@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Machine Learning - Deep Learning Methods"
 teaching: 0
 exercises: 0
 questions:

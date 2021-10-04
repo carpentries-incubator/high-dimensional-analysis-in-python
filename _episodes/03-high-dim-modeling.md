@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "High-dimensional Modeling and Feature Selection"
 teaching: 0
 exercises: 0
 questions:

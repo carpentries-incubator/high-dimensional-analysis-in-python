@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Thinking about High Dimensional Data"
 teaching: 0
 exercises: 0
 questions:

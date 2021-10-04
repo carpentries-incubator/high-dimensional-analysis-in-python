@@ -1,5 +1,5 @@
 ---
-title: "Introduction"
+title: "Exploring Data and Clustering"
 teaching: 0
 exercises: 0
 questions:
