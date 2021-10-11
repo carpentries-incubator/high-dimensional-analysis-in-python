@@ -3,12 +3,13 @@ title: "High-dimensional Modeling and Feature Selection"
 teaching: 0
 exercises: 3
 questions:
-- "Key question (FIXME)"
+- "Are more features always better when trying to fit a model to your data?"
+- "What is one general way to avoid overfitting when training on high-dimensional data?"
+- "How can one determine which features are most relevant to a model's predictions?"
 objectives:
 - "Understand the challenges associated with modeling high-dimensional data"
 - "Understand the importance of feature selection as a tool for modeling high-dimensional data"
 - "Identify and understand some of the possible ways to perform feature selection"
-- 
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
