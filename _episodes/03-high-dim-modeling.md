@@ -19,7 +19,7 @@ FIXME
 # Introduction
 
 > ## Discussion
-> In this example, we would like to classify images of snakes versus lizards. In every image example, a cat or a dog appears at the center of the image with some background imagery present as well. There are two example images provided below. Instead of training our model on every pixel present in each image, what could we do to help the model hone in on the important aspects of the images that relate to how dogs and cats differ?
+> In this example, we would like to classify images of cats versus dogs. In every image example, a cat or a dog appears at the center of the image with some background imagery present as well. There are two example images provided below. Instead of training our model on every pixel present in each image, what could we do to help the model hone in on the important aspects of the images that relate to how dogs and cats differ?
 > 
 >
 > > ## Solution
