@@ -18,8 +18,21 @@ FIXME
 {% include links.md %}
 
 # Introduction
+- Curse of dimensionality
+- Bias VS Variance, 10X as many datapoints as features as general rule of thumb
+- Methods for feature selection
 
-> ## Discussion
+> ## Exercise - demonstrate overfitting (might just show this in intro, but leaving here as placeholder for now)
+> 
+> 
+>
+> > ## Solution
+> >  
+> >  
+> {: .solution}
+{: .challenge}
+
+> ## Exercise
 > In this example, we would like to classify images of cats versus dogs. In every image example, a cat or a dog appears at the center of the image with some background imagery present as well. There are two example images provided below. Instead of training our model on every pixel present in each image, what could we do to help the model hone in on the important aspects of the images that relate to how dogs and cats differ?
 > 
 >
@@ -29,5 +42,26 @@ FIXME
 > {: .solution}
 {: .challenge}
 
+> ## Exercise
+> In this example, we would like to classify images of cats versus dogs. In every image example, a cat or a dog appears at the center of the image with some background imagery present as well. There are two example images provided below. Instead of training our model on every pixel present in each image, what could we do to help the model hone in on the important aspects of the images that relate to how dogs and cats differ?
+> 
+>
+> > ## Solution
+> >  - Include only the center of each image--where a dog or a cat appears
+> >  - Include only pixels that contain the head of the animal--where differences are more noticeable between the species.
+> {: .solution}
+{: .challenge}
+
+# Filter Methods
+
 # Automated Feature Selection
 What if don't know which features are important?
+
+## Wrapper Methods
+Forward Selection
+Backward Elimination
+Recursive Feature Elimination
+
+## Embedded Methods 
+lasso (L1 regularization)
+ridge (L2 regularization)
