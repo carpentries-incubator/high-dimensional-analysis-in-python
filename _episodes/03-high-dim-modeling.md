@@ -4,7 +4,8 @@ teaching: 0
 exercises: 3
 questions:
 - "Are more features always better when trying to fit a model to your data?"
-- "What is one general way to avoid overfitting when training on high-dimensional data?"
+- "What does a model's level of bias or variance indicate?"
+- "What are some of the popular methods to avoid overfitting when training on high-dimensional data?"
 - "How can one determine which features are most relevant to a model's predictions?"
 objectives:
 - "Understand the challenges associated with modeling high-dimensional data"
@@ -18,8 +19,16 @@ FIXME
 {% include links.md %}
 
 # Introduction
-- Curse of dimensionality
-- Bias VS Variance, 10X as many datapoints as features as general rule of thumb
+- **Curse of dimensionality**: 
+- The phrase, attributed to Richard Bellman, was coined to express the difficulty of using brute force (a.k.a. grid search) to optimize a function with too many input variables.
+- In machine learning, the Curse of Dimensionality refers to a set of problems that arise when working with high-dimensional data.
+  - Compute Time: Generally speaking, as the number of features in a model increases, so does the amount of time required to opitmize the model
+  - Overfitting: When there are more features than training observations, overfitting is gauranteed
+  - Interpretability: Models become more difficult to interpret as the numbers of features increase
+  - Clustering: Too many dimensions causes every observation in your dataset to appear equidistant from all the others — making it difficult to form clusters on the data. If the distances are all approximately equal, then all the observations appear equally alike (as well as equally different), and no meaningful clusters can be formed.
+
+
+- **Bias VS Variance**, 10X as many datapoints as features as general rule of thumb
 - Methods for feature selection
 
 > ## Exercise - demonstrate overfitting (might just show this in intro, but leaving here as placeholder for now)
@@ -37,18 +46,17 @@ FIXME
 > 
 >
 > > ## Solution
-> >  - Include only the center of each image--where a dog or a cat appears
+> >  - Include only the center of each image--where a dog or a cat appears (i.e. remove the constants)
 > >  - Include only pixels that contain the head of the animal--where differences are more noticeable between the species.
 > {: .solution}
 {: .challenge}
 
 > ## Exercise
-> In this example, we would like to classify images of cats versus dogs. In every image example, a cat or a dog appears at the center of the image with some background imagery present as well. There are two example images provided below. Instead of training our model on every pixel present in each image, what could we do to help the model hone in on the important aspects of the images that relate to how dogs and cats differ?
+> In this example, 
 > 
 >
 > > ## Solution
-> >  - Include only the center of each image--where a dog or a cat appears
-> >  - Include only pixels that contain the head of the animal--where differences are more noticeable between the species.
+> >  - Include 
 > {: .solution}
 {: .challenge}
 
