@@ -31,7 +31,7 @@ keypoints:
           * Comment on interpretability and training time of high-dimensional models
       * Live-coding: Use same model given in intro section but add additional predictor variables to demonstrate overfitting
 3. Methods for feature selection
-      * Intro to feature selection
+      * Intro to feature selection; exercises to illustrate the concept of feature selection
       * Filter methods
           * Overview
           * Live-coding: implement varianceThreshold and selectKbest (F-test and mutual information tests) using sklearn
@@ -42,9 +42,14 @@ keypoints:
           * Live-coding: implement backward elimination using mlxtend library (built in wrapper methods)
       * Embedded methods
           * Overview of ridge and lasso regression
-          * Live-coding: implement both ridge and lasso. Ask students to compare their performance
-4. Wrap-up
-      * Compare performance across all feature selection methods using a new dataset
+          * Live-coding: implement both ridge and lasso using sklearn. Ask students to compare their performance.
+4. Model Interpretability / Wrap-up 
+      * Interpretability: How to determine which features are most relevant in your model?
+          * Linear models: coefficient size 
+      * Compare performance across all feature selection methods using a new dataset. Questions to consider....
+          * Which feature selection method yielded the best performing model?
+          * When might you choose one feature selection over another?
+          *  
 
 # Possible Datasets (internal use; will remove this later)
 1. Boston house prices dataset (sklearn)
