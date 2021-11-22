@@ -22,6 +22,7 @@ keypoints:
       * What goes into a model/estimator
       * What is the goal of the model (prediction or classification)
       * How is a model trained? Optimizing error functions.
+      * Intro to dataset and linear modeling
       * Live-coding: Training a univariate linear model
 2. The curse of dimensionality
       * Overview
