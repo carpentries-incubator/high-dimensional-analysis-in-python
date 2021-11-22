@@ -40,8 +40,10 @@ keypoints:
           * Overview of backward elimination
           * Live-coding: implement backward elimination using mlxtend library (built in wrapper methods)
       * Embedded methods
-          * Overview
-          * Live-coding: 
+          * Overview of ridge and lasso regression
+          * Live-coding: implement both ridge and lasso. Ask students to compare their performance
+4. Wrap-up
+      * Compare performance across all feature selection methods using a new dataset
 
 # Possible Datasets (internal use; will remove this later)
 1. Boston house prices dataset (sklearn)
@@ -93,16 +95,6 @@ Some systems will do training as a one shot process which produces a model. Othe
 ![image alt text](https://upload.wikimedia.org/wikipedia/commons/9/9f/Bias_and_variance_contributing_to_total_error.svg)
 ![need to find equivalent image w/ creative commons license](https://www.cs.cornell.edu/courses/cs4780/2018fa/lectures/images/bias_variance/bullseye.png)
 
-> ## Exercise - demonstrate overfitting (might just show this in intro, but leaving here as placeholder for now)
-> 
-> 
->
-> > ## Solution
-> >  
-> >  
-> {: .solution}
-{: .challenge}
-
 **Important considerations / takeaways**
 
 
@@ -112,7 +104,23 @@ In machine learning and statistics, feature selecture (a.k.a. variable selection
 2. shorter training times
 3. to avoid overfitting and subsequently improve the accuracy of the predictive models
 
-- if there are d features, brute force testing would require training and evaluating (2^d - 1) different models!
+## Illustrate feature selection with simple exercise
+- use apriori knowledge to filter out unwanted features (e.g. remove constants).  
+
+> ## Exercise
+> In this example, we would like to classify images of cats versus dogs. In every image example, a cat or a dog appears at the center of the image with some background imagery present as well. There are two example images provided below. Instead of training our model on every pixel present in each image, what could we do to help the model hone in on the important aspects of the images that relate to how dogs and cats differ?
+> 
+>
+> > ## Solution
+> >  - Include only the center of each image--where a dog or a cat appears
+> >  - Include only pixels that contain the head of the animal--where differences are more noticeable between the species.
+> {: .solution}
+{: .challenge}
+
+In the above challenge, we saw that we could use a priori knowledge about our dataset to remove features that provide no information to the model. However, what if we don't know which features will be relevant? We could test out each possible subset of features by iteratively selecting different feature subsets prior to training and testing our models. However, if there are d features, brute force testing would require training and evaluating (2^d - 1) different models! In the next section, we will learn about a few different approaches to feature selection that allow us to avoid this brute force method.
+
+**Important considerations / takeaways**
+
 
 # **Methods for feature selection**
 ## Filter Methods (Preprocessing Step)
@@ -147,7 +155,6 @@ With wrapper methods, we train many models on various subsets of the feature spa
 ## Embedded Methods 
 - lasso (L1 regularization)
 - ridge (L2 regularization)
-- 
+
 **Important considerations / takeaways**
-* Wrapper methods are computationally costly but can yield a good result
 
