@@ -10,21 +10,44 @@ questions:
 objectives:
 - "Understand the challenges associated with modeling high-dimensional data"
 - "Understand the importance of feature selection as a tool for modeling high-dimensional data"
-- "Identify and understand some of the possible ways to perform feature selection"
+- "Identify and understand different approaches/methods for feature selection"
+- "Understand the limitations of feature selection techniques and ways to assess model bias/variance tradeoff"
+- "Learn how to fit and interpret univariate and multivariate linear models"
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
-FIXME
-
 {% include links.md %}
+# Schedule Outline (internal use; will remove this later)
+1. Intro/overview of ML
+      * What goes into a model/estimator
+      * What is the goal of the model (prediction or classification)
+      * How is a model trained?
+      * Live-coding: Training a univariate linear model
+2. The curse of dimensionality
+      * Overfitting, bias vs. variance trade-off discussion
+      * Live-coding: Use same model with additional predictor variables and demonstrate overfitting
+3. Methods for feature selection
+      * Intro to feature selection
+      * Filter methods
+          * Overview
+          * Live-coding: implement varianceThreshold and selectKbest (F-test and mutual information tests) using sklearn
+      * Wrapper methods
+          * Overview
+          * Live-coding: 
+      * Embedded methods
+          * Overview
+          * Live-coding: 
 
 # Introduction
 ## Machine learning — a brief overview
 Machine learning is the process of learning (optimizing) a function that is able to map some input to a desired output.
+input data --> cool algorithms --> prediction forecast, recommendation ,decision
 
-Borrowed from Intro to ML w/ sklearn lesson: "Machine learning is a set of of tools and techniques which let us find patterns in data. This lesson will introduce you to a few of these techniques, but there are many more which we simply don’t have time to cover here.
+From Intro to ML lesson:
+"The techniques breakdown into two broad categories, predictors and classifiers. Predictors are used to predict a value (or set of value) given a set of inputs, for example trying to predict the cost of something given the economic conditions and the cost of raw materials or predicting a country’s GDP given its life expectancy. Classifiers try to classify data into different categories, for example deciding what characters are visible in a picture of some writing or if a message is spam or not."
 
-The techniques breakdown into two broad categories, predictors and classifiers. Predictors are used to predict a value (or set of value) given a set of inputs, for example trying to predict the cost of something given the economic conditions and the cost of raw materials or predicting a country’s GDP given its life expectancy. Classifiers try to classify data into different categories, for example deciding what characters are visible in a picture of some writing or if a message is spam or not."
+In this lesson, we will focus on predicting continuous values when fitting models to high-dimensional data.
+
 
 ## Training data 
 * The text below is borrowed form this lesson: https://carpentries-incubator.github.io/machine-learning-novice-sklearn/01-introduction/index.html)
@@ -49,14 +72,14 @@ Some systems will do training as a one shot process which produces a model. Othe
   - Interpretability: Models become more difficult to interpret as the numbers of features increase
   - Clustering: Too many dimensions causes every observation in your dataset to appear equidistant from all the others — making it difficult to form clusters on the data. If the distances are all approximately equal, then all the observations appear equally alike (as well as equally different), and no meaningful clusters can be formed.
 
-## **Bias-Variance Tradeoff**
+## **Bias-Variance Tradeoff (Underftting vs Overfitting)**
 - Train error:
 - Test error: 
 - Overfitting: 
 
-Bias: Bias is the model's average prediction error (i.e. model's predicted values minus actual values). A model with high bias pays very little attention to the training data and oversimplifies the model. It leads to a high error on both the train and test datasets.
+**Bias**: Bias is the model's average prediction error (i.e. model's predicted values minus actual values). A model with high bias pays very little attention to the training data and oversimplifies the model. It leads to a high error on both the train and test datasets.
 
-Variance: Variance is the variability of the model's predictions. It indicates the overal spread of the model's predictions. A model with high variance pays too much attention to the training data (i.e. overfits) 
+**Variance**: Variance is the variability of the model's predictions. It indicates the overal spread of the model's predictions. A model with high variance pays too much attention to the training data (i.e. overfits) 
 
 10X as many datapoints as features as general rule of thumb
 ![image alt text](https://upload.wikimedia.org/wikipedia/commons/9/9f/Bias_and_variance_contributing_to_total_error.svg)
@@ -71,22 +94,32 @@ Variance: Variance is the variability of the model's predictions. It indicates t
 > >  
 > {: .solution}
 {: .challenge}
+# **Feature Selection**
+From: https://en.wikipedia.org/wiki/Feature_selection
+"In machine learning and statistics, feature selection, also known as variable selection, attribute selection or variable subset selection, is the process of selecting a subset of relevant features (variables, predictors) for use in model construction. Feature selection techniques are used for several reasons:
+1. simplification of models to make them easier to interpret by researchers/users,[1]
+2. shorter training times,[2]
+3. to avoid overfitting and subsequently improve the accuracy of the predictive models
+4. improve data's compatibility with a learning model class,[4]
+5. encode inherent symmetries present in the input space.[5][6][7][8]
 
 # **Methods for feature selection**
 ## Filter Methods (Preprocessing Step)
+From: https://stackabuse.com/applying-filter-methods-in-python-for-feature-selection/
+"Filters methods belong to the category of feature selection methods that select features independently of the machine learning algorithm model. This is one of the biggest advantages of filter methods. Features selected using filter methods can be used as an input to any machine learning models. Another advantage of filter methods is that they are very fast. Filter methods are generally the first step in any feature selection pipeline.
+
+Filter methods can be broadly categorized into two categories: Univariate Filter Methods and Multivariate filter methods.
+The univariate filter methods are the type of methods where individual features are ranked according to specific criteria. The top N features are then selected. Different types of ranking criteria are used for univariate filter methods, for example fisher score, mutual information, and variance of the feature.
+
+One of the major disadvantage of univariate filter methods is that they may select redundant features because the relationship between individual features is not taken into account while making decisions. Univariate filter methods are ideal for removing constant and quasi-constant features from the data.
+
+Multivariate filter methods are capable of removing redundant features from the data since they take the mutual relationship between the features into account. Multivariate filter methods can be used to remove duplicate and correlated features from the data."
+
+### Implementing Filter Methods using Scikit Learn 
+* make note about applying filter methods using training set data
 - Pearson's Correlation
 - ANOVA
 - Remove constants
-
-> ## Exercise
-> In this example, we would like to classify images of cats versus dogs. In every image example, a cat or a dog appears at the center of the image with some background imagery present as well. There are two example images provided below. Instead of training our model on every pixel present in each image, what could we do to help the model hone in on the important aspects of the images that relate to how dogs and cats differ?
-> 
->
-> > ## Solution
-> >  - Include only the center of each image--where a dog or a cat appears (i.e. remove the constants)
-> >  - Include only pixels that contain the head of the animal--where differences are more noticeable between the species.
-> {: .solution}
-{: .challenge}
 
 ## Wrapper Methods
 With wrapper methods, we train many models on various subsets of the feature space. Since this method requires training and testing numerous models, it tends to be very computationally expensive. Some wrapper methods include:
