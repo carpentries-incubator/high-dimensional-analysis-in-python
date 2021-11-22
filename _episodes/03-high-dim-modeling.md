@@ -21,7 +21,7 @@ keypoints:
 1. Intro/overview of ML
       * What goes into a model/estimator
       * What is the goal of the model (prediction or classification)
-      * How is a model trained?
+      * How is a model trained? Optimizing error functions.
       * Live-coding: Training a univariate linear model
 2. The curse of dimensionality
       * Overview
@@ -47,8 +47,12 @@ keypoints:
 
 # Possible Datasets (internal use; will remove this later)
 1. Boston house prices dataset (sklearn)
-        * 506 observations, 14 different features; easy to fit regression model to
-2. 
+   * 506 observations, 14 different features; easy to fit regression model to
+2. Diabetes
+   * 442 observations, 10 features, easy to fit regression model to
+
+# Functions Provided
+1. Load/plot data
 
 # Introduction
 ## Machine learning — a brief overview
