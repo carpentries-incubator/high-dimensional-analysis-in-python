@@ -24,41 +24,49 @@ keypoints:
       * How is a model trained?
       * Live-coding: Training a univariate linear model
 2. The curse of dimensionality
-      * Overfitting, bias vs. variance trade-off discussion
-      * Live-coding: Use same model with additional predictor variables and demonstrate overfitting
+      * Overview
+          * Overfitting, bias vs. variance trade-off discussion
+          * How to assess overfitting
+          * Comment on interpretability and training time of high-dimensional models
+      * Live-coding: Use same model given in intro section but add additional predictor variables to demonstrate overfitting
 3. Methods for feature selection
       * Intro to feature selection
       * Filter methods
           * Overview
           * Live-coding: implement varianceThreshold and selectKbest (F-test and mutual information tests) using sklearn
       * Wrapper methods
-          * Overview
-          * Live-coding: 
+          * Overview of forward selection
+          * Live-coding: implement forward selection using mlxtend library (built in wrapper methods)
+          * Overview of backward elimination
+          * Live-coding: implement backward elimination using mlxtend library (built in wrapper methods)
       * Embedded methods
           * Overview
           * Live-coding: 
 
+# Possible Datasets (internal use; will remove this later)
+1. Boston house prices dataset (sklearn)
+        * 506 observations, 14 different features; easy to fit regression model to
+2. 
+
 # Introduction
 ## Machine learning — a brief overview
 Machine learning is the process of learning (optimizing) a function that is able to map some input to a desired output.
-input data --> cool algorithms --> prediction forecast, recommendation ,decision
 
-From Intro to ML lesson:
-"The techniques breakdown into two broad categories, predictors and classifiers. Predictors are used to predict a value (or set of value) given a set of inputs, for example trying to predict the cost of something given the economic conditions and the cost of raw materials or predicting a country’s GDP given its life expectancy. Classifiers try to classify data into different categories, for example deciding what characters are visible in a picture of some writing or if a message is spam or not."
+**Find/make diagram**: input data --> cool algorithms --> prediction forecast, recommendation ,decision
 
-In this lesson, we will focus on predicting continuous values when fitting models to high-dimensional data.
+The techniques breakdown into two broad categories, predictors and classifiers. Predictors are used to predict a value (or set of value) given a set of inputs, for example trying to predict the cost of something given the economic conditions and the cost of raw materials or predicting a country’s GDP given its life expectancy. Classifiers try to classify data into different categories, for example deciding what characters are visible in a picture of some writing or if a message is spam or not. Some examples might include:
+* predicting a person’s weight based on their height
+* predicting commute times given traffic conditions
+* predicting house prices given stock market prices
+* classifying if an email is spam or not
+* classifying what if an image contains a person or not
 
+In this lesson, we will work with predictive models in both a low and high-dimensional data regime.
 
 ## Training data 
 * The text below is borrowed form this lesson: https://carpentries-incubator.github.io/machine-learning-novice-sklearn/01-introduction/index.html)
 * 
-Many (but not all) machine learning systems “learn” by taking a series of input data and output data and using it to form a model. The maths behind the machine learning doesn’t care what the data is as long as it can represented numerically or categorised. Some examples might include:
-
-- predicting a person’s weight based on their height
-- predicting commute times given traffic conditions
-- predicting house prices given stock market prices
-- classifying if an email is spam or not
-- classifying what if an image contains a person or not
+Many (but not all) machine learning systems “learn” by taking a series of input data and output data and using it to form a model. The maths behind the machine learning doesn’t care what the data is as long as it can represented numerically or categorised.
 
 Typically we will need to train our models with hundreds, thousands or even millions of examples before they work well enough to do any useful predictions or classifications with them.
 
@@ -72,7 +80,7 @@ Some systems will do training as a one shot process which produces a model. Othe
   - Interpretability: Models become more difficult to interpret as the numbers of features increase
   - Clustering: Too many dimensions causes every observation in your dataset to appear equidistant from all the others — making it difficult to form clusters on the data. If the distances are all approximately equal, then all the observations appear equally alike (as well as equally different), and no meaningful clusters can be formed.
 
-## **Bias-Variance Tradeoff (Underftting vs Overfitting)**
+### **Bias-Variance Tradeoff (Underftting vs Overfitting)**
 - Train error:
 - Test error: 
 - Overfitting: 
@@ -94,14 +102,17 @@ Some systems will do training as a one shot process which produces a model. Othe
 > >  
 > {: .solution}
 {: .challenge}
+
+**Important considerations / takeaways**
+
+
 # **Feature Selection**
-From: https://en.wikipedia.org/wiki/Feature_selection
-"In machine learning and statistics, feature selection, also known as variable selection, attribute selection or variable subset selection, is the process of selecting a subset of relevant features (variables, predictors) for use in model construction. Feature selection techniques are used for several reasons:
-1. simplification of models to make them easier to interpret by researchers/users,[1]
-2. shorter training times,[2]
+In machine learning and statistics, feature selecture (a.k.a. variable selection, attribute selection, or variable subset selection) is the process of selecting the best subset of relevant features for use in a given model/estimator. There are several benefits to incorporating feature selection into a machine learning analysis:
+1. simplification of models to make them easier to interpret by researchers/users
+2. shorter training times
 3. to avoid overfitting and subsequently improve the accuracy of the predictive models
-4. improve data's compatibility with a learning model class,[4]
-5. encode inherent symmetries present in the input space.[5][6][7][8]
+
+- if there are d features, brute force testing would require training and evaluating (2^d - 1) different models!
 
 # **Methods for feature selection**
 ## Filter Methods (Preprocessing Step)
@@ -114,33 +125,29 @@ The univariate filter methods are the type of methods where individual features 
 One of the major disadvantage of univariate filter methods is that they may select redundant features because the relationship between individual features is not taken into account while making decisions. Univariate filter methods are ideal for removing constant and quasi-constant features from the data.
 
 Multivariate filter methods are capable of removing redundant features from the data since they take the mutual relationship between the features into account. Multivariate filter methods can be used to remove duplicate and correlated features from the data."
+**Important considerations / takeaways**
 
 ### Implementing Filter Methods using Scikit Learn 
-* make note about applying filter methods using training set data
-- Pearson's Correlation
-- ANOVA
-- Remove constants
+
+
+**Important considerations / takeaways**
+* Filter methods are agnostic to model-choice — they are used as a preprocessing step prior model-fitting. 
+* Filter methods should only be used on training set data to prevent "data leakage"
 
 ## Wrapper Methods
+see here: https://www.analyticsvidhya.com/blog/2020/10/a-comprehensive-guide-to-feature-selection-using-wrapper-methods-in-python/
 With wrapper methods, we train many models on various subsets of the feature space. Since this method requires training and testing numerous models, it tends to be very computationally expensive. Some wrapper methods include:
 - Forward Selection
 - Backward Elimination
 - Recursive Feature Elimination
+- 
+**Important considerations / takeaways**
+* Wrapper methods are computationally costly but can yield a good result
 
 ## Embedded Methods 
 - lasso (L1 regularization)
 - ridge (L2 regularization)
-
-
-
-
-> ## Exercise
-> In this example, 
-> 
->
-> > ## Solution
-> >  - Include 
-> {: .solution}
-{: .challenge}
-
+- 
+**Important considerations / takeaways**
+* Wrapper methods are computationally costly but can yield a good result
 
