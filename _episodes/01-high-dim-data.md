@@ -1,7 +1,7 @@
 ---
 title: "Thinking about High Dimensional Data"
 teaching: 0
-exercises: 0
+exercises: 5
 questions:
 - "Key question (FIXME)"
 objectives:
@@ -97,6 +97,9 @@ show chart - original 2d blob of points from above with p1, p2 as X', Y'
 ## Additional reading: 
 1. A Tutorial on Prinicipal Component Analysis, J. Shlens (2014) https://arxiv.org/pdf/1404.1100.pdf 
 2. I.T. Jolliffe (2002) Principal Component Analysis, Second Edition
+
+## additional visualization
+https://setosa.io/ev/principal-component-analysis/
 
 > ## Exercise
 > PCA explore with synthetic data
