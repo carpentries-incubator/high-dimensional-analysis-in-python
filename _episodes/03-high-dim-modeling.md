@@ -52,9 +52,12 @@ keypoints:
           *  
 
 # Possible Datasets (internal use; will remove this later)
-1. Boston house prices dataset (sklearn)
+1. Ames house prices dataset (sklearn: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_boston.html)
+   * 1460 observations, 80 feautres (bingo!)
+2. Boston house prices dataset (sklearn)
    * 506 observations, 14 different features; easy to fit regression model to
-2. Diabetes
+   * Evidently there's an ethical issue with this dataset. Recommended to not use (https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_boston.html).
+3. Diabetes
    * 442 observations, 10 features, easy to fit regression model to
 
 # Functions Provided
