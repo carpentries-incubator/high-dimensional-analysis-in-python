@@ -17,9 +17,6 @@ objectives:
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
-FIXME
-
-{% include links.md %}
 
 # Introduction - what is high dimensional data?
 - what is data? 'the quantities, characters, or symbols on which operations are performed by a computer' - literally anything.
@@ -31,6 +28,12 @@ FIXME
 - 4d data set - surface plus coloration, 2d full color image data set, a movie
 - 30 dimensional dataset - customer feature table
 - 1000 dimensional dataset - gene expression 
+
+~~~
+for item in collection:
+  print(item)
+~~~
+{:.language-python}
 
 > ## Exercise - how would you simplify a dataset? What new representations could you choose?
 > movie, radio pulses, customer dataset
@@ -53,6 +56,7 @@ Discuss what dim reduction/ simplication is doing - lossy compression, may revea
 
 > ## Exercise
 > How can you grasp what signal is present in a 13 dimensional dataset? What does each dimension contribute? 
+{: .challenge}
 
 > > ## Solution
 > >  - correlation matrix heat map
@@ -124,3 +128,7 @@ https://setosa.io/ev/principal-component-analysis/
 > >  - what is lost?
 > {: .solution}
 {: .challenge}
+
+
+
+{% include links.md %}
