@@ -1,15 +1,19 @@
 ---
-title: "Thinking about High Dimensional Data"
+title: "Exploring High Dimensional Data"
 teaching: 0
 exercises: 5
 questions:
 - "Key question (FIXME)"
 objectives:
-- "Define, identify, give examples of high dimensional datasets"
-- "Understand how to visualize and explore high-dimensional data"
-- "Reflect upon how high dimensional data visualization and analysis can reveal a research story in noisy data."
-- "Explain how to form lower dimensional descriptions/abstractions of the data"
-- "Use PCA to reduce dimensionality and visualize the dimensions"
+- "Provide intellectual access to discussions of information-age high dimensional data(sets)"
+- "Define, identify, and give examples of high dimensional datasets"
+- "Summarize the dimensionality of a dataset"
+- "Explain best practices for how to organize / structure high dim data for reuse"
+- "Demonstrate at least one method to visualize, and explore a high-dimensional dataset"
+- "Describe how high dimensional data visualization and analysis can reveal a research story in noisy data."
+- "Explain how to form lower dimensional descriptions/abstractions of high dimensional data"
+- "Identify and explain at least one possible method and use-case for reducing dimensionality"
+
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
@@ -92,6 +96,7 @@ show chart - original 2d blob of points from above with p1, p2 as X', Y'
 ## Caveats - note that PCA assumes:
 1. PCA assumes variance noise << variance signal, i.e. low noise.
 *if all your data is noisy this isn't going to work very well*
+	- demonstrate this with two side by side examples.
 2. output data is now in terms of _prinicipal components_ not your original dimensions - this may or may not matter to you.
 
 ## Additional reading: 
