@@ -11,5 +11,24 @@ keypoints:
 ---
 FIXME
 
-{% include links.md %}
+1. Clustering in low dimensions via K-means.
+    1. Generate and plot 2 blobs;
+    2. Walk through steps of k-means.
+    3. Live coding of k means 2 dim, with k=2.
+        1. Use sklearn.datasets.load_breast_cancer() for 2 clusters +/- PCA
+    4. Live coding: Example where clustering doesn’t work in low dimensions.
+2. Clustering in high dimensions:
+    5. Live coding: Example where k means does reveal an aspect of the signal.
+    6. Live coding: Example where it doesn’t  and explain why clustering isn’t a good tool there
+    7. example: [https://towardsdatascience.com/the-curse-of-dimensionality-50dc6e49aa1e](https://towardsdatascience.com/the-curse-of-dimensionality-50dc6e49aa1e) 
+    8. Explore different clustering algorithms here? Probably not. The focus here is more on the dimensionality of the data and not on exploring every possible clustering algorithms
+3. Provide cluster quality metrics
+    9. Silhouette or inertia (sklearn)
+4. Cluster on lower-dimensional version of high-dim data
+    10. Explore PCA once again
+        2. Remove 50% of variance and show that clustering fails
+5. Misc points
+    11. outliers: can exclude noise with clustering
 
+
+{% include links.md %}
