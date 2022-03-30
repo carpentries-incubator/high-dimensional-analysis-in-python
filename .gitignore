@@ -15,3 +15,7 @@ vendor/
 .docker-vendor/
 Gemfile.lock
 .*history
+
+## emacs tmp files 
+.#*
+\#*
