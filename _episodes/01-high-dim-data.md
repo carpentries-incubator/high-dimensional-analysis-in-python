@@ -117,7 +117,7 @@ plt.show()
 ~~~
 {:.language-python}
 
-![PCA result](/images/day_1/pca_result.png)
+![PCA result](../../fig/day_1/pca_result.png)
 
 
 
