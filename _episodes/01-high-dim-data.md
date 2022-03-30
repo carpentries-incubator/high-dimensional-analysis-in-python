@@ -81,5 +81,5 @@ keypoints:
 6. Describe how PCA can help you tell a story about a high dimensional dataset
     16. Show story/signal with PCA result
         28. malignant/benign definition.
-
+7. inserted this just now.
 {% include links.md %}
