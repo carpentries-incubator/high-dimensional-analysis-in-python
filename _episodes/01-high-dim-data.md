@@ -1,15 +1,18 @@
 ---
-title: "Thinking about High Dimensional Data"
+title: "Exploring High Dimensional Data"
 teaching: 0
 exercises: 5
 questions:
 - "Key question (FIXME)"
 objectives:
-- "Define, identify, give examples of high dimensional datasets"
-- "Understand how to visualize and explore high-dimensional data"
-- "Reflect upon how high dimensional data visualization and analysis can reveal a research story in noisy data."
-- "Explain how to form lower dimensional descriptions/abstractions of the data"
-- "Use PCA to reduce dimensionality and visualize the dimensions"
+- "Provide intellectual access to discussions of information-age high dimensional data(sets)"
+- "Define, identify, and give examples of high dimensional datasets"
+- "Summarize the dimensionality of a dataset"
+- "Explain best practices for how to organize / structure high dim data for reuse"
+- "Demonstrate at least one method to visualize, and explore a high-dimensional dataset"
+- "Describe how high dimensional data visualization and analysis can reveal a research story in noisy data."
+- "Explain how to form lower dimensional descriptions/abstractions of high dimensional data"
+- "Identify and explain at least one possible method and use-case for reducing dimensionality"
 keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
@@ -77,6 +80,45 @@ keypoints:
 6. Describe how PCA can help you tell a story about a high dimensional dataset
     16. Show story/signal with PCA result
         28. malignant/benign definition.
+
+## How to Apply PCA
+~~~
+from sklearn import datasets
+import pandas as pd
+import numpy as np
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+from sklearn.decomposition import PCA
+
+bc = datasets.load_breast_cancer()
+df = pd.DataFrame(bc.data)
+df = df.set_axis(bc.feature_names, axis=1)
+df['labels'] = bc.target
+
+p = PCA(n_components=2)
+components = p.fit_transform()
+
+pca_df = pd.DataFrame(components, columns=[1,2])
+pca_df['labels'] = df['labels']
+df_0 = pca_df[pca_df['labels'] == 0]
+df_1 = pca_df[pca_df['labels'] == 1]
+
+fig = plt.figure(figsize(7,7))
+labels  = df['labels'].tolist()
+s = 10
+alpha = 1
+plt.scatter(df_0[1], df_0[2], s=s, label = '0', c='lightblue', alpha=alpha, zorder=2)
+plt.scatter(df_1[1], df_1[2], s=s, label = '1', c='orange', alpha=alpha, zorder=1)
+plt.xlabel('component 1')
+plt.ylabel('component 2')
+plt.title('Breast cancer wisconsin (diagnostic) dataset 2 component PCA')
+plt.legend()
+plt.show()
+~~~
+{:.language-python}
+
+![PCA result](../../fig/day_1/pca_result.png)
+
 
 
 {% include links.md %}
