@@ -53,6 +53,9 @@ keypoints:
         19. Correlation heat map
         20. Scatter matrix
         21. facet plots
+3. High dimensions - geometric intuition
+    1. [volume of an n-ball](https://en.wikipedia.org/wiki/Volume_of_an_n-ball]
+    2. What does that show for 3 dims vs 10 vs 100 ?
 3. Describe how high dimensional data visualization and analysis can reveal a research story in noisy data.
     9. Exercise - Using your plots or new plots How can you grasp what signal is present in a 13 dimensional dataset? What does each dimension contribute?
     10. Discussion: what story or stories seem to be in this data?
