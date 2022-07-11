@@ -46,7 +46,7 @@ keypoints:
     6. Exercise: describe a data set
         16. Copy live coding example
         17. What’s one thing you can learn about the data?
-2. Demonstrate at least one method to visualize, and explore a high-dimensional dataset
+2. Demonstrate at least one method to visualize, and explore a high-dimensional dataset:
     7. Live code plotting with one of the following provided functions
     8. Exercise: Plotting of discovered dimensions (provide functions)
         18. Normalization
@@ -54,7 +54,7 @@ keypoints:
         20. Scatter matrix
         21. facet plots
 3. High dimensions - geometric intuition
-    1. [volume of an n-ball](https://en.wikipedia.org/wiki/Volume_of_an_n-ball]
+    1. [volume of an n-ball](https://en.wikipedia.org/wiki/Volume_of_an_n-ball)
     2. What does that show for 3 dims vs 10 vs 100 ?
 3. Describe how high dimensional data visualization and analysis can reveal a research story in noisy data.
     9. Exercise - Using your plots or new plots How can you grasp what signal is present in a 13 dimensional dataset? What does each dimension contribute?
@@ -71,6 +71,7 @@ keypoints:
                 2. radio signals - just take max amplitude?
                 3. Customer table - choose specific features?
             6. Note these approaches are lossy compression
+        
 5. Identify and explain at least one possible method and use-case for reducing dimensionality
     12. PCA concept slides
     13. Visualization webpage: [https://setosa.io/ev/principal-component-analysis/](https://setosa.io/ev/principal-component-analysis/)
