@@ -23,17 +23,53 @@ A common goal associated with high-dimensional datasets is to determine if one v
 
 In this section, we will learn how to appropriately approach modeling high-dimensional datasets using multivariate linear regression. Specifically, we will use the Ames Housing dataset to predict the sale prices of individual houses.
 
-TODO: Explain why we are studying high-dimensional modeling through the lens of linear modeling (fast, easy to interpret, etc.)
+##### TODO: Explain why we are studying high-dimensional modeling through the lens of linear modeling (fast, easy to interpret, etc.)
 
-## Import Essential Packages
+### Import Essential Packages
 ~~~
 import numpy as np
 import pandas as pd
 ~~~
 {: .language-python}
 
-## Load Ames Housing Data
+## Load the Ames Housing Data
+Let's read in and briefly explore the data for this section.
+
+See here python documentation: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_boston.html
+
+~~~
+from sklearn.datasets import fetch_openml
+housing = fetch_openml(name="house_prices", as_frame=True)
+~~~
+
+ Also see here for more thorough documentation regarding the feature set: 
+https://www.openml.org/d/42165
 
 
-
-
+> ## Load the Ames Housing Data
+>
+> Spend 5 minutes exploring the Ames Housing data. Specifically, please answer the following:
+> 1. What kind of object is "housing" stored as?
+> 2. How many observations and features are there in the data?
+> 3. What are some of the features available?
+> 4. What is the name of the target feature?
+>
+> > ## Solution
+> >
+> >
+> > ~~~
+> > # 1. 
+> > print(type(housing)) # sklearn bunch (map) object
+> > # 2. 
+> > print(housing.keys()) # keys used to store info in housing variable
+> > print(housing['data'].shape) # 80 features total, 1460 observations
+> > # 3. 
+> > feat_names=housing['feature_names'] # get feature names
+> > print(feat_names)
+> > # 4.
+> > targets=housing['target_names'] # get target name
+> > print(targets) # Sale price
+> > ~~~
+> > {: .output}
+> {: .solution}
+{: .challenge}
