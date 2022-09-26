@@ -72,6 +72,7 @@ https://www.openml.org/d/42165
 > > print(targets) # Sale price
 > > ~~~
 > > {: .language-python}
+> > ~~~
 > > # 1. 
 > > print(type(housing)) # sklearn bunch (map) object
 > > # 2. 
