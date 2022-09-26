@@ -18,12 +18,13 @@ keypoints:
 ---
 {% include links.md %}
 
-# Ames Housing Data
-In the previous lesson, we applied PCA to the Ames housing dataset to better understand X properties of the data, including:
-- degree of feature redundancy
-- underlying factors present in the data
+# Modeling Sales Prices of Houses 
+A common goal associated with high-dimensional datasets is to determine if one variable of the data (e.g., sale price of house) can be predicted using other observed variables (e.g., overall quality of house, size of garage, construction date, etc.). 
 
-In this section, we will attempt to predict housing prices from the features recorded in the Ames Housing dataset (e.g., overall quality of house, size of garage, construction date, etc.). 
+In this section, we will learn how to appropriately approach modeling high-dimensional datasets using multivariate linear regression. Specifically, we will use the Ames Housing dataset to predict the sale prices of individual houses.
+
+## Import Essential Packages
+
 
 
 
