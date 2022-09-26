@@ -23,8 +23,16 @@ A common goal associated with high-dimensional datasets is to determine if one v
 
 In this section, we will learn how to appropriately approach modeling high-dimensional datasets using multivariate linear regression. Specifically, we will use the Ames Housing dataset to predict the sale prices of individual houses.
 
-## Import Essential Packages
+TODO: Explain why we are studying high-dimensional modeling through the lens of linear modeling (fast, easy to interpret, etc.)
 
+## Import Essential Packages
+~~~
+import numpy as np
+import pandas as pd
+~~~
+{: .language-python}
+
+## Load Ames Housing Data
 
 
 
