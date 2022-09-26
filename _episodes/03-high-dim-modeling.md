@@ -59,31 +59,25 @@ https://www.openml.org/d/42165
 > >
 > >
 > > ~~~
-> > # 1. 
-> > print(type(housing)) # sklearn bunch (map) object
-> > # 2. 
+> > # 1. What kind of object is "housing" stored as?
+> > print(type(housing)) # <class 'sklearn.utils.Bunch'>
+> > # 2. How many observations and features are there in the data?
 > > print(housing.keys()) # keys used to store info in housing variable
 > > print(housing['data'].shape) # 80 features total, 1460 observations
-> > # 3. 
+> > # 3. What are some of the features available?
 > > feat_names=housing['feature_names'] # get feature names
 > > print(feat_names)
-> > # 4.
+> > # 4. What is the name of the target feature?
 > > targets=housing['target_names'] # get target name
 > > print(targets) # Sale price
 > > ~~~
 > > {: .language-python}
 > > ~~~
-> > # 1. 
-> > print(type(housing)) # sklearn bunch (map) object
-> > # 2. 
-> > print(housing.keys()) # keys used to store info in housing variable
-> > print(housing['data'].shape) # 80 features total, 1460 observations
-> > # 3. 
-> > feat_names=housing['feature_names'] # get feature names
-> > print(feat_names)
-> > # 4.
-> > targets=housing['target_names'] # get target name
-> > print(targets) # Sale price
+> > <class 'sklearn.utils.Bunch'>
+> > dict_keys(['data', 'target', 'frame', 'categories', 'feature_names', 'target_names', 'DESCR', 'details', 'url'])
+> > (1460, 80)
+> > ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType', 'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1', 'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual', 'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType', 'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual', 'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC', 'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType', 'SaleCondition']
+> > ['SalePrice']
 > > ~~~
 > > {: .output}
 > {: .solution}
