@@ -41,6 +41,7 @@ See here python documentation: https://scikit-learn.org/stable/modules/generated
 from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True)
 ~~~
+{: .language-python}
 
  Also see here for more thorough documentation regarding the feature set: 
 https://www.openml.org/d/42165
@@ -70,6 +71,6 @@ https://www.openml.org/d/42165
 > > targets=housing['target_names'] # get target name
 > > print(targets) # Sale price
 > > ~~~
-> > {: .output}
+> > {: .language-python .output}
 > {: .solution}
 {: .challenge}
