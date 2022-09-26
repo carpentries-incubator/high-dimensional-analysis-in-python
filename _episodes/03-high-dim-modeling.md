@@ -23,10 +23,10 @@ A common goal associated with high-dimensional datasets is to determine if one v
 
 In this section, we will learn how to appropriately approach modeling high-dimensional datasets using multivariate linear regression. Specifically, we will use the Ames Housing dataset to predict the sale prices of individual houses.
 
-#### TODO: Explain why we are studying high-dimensional modeling through the lens of linear modeling (fast, easy to interpret, etc.)
+*TODO*: Explain why we are studying high-dimensional modeling through the lens of linear modeling (fast, easy to interpret, etc.)
 
 ### Import Essential Packages
-#### TODO: explain what each package does
+*TODO*: explain what each package does
 ~~~
 import numpy as np
 import pandas as pd
@@ -36,17 +36,11 @@ import pandas as pd
 ## Load the Ames Housing Data
 Let's read in and briefly explore the data for this section.
 
-See here python documentation: https://scikit-learn.org/stable/modules/generated/sklearn.datasets.load_boston.html
-
 ~~~
 from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True)
 ~~~
 {: .language-python}
-
- Also see here for more thorough documentation regarding the feature set: 
-https://www.openml.org/d/42165
-
 
 > ## Load the Ames Housing Data
 >
