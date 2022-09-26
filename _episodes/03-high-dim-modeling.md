@@ -71,6 +71,19 @@ https://www.openml.org/d/42165
 > > targets=housing['target_names'] # get target name
 > > print(targets) # Sale price
 > > ~~~
-> > {: .language-python .output}
+> > {: .language-python}
+> > # 1. 
+> > print(type(housing)) # sklearn bunch (map) object
+> > # 2. 
+> > print(housing.keys()) # keys used to store info in housing variable
+> > print(housing['data'].shape) # 80 features total, 1460 observations
+> > # 3. 
+> > feat_names=housing['feature_names'] # get feature names
+> > print(feat_names)
+> > # 4.
+> > targets=housing['target_names'] # get target name
+> > print(targets) # Sale price
+> > ~~~
+> > {: .output}
 > {: .solution}
 {: .challenge}
