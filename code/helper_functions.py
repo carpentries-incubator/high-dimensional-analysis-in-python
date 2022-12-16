@@ -4,19 +4,14 @@ import pandas as pd
 
 # def clean_data(housing):
     
-def one_hot_housing_data(X):
+def encode_predictors_housing_data(X):
     # get lists of continuous features, nominal features, etc.
     exclude_fields, nominal_fields, ordinal_fields, dichotomous, continuous_fields = get_feat_types()
     
     # init list of features/variables to keep
     keep_cols=[]
-
-    # add dichotomous vars as dummy vars
-    dummy_vars=pd.get_dummies(X[dichotomous])
-    keep_cols.extend(dummy_vars.columns)
-    X=X.join(dummy_vars)
-    
-    # add nominal_fields as dummy vars
+ 
+    # add nominal fields as dummy vars
     X[nominal_fields]=X[nominal_fields].astype("category")
     dummy_vars=pd.get_dummies(X[nominal_fields])
     keep_cols.extend(dummy_vars.columns)
@@ -25,14 +20,32 @@ def one_hot_housing_data(X):
     # continuous fields can be stored without any changes
     keep_cols.extend(continuous_fields)
     
+    # ordinal fields are skipped since they require some additional code to map different strings to different numerical values
+    X=X
+    
+    # binary vars can be stored as numeric representations (using factorize function)
+    for bin_var in dichotomous:
+        if bin_var=='Street':
+            new_vals, uniques = X['Street'].factorize(['Grvl','Pave'])
+            X['Street'] = new_vals
+        elif bin_var=='CentralAir':
+            new_vals, uniques = X['CentralAir'].factorize(['N','Y'])
+            X['CentralAir'] = new_vals
+        else:
+            raise ValueError(('A new binary variable needs to be appropriately factorized:', bin_var))
+            
+    keep_cols.extend(dichotomous)
+#     dummy_vars=pd.get_dummies(X[dichotomous])
+#     keep_cols.extend(dummy_vars.columns)
+#     X=X.join(dummy_vars)
+    
     # keep only these columns (continous features and one-hot encoded features) 
     X=X[keep_cols]
     
     return X
 
-def remove_bad_cols(X):
+def remove_bad_cols(X, limited_var_thresh):
     # Remove variables that have NaNs as observations and vars that have a constant value across all observations
-    # def remove_bad_vars(X):
     all_feats=X.columns
     rem_cols=[]
     for feat_index in range(0,len(all_feats)):
@@ -40,16 +53,19 @@ def remove_bad_cols(X):
         this_X = np.array(X.loc[:,feat_name]).reshape(-1, 1) # in general, it is safer (more stable) to index by column names rather than by row/col numbers
         sum_nans = np.sum(np.isnan(this_X)) # sum up nans present in column/feature
         unique_vals = np.unique(this_X) # sum up number of unique possible values for this column/feature
+        val_counts = X[feat_name].value_counts(normalize=True) # check for nearly constant columns
 
         # exclude column if there are any NaNs or if column contains a constant (1 unique value only)
         if sum_nans > 0: 
             rem_cols.append(feat_name)
             print(feat_name + ' removed due to presence of NaNs (sum of nans = ' + str(sum_nans) + ')')
-        elif len(unique_vals)==1:
+        elif sum(val_counts > limited_var_thresh):
             rem_cols.append(feat_name)
-            print(feat_name, 'removed due to lack of variance (feature is a constant value across all rows)')
-
+            print(feat_name + ' removed due to lack of variance ( >' + str(limited_var_thresh*100) + '% rows have the same value value)')
+            
     print('All columns removed:', rem_cols)
+    print('# of columns removed:', len(rem_cols))
+
     X=X.drop(rem_cols, axis = 1)
     
     return X
@@ -87,8 +103,9 @@ def get_feat_types():
     #     1=Gtl Gentle slope
     #     2=Mod Moderate Slope
     #     3=Sev Severe Slope
+    
     # data['Neighborhood'] # nominal variable with 25 different categories
-    exclude_fields=['Id','MiscFeature','MiscVal']
+    exclude_fields=['Id','MiscFeature','MiscVal'] # ID is an index variable. Removing MiscFeature and MiscVal for simplicity. These two features are always paired; would take a small amount of code to convert the combination of these vars into a set of one-hot-encoded vars.
     nominal_fields=['MSSubClass','MSZoning','Alley','LandContour',
                    'LotConfig','Neighborhood','Condition1','Condition2',
                    'BldgType','HouseStyle','RoofStyle','RoofMatl',
@@ -115,6 +132,6 @@ def get_feat_types():
 
 # PCA
 def my_PCA(X: pd.DataFrame, variance_thresh: float) -> pd.DataFrame:
-    #raise NotImplementedError
-    return 'answer'
+    raise NotImplementedError    
+    
     
