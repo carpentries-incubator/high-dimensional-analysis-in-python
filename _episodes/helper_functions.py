@@ -2,7 +2,10 @@ import math
 import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
-from typing import Optional
+from typing import Optional, Tuple
+
+import numpy as np
+from sklearn.datasets import make_classification
 
 
 def plot_salesprice(df: pd.DataFrame) -> None:
@@ -131,4 +134,66 @@ def demo_standardization(column_name: str, df: pd.DataFrame) -> None:
     ax.legend()
 
     plt.show()
+    
+
+def create_feature_data() -> np.ndarray:
+    '''create x and y correlated variable'''
+    X1, Y1 = make_classification(
+        n_features=2, n_redundant=0, n_informative=2, n_clusters_per_class=1
+    )
+
+    feature_1 = [x for x, y in zip(X1, Y1) if y == 0]
+    return np.stack(feature_1)
+
+
+def create_normalized_feature(arr: np.ndarray) -> np.ndarray:
+    """center data at 0"""
+    normalized_arr = np.zeros_like(arr)
+    for dim in range(arr.shape[-1]):
+        data = arr[:, dim]
+        normalized_arr[:, dim] = (data-np.mean(data))/np.std(data)
+    return normalized_arr
+
+
+def create_feature_scatter_plot() -> Tuple[np.ndarray, Tuple[float, float]]:
+    # feature_data = create_feature_data()
+    feature_data = create_normalized_feature(create_feature_data())
+    fig, ax = plt.subplots(1, 1, figsize=(8, 8))
+    im = ax.scatter(feature_data[:,0], feature_data[:,1], label='original features')
+    # ensure square plot
+    xlims = ax.get_xlim()
+    ylims = ax.get_ylim()
+    min_ax_val = min(xlims[0], ylims[0])
+    max_ax_val = max(xlims[1], ylims[1])
+    ax.set_xlim(min_ax_val, max_ax_val)
+    ax.set_ylim(min_ax_val, max_ax_val)
+    # label and plot
+    ax.set_title('random feature data scatter plot')
+    ax.set_xlabel('feature x value, arbitrary units')
+    ax.set_ylabel('feature y value, arbitrary units')
+    return ax, feature_data, (min_ax_val, max_ax_val)
+
+
+def plot_pca_features(features_pca: np.ndarray) -> Tuple[plt.Figure, plt.Axes, Tuple[float, float]]:
+    """
+    plot PCA data centreed in a square plot
+    """
+    # get extents, set to extremes
+    min_x = min(features_pca[:,0])
+    max_x = max(features_pca[:,0])
+    min_y = min(features_pca[:,1])
+    max_y = max(features_pca[:,1])
+    ax_max = max(max_x, max_y)
+    ax_min = min(min_x, min_y)
+
+    # plot data within extents above
+    fig, pca_ax = plt.subplots(1,1,figsize=(8, 8))
+    pca_im = pca_ax.scatter(features_pca[:,0], features_pca[:, 1], color='orange')
+    pca_ax.set_xlim(ax_min, ax_max)
+    pca_ax.set_ylim(ax_min, ax_max)
+    pca_ax.set_xlabel('pca component 0')
+    pca_ax.set_ylabel('pca component 1')
+    pca_ax.set_title('2 component pca')
+    return fig, pca_ax, (ax_min, ax_max)
+
 
