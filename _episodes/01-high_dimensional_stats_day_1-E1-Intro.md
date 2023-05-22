@@ -85,7 +85,6 @@ noun: __dimension__; plural noun: __dimensions__
 # A Tabular/Rectangular Data Context
 <!-- ![Table](../fig/day_1/tabular_data.png) -->
 
-<p>
 <center>
 <img
     src = "../fig/day_1/tabular_data.png"
@@ -95,21 +94,21 @@ noun: __dimension__; plural noun: __dimensions__
 
 
 A Row is an Observation
-<p div='image'>
+
 <center>
 <img src="../fig/day_1/tabular_data_row_highlight.png"
      />
 </center>
-<p>
+
 
 A Column is a Feature is a Dimension
-<p>
+
 <center>
 <img src="../fig/day_1/tabular_data_dim_highlight.png"/>
 </center>
 
 The Index is not a Dimension
-<p>
+
 <center>
 <img src="../fig/day_1/tabular_data_idx_highlight.png"/>
 </center>
