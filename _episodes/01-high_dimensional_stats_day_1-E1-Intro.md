@@ -17,20 +17,6 @@ keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
 
-> ## Name Of Exercise
-> line1 of exercise body (instructions for exercise)
-> line2 of exercise body (instructions for exercise)
-> ...
-> lineN of exercise body (instructions for exercise)
-> > ## Solution
-> >
-> > line1 of solution 
-> > line2 of solution 
-> > ...
-> > lineN of solution
-> {:.solution}
-{:.challenge}
-
 ## Contents of this lesson
 1. Describe how high dimensional data visualization and analysis can reveal a research story in noisy data.
 9. Exercise - Using your plots or new plots How can you grasp what signal is present in a 13 dimensional dataset? What does each dimension contribute?
@@ -260,10 +246,10 @@ yes - there are more dimensions/features per observation now.
 
 > ## Examine Titanic dataset
 > What about the data are you using? or a dataset you know about? e.g. kaggle [Titantic Dataset](https://www.kaggle.com/competitions/titanic/data)?
-> 1. What columns are the index?
-> 2. What columns are the dimensions?
-> 3. how many dimensions are ther?
-> 4. is there extra information in the index that could be an additional feature?
+> - What columns are the index?
+> - What columns are the dimensions?
+> - how many dimensions are ther?
+> - is there extra information in the index that could be an additional feature?
 > ```python
 > with open('../files/day_1_titanic_table.html', 'r') as f:
 >     table = ''.join(f.readlines())
@@ -271,10 +257,10 @@ yes - there are more dimensions/features per observation now.
 > ```
 > > ## Solution
 > >
-> > 1. index: passenger_id is the index
-> > 2. dimensons = pclass   name    sex     age     sibsp   parch   ticket  fare    cabin   embarked    boat    body    home.dest   survived
-> > 3. 14 total dimensions
-> > 4. not at first glance - check data dict.
+> > index: passenger_id is the index
+> > dimensons = pclass   name    sex     age     sibsp   parch   ticket  fare    cabin   embarked    boat    body    home.dest   survived
+> > 14 total dimensions
+> > not at first glance - check data dict.
 > {:.solution}
 {:.challenge}
 
