@@ -17,6 +17,20 @@ keypoints:
 - "First key point. Brief Answer to questions. (FIXME)"
 ---
 
+> ## Name Of Exercise
+> line1 of exercise body (instructions for exercise)
+> line2 of exercise body (instructions for exercise)
+> ...
+> lineN of exercise body (instructions for exercise)
+> > ## Solution
+> >
+> > line1 of solution 
+> > line2 of solution 
+> > ...
+> > lineN of solution
+> {:.solution}
+{:.challenge}
+
 ## Contents of this lesson
 1. Describe how high dimensional data visualization and analysis can reveal a research story in noisy data.
 9. Exercise - Using your plots or new plots How can you grasp what signal is present in a 13 dimensional dataset? What does each dimension contribute?
@@ -229,6 +243,20 @@ yes - there are more dimensions/features per observation now.
 <center>
 <img src="../fig/day_1/DNA_microarray_DrJasonKangNCIFlicker.jpg"/>
 </center>
+
+> ## Name Of Exercise1
+> line1 of exercise body (instructions for exercise)
+> line2 of exercise body (instructions for exercise)
+> ...
+> lineN of exercise body (instructions for exercise)
+> > ## Solution
+> >
+> > line1 of solution 
+> > line2 of solution 
+> > ...
+> > lineN of solution
+> {:.solution}
+{:.challenge}
 
 > ## Examine Titanic dataset
 > What about the data are you using? or a dataset you know about? e.g. kaggle [Titantic Dataset](https://www.kaggle.com/competitions/titanic/data)?
