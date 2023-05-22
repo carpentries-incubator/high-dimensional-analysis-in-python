@@ -226,7 +226,6 @@ yes - there are more dimensions/features per observation now.
 
 # 20, 000 D - human gene expression
 
-<p>
 <center>
 <img src="../fig/day_1/DNA_microarray_DrJasonKangNCIFlicker.jpg"/>
 </center>
@@ -270,8 +269,3 @@ yes - there are more dimensions/features per observation now.
 5. examined dimensionality of the titantic dataset
 
 in part two we'll start exploring a new dataset
-
-
-```python
-
-```
