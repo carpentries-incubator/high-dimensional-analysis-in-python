@@ -115,11 +115,11 @@ The* *index* is not a dimension
 
 
 # Examples of datasets with increasing dimensionality
-    
+
 1. There are some number of observations
 2. every feature of an observation is a dimension
 3. the number of observations is not a dimension
-   
+
 
 
 
@@ -145,7 +145,7 @@ The* *index* is not a dimension
 4. 2d black and white image (x, y, pixel_value)
 5. moves log from a game of 'battleship' (move number, x coord, y coord, hit or not)
 
-## Battle ship moves: 
+## Battle ship moves:
 ### discussion point is this 3d or 4d?
 
 is the move number a dimension or an index?
@@ -173,7 +173,7 @@ is the move number a dimension or an index?
 
 ### There is always an index
 
-1. it is an index 
+1. it is an index
 2. that doesn't mean there is no information there
 2. you can perform some feature extraction on the index
 4. this would up the dimensionality of the inital 2d dataset:
@@ -202,7 +202,7 @@ It has the following properties:
 
 ## would the dimensions change if the film was longer or shorter?
 
-1. The dimensions would NOT change. 
+1. The dimensions would NOT change.
 2. There would simply be a greater or fewer number of 'observations'
 
 ## what if it was a color film?
@@ -230,33 +230,41 @@ yes - there are more dimensions/features per observation now.
 <img src="../fig/day_1/DNA_microarray_DrJasonKangNCIFlicker.jpg"/>
 </center>
 
-> ## Exercise 1: examine Titanic dataset
+> ## Examine Titanic dataset
 > What about the data are you using? or a dataset you know about? e.g. kaggle [Titantic Dataset](https://www.kaggle.com/competitions/titanic/data)?
 > 1. What columns are the index?
 > 2. What columns are the dimensions?
 > 3. how many dimensions are ther?
 > 4. is there extra information in the index that could be an additional feature?
+> ```python
+> with open('../files/day_1_titanic_table.html', 'r') as f:
+>     table = ''.join(f.readlines())
+> HTML(table)
+> ```
 > > ## Solution
-> > asdf
+> >
+> > 1. index: passenger_id is the index
+> > 2. dimensons = pclass   name    sex     age     sibsp   parch   ticket  fare    cabin   embarked    boat    body    home.dest   survived
+> > 3. 14 total dimensions
+> > 4. not at first glance - check data dict.
 > {:.solution}
 {:.challenge}
 
+> ## Imagine building a model to predict survival on the titantic
+> 1. would you use every dimension?
+> 2. what makes a dimension useful?
+> 3. could you remove some dimensions?
+> 4. could you combine some dimensions?
+> 5. how would you combine those dimensions?
+> 6. do you have fewer dimensions after combining?
+> 7. do you have less information after combining?
+> > ## Solution
+> >
+> > 1. no, some variables are poor predictors and can be ignored
+> > 2. if it is (anti-)correlated with survival i.e. has information.
+> {:.solution}
+{:.challenge}
 
-
-
-
-##  Exercise 2: imagine building a model to predict survival on the titantic
-1. would you use every dimension?
-2. what makes a dimension useful?
-3. could you remove some dimensions?
-4. could you combine some dimensions?
-5. how would you combine those dimensions?
-6. do you have fewer dimensions after combining?
-7. do you have less information after combining?
-
-
-1. no, some variables are poor predictors and can be ignored
-2. if it is (anti-)correlated with survival i.e. has information.
 
 # End of part 1
 
