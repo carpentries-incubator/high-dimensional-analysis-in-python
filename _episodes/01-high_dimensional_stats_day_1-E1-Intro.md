@@ -93,7 +93,7 @@ noun: __dimension__; plural noun: __dimensions__
 </center>
 
 
-A Row is an Observation
+Each *row* is an **observation** is a **sample**
 
 <center>
 <img src="../fig/day_1/tabular_data_row_highlight.png"
@@ -101,13 +101,13 @@ A Row is an Observation
 </center>
 
 
-A Column is a Feature is a Dimension
+Each *column* is a **feature** is a **dimension**
 
 <center>
 <img src="../fig/day_1/tabular_data_dim_highlight.png"/>
 </center>
 
-The Index is not a Dimension
+The* *index* is not a dimension
 
 <center>
 <img src="../fig/day_1/tabular_data_idx_highlight.png"/>
@@ -237,19 +237,13 @@ yes - there are more dimensions/features per observation now.
 > 2. What columns are the dimensions?
 > 3. how many dimensions are ther?
 > 4. is there extra information in the index that could be an additional feature?
-> ```python
-> with open('../files/day_1_titanic_table.html', 'r') as f:
->     table = ''.join(f.readlines())
-> HTML(table)
-> ```
 > > ## Solution
-> > 
-> > 1. index: passenger_id is the index
-> > 2. dimensons = pclass   name    sex     age     sibsp   parch   ticket  fare    cabin   embarked    boat    body    home.dest   survived
-> > 3. 14 total dimensions
-> > 4. not at first glance - check data dict.
+> > asdf
 > {:.solution}
 {:.challenge}
+
+
+
 
 
 ##  Exercise 2: imagine building a model to predict survival on the titantic
