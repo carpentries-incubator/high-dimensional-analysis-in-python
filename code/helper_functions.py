@@ -129,7 +129,37 @@ def get_feat_types():
     
     return exclude_fields, nominal_fields, ordinal_fields, dichotomous, continuous_fields
 
+# regression 
+import matplotlib.pyplot as plt
+def plot_model_predictions(
+        y_train, y_pred_train, 
+        y_test, y_pred_test, 
+        err_type=None,train_err=None, test_err=None):
+    
+    fig, (ax1, ax2) = plt.subplots(1,2)
+    fig.suptitle('Model Fit')
 
+    # train set
+    ax1.scatter(y_train, y_pred_train, alpha=.1) 
+    ax1.plot([0, 1], [0, 1], transform=ax1.transAxes)
+
+    if train_err is not None:
+        ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
+    else:
+        ax1.title.set_text('Train Data')
+    ax1.set_xlabel('True Price')
+    ax1.set_ylabel('Predicted Price')
+
+    # test set
+    ax2.scatter(y_test, y_pred_test, alpha=.1) 
+    ax2.plot([0, 1], [0, 1], transform=ax2.transAxes)
+
+#     ax2.axes.get_yaxis().set_ticklabels([]);
+    if test_err is not None:
+        ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
+    else:
+        ax2.title.set_text('Test Data')
+    
 # PCA
 def my_PCA(X: pd.DataFrame, variance_thresh: float) -> pd.DataFrame:
     raise NotImplementedError    
