@@ -10,7 +10,7 @@ C:\Users\username\Desktop\high-dim # Windows path
 ```
 
 ### 2. Download the helper_functions.py script and add it to the high-dim folder you just created.
-Click to download: [helper_functions.py](../code/helper_functions.py)
-
+Click to download: [helper_functions.py](code/helper_functions.py)
+../fig/regression/under_v_over_fit.png)
 {% include links.md %}
 
