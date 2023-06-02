@@ -2,13 +2,14 @@ import math
 import pandas as pd
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
 from typing import Optional, Tuple
 
-import numpy as np
 from sklearn.datasets import make_classification
 
 
-def plot_salesprice(df: pd.DataFrame) -> None:
+def plot_salesprice(df: pd.DataFrame, ylog: bool = False) -> None:
     # set font size w/ params context manager
     font = {'font.size': 14}
     with mpl.rc_context(font):
@@ -28,10 +29,16 @@ def plot_salesprice(df: pd.DataFrame) -> None:
             df[df['top_10']].SalePrice.hist(bins=20, color='brown', label='Top 10 % of prices', figsize=(8, 6))
         except (KeyError, ValueError):
             df.SalePrice.hist(bins=20, color=my_blue, label='prices', figsize=(8, 6))
+
+        if ylog:
+            plt.yscale('log')
+            plt.ylim(1, plt.ylim()[1])
         plt.title('SalePrice Distribution: Count vs. SalePrice')
         plt.ylabel('Count, n')
         plt.xlabel("Sales Price, USD")
         plt.xticks(rotation=45, ha='right')
+        ax = plt.gca()
+        ax.xaxis.set_major_formatter(lambda x, y: "{:,}".format(int(x)))
         plt.axvline(mean, label='mean: {:,.0f}'.format(mean), color=my_magenta)
         plt.axvline(median, label='median: {:,.0f}'.format(median), color=my_yellow)
         plt.legend()
@@ -84,6 +91,46 @@ def split_df(df: pd.DataFrame,
 
     return df
 
+
+def plot_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:
+    cols_in_corr_order=['SalePrice', 'OverallQual', 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF', '1stFlrSF', 'FullBath', 'TotRmsAbvGrd', 'YearBuilt', 'YearRemodAdd', 'GarageYrBlt', 'MasVnrArea', 'Fireplaces', 'BsmtFinSF1', 'LotFrontage', 'WoodDeckSF', '2ndFlrSF', 'OpenPorchSF', 'HalfBath', 'LotArea', 'BsmtFullBath', 'BsmtUnfSF', 'BedroomAbvGr', 'ScreenPorch', 'PoolArea', 'MoSold', '3SsnPorch', 'BsmtFinSF2', 'BsmtHalfBath', 'MiscVal', 'LowQualFinSF', 'YrSold', 'OverallCond', 'MSSubClass', 'EnclosedPorch', 'KitchenAbvGr']
+    fig, ax = plt.subplots(1, 1, figsize=(10,10))
+    corr_mat = (
+        df.drop(['top_10', 'hue'], axis=1)
+        [cols_in_corr_order]
+        .corr()
+    )
+    upper_triangle_mask = np.triu(corr_mat)
+    sns.heatmap(corr_mat, cmap='magma', ax=ax, mask=upper_triangle_mask)
+    plt.title('correlation heatmap')
+    plt.show()
+    return corr_mat
+
+
+def plot_2d_pca(X_pca_df: pd.DataFrame, pc0_upper_limit: int = 0) -> None:
+    X_pca_top_10 = X_pca_df[X_pca_df['category'] == 1]
+    X_pca_not_10 = X_pca_df[X_pca_df['category'] == 0]
+
+    # plot it
+    fig, ax = plt.subplots(1, 1, figsize=(8,6))
+    not10scatter = ax.scatter(X_pca_not_10[0], X_pca_not_10[1],
+                              c='#1f77b4',
+                              label='not top 10',
+                              alpha=0.3)
+    top10scatter = ax.scatter(X_pca_top_10[0], X_pca_top_10[1],
+                              c='orange',
+                              label='top 10',
+                              alpha=0.3)
+    ax.set_title('scatter plot of pc1 vs pc0 shaded by SalePrice category')
+    ax.set_xlabel('pc0, arbitrary units')
+    ax.set_ylabel('pc1, arbitrary units')
+    ax.yaxis.set_major_formatter(lambda x, y: '{:,}'.format(int(x)))
+    ax.xaxis.set_major_formatter(lambda x, y: '{:,}'.format(int(x)))
+    if pc0_upper_limit:
+        ax.set_xlim(ax.get_xlim()[0], pc0_upper_limit)
+    ax.legend()
+    plt.show()
+    
 
 def demo_standardization(column_name: str, df: pd.DataFrame) -> None:
     raw = df[column_name].tolist()
