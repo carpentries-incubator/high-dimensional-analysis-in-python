@@ -152,7 +152,7 @@ from helper_functions import plot_model_predictions
                              y_pred_train, y_pred_test);
 ```
 ![univariate_truePrice-vs-predPrice](../fig/regression/univariate_truePrice_vs_predPrice.png | width=100)
-<img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  width="60%" height="30%">
+<img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  width="20%" height="20%">
 
 ![univariate_yearBuilt-vs-predPrice](../fig/regression/univariate_yearBuilt_vs_predPrice.png | width=100)
 
