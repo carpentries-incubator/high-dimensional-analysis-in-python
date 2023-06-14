@@ -21,7 +21,7 @@ Linear regression is powerful technique that is often used to understand whether
 1. **Explain**: Use *statistics* to make scientific claims concerning which predictor variables have the greatest impact on sale price — the target variable
 2. **Predict**: Use *predictive modeling* to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
 
-In this workshop, we will explore how we can exploit well-established machine learning methods, including "multivariate regression" and "regularization techniques" (more on these terms later), to achieve both of the above goals.
+In this workshop, we will explore how we can exploit well-established machine learning methods, including *multivariate regression*, *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals.
 
 > ## To predict or explain. That is the question.
 > When trying to model data you use in your work, which goal is typically more prevalent? Do you typically care more about (1) accurately predicting some target variable or (2) making scientific claims concerning the existence of certain relationships between variables?
