@@ -1,5 +1,5 @@
 ---
-title: "Exploring High Dimensional Data"
+title: "Exploring high dimensional data"
 teaching: 20
 exercises: 2
 questions:
