@@ -136,7 +136,7 @@ def plot_model_predictions(
         y_test, y_pred_test, 
         err_type=None,train_err=None, test_err=None):
     
-    fig, (ax1, ax2) = plt.subplots(1,2)
+    fig, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
     fig.suptitle('Model Fit')
 
     # train set
@@ -153,8 +153,11 @@ def plot_model_predictions(
     # test set
     ax2.scatter(y_test, y_pred_test, alpha=.1) 
     ax2.plot([0, 1], [0, 1], transform=ax2.transAxes)
+    # ax2.yaxis.set_tick_params(labelleft=False)
 
+    # ax2.set_yticks([])
 #     ax2.axes.get_yaxis().set_ticklabels([]);
+
     if test_err is not None:
         ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
     else:
