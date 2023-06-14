@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: High dimensional data visualization techniques - t-SNE and PaCMAP
+title: "Data visualization techniques: t-SNE and PaCMAP"
 ---
 
