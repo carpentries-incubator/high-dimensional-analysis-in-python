@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: Exploring principal component analysis (PCA)
+title: The Ames housing dataset
 ---
 
