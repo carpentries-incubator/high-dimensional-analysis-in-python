@@ -11,7 +11,8 @@ FIXME: home page introduction
 
 > ## Prerequisites
 >
-> FIXME
+> Learners are expected to have basic Python programming skills (variable assignments, how to create a function, for loops, etc.) and familiarity with the Pandas package. If you need a refresher on Python before taking this workshop, please review the lesson materials from this [Introductory Python Carpentries workshop](https://swcarpentry.github.io/python-novice-inflammation/index.html).
+> 
 {: .prereq}
 
 {% include links.md %}
