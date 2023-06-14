@@ -151,8 +151,8 @@ from helper_functions import plot_model_predictions
                              y_train, y_test,
                              y_pred_train, y_pred_test);
 ```
-![univariate_truePrice-vs-predPrice](../fig/regression/univariate_truePrice-vs-predPrice.png)
-![univariate_yearBuilt-vs-predPrice](../fig/regression/univariate_yearBuilt-vs-predPrice.png)
+![univariate_truePrice-vs-predPrice](../fig/regression/univariate_truePrice_vs_predPrice.png)
+![univariate_yearBuilt-vs-predPrice](../fig/regression/univariate_yearBuilt_vs_predPrice.png)
 
 
 > ## Train/test splits — how much data should be left out for testing?
