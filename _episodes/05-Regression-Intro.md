@@ -129,11 +129,11 @@ reg = LinearRegression().fit(x_train,y_train)
 ```
 
 #### 5) Get model predictions for train and test data
-Next, we can assess the model's ability to generalize to new datasets by measuring its performance on the remaining, unseen data. This subset of data is referred to as the **test data** or holdout set. By evaluating the model on the test set, which was not used during training, we can obtain an unbiased estimate of its performance. If we were to evaluate the model solely on the training data, it could lead to **overfitting**. Overfitting occurs when the model learns the noise and specific patterns of the training data too well, resulting in poor performance on new data. By using a separate test set, we can identify if the model has overfit the training data and assess its ability to generalize to unseen samples.
+Next, we can assess the model's ability to generalize to new datasets by measuring its performance on the remaining, unseen data. This subset of data is referred to as the **test data** or holdout set. By evaluating the model on the test set, which was not used during training, we can obtain an unbiased estimate of its performance. If we were to evaluate the model solely on the training data, it could lead to **overfitting**. Overfitting occurs when the model learns the noise and specific patterns of the training data too well, resulting in poor performance on new data. By using a separate test set, we can identify if the model has overfit the training data and assess its ability to generalize to unseen samples. While overfitting isn't typically likely to occur when using only a single predictor variable, it is still a good idea to use a train/test split when fitting univariate models. This can help in detected unanticipated issues with the training data, such as missing values, outliers, or other anomalies that affect the model's behavior.
 
 ![The above image is from Badillo et al., 2020. An Introduction to Machine Learning. Clinical Pharmacology & Therapeutics. 107. 10.1002/cpt.1796.](../fig/regression/under_v_over_fit.png)
 
-While overfitting is typically not likely to occur when using only a single predictor variable, it is still a good idea to use a train/test split when fitting univariate models. This can help in detected unanticipated issues with the data, such as missing values, outliers, or other anomalies that affect the model's behavior.
+
 
 ```python
 y_pred_train=reg.predict(x_train)
