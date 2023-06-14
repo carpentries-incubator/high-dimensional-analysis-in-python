@@ -146,9 +146,14 @@ y_pred_test=reg.predict(x_test)
 
 ```python
 from helper_functions import plot_model_predictions
-plot_model_predictions(y_train, y_pred_train,
-                       y_test, y_pred_test)
+(fig1, fig2) = plot_model_predictions('Year Built',
+                             x_train, x_test,
+                             y_train, y_test,
+                             y_pred_train, y_pred_test);
 ```
+![univariate_truePrice-vs-predPrice](../fig/regression/univariate_truePrice-vs-predPrice.png)
+![univariate_yearBuilt-vs-predPrice](../fig/regression/univariate_yearBuilt-vs-predPrice.png)
+
 
 > ## Train/test splits — how much data should be left out for testing?
 > 
