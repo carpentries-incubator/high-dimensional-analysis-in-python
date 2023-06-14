@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: Exploring Principal Component Analysis (PCA)
+title: Exploring principal component analysis (PCA)
 ---
 
