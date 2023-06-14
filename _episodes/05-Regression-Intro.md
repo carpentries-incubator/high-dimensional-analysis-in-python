@@ -10,7 +10,7 @@ objectives:
 questions:
 - "What is the equation/structure of a linear model?"
 - "What are the two different goals to keep in mind when modeling data?"
-- "How can we assess a model's ability to fit data?"
+- "How can we evaluate a model's ability to capture a true signal/relationship in the data versus spurious noise?"
 
 title: Intro to linear regression
 ---
