@@ -131,17 +131,32 @@ def get_feat_types():
 
 # regression 
 import matplotlib.pyplot as plt
-def plot_model_predictions(
-        y_train, y_pred_train, 
-        y_test, y_pred_test, 
-        err_type=None,train_err=None, test_err=None):
+def plot_model_predictions(predictor,
+                           x_train, x_test,
+                           y_train, y_test,
+                           y_pred_train, y_pred_test,
+                           err_type=None,train_err=None,test_err=None):
     
-    fig, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
-    fig.suptitle('Model Fit')
+    if type(y_train) != 'numpy.ndarray':
+        y_train=np.asarray(y_train)
+    if type(y_test) != 'numpy.ndarray':
+        y_test=np.asarray(y_test)
+    if type(y_pred_train) != 'numpy.ndarray':
+        y_pred_train=np.asarray(y_pred_train)
+    if type(y_pred_test) != 'numpy.ndarray':
+        y_pred_test=np.asarray(y_pred_test)
+        
+    # get min and max y values
+    all_y = np.concatenate((y_train, y_test, y_pred_train, y_pred_test), axis=0)
+    min_y = 30000#np.percentile(all_y, 2)
+    max_y = 400000#np.percentile(all_y, 95)
+    print(min_y, max_y)
+    
+    fig1, (ax1, ax2) = plt.subplots(1,2)#, sharex=True, sharey=True)
+    fig1.suptitle('True Sale Price VS Predicted Sale Price')
 
     # train set
     ax1.scatter(y_train, y_pred_train, alpha=.1) 
-    ax1.plot([0, 1], [0, 1], transform=ax1.transAxes)
 
     if train_err is not None:
         ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
@@ -149,19 +164,46 @@ def plot_model_predictions(
         ax1.title.set_text('Train Data')
     ax1.set_xlabel('True Price')
     ax1.set_ylabel('Predicted Price')
+    ax1.set_aspect('equal')
+    # ax1.axis('equal')
+    ax1.set_xlim([min_y, max_y])
+    ax1.set_ylim([min_y, max_y])
+    ax1.plot([0, 1], [0, 1], transform=ax1.transAxes)
+    ax1.xaxis.set_ticks(np.arange(50000, 350001, 50000))
+    ax1.yaxis.set_ticks(np.arange(50000, 350001, 50000))
+    for tick in ax1.get_xticklabels():
+        tick.set_rotation(45)
 
+    
     # test set
     ax2.scatter(y_test, y_pred_test, alpha=.1) 
+    ax2.set_aspect('equal')
+    ax2.set_xlim([min_y, max_y])
+    ax2.set_ylim([min_y, max_y])
     ax2.plot([0, 1], [0, 1], transform=ax2.transAxes)
-    # ax2.yaxis.set_tick_params(labelleft=False)
+    ax2.xaxis.set_ticks(np.arange(50000, 250001, 50000))
+    ax2.yaxis.set_ticks(np.arange(50000, 250001, 50000))
 
-    # ax2.set_yticks([])
-#     ax2.axes.get_yaxis().set_ticklabels([]);
+    ax2.xaxis.set_tick_params(labelbottom=False)
+    ax2.yaxis.set_tick_params(labelleft=False)
 
     if test_err is not None:
         ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
     else:
         ax2.title.set_text('Test Data')
+
+    # ax2.set_aspect('equal')
+
+    # regression plot
+    fig2, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
+    fig2.suptitle('Model Fit: ' + predictor + ' VS Sale Price')
+    ax1.scatter(x_train,y_train,alpha=.1) 
+    ax1.plot(x_train,y_pred_train,color='k') 
+
+    ax2.scatter(x_test,y_test,alpha=.1) 
+    ax2.plot(x_test,y_pred_test,color='k') 
+
+    return (fig1, fig2)
     
 # PCA
 def my_PCA(X: pd.DataFrame, variance_thresh: float) -> pd.DataFrame:
