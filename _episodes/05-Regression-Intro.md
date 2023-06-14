@@ -81,7 +81,7 @@ print(f"housing['target_names'] = {housing['target_names']}\n")
 
 
 #### 2) Extract predictor variable and target variable from dataframe
-Next, we'll extract the two variables we'll use for our model — the target variable that we'll attempt to predict (SalePrice), and a sinlge predictor variable that will be used to predict the target variable. For this example, we'll explore how well the "YearBuilt" variable (i.e., the predictor variable) can predict sale prices.
+Next, we'll extract the two variables we'll use for our first model — the target variable that we'll attempt to predict (SalePrice), and a sinlge predictor variable that will be used to predict the target variable. For this example, we'll explore how well the "YearBuilt" variable (i.e., the predictor variable) can predict sale prices.
 
 
 ```python
