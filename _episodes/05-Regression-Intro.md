@@ -91,26 +91,7 @@ x=housing['data']['YearBuilt']
 ```
 
 #### 3) Train/test split
-Next, we will prepare two subsets of our data to be used for "model-fitting" and "model evaluation".
-
-During the model-fitting step, we use a subset of the data referred to as **training data** to estimate the model's coefficients. The univariate model will find a line of best fit through this data.
-
-Next, we can assess the model's ability to generalize to new datasets by measuring its performance on the remaining, unseen data. This subset of data is referred to as the **test data** or holdout set. By evaluating the model on the test set, which was not used during training, we can obtain an unbiased estimate of its performance.
-
-If we were to evaluate the model solely on the training data, it could lead to **overfitting**. Overfitting occurs when the model learns the noise and specific patterns of the training data too well, resulting in poor performance on new data. By using a separate test set, we can identify if the model has overfit the training data and assess its ability to generalize to unseen samples.
-
-While overfitting is typically not likely to occur when using only a single predictor variable, it is still a good idea to use a train/test split when fitting univariate models. This can help in detected unanticipated issues with the data, such as missing values, outliers, or other anomalies that affect the model's behavior.
-
-![The above image is from Badillo et al., 2020. An Introduction to Machine Learning. Clinical Pharmacology & Therapeutics. 107. 10.1002/cpt.1796.](../fig/regression/under_v_over_fit.png)
-
-
-When determinining what percentage of data to leave out as the test set, it is important to balance the following opposing forces:
-* as training dataset size increases, the model has more data to learn from and can typically generalize better
-* as test dataset size increases, you can gain a better assessment of the model's ability to generalize
-
-Typically, you want to leave out just enough test data so that your estimate of model performance isn't skewed by having too few observations in the test set. A good rule of thumb is to reserve 1/3 of the full dataset for testing, but you may want to lower this percentage if you do not have many samples to begin with (i.e., save more data for training the model).
-
-The below code will split our dataset into a training dataset containing 2/3 of the samples, and a test set containing the remaining 1/3 of the data.
+Next, we will prepare two subsets of our data to be used for *model fitting* and *model evaluation*. The below code will split our dataset into a training dataset containing 2/3 of the samples, and a test set containing the remaining 1/3 of the data. We'll discuss these different subsets in more detail in just a bit.
 
 
 ```python
@@ -140,7 +121,7 @@ print(type(x_train))
 
 
 #### 4) Fit the model to the training dataset
-
+During the model fitting step, we use a subset of the data referred to as **training data** to estimate the model's coefficients. The univariate model will find a line of best fit through this data.
 
 ```python
 from sklearn.linear_model import LinearRegression
@@ -148,7 +129,11 @@ reg = LinearRegression().fit(x_train,y_train)
 ```
 
 #### 5) Get model predictions for train and test data
+Next, we can assess the model's ability to generalize to new datasets by measuring its performance on the remaining, unseen data. This subset of data is referred to as the **test data** or holdout set. By evaluating the model on the test set, which was not used during training, we can obtain an unbiased estimate of its performance. If we were to evaluate the model solely on the training data, it could lead to **overfitting**. Overfitting occurs when the model learns the noise and specific patterns of the training data too well, resulting in poor performance on new data. By using a separate test set, we can identify if the model has overfit the training data and assess its ability to generalize to unseen samples.
 
+![The above image is from Badillo et al., 2020. An Introduction to Machine Learning. Clinical Pharmacology & Therapeutics. 107. 10.1002/cpt.1796.](../fig/regression/under_v_over_fit.png)
+
+While overfitting is typically not likely to occur when using only a single predictor variable, it is still a good idea to use a train/test split when fitting univariate models. This can help in detected unanticipated issues with the data, such as missing values, outliers, or other anomalies that affect the model's behavior.
 
 ```python
 y_pred_train=reg.predict(x_train)
@@ -164,6 +149,19 @@ from helper_functions import plot_model_predictions
 plot_model_predictions(y_train, y_pred_train,
                        y_test, y_pred_test)
 ```
+
+> ## Train/test splits — how much data should be left out for testing?
+> 
+> In your  opinion, what percentage of data should be used for training versus testing the model? Would your answer change depending on the overall size of the dataset?
+> 
+> > ## Solution
+> > When determinining what percentage of data to leave out as the test set, it is important to balance the following opposing forces:
+> > * as training dataset size increases, the model has more data to learn from and can typically generalize better
+> > * as test dataset size increases, you can gain a better assessment of the model's ability to generalize
+> > Typically, you want to leave out just enough test data so that your estimate of model performance isn't skewed by having too few observations in the test set. A good rule of thumb is to reserve 1/3 of the full dataset for testing, but you may want to lower this percentage if you do not have many samples to begin with (i.e., save more data for training the model).
+> > 
+> {:.solution}
+{:.challenge}
 
 
 
