@@ -20,9 +20,9 @@ Click to download: [helper_functions.py](/code/helper_functions.py)
 
 ## Installing Python using Anaconda
 
-[Python][python] is a popular language for scientific computing, and a frequent choice
+[Python](https://python.org/) is a popular language for scientific computing, and a frequent choice
 for machine learning as well. Installing all of its scientific packages
-individually can be a bit difficult, however, so we recommend the installer [Anaconda][anaconda]
+individually can be a bit difficult, however, so we recommend the installer [Anaconda](https://www.anaconda.com/products/individual)
 which includes most (but not all) of the software you will need.
 
 Regardless of how you choose to install it, please make sure you install Python
@@ -31,9 +31,9 @@ least a day in advance of the workshop.  If you encounter problems with the
 installation procedure, ask your workshop organizers via e-mail for assistance so
 you are ready to go as soon as the workshop begins.
 
-### Windows - [Video tutorial][video-windows]
+### Windows - [Video tutorial](https://www.youtube.com/watch?v=xxQ0mzZ8UvA)
 
-1. Open [https://www.anaconda.com/products/distribution][anaconda-distribution]
+1. Open [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution)
    with your web browser.
 
 2. Download the Python 3 installer for Windows.
@@ -44,7 +44,7 @@ you are ready to go as soon as the workshop begins.
 
 ### Mac OS X - [Video tutorial][video-mac]
 
-1. Open [https://www.anaconda.com/products/distribution][anaconda-distribution]
+1. Open [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution)
    with your web browser.
 
 2. Download the Python 3 installer for OS X.
@@ -56,7 +56,7 @@ you are ready to go as soon as the workshop begins.
 Note that the following installation steps require you to work from the shell.
 If you run into any difficulties, please request help before the workshop begins.
 
-1.  Open [https://www.anaconda.com/products/distribution][anaconda-distribution] with your web browser.
+1.  Open [https://www.anaconda.com/products/distribution](https://www.anaconda.com/products/distribution) with your web browser.
 
 2.  Download the Python 3 installer for Linux.
 
@@ -106,13 +106,13 @@ conda activate highdim_workshop
 
 ## Starting Jupyter Lab
 
-We will teach using Python in [Jupyter lab][jupyter], a
+We will teach using Python in [Jupyter lab](http://jupyter.org/), a
 programming environment that runs in a web browser. Jupyter requires a reasonably
 up-to-date browser, preferably a current version of Chrome, Safari, or Firefox
 (note that Internet Explorer version 9 and below are *not* supported). If you
 installed Python using Anaconda, Jupyter should already be on your system. If
 you did not use Anaconda, use the Python package manager pip
-(see the [Jupyter website][jupyter-install] for details.)
+(see the [Jupyter website](http://jupyter.readthedocs.io/en/latest/install.html#optional-for-experienced-python-developers-installing-jupyter-with-pip) for details.)
 
 To start jupyter lab, open a terminal and type the command:
 
