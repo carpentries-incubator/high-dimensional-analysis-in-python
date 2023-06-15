@@ -153,12 +153,29 @@ from helper_functions import plot_model_predictions
                              y_train, y_test,
                              y_pred_train, y_pred_test);
 ```
-<br><br>
+
+
+  
+
+  
 <img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
 <img src="../fig/regression/univariate_yearBuilt_vs_predPrice.png"  align="center" width="40%" height="40%">
 
 
-<br><br><br><br><br><br><br><br><br><br><br><br>
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
 
 > ## Inspect the plots
 > 
