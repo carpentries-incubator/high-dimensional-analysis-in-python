@@ -18,7 +18,7 @@ title: Intro to linear regression
 ## Goals of Linear Regression
 Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset (linearly) relate to some *target variable* (e.g., sale prices). By modeling these relationships in the housing data, we can:
 
-1. **Explain**: Use *statistics* to make scientific claims concerning which predictor variables have the greatest impact on sale price — the target variable
+1. **Explain**: Use *statistics* to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable
 2. **Predict**: Use *predictive modeling* to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
 
 In this workshop, we will explore how we can exploit well-established machine learning methods, including *multivariate regression*, *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals.
@@ -50,7 +50,7 @@ where...
 
 
 ### Predicting housing prices
-Given the Ames housing dataset, let's first review how we can use univariate models to predict housing sale prices. We'll unpack techniques to *explain* univariate models in the next episode (**spoiler alert**: statistics are your friend).
+Given the Ames housing dataset, let's first review how we can use univariate models to predict housing sale prices. We'll unpack how we can detect *statistically significant* relationships between variables in the next episode.
 
 We'll start by loading in the Ames housing data as we have done previously in this workshop.
 
