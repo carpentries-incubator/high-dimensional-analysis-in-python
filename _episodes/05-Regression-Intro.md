@@ -28,11 +28,13 @@ In this workshop, we will explore how we can exploit well-established machine le
 
 > ## To predict or explain. That is the question.
 > When trying to model data you use in your work, which of these two goals is typically more prevalent?
-> 1) accurately predicting values of some target variable 
-> 2) making scientific claims concerning the existence of certain relationships between variables
+> 
+> 1. accurately predicting values of some target variable
+> 
+> 2. making scientific claims concerning the existence of certain relationships between variables
 > > ## Solution
 > >
-> > In a research setting, goal #1 (explain) typically takes higher priority over goal #2 (predict) since explainations hold high value in science, but both goals are sometimes relevant. In industry, the reverse is typically true as many industry applications place predictive accuracy above explainability. We will explore how these goals align and sometimes diverge from one another throughout this lesson.
+> > In a research setting, goal #2 (explain) typically takes higher priority over goal #1 (predict) since explainations hold high value in science, but both goals are sometimes relevant. In industry, the reverse is typically true as many industry applications place predictive accuracy above explainability. We will explore how these goals align and sometimes diverge from one another throughout this lesson.
 > {:.solution}
 {:.challenge}
 
