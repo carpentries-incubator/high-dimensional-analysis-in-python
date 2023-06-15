@@ -152,10 +152,11 @@ def plot_model_predictions(predictor,
     max_y = 400000#np.percentile(all_y, 95)
     print(min_y, max_y)
     
+    # Fig1. True vs predicted sale price
     fig1, (ax1, ax2) = plt.subplots(1,2)#, sharex=True, sharey=True)
-    fig1.suptitle('True Sale Price VS Predicted Sale Price')
+    fig1.suptitle('True Sale Price vs. Predicted Sale Price')
 
-    # train set
+    #train set
     ax1.scatter(y_train, y_pred_train, alpha=.1) 
 
     if train_err is not None:
@@ -174,8 +175,7 @@ def plot_model_predictions(predictor,
     for tick in ax1.get_xticklabels():
         tick.set_rotation(45)
 
-    
-    # test set
+    #test set
     ax2.scatter(y_test, y_pred_test, alpha=.1) 
     ax2.set_aspect('equal')
     ax2.set_xlim([min_y, max_y])
@@ -192,16 +192,28 @@ def plot_model_predictions(predictor,
     else:
         ax2.title.set_text('Test Data')
 
-    # ax2.set_aspect('equal')
-
-    # regression plot
+    # Fig2. Line of best fit 
+    #train data
     fig2, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
-    fig2.suptitle('Model Fit: ' + predictor + ' VS Sale Price')
+    fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
     ax1.scatter(x_train,y_train,alpha=.1) 
     ax1.plot(x_train,y_pred_train,color='k') 
+    ax1.set_ylim([min_y, np.max(all_y)])
 
+    ax1.set_xlabel('Year Built')
+    ax1.set_ylabel('Sale Price')
+    if train_err is not None:
+        ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
+    else:
+        ax1.title.set_text('Train Data')
+    #test data
     ax2.scatter(x_test,y_test,alpha=.1) 
     ax2.plot(x_test,y_pred_test,color='k') 
+    if test_err is not None:
+        ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
+    else:
+        ax2.title.set_text('Test Data')
+    ax2.set_ylim([min_y, np.max(all_y)])
 
     return (fig1, fig2)
     
