@@ -180,7 +180,7 @@ from helper_functions import plot_model_predictions
 > ## Inspect the plots
 > 
 > 1. Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house?  Why or why not?
-> 2. Does our model seem to exhibit any signs of overfitting? What about underfitting?
+> 2. Does the model seem to exhibit any signs of overfitting? What about underfitting?
 >    
 > > ## Solution
 > > 
