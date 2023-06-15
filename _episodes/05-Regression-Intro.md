@@ -184,10 +184,8 @@ from helper_functions import plot_model_predictions
 >    
 > > ## Solution
 > > 
-> > Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house?  Why or why not?
-> > Our linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. I would not use this model to predict sale prices since it does not appear to be very accurate.
+> > This linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship between these variables appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. It is probably best to avoid using this model to predict sale prices since it is not very accurate.
 > > 
-> > Does our model seem to exhibit any signs of overfitting? What about underfitting?
 > > Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
 > >
 > {:.solution}
@@ -205,12 +203,6 @@ from helper_functions import plot_model_predictions
 > > 
 > {:.solution}
 {:.challenge}
-
-
-
-![png](output_16_0.png)
-
-
 
 #### 5) Measure model error and assess under/overfitting
 **Root Mean Squared Error (RMSE)**:
@@ -233,13 +225,6 @@ plot_model_predictions(y_train, y_pred_train,
 
     Train RMSE = 67500.86657586123
     Test RMSE = 68106.22257848026
-
-
-
-
-![png](output_18_1.png)
-
-
 
 Here, both train and test RMSE are very similar to one another. As expected with most univariate models, we do not see any evidence of overfitting. However, we do see that our model is perhaps underfitting given its poor ability to predict any of the true housing prices.
 
