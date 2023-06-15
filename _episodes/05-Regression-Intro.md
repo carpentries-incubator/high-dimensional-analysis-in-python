@@ -270,41 +270,9 @@ Our model predicts 27.1% (28.7%) of the variance across sale prices in the test 
 To read more about additional error/loss measurements, visit [sklearn's metrics documentation](https://scikit-learn.org/stable/modules/model_evaluation.html).
 
 > ## More on R-squared
-> Some of the below is paraphrased from (make sure to go back and rephrase in own words -- use different examples at least): https://www.statology.org/good-r-squared-value
-> 
-> R-squared is a measure of how well a linear regression model “fits” a dataset (i.e., the proportion of the variance in the response variable that can be explained by the predictor variable(s)).
-> 
-> The value for R-squared can range from 0 to 1. A value of 0 indicates that the response variable cannot be explained by the predictor variable at all. A value of 1 indicates that the response variable can be perfectly explained without error by the predictor variable. In practice, you will likely never see a value of 0 or 1 for R-squared. Instead, you’ll likely encounter some value between 0 and 1. ""
-> 
-> Our above example model is able to explain roughly 27% of the variance in the test dataset. Is this a “good” value for R-squared?
-> 
-> **Hint**: The answer to this question depends on your objective for the regression model. This relates back to the two tangentially related goals of *explaining* vs *predicting*, namely:
-> 
-> 1. Are you interested in *explaining* the relationship between the predictor(s) and the response variable?
-> 
-> OR
-> 
-> 2. Are you interested in *predicting* the response variable?
-> 
-> Depending on the objective, the answer to "What is a good value for R-squared?" will be different.
 > 
 > > ## Solution
 > >
-> > #### Explaining the Relationship Between the Predictor(s) and the Response Variable
-> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable is typically always interesting — regardless of the the effect size.
-> > 
-> > For example, suppose in the regression example from above, you see that the coefficient  for the predictor YearBuilt is 100 and that it's statistically significant. This means that an increase of one in YearBuilt  is associated with an average increase of \$100 dollars in final sale price.
-> > 
-> > Whether the R-squared value for this regression model is 0.2 or 0.9 doesn’t change this interpretation. Since you are simply interested in the relationship between YearBuilt and final sale price, you don't have to be overly concerned with the R-square value of the model.
-> > 
-> > #### Predicting the Response Variable
-> > If your main objective is to predict the value of the response variable accurately using the predictor variable, then R-squared is important.
-> > 
-> > In general, the larger the R-squared value, the more precisely the predictor variables are able to predict the value of the response variable.
-> > 
-> > How high an R-squared value needs to be depends on how precise you need to be. For example, in scientific studies, the R-squared may need to be above 0.95 for a regression model to be considered reliable. In other domains, an R-squared of just 0.3 may be sufficient if there is extreme variability in the dataset.
-> > 
-> > To find out what is considered a “good” R-squared value, you will need to explore what R-squared values are generally accepted in your particular field of study.
 > > 
 > {:.solution}
 {:.challenge}
