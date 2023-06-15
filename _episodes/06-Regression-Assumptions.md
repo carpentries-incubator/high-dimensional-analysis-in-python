@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: Statistics and assumptions of univariate regression
+title: Regression assumptions & stats
 ---
 
