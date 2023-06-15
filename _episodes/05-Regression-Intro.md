@@ -271,7 +271,25 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 
 > ## More on R-squared
 > 
+> Our above example model is able to explain roughly 27% of the variance in the test dataset. Is this a “good” value for R-squared?
+> 
+> **Hint**: The answer to this question depends on your objective for the regression model. This relates back to the two tangentially related goals of *explaining* vs *predicting*, namely:
+> 
+> 1. Are you interested in *explaining* the relationship between the predictor(s) and the response variable?
+> 
+> OR
+> 
+> 2. Are you interested in *predicting* the response variable?
+> 
+> Depending on the objective, the answer to "What is a good value for R-squared?" will be different.
+> 
 > > ## Solution
+> >
+> > #### Explaining the Relationship Between the Predictor(s) and the Response Variable
+> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable is typically always interesting — regardless of the the effect size.
+> > 
+> > #### Predicting the Response Variable
+> > If your main objective is to predict the value of the response variable accurately using the predictor variable, then R-squared is important. The value for R-squared can range from 0 to 1. A value of 0 indicates that the response variable cannot be explained by the predictor variable at all. A value of 1 indicates that the response variable can be perfectly explained without error by the predictor variable. In general, the larger the R-squared value, the more precisely the predictor variables are able to predict the value of the response variable. How high an R-squared value needs to be depends on how precise you need to be for your specific model's application. To find out what is considered a “good” R-squared value, you will need to explore what R-squared values are generally accepted in your particular field of study.
 > >
 > > 
 > {:.solution}
