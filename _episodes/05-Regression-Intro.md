@@ -199,8 +199,12 @@ from helper_functions import plot_model_predictions
 > > When determinining what percentage of data to leave out as the test set, it is critical to avoid having too small a training or test set.
 > > 
 > > If the train set is too small, you risk overfitting the model. An overfit model is too sensitive to noise in the data and fails to capture underlying trends.
-> > If the test set is too small, you risk deriving poor estimates of the model's generalizability. With this measure tainted, it is difficult to say for certain whether the model overfits or not. 
-> > In a limited data regime, the goal is to leave out just enough test data so that your estimate of model performance isn't skewed by having too few observations in the test set. This leaves as much data as possible available for training the model (which typically requires more data than testing). Researchers sometimes leave out as little as 10% of the data for testing when data is extremely limited. When data is abundant, it is fairly common practice to reserve 1/3 of the full dataset for testing. 
+> >   
+> > If the test set is too small, you risk deriving poor estimates of the model's generalizability. With this measure tainted, it is difficult to say for certain whether the model overfits or not.
+> >   
+> > In a limited data regime, the goal is to leave out just enough test data so that your estimate of model performance isn't skewed by having too few observations in the test set. This leaves as much data as possible available for training the model (which typically requires more data than testing). Researchers sometimes leave out as little as 10% of the data for testing when data is extremely limited.
+> >   
+> > When data is abundant, it is fairly common practice to reserve 1/3 of the full dataset for testing. 
 > > 
 > {:.solution}
 {:.challenge}
