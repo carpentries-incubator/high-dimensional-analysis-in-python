@@ -2,14 +2,17 @@
 teaching: 45
 exercises: 2
 keypoints:
-- "Linear regression models can be used to predict or explain target variables of interest"
+- "Linear regression models can be used to predict a target variable and/or to reveal relationships between variables"
+- "Linear models are most effective when applied to linear relationships. Data transformation techniques can be used to help ensure that only linear relationships are modelled."
 - "Train/test splits are used to assess under/overfitting in a model"
-- "Different error measurements can be used to assess the model"
+- "Different model evaluation metrics provide different perspectives of model error. Some error measurements, such as R-squared, are not as relevant for explanatory models."
 objectives:
-- "Understand the basic building blocks of a linear model before moving on to model assumptions and multivariate models."
+- "Review structure and goals of linear regression"
+- "Understand how to detect under and overfitting in a model"
+- 
 questions:
-- "What is the equation/structure of a linear model?"
 - "What are the two different goals to keep in mind when modeling data?"
+- "What kinds of questions can be answered using linear regresion?"
 - "How can we evaluate a model's ability to capture a true signal/relationship in the data versus spurious noise?"
 
 title: Predictive vs. explanatory regression
