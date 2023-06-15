@@ -153,9 +153,12 @@ from helper_functions import plot_model_predictions
                              y_train, y_test,
                              y_pred_train, y_pred_test);
 ```
+<br><br>
 <img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
-<img src="../fig/regression/univariate_yearBuilt_vs_predPrice.png"  align="left" width="40%" height="40%">
+<img src="../fig/regression/univariate_yearBuilt_vs_predPrice.png"  align="center" width="40%" height="40%">
 
+
+<br><br><br><br><br><br><br><br><br><br><br><br>
 
 > ## Inspect the plots
 > 
@@ -164,12 +167,12 @@ from helper_functions import plot_model_predictions
 >    
 > > ## Solution
 > > 
-> > 1. Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house?  Why or why not?
+> > Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house?  Why or why not?
 > > Our linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. I would not use this model to predict sale prices since it does not appear to be very accurate.
 > > 
-> > 2. Does our model seem to exhibit any signs of overfitting? What about underfitting?
+> > Does our model seem to exhibit any signs of overfitting? What about underfitting?
 > > Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
-> > 
+> >
 > {:.solution}
 {:.challenge}
 
