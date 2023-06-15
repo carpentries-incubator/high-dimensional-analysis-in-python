@@ -9,7 +9,7 @@ keypoints:
 objectives:
 - "Review structure and goals of linear regression"
 - "Understand how to detect under and overfitting in a model"
-- 
+- "Know when to use different model evaluation metrics for different modeling goals"
 questions:
 - "What are the two different goals to keep in mind when modeling data?"
 - "What kinds of questions can be answered using linear regresion?"
