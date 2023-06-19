@@ -149,7 +149,7 @@ def plot_model_predictions(predictor,
     # get min and max y values
     all_y = np.concatenate((y_train, y_test, y_pred_train, y_pred_test), axis=0)
     min_y = 30000#np.percentile(all_y, 2)
-    max_y = 400000#np.percentile(all_y, 95)
+    max_y = 500000#np.percentile(all_y, 95)
     print(min_y, max_y)
     
     # Fig1. True vs predicted sale price
