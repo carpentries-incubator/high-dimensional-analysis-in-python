@@ -9,7 +9,7 @@ keypoints:
 objectives:
 - "Review structure and goals of linear regression"
 - "Learn how to train and evaluate a predictive regression model"
-- "Understand how to detect under/overfitting in a model"
+- "Understand how to detect underfitting and overfitting in a model"
 - "Know when to use different model evaluation metrics for different modeling goals"
 questions:
 - "What are the two different goals to keep in mind when fitting or "training" machine learning models?"
