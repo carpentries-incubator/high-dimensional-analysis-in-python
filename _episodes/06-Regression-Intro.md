@@ -11,7 +11,7 @@ objectives:
 - "Understand how to detect under and overfitting in a model"
 - "Know when to use different model evaluation metrics for different modeling goals"
 questions:
-- "What are the two different goals to keep in mind when modeling data?"
+- "What are the two different goals to keep in mind when fitting or "training" machine learning models?"
 - "What kinds of questions can be answered using linear regresion?"
 - "How can we evaluate a model's ability to capture a true signal/relationship in the data versus spurious noise?"
 
