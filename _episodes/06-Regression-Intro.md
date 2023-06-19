@@ -8,7 +8,8 @@ keypoints:
 - "Different model evaluation metrics provide different perspectives of model error. Some error measurements, such as R-squared, are not as relevant for explanatory models."
 objectives:
 - "Review structure and goals of linear regression"
-- "Understand how to detect under and overfitting in a model"
+- "Learn how to train and evaluate a predictive regression model"
+- "Understand how to detect under/overfitting in a model"
 - "Know when to use different model evaluation metrics for different modeling goals"
 questions:
 - "What are the two different goals to keep in mind when fitting or "training" machine learning models?"
