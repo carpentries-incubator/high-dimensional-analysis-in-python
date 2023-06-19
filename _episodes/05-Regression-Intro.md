@@ -2,32 +2,36 @@
 teaching: 45
 exercises: 2
 keypoints:
-- "Linear regression models can be used to predict or explain target variables of interest"
+- "Linear regression models can be used to predict a target variable and/or to reveal relationships between variables"
+- "Linear models are most effective when applied to linear relationships. Data transformation techniques can be used to help ensure that only linear relationships are modelled."
 - "Train/test splits are used to assess under/overfitting in a model"
-- "Different error measurements can be used to assess the model"
+- "Different model evaluation metrics provide different perspectives of model error. Some error measurements, such as R-squared, are not as relevant for explanatory models."
 objectives:
-- "Understand the basic building blocks of a linear model before moving on to model assumptions and multivariate models."
+- "Review structure and goals of linear regression"
+- "Understand how to detect under and overfitting in a model"
+- "Know when to use different model evaluation metrics for different modeling goals"
 questions:
-- "What is the equation/structure of a linear model?"
 - "What are the two different goals to keep in mind when modeling data?"
+- "What kinds of questions can be answered using linear regresion?"
 - "How can we evaluate a model's ability to capture a true signal/relationship in the data versus spurious noise?"
 
-title: Intro to linear regression
+title: Predictive vs. explanatory regression
 ---
 
 ## Goals of Linear Regression
-Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset (linearly) relate to some *target variable* (e.g., sale prices). By modeling these relationships in the housing data, we can:
+Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset ***linearly*** relate to some *target variable* (e.g., sale prices). By modeling these relationships in the housing data, we can:
 
-1. **Explain**: Use *statistics* to make scientific claims concerning which predictor variables have the greatest impact on sale price — the target variable
+1. **Explain**: Use *statistics* to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable
 2. **Predict**: Use *predictive modeling* to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
 
 In this workshop, we will explore how we can exploit well-established machine learning methods, including *multivariate regression*, *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals.
 
 > ## To predict or explain. That is the question.
-> When trying to model data you use in your work, which goal is typically more prevalent? Do you typically care more about (1) accurately predicting some target variable or (2) making scientific claims concerning the existence of certain relationships between variables?
+> When trying to model data you use in your work, which of the above two goals is typically more prevalent? Explaining or predicting?
+> 
 > > ## Solution
 > >
-> > In a research setting, goal #1 (explain) typically takes higher priority over goal #2 (predict) since explainations hold high value in science, but both goals are sometimes relevant. In industry, the reverse is typically true as many industry applications place predictive accuracy above explainability. We will explore how these goals align and sometimes diverge from one another throughout this lesson.
+> > In a research setting, explaining relationships typically takes higher priority over predicting since explainations hold high value in science, but both goals are sometimes relevant. In industry, the reverse is typically true as many industry applications place predictive accuracy above explainability. We will explore how these goals align and sometimes diverge from one another throughout this lesson.
 > {:.solution}
 {:.challenge}
 
@@ -48,7 +52,7 @@ where...
 
 
 ### Predicting housing prices
-Given the Ames housing dataset, let's first review how we can use univariate models to predict housing sale prices. We'll unpack techniques to *explain* univariate models in the next episode (**spoiler alert**: statistics are your friend).
+Given the Ames housing dataset, let's first review how we can use univariate models to predict housing sale prices. We'll unpack how we can detect *statistically significant* relationships between variables in the next episode.
 
 We'll start by loading in the Ames housing data as we have done previously in this workshop.
 
@@ -89,6 +93,8 @@ Next, we'll extract the two variables we'll use for our first model — the targ
 y=housing['target']
 x=housing['data']['YearBuilt']
 ```
+#### To-Do
+- plot x and y and observe nonlinear relationship. Correct before moving forward since we're using ***linear*** models!
 
 #### 3) Train/test split
 Next, we will prepare two subsets of our data to be used for *model fitting* and *model evaluation*. The below code will split our dataset into a training dataset containing 2/3 of the samples, and a test set containing the remaining 1/3 of the data. We'll discuss these different subsets in more detail in just a bit.
@@ -151,27 +157,61 @@ from helper_functions import plot_model_predictions
                              y_train, y_test,
                              y_pred_train, y_pred_test);
 ```
-<img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  width="50%" height="50%">
-<img src="../fig/regression/univariate_yearBuilt_vs_predPrice.png"  width="50%" height="50%">
+
+
+  
+
+  
+<img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
+<img src="../fig/regression/univariate_yearBuilt_vs_predPrice.png"  align="center" width="40%" height="40%">
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+
+
+> ## Inspect the plots
+> 
+> 1. Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house?  Why or why not?
+> 2. Does the model seem to exhibit any signs of overfitting? What about underfitting?
+>    
+> > ## Solution
+> > 
+> > This linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship between these variables appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. It is probably best to avoid using this model to predict sale prices since it is not very accurate.
+> > 
+> > Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
+> >
+> {:.solution}
+{:.challenge}
 
 > ## Train/test splits — how much data should be left out for testing?
 > 
 > In your  opinion, what percentage of data should be used for training versus testing the model? Would your answer change depending on the overall size of the dataset?
 > 
 > > ## Solution
-> > When determinining what percentage of data to leave out as the test set, it is important to balance the following opposing forces:
-> > * as training dataset size increases, the model has more data to learn from and can typically generalize better
-> > * as test dataset size increases, you can gain a better assessment of the model's ability to generalize
-> > Typically, you want to leave out just enough test data so that your estimate of model performance isn't skewed by having too few observations in the test set. A good rule of thumb is to reserve 1/3 of the full dataset for testing, but you may want to lower this percentage if you do not have many samples to begin with (i.e., save more data for training the model).
+> > When determinining what percentage of data to leave out as the test set, it is critical to avoid having too small a training or test set.
+> > 
+> > If the train set is too small, you risk overfitting the model. An overfit model is too sensitive to noise in the data and fails to capture underlying trends.
+> >   
+> > If the test set is too small, you risk deriving poor estimates of the model's generalizability. With this measure tainted, it is difficult to say for certain whether the model overfits or not.
+> >   
+> > In a limited data regime, the goal is to leave out just enough test data so that your estimate of model performance isn't skewed by having too few observations in the test set. This leaves as much data as possible available for training the model (which typically requires more data than testing). Researchers sometimes leave out as little as 10% of the data for testing when data is extremely limited.
+> >   
+> > When data is abundant, it is fairly common practice to reserve 1/3 of the full dataset for testing. 
 > > 
 > {:.solution}
 {:.challenge}
-
-
-
-![png](output_16_0.png)
-
-
 
 #### 5) Measure model error and assess under/overfitting
 **Root Mean Squared Error (RMSE)**:
@@ -194,13 +234,6 @@ plot_model_predictions(y_train, y_pred_train,
 
     Train RMSE = 67500.86657586123
     Test RMSE = 68106.22257848026
-
-
-
-
-![png](output_18_1.png)
-
-
 
 Here, both train and test RMSE are very similar to one another. As expected with most univariate models, we do not see any evidence of overfitting. However, we do see that our model is perhaps underfitting given its poor ability to predict any of the true housing prices.
 
@@ -241,11 +274,6 @@ Our model predicts 27.1% (28.7%) of the variance across sale prices in the test 
 To read more about additional error/loss measurements, visit [sklearn's metrics documentation](https://scikit-learn.org/stable/modules/model_evaluation.html).
 
 > ## More on R-squared
-> Some of the below is paraphrased from (make sure to go back and rephrase in own words -- use different examples at least): https://www.statology.org/good-r-squared-value
-> 
-> R-squared is a measure of how well a linear regression model “fits” a dataset (i.e., the proportion of the variance in the response variable that can be explained by the predictor variable(s)).
-> 
-> The value for R-squared can range from 0 to 1. A value of 0 indicates that the response variable cannot be explained by the predictor variable at all. A value of 1 indicates that the response variable can be perfectly explained without error by the predictor variable. In practice, you will likely never see a value of 0 or 1 for R-squared. Instead, you’ll likely encounter some value between 0 and 1. ""
 > 
 > Our above example model is able to explain roughly 27% of the variance in the test dataset. Is this a “good” value for R-squared?
 > 
@@ -264,18 +292,9 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 > > #### Explaining the Relationship Between the Predictor(s) and the Response Variable
 > > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable is typically always interesting — regardless of the the effect size.
 > > 
-> > For example, suppose in the regression example from above, you see that the coefficient  for the predictor YearBuilt is 100 and that it's statistically significant. This means that an increase of one in YearBuilt  is associated with an average increase of \$100 dollars in final sale price.
-> > 
-> > Whether the R-squared value for this regression model is 0.2 or 0.9 doesn’t change this interpretation. Since you are simply interested in the relationship between YearBuilt and final sale price, you don't have to be overly concerned with the R-square value of the model.
-> > 
 > > #### Predicting the Response Variable
-> > If your main objective is to predict the value of the response variable accurately using the predictor variable, then R-squared is important.
-> > 
-> > In general, the larger the R-squared value, the more precisely the predictor variables are able to predict the value of the response variable.
-> > 
-> > How high an R-squared value needs to be depends on how precise you need to be. For example, in scientific studies, the R-squared may need to be above 0.95 for a regression model to be considered reliable. In other domains, an R-squared of just 0.3 may be sufficient if there is extreme variability in the dataset.
-> > 
-> > To find out what is considered a “good” R-squared value, you will need to explore what R-squared values are generally accepted in your particular field of study.
+> > If your main objective is to predict the value of the response variable accurately using the predictor variable, then R-squared is important. The value for R-squared can range from 0 to 1. A value of 0 indicates that the response variable cannot be explained by the predictor variable at all. A value of 1 indicates that the response variable can be perfectly explained without error by the predictor variable. In general, the larger the R-squared value, the more precisely the predictor variables are able to predict the value of the response variable. How high an R-squared value needs to be depends on how precise you need to be for your specific model's application. To find out what is considered a “good” R-squared value, you will need to explore what R-squared values are generally accepted in your particular field of study.
+> >
 > > 
 > {:.solution}
 {:.challenge}

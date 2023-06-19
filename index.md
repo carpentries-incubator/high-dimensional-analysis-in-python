@@ -6,9 +6,9 @@ permalink: index.html  # Is the only page that doesn't follow the pattern /:path
 High dimensional datasets, or tabular data with many features describing each observation of a dataset, are increasingly commonplace in many research domains. How can researchers find patterns and extract insights from such complex and information-rich data? In this workshop, we will explore several tried and true methods that can help data analysts better understand their high dimensional data including: principal component analysis, data visualization (t-SNE and PaCMAP), and regularized multivariate regression. As a result of participating in this workshop learners should be able to…
 * Define, identify, and give examples of high dimensional datasets
 * Visualize and explore high-dimensional data to reveal a research story
+* Navigate the common pitfalls of clustering in high-dimensions
 * Use dimensionality reduction techniques such as PCA to yield useful abstractions/summaries of complex, high dimensional data
-* Understand the challenges associated with fitting a both predictive (e.g., overfitting) and explanatory (e.g., avoiding multicolinearity) regression models to high dimensional datasets
-* Select the most appropriate feature selection, dimensionality reduction, and regularization techniques for your specific modeling goals
+* Understand the challenges associated with fitting both predictive (e.g., overfitting) and explanatory (e.g., avoiding multicolinearity) regression models to high dimensional datasets
 * Optimize high dimensional multivariate regression models for either predictive or explanatory purposes via a combination of techniques including: PCA, feature selection, and regularization techniques (lasso, ridge, and elastic net) 
 
 <!-- this is an html comment -->
