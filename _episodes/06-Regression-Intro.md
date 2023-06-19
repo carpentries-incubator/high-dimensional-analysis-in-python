@@ -21,8 +21,8 @@ title: Predictive vs. explanatory regression
 ## Goals of Linear Regression
 Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset **linearly relate** to some *target variable* (e.g., house sale prices). By modeling these relationships in the housing data, we can:
 
-1. **Explain**: Use *statistics* to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable
-2. **Predict**: Use *predictive modeling* to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
+1. **Explain**: Use statistics to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable
+2. **Predict**: Use predictive modeling to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
 
 In this workshop, we will explore how we can exploit well-established machine learning methods, including *multivariate regression*, *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals.
 
