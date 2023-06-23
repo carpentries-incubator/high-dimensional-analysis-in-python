@@ -185,12 +185,16 @@ from helper_functions import plot_model_predictions
 > 
 > 1. Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house?  Why or why not?
 > 2. Does the model seem to exhibit any signs of overfitting? What about underfitting?
+> 3. How might you improve the model?
+
 >    
 > > ## Solution
 > > 
-> > This linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship between these variables appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. It is probably best to avoid using this model to predict sale prices since it is not very accurate.
+> > 1. This linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship between these variables appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. It is probably best to avoid using this model to predict sale prices since it is not very accurate. To
 > > 
-> > Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
+> > 2. Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
+> > 
+> > 3. There are a couple of approaches you could use to improve this model. One common approach when observing an exponential relationship is to log transform the target variable to put it on a more linear looking scale. Alternatively, you could limit your model's analysis to only years which appear to exhibit a linear relationship between predictor variable and response variable (e.g., through min(YearBuilt) - 2000).
 > >
 > {:.solution}
 {:.challenge}
