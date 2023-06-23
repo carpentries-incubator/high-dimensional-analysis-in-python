@@ -300,5 +300,5 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 {:.challenge}
 
 
-#### 7) Explaining Model Predictions Using Statistics
+#### 7) Explaining model predictions using statistics
 At this point, we have assessed the predictive accuracy of our model. However, what if we want to make scientific claims regarding how impactful the 'YearBuilt' predictor variable really is on sale prices? For this kind of question, we need to incorporate statistical analyses after fitting our model. This next section will explore the assumptions required for running basic statistics on a linear regression model.
