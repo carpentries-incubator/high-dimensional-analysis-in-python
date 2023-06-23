@@ -93,8 +93,6 @@ Next, we'll extract the two variables we'll use for our first model — the targ
 y=housing['target']
 x=housing['data']['YearBuilt']
 ```
-#### To-Do
-- plot x and y and observe nonlinear relationship. Correct before moving forward since we're using ***linear*** models!
 
 #### 3) Train/test split
 Next, we will prepare two subsets of our data to be used for *model fitting* and *model evaluation*. The below code will split our dataset into a training dataset containing 2/3 of the samples, and a test set containing the remaining 1/3 of the data. We'll discuss these different subsets in more detail in just a bit.
