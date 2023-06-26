@@ -1,4 +1,5 @@
 ---
+title: Predictive vs. explanatory regression
 teaching: 45
 exercises: 2
 keypoints:
@@ -8,21 +9,20 @@ keypoints:
 - "Different model evaluation metrics provide different perspectives of model error. Some error measurements, such as R-squared, are not as relevant for explanatory models."
 objectives:
 - "Review structure and goals of linear regression"
-- "Understand how to detect under and overfitting in a model"
 - "Know when to use different model evaluation metrics for different modeling goals"
+- "Learn how to train and evaluate a predictive machine learning model"
+- "Understand how to detect underfitting and overfitting in a machine learning model"
 questions:
-- "What are the two different goals to keep in mind when modeling data?"
+- "What are the two different goals to keep in mind when fitting machine learning models?"
 - "What kinds of questions can be answered using linear regresion?"
 - "How can we evaluate a model's ability to capture a true signal/relationship in the data versus spurious noise?"
-
-title: Predictive vs. explanatory regression
 ---
 
 ## Goals of Linear Regression
-Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset ***linearly*** relate to some *target variable* (e.g., sale prices). By modeling these relationships in the housing data, we can:
+Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset **linearly relate** to some *target variable* (e.g., house sale prices). By modeling these relationships in the housing data, we can:
 
-1. **Explain**: Use *statistics* to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable
-2. **Predict**: Use *predictive modeling* to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
+1. **Explain**: Use statistics to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable
+2. **Predict**: Use predictive modeling to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
 
 In this workshop, we will explore how we can exploit well-established machine learning methods, including *multivariate regression*, *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals.
 
@@ -93,8 +93,6 @@ Next, we'll extract the two variables we'll use for our first model — the targ
 y=housing['target']
 x=housing['data']['YearBuilt']
 ```
-#### To-Do
-- plot x and y and observe nonlinear relationship. Correct before moving forward since we're using ***linear*** models!
 
 #### 3) Train/test split
 Next, we will prepare two subsets of our data to be used for *model fitting* and *model evaluation*. The below code will split our dataset into a training dataset containing 2/3 of the samples, and a test set containing the remaining 1/3 of the data. We'll discuss these different subsets in more detail in just a bit.
@@ -185,12 +183,16 @@ from helper_functions import plot_model_predictions
 > 
 > 1. Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house?  Why or why not?
 > 2. Does the model seem to exhibit any signs of overfitting? What about underfitting?
+> 3. How might you improve the model?
+
 >    
 > > ## Solution
 > > 
-> > This linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship between these variables appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. It is probably best to avoid using this model to predict sale prices since it is not very accurate.
+> > 1. This linear model does a poor job in capturing the relationship between "year built" and "sale price" because the relationship between these variables appears to be exponential. Due to this exponential relationship, homes built more recently skew the model towards overestimating the prices of older homes. It is probably best to avoid using this model to predict sale prices since it is not very accurate. To
 > > 
-> > Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
+> > 2. Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
+> > 
+> > 3. There are a couple of approaches you could use to improve this model. One common approach when observing an exponential relationship is to log transform the target variable to put it on a more linear looking scale. Alternatively, you could limit your model's analysis to only years which appear to exhibit a linear relationship between predictor variable and response variable (e.g., through min(YearBuilt) - 2000).
 > >
 > {:.solution}
 {:.challenge}
@@ -300,5 +302,5 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 {:.challenge}
 
 
-#### 7) Explaining Model Predictions Using Statistics
+#### 7) Explaining model predictions using statistics
 At this point, we have assessed the predictive accuracy of our model. However, what if we want to make scientific claims regarding how impactful the 'YearBuilt' predictor variable really is on sale prices? For this kind of question, we need to incorporate statistical analyses after fitting our model. This next section will explore the assumptions required for running basic statistics on a linear regression model.
