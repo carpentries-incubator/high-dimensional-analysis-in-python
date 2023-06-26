@@ -134,7 +134,7 @@ import matplotlib.pyplot as plt
 def plot_model_predictions(predictor,
                            x_train, x_test,
                            y_train, y_test,
-                           y_pred_train, y_pred_test,
+                           y_pred_train, y_pred_test,logTransformY,
                            err_type=None,train_err=None,test_err=None):
     
     if type(y_train) != 'numpy.ndarray':
@@ -148,13 +148,21 @@ def plot_model_predictions(predictor,
         
     # get min and max y values
     all_y = np.concatenate((y_train, y_test, y_pred_train, y_pred_test), axis=0)
-    min_y = 30000#np.percentile(all_y, 2)
-    max_y = 500000#np.percentile(all_y, 95)
-    print(min_y, max_y)
+    if logTransformY:
+        min_y = 11#np.percentile(all_y, 1)
+        max_y = 13.6#np.percentile(all_y, 100)
+        tick_dist = .5
+    else:
+        min_y = 50000#np.percentile(all_y, 2)
+        max_y = 350001#np.percentile(all_y, 95)
+        tick_dist = 50000
     
     # Fig1. True vs predicted sale price
     fig1, (ax1, ax2) = plt.subplots(1,2)#, sharex=True, sharey=True)
-    fig1.suptitle('True Sale Price vs. Predicted Sale Price')
+    if logTransformY:
+        fig1.suptitle('True vs. Predicted log(Sale_Price)')
+    else:
+        fig1.suptitle('True vs. Predicted Sale Price')
 
     #train set
     ax1.scatter(y_train, y_pred_train, alpha=.1) 
@@ -163,15 +171,15 @@ def plot_model_predictions(predictor,
         ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
     else:
         ax1.title.set_text('Train Data')
-    ax1.set_xlabel('True Price')
-    ax1.set_ylabel('Predicted Price')
+    ax1.set_xlabel('True')
+    ax1.set_ylabel('Predicted')
     ax1.set_aspect('equal')
     # ax1.axis('equal')
     ax1.set_xlim([min_y, max_y])
     ax1.set_ylim([min_y, max_y])
     ax1.plot([0, 1], [0, 1], transform=ax1.transAxes)
-    ax1.xaxis.set_ticks(np.arange(50000, 350001, 50000))
-    ax1.yaxis.set_ticks(np.arange(50000, 350001, 50000))
+    ax1.xaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
+    ax1.yaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
     for tick in ax1.get_xticklabels():
         tick.set_rotation(45)
 
@@ -181,8 +189,8 @@ def plot_model_predictions(predictor,
     ax2.set_xlim([min_y, max_y])
     ax2.set_ylim([min_y, max_y])
     ax2.plot([0, 1], [0, 1], transform=ax2.transAxes)
-    ax2.xaxis.set_ticks(np.arange(50000, 250001, 50000))
-    ax2.yaxis.set_ticks(np.arange(50000, 250001, 50000))
+    ax2.xaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
+    ax2.yaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
 
     ax2.xaxis.set_tick_params(labelbottom=False)
     ax2.yaxis.set_tick_params(labelleft=False)
@@ -195,13 +203,19 @@ def plot_model_predictions(predictor,
     # Fig2. Line of best fit 
     #train data
     fig2, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
-    fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
+    if logTransformY:
+        fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. log(sale_price)')
+    else:
+        fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
     ax1.scatter(x_train,y_train,alpha=.1) 
     ax1.plot(x_train,y_pred_train,color='k') 
     ax1.set_ylim([min_y, np.max(all_y)])
 
     ax1.set_xlabel('Year Built')
-    ax1.set_ylabel('Sale Price')
+    if logTransformY:
+        ax1.set_ylabel('log(sale_price)')
+    else:
+        ax1.set_ylabel('Sale Price')
     if train_err is not None:
         ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
     else:
