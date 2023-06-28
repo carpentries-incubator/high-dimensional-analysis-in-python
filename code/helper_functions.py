@@ -212,7 +212,7 @@ def plot_model_predictions(predictor,
     ax1.plot(x_train,y_pred_train,color='k') 
     ax1.set_ylim([min_y, np.max(all_y)])
 
-    ax1.set_xlabel('Year Built')
+    ax1.set_xlabel(predictor)
     if logTransformY:
         ax1.set_ylabel('log(sale_price)')
     else:
