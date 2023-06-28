@@ -26,7 +26,7 @@ individually can be a bit difficult, however, so we recommend the installer [Ana
 which includes most (but not all) of the software you will need.
 
 Regardless of how you choose to install it, please make sure you install Python
-version 3.x (e.g., 3.4 is fine). Also, please set up your python environment at
+version 3.11. Also, please set up your python environment at
 least a day in advance of the workshop.  If you encounter problems with the
 installation procedure, ask your workshop organizers via e-mail for assistance so
 you are ready to go as soon as the workshop begins.
@@ -94,7 +94,7 @@ See [these instructions](https://docs.anaconda.com/anaconda/install/update-versi
 
 To create a conda environment called `highdim_workshop` with the required packages, open a terminal (Mac) or Anaconda prompt (Windows) and type the command:
 ~~~
-conda create --name highdim_workshop python jupyter seaborn scikit-learn pandas
+conda create --name highdim_workshop python jupyter seaborn scikit-learn pandas statsmodels 
 ~~~
 {: .source}
 
