@@ -92,7 +92,7 @@ plt.ylabel('Sale Price');
 
 
 
-![png](output_10_0.png)
+
 
 
 
@@ -119,7 +119,7 @@ plt.ylabel('Sale Price');
 
 
 
-![png](output_13_0.png)
+
 
 
 
@@ -213,13 +213,13 @@ plt.savefig('..//fig//regression//univariate_yearBuilt_vs_predPrice.png',bbox_in
 
 
 
-![png](output_26_0.png)
 
 
 
 
 
-![png](output_26_1.png)
+
+
 
 
 
