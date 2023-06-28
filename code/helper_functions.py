@@ -331,7 +331,7 @@ def split_df(df: pd.DataFrame,
     return df
 
 
-def plot_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:
+def plot_corr_matrix_allVars(df: pd.DataFrame) -> pd.DataFrame:
     cols_in_corr_order=['SalePrice', 'OverallQual', 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF', '1stFlrSF', 'FullBath', 'TotRmsAbvGrd', 'YearBuilt', 'YearRemodAdd', 'GarageYrBlt', 'MasVnrArea', 'Fireplaces', 'BsmtFinSF1', 'LotFrontage', 'WoodDeckSF', '2ndFlrSF', 'OpenPorchSF', 'HalfBath', 'LotArea', 'BsmtFullBath', 'BsmtUnfSF', 'BedroomAbvGr', 'ScreenPorch', 'PoolArea', 'MoSold', '3SsnPorch', 'BsmtFinSF2', 'BsmtHalfBath', 'MiscVal', 'LowQualFinSF', 'YrSold', 'OverallCond', 'MSSubClass', 'EnclosedPorch', 'KitchenAbvGr']
     fig, ax = plt.subplots(1, 1, figsize=(10,10))
     corr_mat = (
@@ -344,6 +344,24 @@ def plot_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:
     plt.title('correlation heatmap')
     plt.show()
     return corr_mat
+
+def plot_corr_matrix(corr_matrix: pd.DataFrame) -> pd.DataFrame:
+    # Create a heatmap with variable labels
+    plt.figure(figsize=(10, 8))
+    sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm",
+                square=True, cbar=True, linewidths=0.5)
+
+    # Set plot labels
+    plt.title("Correlation Matrix")
+    plt.xlabel("Predictor Variables")
+    plt.ylabel("Predictor Variables")
+
+    # Rotate x-axis labels for better readability
+    plt.xticks(rotation=45, ha="right")
+
+    # Show the plot
+    plt.tight_layout()
+    plt.show()
 
 
 def plot_regression_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:
