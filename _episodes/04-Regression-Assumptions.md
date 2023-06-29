@@ -8,7 +8,7 @@ keypoints:
 - "Models that do not account for essential predictor variables can produce distorted pictures of reality due to omitted variable bias and confounding effects."
 objectives:
 - "Understand the importance of including all relevant predictors in a model"
-- "Know how to test the validity of a multivariate regression model, 
+- "Know how to test the validity of a multivariate regression model"
 - "Know how to use statistics to evaluate the likelihood of existing relationships recovered by a multivariate model"
 questions:
 - "What are the benfits/costs of including additional predictors in a regression model?"
