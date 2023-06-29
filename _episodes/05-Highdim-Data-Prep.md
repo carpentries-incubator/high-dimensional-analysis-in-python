@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: Multivariate regression of high dimensional data
+title: High-dimensional data preparation
 ---
 
