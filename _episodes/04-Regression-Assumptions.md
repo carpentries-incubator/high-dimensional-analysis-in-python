@@ -1,5 +1,5 @@
 ---
-title: Explanatory models - a multivariate approach
+title: Model validity and interpretation
 teaching: 45
 exercises: 2
 keypoints:
