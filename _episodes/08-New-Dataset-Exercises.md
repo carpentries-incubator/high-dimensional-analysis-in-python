@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: Regularization and feature selection
+title: (Optional) Exercises with additional dataset
 ---
 

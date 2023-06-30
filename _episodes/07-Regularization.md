@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: Principal component analysis (PCA)
+title: Regularization methods
 ---
 

@@ -8,6 +8,6 @@ objectives:
 questions:
 - "TODO"
 
-title: Regression assumptions & stats
+title: Feature selection and PCA
 ---
 
