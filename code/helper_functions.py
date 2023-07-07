@@ -1,6 +1,7 @@
-
 import numpy as np
 import pandas as pd
+from sklearn.decomposition import PCA
+import matplotlib.ticker as ticker
 
 
 # def clean_data(housing):
@@ -454,10 +455,12 @@ def demo_standardization(column_name: str, df: pd.DataFrame) -> None:
     plt.show()
     
 
-def create_feature_data() -> np.ndarray:
+def create_feature_data(random_state: int) -> np.ndarray:
     '''create x and y correlated variable'''
     X1, Y1 = make_classification(
-        n_features=2, n_redundant=0, n_informative=2, n_clusters_per_class=1
+        n_features=2, n_redundant=0, n_informative=2, n_clusters_per_class=1,
+        random_state=random_state
+
     )
 
     feature_1 = [x for x, y in zip(X1, Y1) if y == 0]
@@ -473,9 +476,11 @@ def create_normalized_feature(arr: np.ndarray) -> np.ndarray:
     return normalized_arr
 
 
-def create_feature_scatter_plot() -> Tuple[np.ndarray, Tuple[float, float]]:
+def create_feature_scatter_plot(random_state: int) -> Tuple[np.ndarray, Tuple[float, float]]:
     # feature_data = create_feature_data()
-    feature_data = create_normalized_feature(create_feature_data())
+    feature_data = create_normalized_feature(
+            create_feature_data(random_state=random_state)
+    )
     fig, ax = plt.subplots(1, 1, figsize=(8, 8))
     im = ax.scatter(feature_data[:,0], feature_data[:,1], label='original features')
     # ensure square plot
@@ -515,3 +520,113 @@ def plot_pca_features(features_pca: np.ndarray) -> Tuple[plt.Figure, plt.Axes, T
     return fig, pca_ax, (ax_min, ax_max)
 
 
+def add_pc_plot(ax: plt.Axes, p: PCA, 
+                color_pc0: str = 'xkcd:pink', color_pc1: str = 'xkcd:black', 
+                add_labels: bool = False) -> plt.Axes:
+        """plot primary components"""
+        for i, ((x, y), color) in enumerate(zip(p.components_, [color_pc0, color_pc1])):
+            ax.plot([0, x], [0, y], color=color)
+            if add_labels:
+                ax.text(x, y, s="PC{}: {:.2f}, {:.2f}".format(i, x, y))
+        return ax
+
+
+def plot_pca_feature_comparison(features: np.ndarray, features_pca: np.ndarray,
+                                ax_max: float, ax_min: float, p: PCA,
+                                point_to_highlight: int=10) -> Tuple[plt.Figure, np.ndarray]:
+    """
+    compare 2D features pre and post PCA
+    features: numpy ndarray of original features (2D)
+    features_pca: numpy ndarray of PCA'd original features (2D)
+    ax_max: float max axes length
+    ax_min: float min axes length
+    p: PCA model fit on features
+    point_to_highlight: int choose a point to highlight in red on plot
+    """
+    color1 = "xkcd:bright blue"
+    color2 = "xkcd:light orange"
+    color_pc0 = "xkcd:pink"
+    color_pc1 = "xkcd:black"
+
+    gs_kw = {
+        "height_ratios": [10, 1, 1],
+        "width_ratios": [1, 1],
+        "hspace": 0.1,
+    }
+
+    fig, axs = plt.subplots(3, 2, figsize=(8, 5.75), 
+                            sharex=True, 
+                            constrained_layout=True,
+                            gridspec_kw=gs_kw)
+
+
+    # plot orig data + PCA data
+    feature_axs = [axs[0][0], axs[0][1]]
+    feature_data = [features, features_pca]
+    feature_titles = ["original features: x, y", "PCA features: PC0, PC1"]
+    var_colors = [color1] + [color2]
+    for ax, data, title, color in zip(feature_axs, feature_data, feature_titles, var_colors):
+        ax.scatter(data[:,0], data[:,1], label=title, color=color)
+        ax.set_title(title)
+        ax.set_xlim(ax_min, ax_max)
+        ax.set_ylim(ax_min, ax_max)
+        if point_to_highlight:
+            ax.scatter(data[point_to_highlight,0], data[point_to_highlight,1], color='red', zorder=10)
+            ax.text(data[point_to_highlight,0], data[point_to_highlight,1], s="{:.2f}, {:.2f}".format(data[point_to_highlight,0], data[point_to_highlight,1]))
+        if "original" in title:
+            # plot feature space eigenvectors
+            ax = add_pc_plot(ax, p)
+        if "PCA" in title:
+            # hide y axis on PCA plot
+            ax.yaxis.set_visible(False)
+            # manually plot pca-space eigenvectors
+            ax.plot([0, 1], [0, 0], color=color_pc0)
+            ax.plot([0, 0], [0, 1], color=color_pc1)
+
+    # plot feature variabilities
+    var_axes = [axs[1][0], axs[2][0], axs[1][1], axs[2][1]]
+    var_data = [features[:,0], features[:,1], features_pca[:,0], features_pca[:,1]]
+    var_names = ["feature x", "feature y", "PC0", "PC1"]
+    var_colors = [color1] * 2 + [color2] * 2
+    for ax, data, name, color in zip(var_axes, var_data, var_names, var_colors):
+        ax.scatter(data,[0]*len(data), alpha=0.6, color=color)
+        ax.set_xlim(ax_min, ax_max)
+        ax.set_ylim(0.25, -0.25)
+        ax.set_title(name)
+        for spine in ["right", "top", "left"]:
+            ax.spines[spine].set_visible(False)
+        ax.yaxis.set_visible(False)
+    return fig, axs
+
+
+def show_pcs_on_unit_axes(p: PCA, color_pc0: str = 'xkcd:pink', color_pc1: str = 'xkcd:black'):
+    fig, ax = plt.subplots(figsize=(5, 4.5))
+    ax = add_pc_plot(ax, p, color_pc0, color_pc1, add_labels=True)
+
+    # Move left y-axis and bottom x-axis to centre, passing through (0,0)
+    ax.spines['left'].set_position('center')
+    ax.spines['bottom'].set_position('center')
+
+    # Eliminate upper and right axes
+    ax.spines['right'].set_color('none')
+    ax.spines['top'].set_color('none')
+
+    # set axes ticks to -1, 0, 1
+    ax.xaxis.set_major_locator(ticker.FixedLocator([-1, 0, 1]))
+    ax.yaxis.set_major_locator(ticker.FixedLocator([-1, 0, 1]))
+
+    # set axes lengths
+    ax.set_xlim(-1,1)
+    ax.set_ylim(-1,1)
+    plt.show()
+
+
+def plot_eigenvectors(p: PCA) -> Tuple[plt.Figure, plt.Axes]:
+    print(f'{p.components_.shape=}')
+    fig, ax = plt.subplots(1,1)
+    im = ax.pcolormesh(abs(p.components_.T), norm=mpl.colors.LogNorm(vmin=1e-6))
+    ax.set_title('heat map of absolute values of PCA eigenvectors')
+    ax.set_ylabel('eigenvector value')
+    ax.set_xlabel('eigenvector')
+    plt.colorbar(im)
+    return plt.Figure, plt.Axes
