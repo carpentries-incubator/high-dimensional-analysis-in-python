@@ -1,5 +1,5 @@
 ---
-title: Model validity and interpretation
+title: Explanatory models - a multivariate approach
 teaching: 45
 exercises: 2
 keypoints:
@@ -8,7 +8,7 @@ keypoints:
 - "Models that do not account for essential predictor variables can produce distorted pictures of reality due to omitted variable bias and confounding effects."
 objectives:
 - "Understand the importance of including all relevant predictors in a model"
-- "Know how to test the validity of a multivariate regression model"
+- "Know how to test the validity of a multivariate regression model, 
 - "Know how to use statistics to evaluate the likelihood of existing relationships recovered by a multivariate model"
 questions:
 - "What are the benfits/costs of including additional predictors in a regression model?"
@@ -20,31 +20,554 @@ questions:
 ### Intro
 With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist? 
 
-There are two critical considerations that must be made before we can read too far into our model's estimations. We will discuss both in detail throughout this episode.
-- First, have we included all relevant predictors in the model?
-- Second, does the fitted model follow the 5 assumptions of linear regression?
+There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss all three in detail throughout this episode.
+1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
+2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
+3. **Bias/variance or under/overfitting**: Does the model capture the variance in the data well enough to be trusted?
 
-#### Relevant predictors
-With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate models can help us test the existence of interesting relationships found in nature.
-
-
-
+### 1. Relevant predictors
 Including all relevant predictor variables in a model is important for several reasons:
 
-1. Capturing the true relationship: Including all relevant predictors ensures that the model captures the true relationship between the predictors and the response variable. If a relevant predictor is omitted, the model may miss important information and fail to provide accurate predictions or insights.
+1. **Improving model interpretability**: Leaving out relevant predictors can result in *model misspecification*. Misspecification refers to a situation where the model structure or functional form does not accurately reflect the underlying relationship between the predictors and the outcome. If a relevant predictor is omitted from the model, the coefficients of the remaining predictors may be biased. This occurs because the omitted predictor may have a direct or indirect relationship with the outcome variable, and its effect is not accounted for in the model. Consequently, the estimated coefficients of other predictors may capture some of the omitted predictor's effect, leading to biased estimates.
 
-2. Reducing omitted variable bias: Omitted variable bias occurs when a relevant predictor is left out of the model. This bias arises because the omitted predictor may be correlated with both the included predictors and the response variable. Including all relevant predictors helps mitigate omitted variable bias and provides a more accurate representation of the relationship between predictors and the response.
+2. **Improving predicitive accuracy and reducing residual variance**: Omitting relevant predictors can increase the residual variance in the model. Residual variance represents the unexplained variation in the outcome variable after accounting for the predictors in the model. If a relevant predictor is left out, the model may not fully capture the systematic variation in the data, resulting in larger residuals and reduced model fit. While it is true that, in a research setting, we typically care more about being able to interpret our model than being able to perfectly predict the target variable, a model that severely underfits is still a cause for concern since the model won't be capturing the variability of the data well enough to form any conclusions from the model.
 
-3. Improving model interpretability: Including all relevant predictors allows for a more comprehensive understanding of the factors influencing the response variable. It enables researchers and analysts to identify and analyze the individual contributions of each predictor and interpret the model's results more effectively.
-
-4. Avoiding confounding effects: Relevant predictors often interact with each other, and their effects may be interdependent. Including all relevant predictors helps account for these interactions and avoid confounding effects, where the relationship between a predictor and the response variable is distorted or confounded by the presence or absence of other relevant predictors.
-
-5. Robustness to future changes: By including all relevant predictors, the model becomes more robust to changes in the data or the underlying system. If a predictor becomes important in the future due to changes in the environment or additional data, including it from the start ensures that the model is already equipped to capture its influence.
+3. **Robustness to future changes**: By including all relevant predictors, the model becomes more robust to changes in the data or the underlying system. If a predictor becomes important in the future due to changes in the environment or additional data, including it from the start ensures that the model is already equipped to capture its influence.
 
 It is worth noting that the emphasis should be on including relevant predictors rather than simply including all available predictors. Including irrelevant predictors can lead to overfitting, decreased model interpretability, and increased complexity without any added benefit. Therefore, careful consideration and domain expertise are necessary to determine which predictors are truly relevant to the problem at hand.
 
+#### Example
+Let's consider a regression model where the outcome variable is the sale price of each hom, and we want to test to see if the number of bathrooms can predict sale price.
+
 
 ```python
+from sklearn.datasets import fetch_openml
+housing = fetch_openml(name="house_prices", as_frame=True) #
+y=housing['target']
+# predictors = ['TotRmsAbvGrd']#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF', BsmtFinSF1, TotRmsAbvGrd]
+predictors = ['FullBath']
+# predictors = ['TotalBsmtSF']
+X=housing['data'][predictors]
+X.head()
+```
+
+    C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\sklearn\datasets\_openml.py:968: FutureWarning: The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4. You can set `parser='auto'` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml's API doc for details.
+      warn(
+    
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>FullBath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+# housing['data'].columns
+```
+
+It's always a good idea to start by plotting the predictor vs the target variable to get a sense of the underlying relationship.
+
+
+```python
+import matplotlib.pyplot as plt
+plt.scatter(X,y,alpha=.3)
+```
+
+
+
+
+    <matplotlib.collections.PathCollection at 0x2c365f5f3d0>
+
+
+
+
+    
+
+    
+
+
+Since the relationship doesn't appear to be quite as linear as we were hoping, we will try a log transformation as we did in the previous episode.
+
+
+```python
+import numpy as np
+y_log = y.apply(np.log)
+plt.scatter(X,y_log, alpha=.3);
+```
+
+
+    
+
+    
+
+
+The log transform improves the linear relationship substantially! Next, we will import the statsmodels package which is an R-style modeling package that has some convenient functions for rigorously testing and running stats on linear models. 
+
+
+```python
+import statsmodels.api as sm
+
+# Add a constant column to the predictor variables dataframe
+X = sm.add_constant(X)
+
+# Fit the multivariate regression model
+model = sm.OLS(y_log, X)
+results = model.fit()
+print(results.params)
+```
+
+    const       11.349116
+    FullBath     0.431250
+    dtype: float64
+    
+
+
+```python
+100*np.exp(.431250)
+```
+
+
+
+
+    153.9180296935723
+
+
+
+The model coefficient estimated for the "FullBath" predictor is 0.43. When transformed to the original data scale, this coefficient tells us that adding an extra bathroom increases the sale price, on average, by 150%. Now, while bathrooms are a very hot commodity to find in a house, they likely don't deserve this much credit. Let's do some further digging by comparing another predictor which seems likely to be more important — the total square footage of the house (excluding the basement).
+
+
+```python
+y=housing['target']
+# predictors = ['TotRmsAbvGrd']#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF', BsmtFinSF1, TotRmsAbvGrd]
+predictors = ['GrLivArea']
+X=housing['data'][predictors]
+X.head()
+
+plt.scatter(X['GrLivArea'],y_log)
+
+# Add a constant column to the predictor variables dataframe
+X = sm.add_constant(X)
+# Fit the multivariate regression model
+model = sm.OLS(y_log, X)
+results = model.fit()
+results.params
+```
+
+
+
+
+    const        11.216582
+    GrLivArea     0.000533
+    dtype: float64
+
+
+
+
+    
+
+    
+
+
+Without the "Number of Bedrooms" predictor, the model will fail to capture the effect of the number of bedrooms on the house price. This can result in biased coefficient estimates for the remaining predictor, "Square Footage."
+
+In reality, the number of bedrooms has a positive relationship with the house price, as houses with more bedrooms tend to be larger and more desirable. However, since we omitted the "Number of Bedrooms" predictor, the model mistakenly attributes the effect of the number of bedrooms to the "Square Footage" predictor.
+
+As a result, the coefficient estimate for "Square Footage" might be inflated. The model might incorrectly assign a higher coefficient to "Square Footage" to compensate for the omitted effect of the number of bedrooms. This bias arises because the model fails to account for the contribution of the "Number of Bedrooms" predictor, which is relevant and correlated with the outcome variable.
+
+By leaving out the relevant predictor, we introduce bias into the coefficient estimates of the remaining predictors, leading to inaccurate and misleading interpretations of their effects on the outcome variable.
+
+
+```python
+y=housing['target']
+predictors = ['GrLivArea', 'BedroomAbvGr']#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF', Bedroom]
+# predictors = ['TotalBsmtSF', 'BsmtFinSF1']
+predictors = ['GrLivArea', 'TotRmsAbvGrd', 'FullBath']
+predictors = ['GrLivArea', 'FullBath']
+
+X=housing['data'][predictors]
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GrLivArea</th>
+      <th>FullBath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1710</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1262</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1786</td>
+      <td>2</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1717</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>2198</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+##### Standardization
+when working with multiple predictors, it's essential to zscore all predictors in 9/10 cases. Talk about edge cases.
+
+
+
+```python
+X = (X - X.mean())/X.std()
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GrLivArea</th>
+      <th>FullBath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.370207</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.482347</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.514836</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.383528</td>
+      <td>-1.025689</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.298881</td>
+      <td>0.789470</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+Calculate interaction term
+
+
+```python
+# X.loc[:,'BedroomAbvGr*GrLivArea'] = X['BedroomAbvGr'] * X['GrLivArea']
+# # X.loc[:,'TotalBsmtSF*BsmtFinSF1'] = X['TotalBsmtSF'] * X['BsmtFinSF1']
+# X.loc[:,'GrLivArea*TotRmsAbvGrd'] = X['GrLivArea'] * X['TotRmsAbvGrd']
+# X.loc[:,'GrLivArea*FullBath'] = X['GrLivArea'] * X['FullBath']
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GrLivArea</th>
+      <th>FullBath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.370207</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.482347</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.514836</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.383528</td>
+      <td>-1.025689</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.298881</td>
+      <td>0.789470</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import pandas as pd
+# Calculate VIF for each predictor in X
+vif = pd.DataFrame()
+vif["Variable"] = X.columns
+vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+
+# Display the VIF values
+print(vif)
+```
+
+        Variable      VIF
+    0  GrLivArea  1.65814
+    1   FullBath  1.65814
+    
+
+Rescale after adding interaction term
+
+
+
+```python
+# X = (X - X.mean())/X.std()
+# X.head()
+```
+
+Add constant for modeling y-intercept
+
+
+```python
+# Fit the multivariate regression model
+X = sm.add_constant(X)
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>const</th>
+      <th>GrLivArea</th>
+      <th>FullBath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>0.370207</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>-0.482347</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.0</td>
+      <td>0.514836</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.0</td>
+      <td>0.383528</td>
+      <td>-1.025689</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.0</td>
+      <td>1.298881</td>
+      <td>0.789470</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+model = sm.OLS(y_log, X)
+results = model.fit()
+print(results.params)
+print(results.pvalues)
+```
+
+    const        12.024051
+    GrLivArea     0.216067
+    FullBath      0.101457
+    dtype: float64
+    const         0.000000e+00
+    GrLivArea    5.142550e-103
+    FullBath      5.036119e-27
+    dtype: float64
+    
+
+The coefficient of the interaction term is the increase in effectiveness of X1 (TotRmsAbvGrd/TotalBsmtSF) for a 1 unit change in X2 (GrLivArea/BsmtFinSF1); interaction = TotRmsAbvGrd*GrLivArea)
+
+
+```python
+plt.hist(X['BedroomAbvGr'])
+```
+
+
+
+
+    (array([  6.,  50., 358., 804.,   0., 213.,  21.,   7.,   0.,   1.]),
+     array([-3.51374786, -2.53308896, -1.55243006, -0.57177116,  0.40888774,
+             1.38954664,  2.37020555,  3.35086445,  4.33152335,  5.31218225,
+             6.29284115]),
+     <BarContainer object of 10 artists>)
+
+
+
+
+    
+
+    
+
+
+### Regression assumptions and hypothesis testing
 What does it mean to be statistically signficiant? It means that an observed relationship is unlikely (< 5% chance if p=.005) to occur due to chance alone. 
 
 To run statistics on a regression model, we start with two hypotheses — one null and one alternative.
@@ -60,15 +583,6 @@ The assumptions of regression (mostly) need to be met before rejecting the null 
 3. **Homoscedasticity**: The variance of the error terms is constant over all X values (homoscedasticity)
 4. **Independence**: The error terms are independent
 5. **Limited multicollinearity**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves. 
-```
-
-
-      File "<ipython-input-1-22b8efc78b13>", line 1
-        to determine if one or more predictor variables has *statistically significant* effect?
-           ^
-    SyntaxError: invalid syntax
-    
-
 
 #### Testing procedure
 The procedure for testing whether predictor(s) have a statistically significant effect on a target variable in a regression model typically involves the following steps:

@@ -74,8 +74,9 @@ Next, we'll extract the two variables we'll use for our model — the target var
 
 ```python
 # Extract x (single predictor variable = YearBuilt) and y (target variable = SalePrice)
-y=housing['target']
-x=housing['data']['YearBuilt']
+y = housing['target']
+predictor = 'OverallQual'#'TotalBsmtSF'#'GarageArea'
+x = housing['data'][predictor]
 ```
 
 #### 3) Visualize the relationship between x and y
@@ -85,9 +86,9 @@ Before fitting any models in a univariate context, we should first explore the d
 ```python
 import matplotlib.pyplot as plt
 plt.scatter(x,y, alpha=.1)
-plt.xlabel('Year Built')
+plt.xlabel(predictor)
 plt.ylabel('Sale Price');
-#plt.savefig('..//fig//regression//scatterplot_year_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+plt.savefig('..//fig//regression//scatterplot_x_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -96,9 +97,9 @@ plt.ylabel('Sale Price');
 
 
 
-<img src="../fig/regression/scatterplot_year_salePrice.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/scatterplot_x_vs_salePrice.png"  align="center" width="30%" height="30%">
 
-Unfortunately, sale price appears to grow exponentially—not linearly—with the predictor variable, "YearBuilt". Any line we draw through this data cloud is going to fail in capturing the true trend we see here.
+Unfortunately, sale price appears to grow almost exponentially—not linearly—with the predictor variable. Any line we draw through this data cloud is going to fail in capturing the true trend we see here.
 
 ##### Log scaling
 How can we remedy this situation? One common approach is to log transform the target variable. We’ll convert the "SalePrice" variable to its logarithmic form by using the math.log() function. Pandas has a special function called apply which can apply an operation to every item in a series by using the statement y.apply(math.log), where y is a pandas series.
@@ -112,9 +113,9 @@ y_log = y.apply(np.log)
 
 ```python
 plt.scatter(x,y_log, alpha=.1)
-plt.xlabel('Year Built')
+plt.xlabel(predictor)
 plt.ylabel('Sale Price');
-#plt.savefig('..//fig//regression//scatterplot_year_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white')
+plt.savefig('..//fig//regression//scatterplot_x_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white')
 ```
 
 
@@ -123,12 +124,12 @@ plt.ylabel('Sale Price');
 
 
 
-<img src="../fig/regression/scatterplot_year_logSalePrice.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/scatterplot_x_vs_logSalePrice.png"  align="center" width="30%" height="30%">
 
-This plot looks marginally better than the previous one. That is, the trend between "YearBuilt" and "SalePrice" appears somewhat more linear. Whether or not it is sufficiently linear can be addressed when we evaluate the model's performance later.
+This plot looks much better than the previous one. That is, the trend between OverallQual and log(SalePrice) appears fairly linear. Whether or not it is sufficiently linear can be addressed when we evaluate the model's performance later.
 
 #### 3) Train/test split
-Next, we will prepare two subsets of our data to be used for "model-fitting" and "model evaluation". This process is standard for any predictive modeling task that involves a model "learning" from observed data (e.g., fitting a line to the observed data).
+Next, we will prepare two subsets of our data to be used for *model-fitting* and *model evaluation*. This process is standard for any predictive modeling task that involves a model "learning" from observed data (e.g., fitting a line to the observed data).
 
 During the model-fitting step, we use a subset of the data referred to as **training data** to estimate the model's coefficients (the slope of the model). The univariate model will find a line of best fit through this data.
 
@@ -157,7 +158,7 @@ print(x_test.shape)
     (482,)
 
 
-Reshape single-var predictor matrix in preparation for model-fitting step (2-D representation)
+Reshape single-var predictor matrix in preparation for model-fitting step (requires a 2-D representation)
 
 
 ```python
@@ -195,7 +196,7 @@ y_pred_test=reg.predict(x_test)
 
 ```python
 from helper_functions import plot_model_predictions
-(fig1, fig2) = plot_model_predictions(predictor='Year Built',
+(fig1, fig2) = plot_model_predictions(predictor=predictor,
                                       x_train=x_train, x_test=x_test,
                                       y_train=y_train, y_test=y_test,
                                       y_pred_train=y_pred_train, y_pred_test=y_pred_test,
@@ -207,7 +208,7 @@ import pylab as pl
 pl.figure(fig1.number)
 plt.savefig('..//fig//regression//univariate_truePrice_vs_predPrice.png',bbox_inches='tight', dpi=300)
 pl.figure(fig2.number)
-plt.savefig('..//fig//regression//univariate_yearBuilt_vs_predPrice.png',bbox_inches='tight', dpi=300)
+plt.savefig('..//fig//regression//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
 
 ```
 
@@ -224,7 +225,7 @@ plt.savefig('..//fig//regression//univariate_yearBuilt_vs_predPrice.png',bbox_in
 
 
 <img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
-<img src="../fig/regression/univariate_yearBuilt_vs_predPrice.png"  align="center" width="40%" height="40%">
+<img src="../fig/regression/univariate_x_vs_predPrice.png"  align="center" width="40%" height="40%">
 
 > ## Inspect the plots
 > 1. Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house? Why or why not?
@@ -235,11 +236,11 @@ plt.savefig('..//fig//regression//univariate_yearBuilt_vs_predPrice.png',bbox_in
 > 
 > > ## Solution
 > >
-> > 1. This linear model does a poor job in capturing the relationship between "year built" and "sale price" because the large increase in log(salePrice) of newer homes skews the model towards overestimating the prices of older homes. Based on this observation, it appears the data is not linear enough for this model to be very useful/accurate. It is probably best to avoid using this model to predict sale prices.
+> > 1. Based on visual inspection, this linear model does a fairly good job in capturing the relationship between "OverallQual" and sale price. While sales price appears to follow a predictable trend, it may be best to first quantitatively evaluate the model before overrelying on its predictions.
 > > 
-> > 2. Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model does not capture the trend in the data well, it is considered to "underfit" the data.
+> > 2. Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model follows the trajectory of sale price reasonably well, it also does not appear to underfit the data (at least not to an extreme extent).
 > > 
-> > 3. There are a couple of approaches you could use to improve this model. One common approach when observing an exponential relationship is to log transform the target variable to put it on a more linear looking scale. Alternatively, you could limit your model’s analysis to only years which appear to exhibit a linear relationship between predictor variable and response variable (e.g., through min(YearBuilt) - 2000).
+> > 3. In order to improve this model, we can ask ourselves — is "OverallQual" likely the only variable that contributes to final sale price, or should we consider additional predictor variables? Most outcome variables can be influenced by more than one predictor variable. By accounting for all predictors that have an impact on sales price, we can improve the model.
 > > 
 > {:.solution}
 {:.challenge}
@@ -248,6 +249,7 @@ plt.savefig('..//fig//regression//univariate_yearBuilt_vs_predPrice.png',bbox_in
 #### 5) Measure model error and assess under/overfitting
 While qualitative examinations of model performance are extremely helpful, it is always a good idea to pair such evaluations with a quantitative analysis of the model's performance.
 
+**Convert back to original data scale**
 There are several error measurements that can't be used to measure a regression model's performance. Before we implement any of them, we'll first convert the log(salePrice) back to original sale price for ease of interpretation.
 
 
@@ -259,6 +261,27 @@ salePrice_test = np.exp(y_test)
 pred_salePrice_test = np.exp(y_pred_test)
 ```
 
+**Measure baseline performance**
+
+
+```python
+from math import sqrt
+import pandas as pd
+
+mean_sale_price = y.mean()
+print('mean sale price =', mean_sale_price)
+
+# convert to series same length as y sets for ease of comparison
+mean_sale_price = pd.Series(mean_sale_price)
+mean_sale_price = mean_sale_price.repeat(len(y))
+
+# mean_sale_price_test = pd.Series(mean_sale_price)
+# mean_sale_price_test = mean_sale_price_test.repeat(len(salePrice_test))
+```
+
+    mean sale price = 180921.19589041095
+
+
 **Root Mean Squared Error (RMSE)**:
 The RMSE provides an easy-to-interpret number that represents error in terms of the units of the target variable. With our univariate model, the "YearBuilt" predictor variable (a.k.a. model feature) predicts sale prices within +/- $68,106 from the true sale price. We always use the RMSE of the test set to assess the model's ability to generalize on unseen data. An extremely low prediction error in the train set is also a good indicator of overfitting.
 
@@ -266,15 +289,18 @@ The RMSE provides an easy-to-interpret number that represents error in terms of 
 ```python
 from sklearn import metrics
 
+RMSE_baseline = metrics.mean_squared_error(y, mean_sale_price, squared=False)
 RMSE_train = metrics.mean_squared_error(salePrice_train, pred_salePrice_train, squared=False)
 RMSE_test = metrics.mean_squared_error(salePrice_test, pred_salePrice_test, squared=False)
 
+print(f"Baseline RMSE = {RMSE_baseline}")
 print(f"Train RMSE = {RMSE_train}")
 print(f"Test RMSE = {RMSE_test}")
 ```
 
-    Train RMSE = 67071.64838748628
-    Test RMSE = 67453.9711987335
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 45534.349409507675
+    Test RMSE = 44762.77229823456
 
 
 Here, both train and test RMSE are very similar to one another. As expected with most univariate models, we do not see any evidence of overfitting. However, we do see that our model is perhaps underfitting given its poor ability to predict any of the true housing prices.
@@ -284,14 +310,17 @@ What if we wanted to know the percent difference between the true sale price and
 
 
 ```python
+MAPE_baseline = metrics.mean_absolute_percentage_error(y, mean_sale_price)
 MAPE_train = metrics.mean_absolute_percentage_error(salePrice_train, pred_salePrice_train)
 MAPE_test = metrics.mean_absolute_percentage_error(salePrice_test, pred_salePrice_test)
+print(f"Baseline MAPE = {MAPE_baseline*100}")
 print(f"Train MAPE = {MAPE_train*100}")
 print(f"Test MAPE = {MAPE_test*100}")
 ```
 
-    Train MAPE = 25.287797887497117
-    Test MAPE = 23.415329689172882
+    Baseline MAPE = 36.3222261212389
+    Train MAPE = 18.758540396700933
+    Test MAPE = 16.75397172881688
 
 
 With the MAPE measurement (max value of 1 which corresponds to 100%), we can state that our model over/under estimates sale prices by an average of 23.41% (25.28%) across all houses included in the test set (train set). Certainly seems there is room for improvement based on this measure.
@@ -300,23 +329,26 @@ With the MAPE measurement (max value of 1 which corresponds to 100%), we can sta
 
 
 ```python
+R2_baseline = metrics.r2_score(y, mean_sale_price)
 R2_train = metrics.r2_score(y_train, y_pred_train)
 R2_test = metrics.r2_score(y_test, y_pred_test)
-print(f"Train R-squared = {MAPE_train}")
-print(f"Test R-squared = {MAPE_test}")
+print(f"Baseline R-squared = {R2_baseline}")
+print(f"Train R-squared = {R2_train}")
+print(f"Test R-squared = {R2_test}")
 
 ```
 
-    Train R-squared = 0.25287797887497115
-    Test R-squared = 0.2341532968917288
+    Baseline R-squared = 0.0
+    Train R-squared = 0.6521389099611015
+    Test R-squared = 0.7012721408788914
 
 
-Our model predicts 23.4% (25.3%) of the variance across sale prices in the test set (train set).
+Our model predicts 70.1% (65.2%) of the variance across sale prices in the test set (train set).
 
 To read more about additional error/loss measurements, visit [sklearn's metrics documentation](https://scikit-learn.org/stable/modules/model_evaluation.html).
 
 > ## More on R-squared
-> Our above example model is able to explain roughly 23.4% of the variance in the test dataset. Is this a “good” value for R-squared?
+> Our above example model is able to explain roughly 70.1% of the variance in the test dataset. Is this a “good” value for R-squared?
 > 
 > **Hint**: The answer to this question depends on your objective for the regression model. This relates back to the two modeling goals of *explaining* vs *predicting*. Depending on the objective, the answer to "What is a good value for R-squared?" will be different.
 > 
@@ -324,7 +356,7 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 > >
 > > 
 > > **Explaining the relationship between the predictor(s) and the response Variable**
-> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable is typically always interesting — regardless of the the effect size.
+> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable (i.e., has a statistically significant effect) is typically always interesting — regardless of the the effect size.
 > > 
 > > **Predicting the response variable**
 > > If your main objective is to predict the value of the response variable accurately using the predictor variable, then R-squared is important. The value for R-squared can range from 0 to 1. A value of 0 indicates that the response variable cannot be explained by the predictor variable at all. A value of 1 indicates that the response variable can be perfectly explained without error by the predictor variable. In general, the larger the R-squared value, the more precisely the predictor variables are able to predict the value of the response variable. How high an R-squared value needs to be depends on how precise you need to be for your specific model's application. To find out what is considered a “good” R-squared value, you will need to explore what R-squared values are generally accepted in your particular field of study.
@@ -345,8 +377,3 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 
 #### 7) Explaining model predictions using statistics
 At this point, we have assessed the predictive accuracy of our model. However, what if we want to make scientific claims regarding whether or not a single predictor has a consistent or above chance (i.e., statistically significant) impact sales price? For this kind of question, we need to incorporate statistical analyses after fitting our model. This next section will explore the assumptions required for running basic statistics on a linear regression model.
-
-
-```python
-
-```
