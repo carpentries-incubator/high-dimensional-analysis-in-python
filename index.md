@@ -3,7 +3,7 @@ layout: lesson
 root: .  # Is the only page that doesn't follow the pattern /:path/index.html
 permalink: index.html  # Is the only page that doesn't follow the pattern /:path/index.html
 ---
-High dimensional datasets, or tabular data with many features describing each observation of a dataset, are increasingly commonplace in many research domains. How can researchers find patterns and extract insights from such complex and information-rich data? In this workshop, we will explore several tried and true methods that can help data analysts better understand their high dimensional data including: principal component analysis, data visualization (t-SNE and PaCMAP), and regularized multivariate regression. As a result of participating in this workshop learners should be able to…
+High dimensional datasets, or tabular data with many features describing each observation of a dataset, are increasingly commonplace in many research domains. How can researchers find patterns and extract insights from such complex and information-rich data? In this workshop, we will explore several tried and true methods that can help data analysts better understand their high dimensional data including: principal component analysis, data visualization, and regularized multivariate regression. As a result of participating in this workshop learners should be able to…
 * Define, identify, and give examples of high dimensional datasets
 * Visualize and explore high-dimensional data to reveal a research story
 * Navigate the common pitfalls of clustering in high-dimensions
