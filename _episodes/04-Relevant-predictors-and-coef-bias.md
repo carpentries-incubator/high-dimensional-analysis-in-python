@@ -1,53 +1,249 @@
 ---
-title: Explanatory models - a multivariate approach
+title: Explanatory models - relevant predictors
 teaching: 45
 exercises: 2
 keypoints:
 - "All models are wrong, but some are useful."
-- "Before reading into a model's estimated coefficients, modelers must take care to account for essential predictor variables and test the 5 assumptions of linear regression."
+- "Before reading into a model's estimated coefficients, modelers must take care to account for essential predictor variables"
 - "Models that do not account for essential predictor variables can produce distorted pictures of reality due to omitted variable bias and confounding effects."
 objectives:
-- "Understand the importance of including all relevant predictors in a model"
-- "Know how to test the validity of a multivariate regression model, 
-- "Know how to use statistics to evaluate the likelihood of existing relationships recovered by a multivariate model"
+- "Understand the importance of including relevant predictors in a model."
 questions:
+- "How can multivariate models be used to detect interesting relationships found in nature?"
 - "What are the benfits/costs of including additional predictors in a regression model?"
-- "How can multivariate models be used to detect interesting relationships foudn in nature?"
-- "How can we rigorously evaluate the validity and accuracy of a multivariate regression model?"
-- "What are the assumptions of linear regression models?"
 ---
 
 ### Intro
-With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist? 
+With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist?
 
-There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss all three in detail throughout this episode.
+There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss the first in detail throughout this episode.
 1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
 2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
-3. **Bias/variance or under/overfitting**: Does the model capture the variance in the data well enough to be trusted?
+3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
 
 ### 1. Relevant predictors
-Including all relevant predictor variables in a model is important for several reasons:
 
-1. **Improving model interpretability**: Leaving out relevant predictors can result in *model misspecification*. Misspecification refers to a situation where the model structure or functional form does not accurately reflect the underlying relationship between the predictors and the outcome. If a relevant predictor is omitted from the model, the coefficients of the remaining predictors may be biased. This occurs because the omitted predictor may have a direct or indirect relationship with the outcome variable, and its effect is not accounted for in the model. Consequently, the estimated coefficients of other predictors may capture some of the omitted predictor's effect, leading to biased estimates.
+> ## Benefits and drawbacks of including all relevant predcitors
+> What do you think might be some benefits of including all relevant predictors in a model that you intend to use to **explain** relationships? Are there any drawbacks you can think of?
+> > ## Solution
+> >
+> > Including all relevant predictor variables in a model is important for several reasons:
+> > 
+> > 1. **Improving model interpretability**: Leaving out relevant predictors can result in *model misspecification*. Misspecification refers to a situation where the model structure or functional form does not accurately reflect the underlying relationship between the predictors and the outcome. If a relevant predictor is omitted from the model, the coefficients of the remaining predictors may be biased. This occurs because the omitted predictor may have a direct or indirect relationship with the outcome variable, and its effect is not accounted for in the model. Consequently, the estimated coefficients of other predictors may capture some of the omitted predictor's effect, leading to biased estimates.
+> > 
+> > 2. **Improving predicitive accuracy and reducing residual variance**: Omitting relevant predictors can increase the residual variance in the model. Residual variance represents the unexplained variation in the outcome variable after accounting for the predictors in the model. If a relevant predictor is left out, the model may not fully capture the systematic variation in the data, resulting in larger residuals and reduced model fit. While it is true that, in a research setting, we typically care more about being able to interpret our model than being able to perfectly predict the target variable, a model that severely underfits is still a cause for concern since the model won't be capturing the variability of the data well enough to form any conclusions.
+> > 
+> > 3. **Robustness to future changes**: This benefit only applies to predictive modeling tasks where models are often being fit to new data. By including all relevant predictors, the model becomes more robust to changes in the data or the underlying system. If a predictor becomes important in the future due to changes in the environment or additional data, including it from the start ensures that the model is already equipped to capture its influence.
+> > 
+> > **Drawbacks to including all relevant predictors:** While one should always aim to include as many relevant predictors as possible, this goal needs to be balanced with overfitting concerns. If we include too many predictors in the model and train on a limited number of observations, the model may simply memorize the nuances/noise in the data rather than capturing the underlying trend in the data.
+> {:.solution}
+{:.challenge}
 
-2. **Improving predicitive accuracy and reducing residual variance**: Omitting relevant predictors can increase the residual variance in the model. Residual variance represents the unexplained variation in the outcome variable after accounting for the predictors in the model. If a relevant predictor is left out, the model may not fully capture the systematic variation in the data, resulting in larger residuals and reduced model fit. While it is true that, in a research setting, we typically care more about being able to interpret our model than being able to perfectly predict the target variable, a model that severely underfits is still a cause for concern since the model won't be capturing the variability of the data well enough to form any conclusions from the model.
-
-3. **Robustness to future changes**: By including all relevant predictors, the model becomes more robust to changes in the data or the underlying system. If a predictor becomes important in the future due to changes in the environment or additional data, including it from the start ensures that the model is already equipped to capture its influence.
-
-It is worth noting that the emphasis should be on including relevant predictors rather than simply including all available predictors. Including irrelevant predictors can lead to overfitting, decreased model interpretability, and increased complexity without any added benefit. Therefore, careful consideration and domain expertise are necessary to determine which predictors are truly relevant to the problem at hand.
 
 #### Example
-Let's consider a regression model where the outcome variable is "House Price" and we have two predictors: "Square Footage" and "Number of Bedrooms." Suppose we omit the relevant predictor "Number of Bedrooms" from the model and only include "Square Footage."
-
-GrLivArea: Above grade (ground) living area square feet
-BedroomAbvGr: Bedrooms above grade (does NOT include basement bedrooms)
+Let's consider a regression model where we want to evaluate the relationship between FullBath (number of bathrooms) and SalePrice.
 
 
 ```python
 from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True) #
 y=housing['target']
-predictors = ['GrLivArea']#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF']
+X=housing['data']['FullBath']
+X.head()
+```
+
+    C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\sklearn\datasets\_openml.py:968: FutureWarning: The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4. You can set `parser='auto'` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml's API doc for details.
+      warn(
+
+
+
+
+
+    0    2
+    1    2
+    2    2
+    3    1
+    4    2
+    Name: FullBath, dtype: int64
+
+
+
+It's always a good idea to start by plotting the predictor vs the target variable to get a sense of the underlying relationship.
+
+
+```python
+import matplotlib.pyplot as plt
+plt.scatter(X,y,alpha=.3);
+```
+
+
+
+
+
+
+
+Since the relationship doesn't appear to be quite as linear as we were hoping, we will try a log transformation as we did in the previous episode.
+
+
+```python
+import numpy as np
+y_log = y.apply(np.log)
+plt.scatter(X,y_log, alpha=.3);
+```
+
+
+
+
+
+
+
+The log transform improves the linear relationship substantially! Next, we will import the statsmodels package which is an R-style modeling package that has some convenient functions for rigorously testing and running stats on linear models.
+
+We'll compare the coefficients estimated from this model to an additional univariate model. To make this comparison more straightforward, we will z-score the predictor.
+
+
+```python
+X = (X - X.mean())/X.std()
+X.head()
+```
+
+
+
+
+    0    0.789470
+    1    0.789470
+    2    0.789470
+    3   -1.025689
+    4    0.789470
+    Name: FullBath, dtype: float64
+
+
+
+
+```python
+import statsmodels.api as sm
+
+# Add a constant column to the predictor variables dataframe
+X = sm.add_constant(X)
+
+# Fit the multivariate regression model
+model = sm.OLS(y_log, X)
+results = model.fit()
+print(results.params)
+```
+
+    const       12.024051
+    FullBath     0.237582
+    dtype: float64
+
+
+The model coefficient estimated for the "FullBath" predictor is 0.24. Recall that we fit this model to a log scaled version of the SalePrice. In other words, increasing the FullBath predictor by 1 standard deviation increases the log(SalePrice) by 0.24. While this explanation is completely valid, it is often useful to interpret the coefficient in terms of the original scale of the target variable.
+
+##### Transforming the coefficient to the original scale of the data.
+Exponentiate the coefficient to reverse the log transformation. This gives the multiplicative factor for every one-unit increase in the independent variable. In our model (run code below), for every standard devation increase in the predictor, our target variable increases by a factor of about 1.27, or 27%. Recall that multiplying a number by 1.27 is the same as increasing the number by 27%. Likewise, multiplying a number by, say 0.3, is the same as decreasing the number by 1 – 0.3 = 0.7, or 70%.
+
+<!-- The model coefficient estimated for the "FullBath" predictor is 0.43. Recall that we fit this model to a log scaled version of the SalePrice. In other words, adding an extra bath increases the log(SalePrice) by 0.43. While this explanation is completely valid, it is often useful to interpret the coefficient in terms of the original scale of the target variable.
+
+##### Transforming the coefficient to the original scale of the data.
+Exponentiate the coefficient to reverse the log transformation. This gives the multiplicative factor for every one-unit increase in the independent variable. In our model (run code below), for every one-unit increase in the predictor, our target variable increases by a factor of about 1.54, or 54%. Recall that multiplying a number by 1.54 is the same as increasing the number by 54%. Likewise, multiplying a number by, say 0.3, is the same as decreasing the number by 1 – 0.3 = 0.7, or 70%. -->
+
+
+```python
+np.exp(results.params[1]) # First param is the estimated coef for the y-intercept / "const". The second param is the estimated coef for FullBath.
+```
+
+
+
+
+    1.2681792421553808
+
+
+
+When transformed to the original data scale, this coefficient tells us that adding an extra bathroom increases the sale price, on average, by 27%. While bathrooms are a very hot commodity to find in a house, they likely don't deserve this much credit. Let's do some further digging by comparing another predictor which likely has a large impact on SalePrice — the total square footage of the house (excluding the basement).
+
+
+```python
+X=housing['data']['GrLivArea']
+plt.scatter(X, y_log);
+```
+
+
+
+
+
+
+
+We'll compare the coefficients estimated from this model to another univariate model in just a moment. To make this comparison more straightforward, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
+
+
+```python
+X = (X - X.mean())/X.std()
+X.head()
+```
+
+
+
+
+    0    0.370207
+    1   -0.482347
+    2    0.514836
+    3    0.383528
+    4    1.298881
+    Name: GrLivArea, dtype: float64
+
+
+
+Fit the model.
+
+
+```python
+# Add a constant column to the predictor variables dataframe
+X = sm.add_constant(X)
+print(X.head())
+# Fit the multivariate regression model
+model = sm.OLS(y_log, X)
+results = model.fit()
+results.params
+```
+
+       const  GrLivArea
+    0    1.0   0.370207
+    1    1.0  -0.482347
+    2    1.0   0.514836
+    3    1.0   0.383528
+    4    1.0   1.298881
+
+
+
+
+
+    const        12.024051
+    GrLivArea     0.279986
+    dtype: float64
+
+
+
+
+```python
+np.exp(results.params[1]) # First param is the estimated coef for the y-intercept / "const". The second param is the estimated coef for FullBath.
+```
+
+
+
+
+    1.3231118984358705
+
+
+
+<!-- For every one-unit increase in the predictor (GrLivArea), our target variable (SalePrice) increases by a factor of about 1.0005, or .05%. It doesn't seem likely that  -->
+
+For every one standard devation increase in the predictor (GrLivArea), our target variable (SalePrice) increases by a factor of about 1.32, or 32%.
+
+Let's compare our findings with a multivariate regression model that includes both predictors.
+
+
+```python
+predictors = ['GrLivArea', 'FullBath']
 X=housing['data'][predictors]
 X.head()
 ```
@@ -74,28 +270,173 @@ X.head()
     <tr style="text-align: right;">
       <th></th>
       <th>GrLivArea</th>
+      <th>FullBath</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>1710.0</td>
+      <td>1710</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>1262.0</td>
+      <td>1262</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>1786.0</td>
+      <td>1786</td>
+      <td>2</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>1717.0</td>
+      <td>1717</td>
+      <td>1</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2198.0</td>
+      <td>2198</td>
+      <td>2</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+##### Standardization
+when working with multiple predictors, it's essential to zscore all predictors so that you can compare coefficient estimates across predictors. If you don't standardize the scale of all predictors, the coefficient size will be a function of the scale of each specific predictor.
+
+
+
+```python
+X = (X - X.mean())/X.std()
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>GrLivArea</th>
+      <th>FullBath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.370207</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>-0.482347</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0.514836</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0.383528</td>
+      <td>-1.025689</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.298881</td>
+      <td>0.789470</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+Add constant for modeling y-intercept
+
+
+```python
+# Fit the multivariate regression model
+X = sm.add_constant(X)
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>const</th>
+      <th>GrLivArea</th>
+      <th>FullBath</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>0.370207</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1.0</td>
+      <td>-0.482347</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>1.0</td>
+      <td>0.514836</td>
+      <td>0.789470</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1.0</td>
+      <td>0.383528</td>
+      <td>-1.025689</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>1.0</td>
+      <td>1.298881</td>
+      <td>0.789470</td>
     </tr>
   </tbody>
 </table>
@@ -105,63 +446,54 @@ X.head()
 
 
 ```python
-import matplotlib.pyplot as plt
-plt.scatter(X,y)
-```
-
-
-
-
-    <matplotlib.collections.PathCollection at 0x175b4f319d0>
-
-
-
-
-    
-
-    
-
-
-
-```python
-import numpy as np
-y_log = y.apply(np.log)
-plt.scatter(X,y_log)
-```
-
-
-
-
-    <matplotlib.collections.PathCollection at 0x175b6048820>
-
-
-
-
-    
-
-    
-
-
-
-```python
-import statsmodels.api as sm
-
-# Add a constant column to the predictor variables dataframe
-X = sm.add_constant(X)
-
-# Fit the multivariate regression model
 model = sm.OLS(y_log, X)
 results = model.fit()
-results.params
+print(results.params)
+
 ```
 
-
-
-
-    const        11.216582
-    GrLivArea     0.000533
+    const        12.024051
+    GrLivArea     0.216067
+    FullBath      0.101457
     dtype: float64
 
+
+Let's convert these measures to the original scale of the target variable as we did before.
+
+
+```python
+print('GrLivArea:', np.exp(.216))
+print('FullBath:', np.exp(.101))
+```
+
+    GrLivArea: 1.2411023790006717
+    FullBath: 1.1062766417634236
+
+
+> ## Comparing results
+> 1. Convert the coefficients to the original scale of the target variable as we did earlier in this episode. How much does SalePrice increase with a 1 standard deviation increase in each predictor?
+> 2. How do these estimates compare to the univariate model estimates? Is there any difference? If so, what might be the cause?
+> > ## Solution
+> >
+> > 
+> > ~~~
+> > print('GrLivArea:', np.exp(.216))
+> > print('FullBath:', np.exp(.101))
+> > ~~~
+> {: .python}
+> > 
+> > 
+> > Including all relevant predictor variables in a model is important for several reasons:
+> > 
+> > 1. **Improving model interpretability**: Leaving out relevant predictors can result in *model misspecification*. Misspecification refers to a situation where the model structure or functional form does not accurately reflect the underlying relationship between the predictors and the outcome. If a relevant predictor is omitted from the model, the coefficients of the remaining predictors may be biased. This occurs because the omitted predictor may have a direct or indirect relationship with the outcome variable, and its effect is not accounted for in the model. Consequently, the estimated coefficients of other predictors may capture some of the omitted predictor's effect, leading to biased estimates.
+> > 
+> > 2. **Improving predicitive accuracy and reducing residual variance**: Omitting relevant predictors can increase the residual variance in the model. Residual variance represents the unexplained variation in the outcome variable after accounting for the predictors in the model. If a relevant predictor is left out, the model may not fully capture the systematic variation in the data, resulting in larger residuals and reduced model fit. While it is true that, in a research setting, we typically care more about being able to interpret our model than being able to perfectly predict the target variable, a model that severely underfits is still a cause for concern since the model won't be capturing the variability of the data well enough to form any conclusions.
+> > 
+> > 3. **Robustness to future changes**: This benefit only applies to predictive modeling tasks where models are often being fit to new data. By including all relevant predictors, the model becomes more robust to changes in the data or the underlying system. If a predictor becomes important in the future due to changes in the environment or additional data, including it from the start ensures that the model is already equipped to capture its influence.
+> > 
+> > **Drawbacks to including all relevant predictors:** While one should always aim to include as many relevant predictors as possible, this goal needs to be balanced with overfitting concerns. If we include too many predictors in the model and train on a limited number of observations, the model may simply memorize the nuances/noise in the data rather than capturing the underlying trend in the data.
+> {:.solution}
+{:.challenge}
 
 
 Without the "Number of Bedrooms" predictor, the model will fail to capture the effect of the number of bedrooms on the house price. This can result in biased coefficient estimates for the remaining predictor, "Square Footage."
@@ -172,26 +504,24 @@ As a result, the coefficient estimate for "Square Footage" might be inflated. Th
 
 By leaving out the relevant predictor, we introduce bias into the coefficient estimates of the remaining predictors, leading to inaccurate and misleading interpretations of their effects on the outcome variable.
 
+In the multivariate model, we
+
 
 ```python
-y=housing['target']
-predictors = ['GrLivArea', 'BedroomAbvGr']#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF']
-X=housing['data'][predictors]
-# Fit the multivariate regression model
-X = sm.add_constant(X)
-model = sm.OLS(y_log, X)
-results = model.fit()
-results.params
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import pandas as pd
+# Calculate VIF for each predictor in X
+vif = pd.DataFrame()
+vif["Variable"] = X.columns
+vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+
+# Display the VIF values
+print(vif)
 ```
 
-
-
-
-    const           11.388964
-    GrLivArea        0.000618
-    BedroomAbvGr    -0.105107
-    dtype: float64
-
+        Variable      VIF
+    0  GrLivArea  1.65814
+    1   FullBath  1.65814
 
 
 
@@ -203,23 +533,25 @@ plt.hist(X['BedroomAbvGr'])
 
 
     (array([  6.,  50., 358., 804.,   0., 213.,  21.,   7.,   0.,   1.]),
-     array([0. , 0.8, 1.6, 2.4, 3.2, 4. , 4.8, 5.6, 6.4, 7.2, 8. ]),
+     array([-3.51374786, -2.53308896, -1.55243006, -0.57177116,  0.40888774,
+             1.38954664,  2.37020555,  3.35086445,  4.33152335,  5.31218225,
+             6.29284115]),
      <BarContainer object of 10 artists>)
 
 
 
 
-    
 
-    
+
+
 
 
 ### Regression assumptions and hypothesis testing
-What does it mean to be statistically signficiant? It means that an observed relationship is unlikely (< 5% chance if p=.005) to occur due to chance alone. 
+What does it mean to be statistically signficiant? It means that an observed relationship is unlikely (< 5% chance if p=.005) to occur due to chance alone.
 
 To run statistics on a regression model, we start with two hypotheses — one null and one alternative.
 * $H_0$ (Null hypothesis): $m$ = 0 (i.e., slope is flat)
-* $H_A$ (Alternative hypothesis): $m \neq 0$ (i.e.., slope is not completely flat) 
+* $H_A$ (Alternative hypothesis): $m \neq 0$ (i.e.., slope is not completely flat)
 
 In other words, we are testing to see if a predictor has a consistent effect on some target variable. We are NOT testing the magnitidute of the effect; simply whether or not an observed effect is due to chance or not. In statistics, we start with the null hypothesis as our default and review evidence (the fitted model and its estimated parameters and error measurement) to see if the observed data suggests that the null hypothesis should be rejected.
 
@@ -229,14 +561,14 @@ The assumptions of regression (mostly) need to be met before rejecting the null 
 2. **Normality**: The error terms (residuals) are normally distributed
 3. **Homoscedasticity**: The variance of the error terms is constant over all X values (homoscedasticity)
 4. **Independence**: The error terms are independent
-5. **Limited multicollinearity**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves. 
+5. **Limited multicollinearity**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves.
 
 #### Testing procedure
 The procedure for testing whether predictor(s) have a statistically significant effect on a target variable in a regression model typically involves the following steps:
 
 1. Formulate the null hypothesis (H₀) and alternative hypothesis (H₁) for the test. The null hypothesis typically states that the predictor has no effect on the response variable (coef=0), while the alternative hypothesis suggests that there is a significant effect (coef!=0).
 
-2. If using multiple predictors, check for multicollinearity. This can be an especially pervasive 
+2. If using multiple predictors, check for multicollinearity. This can be an especially pervasive
 
 3. Check linearity assumption for all predictors
 
@@ -301,15 +633,15 @@ SaleCondition: Condition of sale
        Normal	Normal Sale
        Abnorml	Abnormal Sale -  trade, foreclosure, short sale
        AdjLand	Adjoining Land Purchase
-       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit	
+       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit
        Family	Sale between family members
        Partial	Home was not completed when last assessed (associated with New Homes)
 Heating: Type of heating
-		
+
        Floor	Floor Furnace
        GasA	Gas forced warm air furnace
        GasW	Gas hot water or steam heat
-       Grav	Gravity furnace	
+       Grav	Gravity furnace
        OthW	Hot water or steam heat other than gas
        Wall	Wall furnace
 
@@ -341,7 +673,7 @@ X.head()
 ### 1. Specify hypotheses
 We begin by formulating the null hypothesis (H₀) and alternative hypothesis (H₁) for each predictor we intend to include in the model. The null hypothesis states that the predictor has no effect on the response variable, while the alternative hypothesis suggests that there is a significant effect. Before we can reject the null hypothesis, we must make sure to satisfy all multivariate regression assumptions to ensure reliable and valid inference.
 
-### 2. Check for multicollinearity 
+### 2. Check for multicollinearity
 
 "Multicollinearity creates a problem in the multiple regression model because the inputs are all influencing each other. Therefore, they are not actually independent, and it is difficult to test how much the combination of the independent variables affects the dependent variable, or outcome, within the regression model.
 
@@ -371,7 +703,7 @@ It looks like one of the predictors, "Normal", has a high VIF score. We can furt
 import pandas as pd
 import seaborn as sns
 import matplotlib.pyplot as plt
-from helper_functions import plot_corr_matrix 
+from helper_functions import plot_corr_matrix
 
 # Calculate correlation matrix
 corr_matrix = X.corr()
@@ -384,11 +716,11 @@ SaleCondition: Condition of sale
        Normal	Normal Sale
        Abnorml	Abnormal Sale -  trade, foreclosure, short sale
        AdjLand	Adjoining Land Purchase
-       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit	
+       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit
        Family	Sale between family members
        Partial	Home was not completed when last assessed (associated with New Homes)
 
-The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value or "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal. 
+The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value or "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal.
 
 
 
@@ -427,8 +759,8 @@ Violations of the linearity assumption can also impact other assumptions in stat
 To fix this problem, you can...
 
 1. Apply nonlinear transformations (e.g., log transform)
-2. Try adding additional variables to help capture the relationship between the predictors and the label. 
-3. Add polynomial terms to some of the predictors (i.e., polynomial regression) 
+2. Try adding additional variables to help capture the relationship between the predictors and the label.
+3. Add polynomial terms to some of the predictors (i.e., polynomial regression)
 
 
 If none of those approaches work, you can also consider nonlinear models if you have a sufficiently large dataset (learning nonlinear relationships requires lots of data).
@@ -535,18 +867,18 @@ plt.ylabel('Bin Counts');
 ```
 
     0.0016591071809379798
-    
 
 
-    
 
-    
+
+
+
 
 
 
 ```python
 # To quantitatively assess a distribution's skewness, we can use pandas' skew() function
-residuals.skew() 
+residuals.skew()
 ```
 
 
@@ -581,16 +913,16 @@ plt.show()
 ```
 
     Shapiro-Wilk test: statistic=0.9949, p-value=0.0002032356
-    
 
 
-    
 
-    
+
+
+
 
 
 #### Unpacking the QQ-plot
-To construct a QQ-plot, the raw data is first sorted from smaller to larger values. Then, empirical quantiles can be assigned to each sample in the dataset. These measurements can then be compared to theoretical quantiles from a normal distribution. Oftentimes, QQ-plots show zscores rather than actual quantile values since zscores can be interpreted more easily. 
+To construct a QQ-plot, the raw data is first sorted from smaller to larger values. Then, empirical quantiles can be assigned to each sample in the dataset. These measurements can then be compared to theoretical quantiles from a normal distribution. Oftentimes, QQ-plots show zscores rather than actual quantile values since zscores can be interpreted more easily.
 
 **X-axis: Theoretical Quantiles**
 This x-axis represents nothing but Z-values/Z-scores of standard normal distribution.
@@ -635,9 +967,9 @@ plt.ylabel('Bin Counts');
 ```
 
 
-    
 
-    
+
+
 
 
 
@@ -652,16 +984,16 @@ print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f
 ```
 
     Shapiro-Wilk test: statistic=0.9998, p-value=0.7514184713
-    
+
 
     C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\scipy\stats\_morestats.py:1816: UserWarning: p-value may not be accurate for N > 5000.
       warnings.warn("p-value may not be accurate for N > 5000.")
-    
 
 
-    
 
-    
+
+
+
 
 
 What happens if we decrease the sample size of our simulation? Let's try to generate a QQ-plot containing only 200 samples.
@@ -682,12 +1014,12 @@ print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f
 ```
 
     Shapiro-Wilk test: statistic=0.9887, p-value=0.1128277779
-    
 
 
-    
 
-    
+
+
+
 
 
 Notice how the SW test nearly fails even though this data comes from a normal distrition. Testing normality can be a difficult task when data is very limited. What happens if we decrease the sample size of our simulation? Let's try to generate a QQ-plot containing the same number of samples used to train our model.
@@ -708,12 +1040,12 @@ print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f
 ```
 
     Shapiro-Wilk test: statistic=0.9992, p-value=0.7804323435
-    
 
 
-    
 
-    
+
+
+
 
 
 **Common Diagnostics**
@@ -721,7 +1053,7 @@ print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f
 2. Left-skewed: If the data falls below the red line (where y=x) where x < 0, that means that you have a left skewed distrution (long tail on the left side of the distrubtion). This causes the sample distribtuion to have lower (more negative) than expected z-scores for data that is greater than the mean (zscore = 0).
 3. Long tails / tall peak: Combination of 1&2 above — points below the mean (zscore = 0) will fall below the red line, and points above the mean will fall above the red line
 
-Now that we understand QQ-plots better, let's try creating a QQ-plot of the model residuals. 
+Now that we understand QQ-plots better, let's try creating a QQ-plot of the model residuals.
 
 
 ```python
@@ -732,9 +1064,9 @@ sm.qqplot(resid, line='s');
 ```
 
 
-    
 
-    
+
+
 
 
 
@@ -754,9 +1086,9 @@ plt.hist(resid)
 
 
 
-    
 
-    
+
+
 
 
 
@@ -801,7 +1133,7 @@ To calculate the p-value for a t-statistic, you follow these general steps:
 
 By calculating the p-value for the t-statistic, you can assess the statistical significance of the coefficient estimate or the difference being tested. A lower p-value indicates stronger evidence against the null hypothesis and suggests a more significant relationship or effect.
 
-#### The more manual route of calculating p-values... 
+#### The more manual route of calculating p-values...
 
 In this code, after fitting the multivariate regression model and obtaining the coefficient estimates in the coefs Series and the standard errors in the std_errs Series, we calculate the t-values by dividing the coefficient estimates by the standard errors. The t-value represents the ratio of the estimated coefficient (or difference) to its standard error. It measures the number of standard errors by which the estimated coefficient differs from zero. The standard error reflects the precision of the estimated coefficient, and a larger t-value indicates a larger difference relative to the standard error.
 
@@ -849,7 +1181,7 @@ p_values_df['Significant'] = p_values_df['P-value'] < 0.05
 
 # Print the DataFrame
 print("P-values of the predictors:")
-print(p_values_df)           
+print(p_values_df)
 ```
 
     P-values of the predictors:
@@ -861,4 +1193,3 @@ print(p_values_df)
     Alloca            Alloca   5.074327e-01     0.043658        False
     Family            Family   8.425049e-02    -0.088357        False
     Partial          Partial   7.722681e-05     0.089044         True
-    
