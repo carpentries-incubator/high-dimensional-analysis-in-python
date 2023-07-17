@@ -1,7 +1,7 @@
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
-import matplotlib.ticker as ticker
+import matplotlib
 
 
 # def clean_data(housing):
@@ -612,8 +612,8 @@ def show_pcs_on_unit_axes(p: PCA, color_pc0: str = 'xkcd:pink', color_pc1: str =
     ax.spines['top'].set_color('none')
 
     # set axes ticks to -1, 0, 1
-    ax.xaxis.set_major_locator(ticker.FixedLocator([-1, 0, 1]))
-    ax.yaxis.set_major_locator(ticker.FixedLocator([-1, 0, 1]))
+    ax.xaxis.set_major_locator(matplotlib.ticker.FixedLocator([-1, 0, 1]))
+    ax.yaxis.set_major_locator(matplotlib.ticker.FixedLocator([-1, 0, 1]))
 
     # set axes lengths
     ax.set_xlim(-1,1)
