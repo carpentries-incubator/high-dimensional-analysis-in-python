@@ -479,7 +479,7 @@ print('FullBath:', np.exp(.101))
 > > print('GrLivArea:', np.exp(.216))
 > > print('FullBath:', np.exp(.101))
 > > ~~~
-> > {: .python}
+> > {: .language-python}
 > > 
 > > 
 > > Including all relevant predictor variables in a model is important for several reasons:
