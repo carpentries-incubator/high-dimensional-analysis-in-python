@@ -45,15 +45,11 @@ Let's consider a regression model where we want to evaluate the relationship bet
 
 ```python
 from sklearn.datasets import fetch_openml
-housing = fetch_openml(name="house_prices", as_frame=True) #
+housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
 y=housing['target']
 X=housing['data']['FullBath']
 X.head()
 ```
-
-    C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\sklearn\datasets\_openml.py:968: FutureWarning: The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4. You can set `parser='auto'` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml's API doc for details.
-      warn(
-
 
 
 
@@ -73,6 +69,7 @@ It's always a good idea to start by plotting the predictor vs the target variabl
 ```python
 import matplotlib.pyplot as plt
 plt.scatter(X,y,alpha=.3);
+# plt.savefig('..//fig//regression//scatterplot_fullBath_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -80,6 +77,8 @@ plt.scatter(X,y,alpha=.3);
 
 
 
+
+<img src="../fig/regression/scatterplot_fullBath_vs_salePrice.png"  align="center" width="30%" height="30%">
 
 Since the relationship doesn't appear to be quite as linear as we were hoping, we will try a log transformation as we did in the previous episode.
 
@@ -88,6 +87,7 @@ Since the relationship doesn't appear to be quite as linear as we were hoping, w
 import numpy as np
 y_log = y.apply(np.log)
 plt.scatter(X,y_log, alpha=.3);
+plt.savefig('..//fig//regression//scatterplot_fullBath_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -96,9 +96,11 @@ plt.scatter(X,y_log, alpha=.3);
 
 
 
+<img src="../fig/regression/scatterplot_fullBath_vs_logSalePrice.png"  align="center" width="30%" height="30%">
+
 The log transform improves the linear relationship substantially! Next, we will import the statsmodels package which is an R-style modeling package that has some convenient functions for rigorously testing and running stats on linear models.
 
-We'll compare the coefficients estimated from this model to an additional univariate model. To make this comparison more straightforward, we will z-score the predictor.
+We'll compare the coefficients estimated from this model to an additional univariate model. To make this comparison more straightforward, we will z-score the predictor. If you don't standardize the scale of all predictors, the coefficient size will be a function of the scale of each specific predictor.
 
 
 ```python
@@ -154,11 +156,11 @@ np.exp(results.params[1]) # First param is the estimated coef for the y-intercep
 
 
 
-    1.2681792421553808
+    1.2681792421553824
 
 
 
-When transformed to the original data scale, this coefficient tells us that adding an extra bathroom increases the sale price, on average, by 27%. While bathrooms are a very hot commodity to find in a house, they likely don't deserve this much credit. Let's do some further digging by comparing another predictor which likely has a large impact on SalePrice — the total square footage of the house (excluding the basement).
+When transformed to the original data scale, this coefficient tells us that increasing bathroom count by 1 standard deviation increases the sale price, on average, by 27%. While bathrooms are a very hot commodity to find in a house, they likely don't deserve this much credit. Let's do some further digging by comparing another predictor which likely has a large impact on SalePrice — the total square footage of the house (excluding the basement).
 
 
 ```python
@@ -172,7 +174,7 @@ plt.scatter(X, y_log);
 
 
 
-We'll compare the coefficients estimated from this model to another univariate model in just a moment. To make this comparison more straightforward, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
+As before,, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
 
 
 ```python
@@ -233,8 +235,6 @@ np.exp(results.params[1]) # First param is the estimated coef for the y-intercep
     1.3231118984358705
 
 
-
-<!-- For every one-unit increase in the predictor (GrLivArea), our target variable (SalePrice) increases by a factor of about 1.0005, or .05%. It doesn't seem likely that  -->
 
 For every one standard devation increase in the predictor (GrLivArea), our target variable (SalePrice) increases by a factor of about 1.32, or 32%.
 
@@ -479,7 +479,7 @@ print('FullBath:', np.exp(.101))
 > > print('GrLivArea:', np.exp(.216))
 > > print('FullBath:', np.exp(.101))
 > > ~~~
-> {: .python}
+> > {: .python}
 > > 
 > > 
 > > Including all relevant predictor variables in a model is important for several reasons:
