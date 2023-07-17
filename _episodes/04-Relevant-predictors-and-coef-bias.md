@@ -468,6 +468,7 @@ print('FullBath:', np.exp(.101))
     GrLivArea: 1.2411023790006717
     FullBath: 1.1062766417634236
 
+test
 
 > ## Comparing results
 > 1. Convert the coefficients to the original scale of the target variable as we did earlier in this episode. How much does SalePrice increase with a 1 standard deviation increase in each predictor?
@@ -475,11 +476,6 @@ print('FullBath:', np.exp(.101))
 > > ## Solution
 > >
 > > 
-> > ~~~
-> > print('GrLivArea:', np.exp(.216))
-> > print('FullBath:', np.exp(.101))
-> > ~~~
-> > {: .language-python}
 > > 
 > > 
 > > Including all relevant predictor variables in a model is important for several reasons:
