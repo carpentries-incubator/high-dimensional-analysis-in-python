@@ -489,8 +489,10 @@ test4
 
 
 > ## Example3
+> 
 > 1. Convert the coefficients to the original scale of the target variable as we did earlier in this episode. How much does SalePrice increase with a 1 standard deviation increase in each predictor?
 > 2. How do these estimates compare to the univariate model estimates? Is there any difference? If so, what might be the cause?
+> 
 > > ## Solution
 > > 
 > > Including all relevant predictor variables in a model is important for several reasons:
