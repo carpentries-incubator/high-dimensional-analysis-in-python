@@ -1,39 +1,1249 @@
 ---
-title: Regularization methods - lasso, ridge, and elastic net
+title: High-dimensional data preparation
 teaching: 45
 exercises: 2
 keypoints:
 - ""
 objectives:
-- ""
+- "Know how to deal with skewed a target variable, outliers, missing values, and categorical data"
+- "Understand the importance of standarizing predictor variables"
 questions:
 - ""
 ---
 
-### Split data into train/test sets and zscore
-We will now split our data into two separate groupings — one for fitting or training the model ("train set") and another for testing ("test set") the model's ability to generalize to data that was excluded during training. The amount of data you exclude for the test set should be large enough that the model can be vetted against a diverse range of samples. A common rule of thumb is to use 3/4 of the data for training, and 1/3 for testing.
+### Load the data
 
 
 ```python
-from sklearn.model_selection import train_test_split
+## Ames housing dataset. 
 
-# Perform train/test split
-X_train, X_test, y_train, y_test = train_test_split(X_encoded, y, test_size=0.33, 
-                                                    random_state=0)
-print(X_train.shape)
-print(X_test.shape)
+# See here for thorough documentation regarding the feature set: 
+# https://www.openml.org/d/42165
+from sklearn.datasets import fetch_openml
+housing = fetch_openml(name="house_prices", as_frame=True)
+```
 
-print(type(y_train))
-print(type(X_train))
 
+```python
+# add blanks between 
+print(f"housing['data'].shape = {housing['data'].shape}\n") # 80 features total, 1460 observations
+print(f"housing['feature_names'] = {housing['feature_names']}\n")
+print(f"housing['target_names'] = {housing['target_names']}\n")
+```
+
+    housing['data'].shape = (1460, 80)
+    
+    housing['feature_names'] = ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType', 'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1', 'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual', 'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType', 'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual', 'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC', 'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType', 'SaleCondition']
+    
+    housing['target_names'] = ['SalePrice']
+    
+    
+
+
+```python
+# Extract X and y
+X=housing['data']
+y=housing['target']
 
 ```
 
-    (978, 215)
-    (482, 215)
-    <class 'pandas.core.series.Series'>
-    <class 'pandas.core.frame.DataFrame'>
+
+```python
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Id</th>
+      <th>MSSubClass</th>
+      <th>MSZoning</th>
+      <th>LotFrontage</th>
+      <th>LotArea</th>
+      <th>Street</th>
+      <th>Alley</th>
+      <th>LotShape</th>
+      <th>LandContour</th>
+      <th>Utilities</th>
+      <th>...</th>
+      <th>ScreenPorch</th>
+      <th>PoolArea</th>
+      <th>PoolQC</th>
+      <th>Fence</th>
+      <th>MiscFeature</th>
+      <th>MiscVal</th>
+      <th>MoSold</th>
+      <th>YrSold</th>
+      <th>SaleType</th>
+      <th>SaleCondition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>60.0</td>
+      <td>RL</td>
+      <td>65.0</td>
+      <td>8450.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>Reg</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>2008.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>20.0</td>
+      <td>RL</td>
+      <td>80.0</td>
+      <td>9600.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>Reg</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>5.0</td>
+      <td>2007.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.0</td>
+      <td>60.0</td>
+      <td>RL</td>
+      <td>68.0</td>
+      <td>11250.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>9.0</td>
+      <td>2008.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.0</td>
+      <td>70.0</td>
+      <td>RL</td>
+      <td>60.0</td>
+      <td>9550.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>2006.0</td>
+      <td>WD</td>
+      <td>Abnorml</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>60.0</td>
+      <td>RL</td>
+      <td>84.0</td>
+      <td>14260.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>12.0</td>
+      <td>2008.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 80 columns</p>
+</div>
+
+
+
+#### Plotting the target variable distribution
+Explore the distribution of sale prices. Is the distribution uniform or skewed left/right?
+
+
+```python
+# plot histogram of housing sales, show mean and std of prices as well
+import numpy as np
+import matplotlib.pyplot as plt
+import seaborn as sns
+
+plt.figure(figsize=(8,6))
+sns.distplot(y)
+title = plt.title('House Price Distribution')
+print('Mean Sale Price:', np.mean(y))
+print('Standard Deviation:', np.std(y))
+```
+
+    C:\Users\Endemann\anaconda3\lib\site-packages\seaborn\distributions.py:2557: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).
+      warnings.warn(msg, FutureWarning)
     
+
+    Mean Sale Price: 180921.19589041095
+    Standard Deviation: 79415.29188606751
+    
+
+
+    
+
+    
+
+
+#### Skewed Target Variable
+This distribution has a long right tail, suggesting that it is skewed. 
+
+Why do we care if the data is skewed? If the response variable is right skewed, the model will be trained on a much larger number of moderately priced homes, and will be less likely to successfully predict the price for the most expensive houses. In addition, the presence of a highly skewed target varible can, more likely, influence the distribution of residuals making them, in turn, non-normal. Normal residuals are required for hypothesis testing.
+
+The concept is the same as training a model on imbalanced categorical classes. If the values of a certain independent variable (feature) are skewed, depending on the model, skewness may violate model assumptions (e.g. logistic regression) or may impair the interpretation of feature importance.
+
+
+```python
+# To quantitatively assess a distribution's skewness, we can use pandas' skew() function
+y.skew() 
+```
+
+
+
+
+    1.8828757597682129
+
+
+
+· If the skewness is between -0.5 and 0.5, the data are fairly symmetrical
+
+· If the skewness is between -1 and — 0.5 or between 0.5 and 1, the data are moderately skewed
+
+· If the skewness is less than -1 or greater than 1, the data are highly skewed
+
+#### Correcting skewed target variable using log transformation
+We can correct for a skewed variable by adjusting the scale of the variable. One commonly used rescaling technique that can correct for skew is applying a log transformation. 
+
+
+```python
+# Correct for skew using log transformation
+y = np.log(y)
+plt.figure(figsize=(8,6))
+sns.distplot(y)
+title = plt.title("House Price Distribution")
+print(np.mean(y))
+print(np.std(y))
+y.skew()
+```
+
+    12.024050901109373
+    0.3993150462437029
+    
+
+    C:\Users\Endemann\anaconda3\lib\site-packages\seaborn\distributions.py:2557: FutureWarning: `distplot` is a deprecated function and will be removed in a future version. Please adapt your code to use either `displot` (a figure-level function with similar flexibility) or `histplot` (an axes-level function for histograms).
+      warnings.warn(msg, FutureWarning)
+    
+
+
+
+
+    0.12133506220520406
+
+
+
+
+    
+
+    
+
+
+Our data now appears to be normal and has a skew value of only .399 — meaning the data is now fairly symmetrical. When we correct the target variable skew using a log transformation but not the predictors, the resulting model fit to this data is a log-linear model, meaning a log dependent variable with linear explanatory variables. 
+
+**Note on other skew correction methods**: While a log transformation is probably the most common way to fix a skewed variable, there are other rescaling methods available to explore, e.g., Box Cox transformation.
+
+#### Skewed Predictor Variables
+What happens if our predictor variables are also skewed? Does this have any impact on the model, and should we correct for predictor variable skew?
+
+Technically speaking, the only distributional assumption we have to look out for when doing hypothesis testing with linear models is that the model's residuals are normally distributed. As long as this is true, the underlying independent variable can be as non-normal as you like. However, sometimes the presence of skewed predictors can lead to less stable model predictions because long tails or outliers in the predictor variable distrutions require an analsyis of leverage (i.e. how much these outliers impact on the estimate of the regression coefficients).
+
+Thus, for very skewed variables it might be a good idea to transform the data to eliminate the harmful effects. If there's just a small amount of skew, you likely are fine to move forward with the data as is. We will return to the impact of skewed predictor variables later in the lesson. For now, we will leave all predictor variables as they are.
+
+### Code all nominal and dichotomous variables as "dummy variables" via one-hot encoding
+
+
+```python
+X.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Id</th>
+      <th>MSSubClass</th>
+      <th>MSZoning</th>
+      <th>LotFrontage</th>
+      <th>LotArea</th>
+      <th>Street</th>
+      <th>Alley</th>
+      <th>LotShape</th>
+      <th>LandContour</th>
+      <th>Utilities</th>
+      <th>...</th>
+      <th>ScreenPorch</th>
+      <th>PoolArea</th>
+      <th>PoolQC</th>
+      <th>Fence</th>
+      <th>MiscFeature</th>
+      <th>MiscVal</th>
+      <th>MoSold</th>
+      <th>YrSold</th>
+      <th>SaleType</th>
+      <th>SaleCondition</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>1.0</td>
+      <td>60.0</td>
+      <td>RL</td>
+      <td>65.0</td>
+      <td>8450.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>Reg</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>2008.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>2.0</td>
+      <td>20.0</td>
+      <td>RL</td>
+      <td>80.0</td>
+      <td>9600.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>Reg</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>5.0</td>
+      <td>2007.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>3.0</td>
+      <td>60.0</td>
+      <td>RL</td>
+      <td>68.0</td>
+      <td>11250.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>9.0</td>
+      <td>2008.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>4.0</td>
+      <td>70.0</td>
+      <td>RL</td>
+      <td>60.0</td>
+      <td>9550.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>2006.0</td>
+      <td>WD</td>
+      <td>Abnorml</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>5.0</td>
+      <td>60.0</td>
+      <td>RL</td>
+      <td>84.0</td>
+      <td>14260.0</td>
+      <td>Pave</td>
+      <td>None</td>
+      <td>IR1</td>
+      <td>Lvl</td>
+      <td>AllPub</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>None</td>
+      <td>None</td>
+      <td>None</td>
+      <td>0.0</td>
+      <td>12.0</td>
+      <td>2008.0</td>
+      <td>WD</td>
+      <td>Normal</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 80 columns</p>
+</div>
+
+
+
+
+```python
+from helper_functions import encode_predictors_housing_data
+X_encoded = X.copy(deep=True) 
+X_encoded = encode_predictors_housing_data(X_encoded)
+X_encoded.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MSSubClass_20.0</th>
+      <th>MSSubClass_30.0</th>
+      <th>MSSubClass_40.0</th>
+      <th>MSSubClass_45.0</th>
+      <th>MSSubClass_50.0</th>
+      <th>MSSubClass_60.0</th>
+      <th>MSSubClass_70.0</th>
+      <th>MSSubClass_75.0</th>
+      <th>MSSubClass_80.0</th>
+      <th>MSSubClass_85.0</th>
+      <th>...</th>
+      <th>WoodDeckSF</th>
+      <th>OpenPorchSF</th>
+      <th>EnclosedPorch</th>
+      <th>3SsnPorch</th>
+      <th>ScreenPorch</th>
+      <th>PoolArea</th>
+      <th>YrSold</th>
+      <th>MoSold</th>
+      <th>Street</th>
+      <th>CentralAir</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>61.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2008.0</td>
+      <td>2.0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>298.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2007.0</td>
+      <td>5.0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>42.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2008.0</td>
+      <td>9.0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>35.0</td>
+      <td>272.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2006.0</td>
+      <td>2.0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>192.0</td>
+      <td>84.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2008.0</td>
+      <td>12.0</td>
+      <td>1</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 215 columns</p>
+</div>
+
+
+
+### Remove columns/predictors that meet any of the following criteria...
+* Presence of one or more NaN value (note: interpolation is also an option here)
+* Column is a constant or nearly constant (i.e., one value is present across 90% or more of the rows). Constant predictors have no prediction power, and low-variance predictors have very little prediction power.
+
+
+```python
+# Remove variables that have NaNs as observations and vars that have a constant value across all observations
+from helper_functions import remove_bad_cols
+X_encoded_good = remove_bad_cols(X_encoded, .95)
+X_encoded_good.head()
+
+```
+
+    MSSubClass_30.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_40.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_45.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_70.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_75.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_80.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_85.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_90.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_160.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_180.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSSubClass_190.0 removed due to lack of variance ( >95.0% rows have the same value value)
+    MSZoning_C (all) removed due to lack of variance ( >95.0% rows have the same value value)
+    MSZoning_FV removed due to lack of variance ( >95.0% rows have the same value value)
+    MSZoning_RH removed due to lack of variance ( >95.0% rows have the same value value)
+    Alley_Grvl removed due to lack of variance ( >95.0% rows have the same value value)
+    Alley_Pave removed due to lack of variance ( >95.0% rows have the same value value)
+    LandContour_Bnk removed due to lack of variance ( >95.0% rows have the same value value)
+    LandContour_HLS removed due to lack of variance ( >95.0% rows have the same value value)
+    LandContour_Low removed due to lack of variance ( >95.0% rows have the same value value)
+    LotConfig_FR2 removed due to lack of variance ( >95.0% rows have the same value value)
+    LotConfig_FR3 removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_Blmngtn removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_Blueste removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_BrDale removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_BrkSide removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_ClearCr removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_Crawfor removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_IDOTRR removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_MeadowV removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_Mitchel removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_NPkVill removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_NoRidge removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_SWISU removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_SawyerW removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_StoneBr removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_Timber removed due to lack of variance ( >95.0% rows have the same value value)
+    Neighborhood_Veenker removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition1_Artery removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition1_PosA removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition1_PosN removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition1_RRAe removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition1_RRAn removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition1_RRNe removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition1_RRNn removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_Artery removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_Feedr removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_Norm removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_PosA removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_PosN removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_RRAe removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_RRAn removed due to lack of variance ( >95.0% rows have the same value value)
+    Condition2_RRNn removed due to lack of variance ( >95.0% rows have the same value value)
+    BldgType_2fmCon removed due to lack of variance ( >95.0% rows have the same value value)
+    BldgType_Duplex removed due to lack of variance ( >95.0% rows have the same value value)
+    BldgType_Twnhs removed due to lack of variance ( >95.0% rows have the same value value)
+    HouseStyle_1.5Unf removed due to lack of variance ( >95.0% rows have the same value value)
+    HouseStyle_2.5Fin removed due to lack of variance ( >95.0% rows have the same value value)
+    HouseStyle_2.5Unf removed due to lack of variance ( >95.0% rows have the same value value)
+    HouseStyle_SFoyer removed due to lack of variance ( >95.0% rows have the same value value)
+    HouseStyle_SLvl removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofStyle_Flat removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofStyle_Gambrel removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofStyle_Mansard removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofStyle_Shed removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_ClyTile removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_CompShg removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_Membran removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_Metal removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_Roll removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_Tar&Grv removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_WdShake removed due to lack of variance ( >95.0% rows have the same value value)
+    RoofMatl_WdShngl removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_AsbShng removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_AsphShn removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_BrkComm removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_BrkFace removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_CBlock removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_CemntBd removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_ImStucc removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_Stone removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_Stucco removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior1st_WdShing removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_AsbShng removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_AsphShn removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_Brk Cmn removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_BrkFace removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_CBlock removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_CmentBd removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_ImStucc removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_Other removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_Stone removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_Stucco removed due to lack of variance ( >95.0% rows have the same value value)
+    Exterior2nd_Wd Shng removed due to lack of variance ( >95.0% rows have the same value value)
+    MasVnrType_BrkCmn removed due to lack of variance ( >95.0% rows have the same value value)
+    Foundation_Slab removed due to lack of variance ( >95.0% rows have the same value value)
+    Foundation_Stone removed due to lack of variance ( >95.0% rows have the same value value)
+    Foundation_Wood removed due to lack of variance ( >95.0% rows have the same value value)
+    Heating_Floor removed due to lack of variance ( >95.0% rows have the same value value)
+    Heating_GasA removed due to lack of variance ( >95.0% rows have the same value value)
+    Heating_GasW removed due to lack of variance ( >95.0% rows have the same value value)
+    Heating_Grav removed due to lack of variance ( >95.0% rows have the same value value)
+    Heating_OthW removed due to lack of variance ( >95.0% rows have the same value value)
+    Heating_Wall removed due to lack of variance ( >95.0% rows have the same value value)
+    Electrical_FuseF removed due to lack of variance ( >95.0% rows have the same value value)
+    Electrical_FuseP removed due to lack of variance ( >95.0% rows have the same value value)
+    Electrical_Mix removed due to lack of variance ( >95.0% rows have the same value value)
+    GarageType_2Types removed due to lack of variance ( >95.0% rows have the same value value)
+    GarageType_Basment removed due to lack of variance ( >95.0% rows have the same value value)
+    GarageType_CarPort removed due to lack of variance ( >95.0% rows have the same value value)
+    MiscFeature_Gar2 removed due to lack of variance ( >95.0% rows have the same value value)
+    MiscFeature_Othr removed due to lack of variance ( >95.0% rows have the same value value)
+    MiscFeature_Shed removed due to lack of variance ( >95.0% rows have the same value value)
+    MiscFeature_TenC removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleType_COD removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleType_CWD removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleType_Con removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleType_ConLD removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleType_ConLI removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleType_ConLw removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleType_Oth removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleCondition_AdjLand removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleCondition_Alloca removed due to lack of variance ( >95.0% rows have the same value value)
+    SaleCondition_Family removed due to lack of variance ( >95.0% rows have the same value value)
+    Utilities_AllPub removed due to lack of variance ( >95.0% rows have the same value value)
+    Utilities_NoSeWa removed due to lack of variance ( >95.0% rows have the same value value)
+    LotFrontage removed due to presence of NaNs (sum of nans = 259)
+    MasVnrArea removed due to presence of NaNs (sum of nans = 8)
+    LowQualFinSF removed due to lack of variance ( >95.0% rows have the same value value)
+    KitchenAbvGr removed due to lack of variance ( >95.0% rows have the same value value)
+    GarageYrBlt removed due to presence of NaNs (sum of nans = 81)
+    3SsnPorch removed due to lack of variance ( >95.0% rows have the same value value)
+    PoolArea removed due to lack of variance ( >95.0% rows have the same value value)
+    Street removed due to lack of variance ( >95.0% rows have the same value value)
+    All columns removed: ['MSSubClass_30.0', 'MSSubClass_40.0', 'MSSubClass_45.0', 'MSSubClass_70.0', 'MSSubClass_75.0', 'MSSubClass_80.0', 'MSSubClass_85.0', 'MSSubClass_90.0', 'MSSubClass_160.0', 'MSSubClass_180.0', 'MSSubClass_190.0', 'MSZoning_C (all)', 'MSZoning_FV', 'MSZoning_RH', 'Alley_Grvl', 'Alley_Pave', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LotConfig_FR2', 'LotConfig_FR3', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NoRidge', 'Neighborhood_SWISU', 'Neighborhood_SawyerW', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'Condition1_Artery', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_Brk Cmn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'Exterior2nd_Wd Shng', 'MasVnrType_BrkCmn', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'Utilities_AllPub', 'Utilities_NoSeWa', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'KitchenAbvGr', 'GarageYrBlt', '3SsnPorch', 'PoolArea', 'Street']
+    # of columns removed: 133
+    
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MSSubClass_20.0</th>
+      <th>MSSubClass_50.0</th>
+      <th>MSSubClass_60.0</th>
+      <th>MSSubClass_120.0</th>
+      <th>MSZoning_RL</th>
+      <th>MSZoning_RM</th>
+      <th>LandContour_Lvl</th>
+      <th>LotConfig_Corner</th>
+      <th>LotConfig_CulDSac</th>
+      <th>LotConfig_Inside</th>
+      <th>...</th>
+      <th>Fireplaces</th>
+      <th>GarageCars</th>
+      <th>GarageArea</th>
+      <th>WoodDeckSF</th>
+      <th>OpenPorchSF</th>
+      <th>EnclosedPorch</th>
+      <th>ScreenPorch</th>
+      <th>YrSold</th>
+      <th>MoSold</th>
+      <th>CentralAir</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>0.0</td>
+      <td>2.0</td>
+      <td>548.0</td>
+      <td>0.0</td>
+      <td>61.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2008.0</td>
+      <td>2.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>460.0</td>
+      <td>298.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2007.0</td>
+      <td>5.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>2.0</td>
+      <td>608.0</td>
+      <td>0.0</td>
+      <td>42.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2008.0</td>
+      <td>9.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>3.0</td>
+      <td>642.0</td>
+      <td>0.0</td>
+      <td>35.0</td>
+      <td>272.0</td>
+      <td>0.0</td>
+      <td>2006.0</td>
+      <td>2.0</td>
+      <td>1</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>...</td>
+      <td>1.0</td>
+      <td>3.0</td>
+      <td>836.0</td>
+      <td>192.0</td>
+      <td>84.0</td>
+      <td>0.0</td>
+      <td>0.0</td>
+      <td>2008.0</td>
+      <td>12.0</td>
+      <td>1</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 82 columns</p>
+</div>
+
+
+
+**Note**: can replace NaNs with some interpolation instead of dropping columns. Your definition of bad may and possibly should differ!
+
+#### End of data cleaning stage
+At this point, we have prepared our X dataframe to contain all independent variables of interest. Our Y variable (pands series object) contains only the response/dependent variable we are trying to predict -- housing prices. 
+
+
+```python
+# quick check of data-types and dimensions post-cleaning efforts
+print(X_encoded_good.shape)
+print(y.shape)
+```
+
+    (1460, 82)
+    (1460,)
+    
+
+#### Use means and stds from training data to zscore test data
+
+
+```python
+def zscore_test(test_df, train_means, train_stds):
+    cols = test_df.columns
+    for col in cols:
+        test_df.loc[:,col] = (test_df[col] - train_means[col])/train_stds[col]
+        
+    return test_df
+```
+
+
+```python
+X_test_zscore = X_test.copy(deep=True) 
+X_test_zscore = zscore_test(X_test_zscore, train_means, train_stds)
+X_test_zscore.head()
+
+# add plot of distribution before/after
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>MSSubClass_20.0</th>
+      <th>MSSubClass_30.0</th>
+      <th>MSSubClass_40.0</th>
+      <th>MSSubClass_45.0</th>
+      <th>MSSubClass_50.0</th>
+      <th>MSSubClass_60.0</th>
+      <th>MSSubClass_70.0</th>
+      <th>MSSubClass_75.0</th>
+      <th>MSSubClass_80.0</th>
+      <th>MSSubClass_85.0</th>
+      <th>...</th>
+      <th>WoodDeckSF</th>
+      <th>OpenPorchSF</th>
+      <th>EnclosedPorch</th>
+      <th>3SsnPorch</th>
+      <th>ScreenPorch</th>
+      <th>PoolArea</th>
+      <th>YrSold</th>
+      <th>MoSold</th>
+      <th>Street</th>
+      <th>CentralAir</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>529</th>
+      <td>1.295274</td>
+      <td>-0.216936</td>
+      <td>-0.055442</td>
+      <td>-0.096325</td>
+      <td>-0.327838</td>
+      <td>-0.514713</td>
+      <td>-0.214342</td>
+      <td>-0.096325</td>
+      <td>-0.189684</td>
+      <td>-0.116007</td>
+      <td>...</td>
+      <td>-0.742245</td>
+      <td>-0.705987</td>
+      <td>2.735143</td>
+      <td>-0.117585</td>
+      <td>-0.275025</td>
+      <td>-0.054775</td>
+      <td>-0.615835</td>
+      <td>-1.221678</td>
+      <td>0.071648</td>
+      <td>0.266685</td>
+    </tr>
+    <tr>
+      <th>491</th>
+      <td>-0.771248</td>
+      <td>-0.216936</td>
+      <td>-0.055442</td>
+      <td>-0.096325</td>
+      <td>3.047168</td>
+      <td>-0.514713</td>
+      <td>-0.214342</td>
+      <td>-0.096325</td>
+      <td>-0.189684</td>
+      <td>-0.116007</td>
+      <td>...</td>
+      <td>-0.742245</td>
+      <td>-0.705987</td>
+      <td>0.129185</td>
+      <td>-0.117585</td>
+      <td>-0.275025</td>
+      <td>-0.054775</td>
+      <td>-1.357568</td>
+      <td>0.640543</td>
+      <td>0.071648</td>
+      <td>0.266685</td>
+    </tr>
+    <tr>
+      <th>459</th>
+      <td>-0.771248</td>
+      <td>-0.216936</td>
+      <td>-0.055442</td>
+      <td>-0.096325</td>
+      <td>3.047168</td>
+      <td>-0.514713</td>
+      <td>-0.214342</td>
+      <td>-0.096325</td>
+      <td>-0.189684</td>
+      <td>-0.116007</td>
+      <td>...</td>
+      <td>-0.742245</td>
+      <td>-0.705987</td>
+      <td>3.479702</td>
+      <td>-0.117585</td>
+      <td>-0.275025</td>
+      <td>-0.054775</td>
+      <td>0.867630</td>
+      <td>0.268099</td>
+      <td>0.071648</td>
+      <td>0.266685</td>
+    </tr>
+    <tr>
+      <th>279</th>
+      <td>-0.771248</td>
+      <td>-0.216936</td>
+      <td>-0.055442</td>
+      <td>-0.096325</td>
+      <td>-0.327838</td>
+      <td>1.940844</td>
+      <td>-0.214342</td>
+      <td>-0.096325</td>
+      <td>-0.189684</td>
+      <td>-0.116007</td>
+      <td>...</td>
+      <td>1.500759</td>
+      <td>1.020040</td>
+      <td>-0.367189</td>
+      <td>-0.117585</td>
+      <td>-0.275025</td>
+      <td>-0.054775</td>
+      <td>0.125897</td>
+      <td>-1.221678</td>
+      <td>0.071648</td>
+      <td>0.266685</td>
+    </tr>
+    <tr>
+      <th>655</th>
+      <td>-0.771248</td>
+      <td>-0.216936</td>
+      <td>-0.055442</td>
+      <td>-0.096325</td>
+      <td>-0.327838</td>
+      <td>-0.514713</td>
+      <td>-0.214342</td>
+      <td>-0.096325</td>
+      <td>-0.189684</td>
+      <td>-0.116007</td>
+      <td>...</td>
+      <td>-0.742245</td>
+      <td>-0.705987</td>
+      <td>-0.367189</td>
+      <td>-0.117585</td>
+      <td>-0.275025</td>
+      <td>-0.054775</td>
+      <td>1.609362</td>
+      <td>-1.221678</td>
+      <td>0.071648</td>
+      <td>0.266685</td>
+    </tr>
+  </tbody>
+</table>
+<p>5 rows × 215 columns</p>
+</div>
+
+
+
+#### Should we standardize the target variable as well?
+In the context of linear modeling using OLS, standardizing the target varible is not necessary. Standardization of target variables is a common practice used when models make use of gradient descent to solve for the model parameters. Gradient descent tends to converge much faster if the target variable has a smaller range. 
+
+
+## Train univariate models
+
+Define a function `train_linear_model` to help us fit a linear model to data using a model_type argument to specify which model to use
+
+
+```python
+# TODO: toy example before getting into the functions
+reg = LinearRegression().fit(X_train,y_train)
+```
+
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    <ipython-input-18-debd002b698a> in <module>
+          1 # TODO: toy example before getting into the functions
+    ----> 2 reg = LinearRegression().fit(X_train,y_train)
+    
+
+    NameError: name 'LinearRegression' is not defined
+
 
 
 ```python
@@ -127,6 +1337,8 @@ def fit_eval_model(X_train, y_train, X_test, y_test, predictor_vars, model_type)
 
 ```
 
+#### Determine which single variable is most predictive of housing prices
+
 
 ```python
 import pandas as pd 
@@ -184,6 +1396,190 @@ df_model_err['Test RMSE'] = RMSE_test_list
 
     ValueError: too many values to unpack (expected 2)
 
+
+### Plot out train/test error vs predictor var
+
+
+```python
+# Let's take a closer look at the results by sorting the test error from best feature to worst. We'll then plot performance by feature for both train and test data.
+RMSE_test = np.asarray(df_model_err['Test RMSE'])
+sort_inds=[i[0] for i in sorted(enumerate(RMSE_test), key=lambda x:x[1])]
+sort_inds = np.array(sort_inds)
+
+# now that we have the sort indices based on test set performance, we'll sort the trainErr, testErr, and feature name vectors
+RMSE_train = np.asarray(df_model_err['Train RMSE'])
+all_feats = df_model_err['Predictor Variable']
+
+RMSE_train=RMSE_train[sort_inds]
+RMSE_test=RMSE_test[sort_inds]
+labels=all_feats[sort_inds]
+
+print(labels)
+print(len(labels))
+```
+
+    57    OverallQual
+    73     GarageCars
+    55      YearBuilt
+    68       FullBath
+    74     GarageArea
+             ...     
+    58    OverallCond
+    59     BsmtFinSF1
+    65      GrLivArea
+    63       1stFlrSF
+    62    TotalBsmtSF
+    Name: Predictor Variable, Length: 82, dtype: object
+    82
+    
+
+
+```python
+# plot out top 10 features based on RMSE; try tight layout or set fig size 
+import matplotlib.pyplot as plt
+num_feats_plot=30#len(labels)
+fig, ax = plt.subplots()
+ax.plot(RMSE_train[0:num_feats_plot], linestyle='--', marker='o', color='b')
+ax.plot(RMSE_test[0:num_feats_plot], linestyle='--', marker='o', color='r')
+ax.set_xticklabels(labels[0:num_feats_plot]);
+plt.xticks(list(range(0,num_feats_plot)),rotation = 45,ha='right'); # Rotates X-Axis Ticks by 45-degrees, ha='right' is used to make rotated labels show up in a clean format
+# plt.xticks(list(range(0,num_feats_plot)),rotation = 90); # Rotates X-Axis Ticks by 45-degrees
+ax.set_ylabel('RMSE')
+ax.legend(['train','test']);
+# increase fig size a bit
+fig = plt.gcf()
+fig.set_size_inches(14, 7) 
+# remind ourselves of train/test error for top-performing predictor variable
+print(RMSE_train[0])
+print(RMSE_test[0])
+
+# add title, colomn chart, maybe start y-axis at zero
+```
+
+    <ipython-input-34-637d614428be>:7: UserWarning: FixedFormatter should only be used together with FixedLocator
+      ax.set_xticklabels(labels[0:num_feats_plot]);
+    
+
+    45534.349409507675
+    44762.77229823456
+    
+
+
+    
+
+    
+
+
+### Discuss results
+
+
+
+```python
+# print and look at descriptions of top 5 features
+best_feats_combined=labels[0:num_feats_plot]
+print(best_feats_combined)
+
+# OverallQual: Rates the overall material and finish of the house
+# GarageCars: Size of garage in car capacity
+# YearBuilt: Original construction date
+# FullBath: Full bathrooms above grade (i.e., not in the basement)
+# GarageArea: Size of garage in square feet
+
+# Also see here for more thorough documentation regarding the feature set: 
+# https://www.openml.org/d/42165
+```
+
+    3                OverallQual
+    12                 GrLivArea
+    20                GarageCars
+    9                   1stFlrSF
+    8                TotalBsmtSF
+    21                GarageArea
+    15                  FullBath
+    1                  YearBuilt
+    171         Foundation_PConc
+    18              TotRmsAbvGrd
+    2               YearRemodAdd
+    19                Fireplaces
+    81      Neighborhood_NridgHt
+    191        GarageType_Detchd
+    170        Foundation_CBlock
+    187        GarageType_Attchd
+    22                WoodDeckSF
+    5                 BsmtFinSF1
+    167          MasVnrType_None
+    39           MSSubClass_60.0
+    23               OpenPorchSF
+    202             SaleType_New
+    53               MSZoning_RM
+    210    SaleCondition_Partial
+    10                  2ndFlrSF
+    80      Neighborhood_NoRidge
+    146      Exterior1st_VinylSd
+    162      Exterior2nd_VinylSd
+    168         MasVnrType_Stone
+    16                  HalfBath
+    Name: Predictor Variable, dtype: object
+    
+
+#### Exercise: Discussion of results
+**1. How comparable is the train error to the test error for each feature? Do these results indicate overfitting?** 
+- For most predictors/features, the test set error is very comparable to train set error. These predictors do not seem to encounter overfitting.
+
+- For a handful of the predictors, we see a very large difference between train set and test set error
+Test set error is between .02 to 1.75% larger than train set error. This suggests that we have successfully avoided overfitting.
+    
+**2. Which feature appears to perform the best in predicting housing prices?** 
+
+OverallQual
+    
+**3. Write a sentence summarizing how to interpret the test RMSE for the best predictor.** 
+
+On average, the overallQual feature predicts housing prices within +/- $44,762 from the true price 
+
+
+```python
+# View data frame and do exercise...
+train_test_ratio = (df_model_err['Test RMSE']-df_model_err['Train RMSE'])/df_model_err['Train RMSE']*100
+plt.hist(abs(train_test_ratio))
+print(abs(train_test_ratio).min())
+print(abs(train_test_ratio).max())
+
+
+```
+
+    0.02905866309520297
+    174.37966498830312
+    
+
+
+    
+
+    
+
+
+## Hypothesis testing of univariate models
+
+
+#### Hypotheses in linear modeling
+* H_0 (Null hypothesis): m = 0 (i.e., slope is flat)
+* H_A (Alternative hypothesis): m != 0 (i.e.., slope is not completely flat) 
+
+#### The 4 Assumptions for Linear Regression Hypothesis Testing
+1. Linearity: There is a linear relation between Y and X
+2. Normality: The error terms (residuals) are normally distributed
+3. Homoscedasticity: The variance of the error terms is constant over all X values (homoscedasticity)
+    - calculate residuals and show their distribution
+    - build an ad hoc plot to test normality using a qq-plot
+    - Shapiro-Wilk Test
+4. Independence: The error terms are independent
+
+
+
+
+```python
+
+```
 
 ## Fit multivariate model using all predictor vars
 
@@ -256,20 +1652,20 @@ Edit function below to use multiple regression techniques (add model_type input)
 ```python
 # edit train_linear_model to train ridge models as well
 def train_linear_model(X_train, y_train, model_type):
-    if model_type == "unregularized":
-        reg = LinearRegression().fit(X_train,y_train)
-    elif model_type == 'ridge':
-        reg = RidgeCV(alphas=[1e-3,1e-2,1e-1,1,10,100,1000], store_cv_values=True).fit(X_train,y_train)
-        print(reg.cv_values_.shape) # num_datapoints x num_alphas
-        print(np.mean(reg.cv_values_, axis=0))
-        print(reg.alpha_)
-    else:
-        raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
+  if model_type == "unregularized":
+    reg = LinearRegression().fit(X_train,y_train)
+  elif model_type == 'ridge':
+    reg = RidgeCV(alphas=[1e-3,1e-2,1e-1,1,10,100,1000], store_cv_values=True).fit(X_train,y_train)
+    print(reg.cv_values_.shape) # num_datapoints x num_alphas
+    print(np.mean(reg.cv_values_, axis=0))
+    print(reg.alpha_)
+  else:
+    raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
 
-    # print number of estimated model coefficients. Need to add one to account for y-intercept (not included in reg.coef_ call)
-    print('# model coefs = ' + str(len(reg.coef_)+1))
+  # print number of estimated model coefficients. Need to add one to account for y-intercept (not included in reg.coef_ call)
+  print('# model coefs = ' + str(len(reg.coef_)+1))
 
-    return reg
+  return reg
 
 
 ```
@@ -315,25 +1711,25 @@ RMSE_train, RMSE_test = fit_eval_model(X_train, y_train, X_test, y_test, labels,
 ```python
 # edit train_linear_model to train ridge models as well
 def train_linear_model(X_train, y_train, model_type):
-    if model_type == "unregularized":
-        reg = LinearRegression().fit(X_train,y_train)
-    elif model_type == 'ridge':
-        reg = RidgeCV(alphas=[1e-3,1e-2,1e-1,1,10,100,1000], store_cv_values=True).fit(X_train,y_train)
-        print(reg.cv_values_.shape) # num_datapoints x num_alphas
-        print(np.mean(reg.cv_values_, axis=0))
-        print(reg.alpha_)
-    elif model_type == 'lasso':
-        reg = LassoCV(random_state=0, alphas=[1e-3,1e-2,1e-1,1,10,100,1000], max_iter=100000, tol=1e-3).fit(X_train,y_train)
-        print(reg.alpha_)
-        print(reg.alphas_)
+  if model_type == "unregularized":
+    reg = LinearRegression().fit(X_train,y_train)
+  elif model_type == 'ridge':
+    reg = RidgeCV(alphas=[1e-3,1e-2,1e-1,1,10,100,1000], store_cv_values=True).fit(X_train,y_train)
+    print(reg.cv_values_.shape) # num_datapoints x num_alphas
+    print(np.mean(reg.cv_values_, axis=0))
+    print(reg.alpha_)
+  elif model_type == 'lasso':
+    reg = LassoCV(random_state=0, alphas=[1e-3,1e-2,1e-1,1,10,100,1000], max_iter=100000, tol=1e-3).fit(X_train,y_train)
+    print(reg.alpha_)
+    print(reg.alphas_)
 
-    else:
-        raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
+  else:
+    raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
 
-    # print number of estimated model coefficients. Need to add one to account for y-intercept (not included in reg.coef_ call)
-    print('# model coefs = ' + str(len(reg.coef_)+1))
+  # print number of estimated model coefficients. Need to add one to account for y-intercept (not included in reg.coef_ call)
+  print('# model coefs = ' + str(len(reg.coef_)+1))
 
-    return reg
+  return reg
 
 
 ```
@@ -388,28 +1784,28 @@ Add elastic net option to function
 ```python
 # edit train_linear_model to train ridge models as well
 def train_linear_model(X_train, y_train, model_type):
-    if model_type == "unregularized":
-        reg = LinearRegression().fit(X_train,y_train)
-    elif model_type == 'ridge':
-        reg = RidgeCV(alphas=[1e-3,1e-2,1e-1,1,10,100,1000], store_cv_values=True).fit(X_train,y_train)
-        print(reg.cv_values_.shape) # num_datapoints x num_alphas
-        print(np.mean(reg.cv_values_, axis=0))
-        print('alpha:', reg.alpha_)
-    elif model_type == 'lasso':
-        reg = LassoCV(random_state=0, alphas=[1e-3,1e-2,1e-1,1,10,100,1000], max_iter=100000, tol=1e-3).fit(X_train,y_train)
-        print('alpha:', reg.alpha_)
-        print('alphas:', reg.alphas_)
-    elif model_type == 'elastic':
-        reg = ElasticNetCV(l1_ratio=[.1, .5, .7, .9, .95, .99, 1],alphas=[1e-5,1e-4,1e-3,1e-2,1e-1,1,10]).fit(X_train,y_train)
-        print('alpha:', reg.alpha_)
-        print('l1_ratio:', reg.l1_ratio_)
-    else:
-        raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
+  if model_type == "unregularized":
+    reg = LinearRegression().fit(X_train,y_train)
+  elif model_type == 'ridge':
+    reg = RidgeCV(alphas=[1e-3,1e-2,1e-1,1,10,100,1000], store_cv_values=True).fit(X_train,y_train)
+    print(reg.cv_values_.shape) # num_datapoints x num_alphas
+    print(np.mean(reg.cv_values_, axis=0))
+    print('alpha:', reg.alpha_)
+  elif model_type == 'lasso':
+    reg = LassoCV(random_state=0, alphas=[1e-3,1e-2,1e-1,1,10,100,1000], max_iter=100000, tol=1e-3).fit(X_train,y_train)
+    print('alpha:', reg.alpha_)
+    print('alphas:', reg.alphas_)
+  elif model_type == 'elastic':
+    reg = ElasticNetCV(l1_ratio=[.1, .5, .7, .9, .95, .99, 1],alphas=[1e-5,1e-4,1e-3,1e-2,1e-1,1,10]).fit(X_train,y_train)
+    print('alpha:', reg.alpha_)
+    print('l1_ratio:', reg.l1_ratio_)
+  else:
+    raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
 
-    # print number of estimated model coefficients. Need to add one to account for y-intercept (not included in reg.coef_ call)
-    print('# model coefs = ' + str(len(reg.coef_)+1))
+  # print number of estimated model coefficients. Need to add one to account for y-intercept (not included in reg.coef_ call)
+  print('# model coefs = ' + str(len(reg.coef_)+1))
 
-    return reg
+  return reg
 
 
 ```
