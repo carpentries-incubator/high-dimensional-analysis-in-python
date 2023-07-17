@@ -9,7 +9,6 @@ keypoints:
 objectives:
 - "Understand the importance of including relevant predictors in a model."
 questions:
-- "How can multivariate models be used to detect interesting relationships found in nature?"
 - "What are the benfits/costs of including additional predictors in a regression model?"
 ---
 
