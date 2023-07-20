@@ -29,7 +29,7 @@ To run statistics on a regression model, we start with two hypotheses — one nu
 * $H_0$ (Null hypothesis): $m$ = 0 (i.e., slope is flat)
 * $H_A$ (Alternative hypothesis): $m \neq 0$ (i.e.., slope is not completely flat) 
 
-In other words, we are testing to see if a predictor has a consistent effect on some target variable. We are NOT testing the magnitidute of the effect; simply whether or not an observed effect is due to chance or not. In statistics, we start with the null hypothesis as our default and review evidence (the fitted model and its estimated parameters and error measurement) to see if the observed data suggests that the null hypothesis should be rejected.
+In other words, we are testing to see if a predictor has a consistent effect on some target variable. We are NOT testing the magnitidute of the effect (we will discuss effect sizes later); simply whether or not an observed effect is due to chance or not. In statistics, we start with the null hypothesis as our default and review evidence (the fitted model and its estimated parameters and error measurement) to see if the observed data suggests that the null hypothesis should be rejected.
 
 #### Linear regression assumptions
 The assumptions of regression (mostly) need to be met before rejecting the null hypothesis because violating these assumptions can lead to biased and unreliable parameter estimates, incorrect standard errors, and misleading hypothesis test results. Failing to meet the assumptions can compromise the validity and interpretability of the regression model. When testing multivariate models for signficant coefficients, the following assumpitons should be met to assure validty of results.
@@ -63,7 +63,7 @@ The procedure for testing whether predictor(s) have a statistically significant 
 It's important to note that significance tests provide statistical evidence for or against the null hypothesis, but they should be interpreted alongside other factors such as effect size, practical significance, and the context of the problem being studied. Additionally, it's crucial to consider the assumptions and limitations of the regression model and the underlying data when interpreting the model.
 
 ### 0. Load and prep data
-For this episode, we'll explore the impact of adding additional preditors to our model, as well as how to rigorously evaluate the statistics of the model.
+For this episode, we'll explore how to rigorously evaluate the statistics of a multivarite regression model.
 
 
 ```python
@@ -335,17 +335,40 @@ X.head()
 
 
 ### 1. Specify hypotheses
-We begin by formulating the null hypothesis (H₀) and alternative hypothesis (H₁) for each predictor we intend to include in the model. The null hypothesis states that the predictor has no effect on the response variable, while the alternative hypothesis suggests that there is a significant effect. Before we can reject the null hypothesis, we must make sure to satisfy all multivariate regression assumptions to ensure reliable and valid inference.
+We begin by formulating the null hypothesis (H₀) and alternative hypothesis (H₁) for each predictor we intend to include in the model. The null hypothesis states that the predictor has no effect on the response variable, while the alternative hypothesis suggests that there is a significant effect (typically < 5% chance of observing the relationship by chance alone). Before we can reject the null hypothesis, we must make sure to satisfy all multivariate regression assumptions to ensure reliable and valid inference.
 
 ### 2. Check for multicollinearity 
 
-"Multicollinearity creates a problem in the multiple regression model because the inputs are all influencing each other. Therefore, they are not actually independent, and it is difficult to test how much the combination of the independent variables affects the dependent variable, or outcome, within the regression model.
+In statistics, multicollinearity is a phenomenon in which one or more predictors in a multivariate regression model can be linearly predicted from the others with a substantial degree of accuracy. In other words, it means that one or more predictors are highly correlated with one another.
 
-While multicollinearity does not reduce a model's overall predictive power, it can produce estimates of the regression coefficients that are not statistically significant. In a sense, it can be thought of as a kind of double-counting in the model.
+Multicollinearity presents a problem in multivariate regression because, without having independent/uncorrelated predictors, it is difficult to know how much each predictor truly contributes to predicting the target variable. In other words, when two or more predictors are closely related or measure almost the same thing, then the underlying impact on the target varible is being accounted for twice (or more) across the predictors.
 
-In statistical terms, a multiple regression model where there is high multicollinearity will make it more difficult to estimate the relationship between each of the independent variables and the dependent variable. In other words, when two or more independent variables are closely related or measure almost the same thing, then the underlying effect that they measure is being accounted for twice (or more) across the variables. When the independent variables are closely-related, it becomes difficult to say which variable is influencing the dependent variables."
+While multicollinearity does not reduce a model's overall predictive power, it can produce estimates of the regression coefficients that are not statistically valid.
 
-TODO: About VIF score and why you want values lower than 10
+#### Variance Inflation Factor (VIF) 
+The VIF (Variance Inflation Factor) is a statistical measure used to detect multicollinearity in regression analysis. VIF helps to quantify the extent to which multicollinearity is present in the model.
+
+The intuition behind the VIF score is based on the idea that if two or more predictor variables are highly correlated, it becomes difficult for the model to distinguish the individual effects of these variables on the dependent variable. Consequently, the coefficient estimates for these variables become unstable, and their standard errors become inflated, making the results less reliable.
+
+The VIF is calculated for each independent variable in the regression model. Specifically, to calculate the VIF for predictor i, the following steps are taken:
+
+* Fit a regression model with variable i as the dependent variable and all other independent variables (excluding i) as predictors.
+
+* Calculate the R-squared value (R²) for this regression model. R² represents the proportion of variance in variable i that can be explained by the other independent variables.
+
+* Calculate the VIF for variable i using the formula: VIF(i) = 1 / (1 - R²)
+
+* The interpretation of the VIF score is as follows:
+
+    * A VIF of 1 indicates that there is no multicollinearity for the variable, meaning it is not correlated with any other independent variable in the model.
+
+    * VIF values between 1 and 5 generally indicate low to moderate multicollinearity, which is typically considered acceptable in most cases.
+
+    * VIF values greater than 5 (some sources use a threshold of 10) suggest high multicollinearity, indicating that the variable is highly correlated with other independent variables, and its coefficient estimates may be unreliable.
+
+    * In extreme cases, VIF can take on very high values, approaching infinity, indicating an almost perfect linear relationship between the variable and other predictors in the model.
+
+
 
 
 ```python
@@ -374,15 +397,16 @@ It looks like one of the predictors, "Normal", has a high VIF score. We can furt
 
 
 ```python
-import pandas as pd
-import seaborn as sns
+# import pandas as pd
+# import seaborn as sns
 import matplotlib.pyplot as plt
 from helper_functions import plot_corr_matrix 
 
 # Calculate correlation matrix
 corr_matrix = X.corr()
-plot_corr_matrix(corr_matrix)
-
+fig = plot_corr_matrix(corr_matrix)
+plt.savefig('..//fig//regression//corrMat_multicollinearity.png', bbox_inches='tight', dpi=300, facecolor='white');
+plt.show()
 ```
 
 
@@ -390,6 +414,8 @@ plot_corr_matrix(corr_matrix)
 
     
 
+
+<img src="../fig/regression/corrMat_multicollinearity.png"  align="center" width="30%" height="30%">
 
 SaleCondition: Condition of sale
 

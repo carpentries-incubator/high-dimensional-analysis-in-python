@@ -346,9 +346,9 @@ def plot_corr_matrix_allVars(df: pd.DataFrame) -> pd.DataFrame:
     plt.show()
     return corr_mat
 
-def plot_corr_matrix(corr_matrix: pd.DataFrame) -> pd.DataFrame:
+def plot_corr_matrix(corr_matrix: pd.DataFrame) -> plt.figure:
     # Create a heatmap with variable labels
-    plt.figure(figsize=(10, 8))
+    fig = plt.figure(figsize=(10, 8))
     sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm",
                 square=True, cbar=True, linewidths=0.5)
 
@@ -362,7 +362,7 @@ def plot_corr_matrix(corr_matrix: pd.DataFrame) -> pd.DataFrame:
 
     # Show the plot
     plt.tight_layout()
-    plt.show()
+    return fig
 
 
 def plot_regression_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:
