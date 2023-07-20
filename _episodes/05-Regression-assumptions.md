@@ -44,13 +44,13 @@ The procedure for testing whether predictor(s) have a statistically significant 
 
 1. Formulate the null hypothesis (H₀) and alternative hypothesis (H₁) for the test. The null hypothesis typically states that the predictor has no effect on the response variable (coef=0), while the alternative hypothesis suggests that there is a significant effect (coef!=0).
 
-2. If using multiple predictors, check for multicollinearity. This can be an especially pervasive 
+2. If using multiple predictors, check for multicollinearity. Multicollinearity can be an especially pervasive.
 
-3. Check linearity assumption for all predictors
+3. Fit the regression model to your data. Obtain the estimated coefficients for each predictor, along with their standard errors.
 
-4. Fit the regression model: Use the appropriate regression method (e.g., ordinary least squares, logistic regression) to fit the regression model to your data. Obtain the estimated coefficients for each predictor, along with their standard errors.
+4. Evaluate linearity assumption (if using univariate model, can do this step before model fitting via a simple scatterplot).
 
-5. Evaluate normality of errors
+5. Evaluate normality of errors assumption
 
 6. Calculate the test statistic: Calculate the test statistic based on the estimated coefficient and its standard error. The test statistic depends on the specific regression model and hypothesis being tested. Common test statistics include t-statistic, z-statistic, or F-statistic.
 
@@ -374,13 +374,19 @@ The VIF is calculated for each independent variable in the regression model. Spe
 ```python
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-# Calculate VIF for each predictor in X
-vif = pd.DataFrame()
-vif["Variable"] = X.columns
-vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+def calc_print_VIF(X):
+    # Calculate VIF for each predictor in X
+    vif = pd.DataFrame()
+    vif["Variable"] = X.columns
+    vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
 
-# Display the VIF values
-print(vif)
+    # Display the VIF values
+    print(vif)
+```
+
+
+```python
+calc_print_VIF(X)
 ```
 
           Variable        VIF
@@ -405,7 +411,7 @@ from helper_functions import plot_corr_matrix
 # Calculate correlation matrix
 corr_matrix = X.corr()
 fig = plot_corr_matrix(corr_matrix)
-plt.savefig('..//fig//regression//corrMat_multicollinearity.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//corrMat_multicollinearity.png', bbox_inches='tight', dpi=300, facecolor='white');
 plt.show()
 ```
 
@@ -431,7 +437,6 @@ The Normal variable appears to be highly negatively correlated with both Partial
 
 ```python
 X = X.drop('Normal',axis = 1)
-
 ```
 
 After dropping the problematic variable with multicollinearity, we can recalculate VIF for each predictor in X
@@ -439,16 +444,7 @@ After dropping the problematic variable with multicollinearity, we can recalcula
 
 
 ```python
-vif = pd.DataFrame()
-vif["Variable"] = X.columns
-vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
-
-# Display the VIF values
-print(vif)
-
-# Calculate correlation matrix
-corr_matrix = X.corr()
-plot_corr_matrix(corr_matrix)
+calc_print_VIF(X)
 ```
 
           Variable       VIF
@@ -460,59 +456,6 @@ plot_corr_matrix(corr_matrix)
     5      Partial  1.156336
     
 
-
-    
-
-    
-
-
-### 3. Check linearity assumption
-How can we test if a linear model is appropriate for this data? A good method to start with is to simply plot scatterplots between each predictor variable and the target variable
-
-#### Why do we care?
-As discussed in the previous episode, the predictions will be inaccurate because our model is underfitting (i.e., not adquately capturing the variance of the data since you can't effectively draw a line through nonlinear data). In addition to having a fatal impact on predictive power, violations of linearity can affect the validity of hypothesis tests on the regression coefficients. The p-values associated with the coefficients may not accurately reflect the statistical significance, potentially leading to erroneous conclusions. For example, if nonlinearity is present, the p-values may be underestimated, making some predictors appear statistically significant when they are not or vice versa.
-
-Violations of the linearity assumption can also impact other assumptions in statistical tests. For example, violations of linearity may be associated with heteroscedasticity (unequal variances) or autocorrelation (dependence between residuals), which violate assumptions of independence and constant variance in regression models. This can affect the reliability and validity of other statistical tests or model diagnostics.
-
-#### How to remedy
-To fix this problem, you can...
-
-1. Apply nonlinear transformations (e.g., log transform)
-2. Try adding additional variables to help capture the relationship between the predictors and the label. 
-3. Add polynomial terms to some of the predictors (i.e., polynomial regression) 
-
-
-If none of those approaches work, you can also consider nonlinear models if you have a sufficiently large dataset (learning nonlinear relationships requires lots of data).
-
-Recall that we observed a nonlinear trend between OverallQual and SalePrice in the previous episode, but log transforming SalePrice fixed this issue. Let's see if the remaining predicotrs have a linear trend with log(SalePrice).
-
-
-```python
-import matplotlib.pyplot as plt
-# Number of predictor variables (change as per your dataframe)
-num_predictors = X.shape[1]
-import numpy as np
-y_log = y.apply(np.log)
-
-# Create subplots for scatterplots
-fig, axes = plt.subplots(nrows=num_predictors, ncols=1, figsize=(5, 3*num_predictors))
-fig.subplots_adjust(hspace=0.5)
-
-# Iterate over predictor variables and create scatterplots
-for i, predictor in enumerate(X.columns):
-    ax = axes[i]
-    ax.scatter(X[predictor], y_log, alpha=.03)
-    ax.set_xlabel(predictor)
-    ax.set_ylabel('Target Variable')
-    ax.set_title(f'Scatterplot of {predictor} vs Target Variable')
-
-# Show the scatterplots
-plt.tight_layout()
-plt.show()
-```
-
-It can be challenging to evaluate linearity when looking at binary predictors since binary predictors are inherently nonlinear. What we're looking for in these plots is a change in the mean sale price when each predictor's value changes from 0 to 1. It looks like the Partial variable a clear linear trend. The remaining variables may have a mild linear impact on saleprice, but it is difficult to tell by these scatterplots alone. We will see later how we can more rigorously evaluate the liearity assumption after fitting our regression model.
-
 #### Train/test split
 Discuss why stats should be evaluated on test set error.
 
@@ -521,7 +464,7 @@ Discuss why stats should be evaluated on test set error.
 # TODO: Train/test split
 ```
 
-### 4. Fit the model
+### 3. Fit the model
 
 
 ```python
@@ -558,6 +501,50 @@ ax.ylabel('predicted')
 # ax1.axis('equal')
 
 ax.plot([0, 1], [0, 1], transform=ax.transAxes)
+```
+
+### 3. Check linearity assumption
+The linearity assumption of multiple/multivariate regression states that the relationship between the predictors and the target variable should be approximately linear. This means that the OVERALL pattern of the data should resemble a straight line, but it doesn't imply that each predictor must have a perfectly linear relationship. In fact, all predictors could indivually have a nonlinear relationship with the target variable without violating the linearity assumption. It all depends on how each predictor's contribution to predicting the target sums together. If the sum of effects is linear, then the linearity has been met. When working with univariate models, we are able to assess the linearity assumption PRIOR to model fitting simply by creating a scatterplot between the predictor and target. With multivariate approaches, we will first need to fit the model before we can evaluate the linearity assumption.
+
+#### Why do we care?
+As discussed in the previous episode, the predictions will be inaccurate because our model is underfitting (i.e., not adquately capturing the variance of the data since you can't effectively draw a line through nonlinear data). In addition to having a fatal impact on predictive power, violations of linearity can affect the validity of hypothesis tests on the regression coefficients. The p-values associated with the coefficients may not accurately reflect the statistical significance, potentially leading to erroneous conclusions. For example, if nonlinearity is present, the p-values may be underestimated, making some predictors appear statistically significant when they are not or vice versa.
+
+Violations of the linearity assumption can also impact other assumptions in statistical tests. For example, violations of linearity may be associated with heteroscedasticity (unequal variances) or autocorrelation (dependence between residuals), which violate assumptions of independence and constant variance in regression models. This can affect the reliability and validity of other statistical tests or model diagnostics.
+
+
+```python
+#### How to remedy
+To fix this problem, you can...
+
+1. Apply nonlinear transformations (e.g., log transform)
+2. Try adding additional variables to help capture the relationship between the predictors and the label. 
+3. Add polynomial terms to some of the predictors (i.e., polynomial regression) 
+
+If none of those approaches work, you can also consider nonlinear models if you have a sufficiently large dataset (learning nonlinear relationships requires lots of data).
+
+Recall that we observed a nonlinear trend between OverallQual and SalePrice in the previous episode, but log transforming SalePrice fixed this issue. Let's see if the remaining predicotrs have a linear trend with log(SalePrice).
+
+import matplotlib.pyplot as plt
+# Number of predictor variables (change as per your dataframe)
+num_predictors = X.shape[1]
+import numpy as np
+y_log = y.apply(np.log)
+
+# Create subplots for scatterplots
+fig, axes = plt.subplots(nrows=num_predictors, ncols=1, figsize=(5, 3*num_predictors))
+fig.subplots_adjust(hspace=0.5)
+
+# Iterate over predictor variables and create scatterplots
+for i, predictor in enumerate(X.columns):
+    ax = axes[i]
+    ax.scatter(X[predictor], y_log, alpha=.03)
+    ax.set_xlabel(predictor)
+    ax.set_ylabel('Target Variable')
+    ax.set_title(f'Scatterplot of {predictor} vs Target Variable')
+
+# Show the scatterplots
+plt.tight_layout()
+plt.show()
 ```
 
 ### 5. Evaluate normality of residuals assumption
