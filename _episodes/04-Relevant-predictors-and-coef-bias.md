@@ -136,22 +136,6 @@ model = sm.OLS(y_log, X)
 results = model.fit()
 ```
 
-
-    ---------------------------------------------------------------------------
-
-    NameError                                 Traceback (most recent call last)
-
-    Cell In[1], line 4
-          1 import statsmodels.api as sm
-          3 # Add a constant column to the predictor variables dataframe
-    ----> 4 X = sm.add_constant(X)
-          6 # Fit the multivariate regression model
-          7 model = sm.OLS(y_log, X)
-
-
-    NameError: name 'X' is not defined
-
-
 Let's print the coefs from this model. In addition, we can quickly extract R-squared from the statsmodel model object using...
 
 
@@ -159,6 +143,12 @@ Let's print the coefs from this model. In addition, we can quickly extract R-squ
 print(results.params)
 print('R-squared:', results.rsquared)
 ```
+
+    const       12.024051
+    FullBath     0.237582
+    dtype: float64
+    R-squared: 0.3537519976399338
+
 
 Based on the R-squared, this model explains 35.4% of the variance in the SalePrice target variable.
 
@@ -193,7 +183,7 @@ plt.scatter(X, y_log);
 
 
 
-As before,, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
+As before, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
 
 
 ```python

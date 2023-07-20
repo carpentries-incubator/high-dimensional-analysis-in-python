@@ -415,7 +415,7 @@ plt.show()
     
 
 
-<img src="../fig/regression/corrMat_multicollinearity.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/corrMat_multicollinearity.png"  align="center" width="60%" height="60%">
 
 SaleCondition: Condition of sale
 
