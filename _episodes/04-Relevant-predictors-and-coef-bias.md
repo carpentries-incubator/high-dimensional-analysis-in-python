@@ -1,5 +1,5 @@
 ---
-title: Model validity: relevant predictors
+title: Model validity and relevant predictors
 teaching: 45
 exercises: 2
 keypoints:
