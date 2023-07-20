@@ -1,5 +1,5 @@
 ---
-title: Explanatory models - relevant predictors
+title: Model validity: relevant predictors
 teaching: 45
 exercises: 2
 keypoints:
@@ -16,7 +16,7 @@ questions:
 With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist?
 
 There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss the first in detail throughout this episode.
-1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
+1. **Accounting for relevant predictors**: Have we included as many relevant predictors in the model as possible?
 2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
 
@@ -87,7 +87,7 @@ Since the relationship doesn't appear to be quite as linear as we were hoping, w
 import numpy as np
 y_log = y.apply(np.log)
 plt.scatter(X,y_log, alpha=.3);
-plt.savefig('..//fig//regression//scatterplot_fullBath_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//scatterplot_fullBath_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -120,7 +120,9 @@ X.head()
 
 
 
-Fit the model
+For efficiency, we will skip train/test splits in this episode. Recall that train/test splits aren't as essential when working with only a handful or predictors.
+
+Fit the model.
 
 
 ```python
@@ -134,6 +136,22 @@ model = sm.OLS(y_log, X)
 results = model.fit()
 ```
 
+
+    ---------------------------------------------------------------------------
+
+    NameError                                 Traceback (most recent call last)
+
+    Cell In[1], line 4
+          1 import statsmodels.api as sm
+          3 # Add a constant column to the predictor variables dataframe
+    ----> 4 X = sm.add_constant(X)
+          6 # Fit the multivariate regression model
+          7 model = sm.OLS(y_log, X)
+
+
+    NameError: name 'X' is not defined
+
+
 Let's print the coefs from this model. In addition, we can quickly extract R-squared from the statsmodel model object using...
 
 
@@ -141,12 +159,6 @@ Let's print the coefs from this model. In addition, we can quickly extract R-squ
 print(results.params)
 print('R-squared:', results.rsquared)
 ```
-
-    const       12.024051
-    FullBath     0.237582
-    dtype: float64
-    R-squared: 0.3537519976399338
-
 
 Based on the R-squared, this model explains 35.4% of the variance in the SalePrice target variable.
 

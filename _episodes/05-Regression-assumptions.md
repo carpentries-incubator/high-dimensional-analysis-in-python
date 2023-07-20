@@ -1,5 +1,5 @@
 ---
-title: Explanatory models - regression assumptions
+title: Regression assumptions and hypothesis testing
 teaching: 45
 exercises: 2
 keypoints:
@@ -18,7 +18,7 @@ questions:
 With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist? 
 
 There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss all three in detail throughout this episode.
-1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
+1. **Accounting for relevant predictors**: Have we included as many relevant predictors in the model as possible?
 2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
 
@@ -37,7 +37,7 @@ The assumptions of regression (mostly) need to be met before rejecting the null 
 2. **Normality**: The error terms (residuals) are normally distributed
 3. **Homoscedasticity**: The variance of the error terms is constant over all X values (homoscedasticity)
 4. **Independence**: The error terms are independent
-5. **Limited multicollinearity**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves. 
+5. **Limited multicollinearity among predictors**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves. 
 
 #### Testing procedure
 The procedure for testing whether predictor(s) have a statistically significant effect on a target variable in a regression model typically involves the following steps:
@@ -68,10 +68,10 @@ For this episode, we'll explore the impact of adding additional preditors to our
 
 ```python
 from sklearn.datasets import fetch_openml
-housing = fetch_openml(name="house_prices", as_frame=True) #
+housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
 ```
 
-Let's assume we only have additional variable recorded in this dataset — sale condition. What values can the sale condition variable take?
+Let's assume we have two predictors recorded in this dataset — sale condition and OverallQual. What values can the sale condition variable take?
 
 
 ```python
@@ -79,11 +79,18 @@ y=housing['target']
 new_predictor = 'SaleCondition'#'SaleType'#'Heating' #  SaleCondition
 predictors = ['OverallQual', new_predictor]#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF']
 X=housing['data'][predictors]
-print(type(X))
-print(type(y))
-X.head()
-# X[new_predictor].unique()
+print(X.head())
+print(X[new_predictor].unique())
 ```
+
+       OverallQual SaleCondition
+    0            7        Normal
+    1            6        Normal
+    2            7        Normal
+    3            7       Abnorml
+    4            8        Normal
+    ['Normal' 'Abnorml' 'Partial' 'AdjLand' 'Alloca' 'Family']
+    
 
 Below code is a quick fix that would take care of issue of violating assumption of normality. However, I think with how small we deviate from normality, better to just leave it in as a more realistic example. Normality assumption is not quite as strict as some others (e.g., multicollinearity).
 
@@ -133,9 +140,103 @@ one_hot.head()
 ```
 
 
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Abnorml</th>
+      <th>AdjLand</th>
+      <th>Alloca</th>
+      <th>Family</th>
+      <th>Normal</th>
+      <th>Partial</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
 ```python
 one_hot.sum()
 ```
+
+
+
+
+    Abnorml     101
+    AdjLand       4
+    Alloca       12
+    Family       20
+    Normal     1198
+    Partial     125
+    dtype: int64
+
+
 
 
 ```python
@@ -145,6 +246,93 @@ X = X.drop(new_predictor,axis = 1)
 X = X.join(one_hot)
 X.head()
 ```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>OverallQual</th>
+      <th>Abnorml</th>
+      <th>AdjLand</th>
+      <th>Alloca</th>
+      <th>Family</th>
+      <th>Normal</th>
+      <th>Partial</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>8</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
 
 ### 1. Specify hypotheses
 We begin by formulating the null hypothesis (H₀) and alternative hypothesis (H₁) for each predictor we intend to include in the model. The null hypothesis states that the predictor has no effect on the response variable, while the alternative hypothesis suggests that there is a significant effect. Before we can reject the null hypothesis, we must make sure to satisfy all multivariate regression assumptions to ensure reliable and valid inference.
@@ -172,6 +360,16 @@ vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
 print(vif)
 ```
 
+          Variable        VIF
+    0  OverallQual   1.128173
+    1      Abnorml   2.268743
+    2      AdjLand   1.040428
+    3       Alloca   1.142339
+    4       Family   1.271997
+    5       Normal  18.474457
+    6      Partial   3.888230
+    
+
 It looks like one of the predictors, "Normal", has a high VIF score. We can further investigate this score by creating a plot of the correlation matrix of all predictors.
 
 
@@ -187,6 +385,12 @@ plot_corr_matrix(corr_matrix)
 
 ```
 
+
+    
+
+    
+
+
 SaleCondition: Condition of sale
 
        Normal	Normal Sale
@@ -196,9 +400,7 @@ SaleCondition: Condition of sale
        Family	Sale between family members
        Partial	Home was not completed when last assessed (associated with New Homes)
 
-The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value or "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal. 
-
-
+The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value of "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal. 
 
 
 ```python
@@ -222,6 +424,21 @@ print(vif)
 corr_matrix = X.corr()
 plot_corr_matrix(corr_matrix)
 ```
+
+          Variable       VIF
+    0  OverallQual  1.249628
+    1      Abnorml  1.068676
+    2      AdjLand  1.002188
+    3       Alloca  1.007705
+    4       Family  1.014723
+    5      Partial  1.156336
+    
+
+
+    
+
+    
+
 
 ### 3. Check linearity assumption
 How can we test if a linear model is appropriate for this data? A good method to start with is to simply plot scatterplots between each predictor variable and the target variable

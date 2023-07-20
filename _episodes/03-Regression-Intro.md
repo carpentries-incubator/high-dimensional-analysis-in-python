@@ -274,9 +274,6 @@ print('mean sale price =', mean_sale_price)
 # convert to series same length as y sets for ease of comparison
 mean_sale_price = pd.Series(mean_sale_price)
 mean_sale_price = mean_sale_price.repeat(len(y))
-
-# mean_sale_price_test = pd.Series(mean_sale_price)
-# mean_sale_price_test = mean_sale_price_test.repeat(len(salePrice_test))
 ```
 
     mean sale price = 180921.19589041095
@@ -303,7 +300,7 @@ print(f"Test RMSE = {RMSE_test}")
     Test RMSE = 44762.77229823456
 
 
-Here, both train and test RMSE are very similar to one another. As expected with most univariate models, we do not see any evidence of overfitting. However, we do see that our model is perhaps underfitting given its poor ability to predict any of the true housing prices.
+Here, both train and test RMSE are very similar to one another. As expected with most univariate models, we do not see any evidence of overfitting. This model performs substantially better than the baseline. However, an average error of +/- $44,726 is likely too high for this model to be useful in practice. That is, the model is underfitting the data given its poor ability to predict the true housing prices.
 
 **Mean Absolute Percentage Error**:
 What if we wanted to know the percent difference between the true sale price and the predicted sale price? For this, we can use the **mean absolute percentage error (MAPE)**...
