@@ -1,3 +1,12 @@
+---
+title: The Ames housing dataset
+teaching: 45
+exercises: 2
+keypoints:
+objectives:
+questions:
+- "Here we introduce the data we'll be analyzing"
+---
 # Intro to Ames Housing Dataset
 
 Here we introduce the data we'll be analyzing: The Ames Housing Dataset
