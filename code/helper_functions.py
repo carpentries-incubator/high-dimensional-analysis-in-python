@@ -266,12 +266,7 @@ def plot_salesprice(df: pd.DataFrame, ylog: bool = False) -> None:
         my_magenta = [216/255, 27/255, 96/255]
 
         # plot
-        try:
-            df[~df['top_10']].SalePrice.hist(bins=20, color=my_blue, label='other prices', figsize=(8, 6))
-            df[df['top_10']].SalePrice.hist(bins=20, color='brown', label='Top 10 % of prices', figsize=(8, 6))
-        except (KeyError, ValueError):
-            df.SalePrice.hist(bins=20, color=my_blue, label='prices', figsize=(8, 6))
-
+        df.SalePrice.hist(bins=20, color=my_blue, label='prices', figsize=(8, 6))
         if ylog:
             plt.yscale('log')
             plt.ylim(1, plt.ylim()[1])
@@ -280,9 +275,21 @@ def plot_salesprice(df: pd.DataFrame, ylog: bool = False) -> None:
         plt.xlabel("Sales Price, USD")
         plt.xticks(rotation=45, ha='right')
         ax = plt.gca()
-        ax.xaxis.set_major_formatter(lambda x, y: "{:,}".format(int(x)))
-        plt.axvline(mean, label='mean: {:,.0f}'.format(mean), color=my_magenta)
-        plt.axvline(median, label='median: {:,.0f}'.format(median), color=my_yellow)
+
+        # set x axis and legend number formats
+        if max(SalePrices) > 1e3:
+            x_axis_format = ",.0f"
+            mnm_format = ",.0f"
+
+        else:
+            x_axis_format = ".1f"
+            mnm_format = ".1f"
+
+        ax.xaxis.set_major_formatter(lambda x, y: f'{x:{x_axis_format}}')
+        
+        # plot median and mean
+        plt.axvline(mean, label=f'mean: {mean:{mnm_format}}', color=my_magenta)  # :{mnm_format}}
+        plt.axvline(median, label=f'median: {median:{mnm_format}}', color=my_yellow)  # :{mnm_format}}
         plt.legend()
         plt.show()
         
