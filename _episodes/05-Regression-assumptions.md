@@ -1,5 +1,5 @@
 ---
-title: Explanatory models - regression assumptions
+title: Regression assumptions and hypothesis testing
 teaching: 45
 exercises: 2
 keypoints:
@@ -18,7 +18,7 @@ questions:
 With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist? 
 
 There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss all three in detail throughout this episode.
-1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
+1. **Accounting for relevant predictors**: Have we included as many relevant predictors in the model as possible?
 2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
 
@@ -29,7 +29,7 @@ To run statistics on a regression model, we start with two hypotheses — one nu
 * $H_0$ (Null hypothesis): $m$ = 0 (i.e., slope is flat)
 * $H_A$ (Alternative hypothesis): $m \neq 0$ (i.e.., slope is not completely flat) 
 
-In other words, we are testing to see if a predictor has a consistent effect on some target variable. We are NOT testing the magnitidute of the effect; simply whether or not an observed effect is due to chance or not. In statistics, we start with the null hypothesis as our default and review evidence (the fitted model and its estimated parameters and error measurement) to see if the observed data suggests that the null hypothesis should be rejected.
+In other words, we are testing to see if a predictor has a consistent effect on some target variable. We are NOT testing the magnitidute of the effect (we will discuss effect sizes later); simply whether or not an observed effect is due to chance or not. In statistics, we start with the null hypothesis as our default and review evidence (the fitted model and its estimated parameters and error measurement) to see if the observed data suggests that the null hypothesis should be rejected.
 
 #### Linear regression assumptions
 The assumptions of regression (mostly) need to be met before rejecting the null hypothesis because violating these assumptions can lead to biased and unreliable parameter estimates, incorrect standard errors, and misleading hypothesis test results. Failing to meet the assumptions can compromise the validity and interpretability of the regression model. When testing multivariate models for signficant coefficients, the following assumpitons should be met to assure validty of results.
@@ -37,20 +37,20 @@ The assumptions of regression (mostly) need to be met before rejecting the null 
 2. **Normality**: The error terms (residuals) are normally distributed
 3. **Homoscedasticity**: The variance of the error terms is constant over all X values (homoscedasticity)
 4. **Independence**: The error terms are independent
-5. **Limited multicollinearity**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves. 
+5. **Limited multicollinearity among predictors**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves. 
 
 #### Testing procedure
 The procedure for testing whether predictor(s) have a statistically significant effect on a target variable in a regression model typically involves the following steps:
 
 1. Formulate the null hypothesis (H₀) and alternative hypothesis (H₁) for the test. The null hypothesis typically states that the predictor has no effect on the response variable (coef=0), while the alternative hypothesis suggests that there is a significant effect (coef!=0).
 
-2. If using multiple predictors, check for multicollinearity. This can be an especially pervasive 
+2. If using multiple predictors, check for multicollinearity. Multicollinearity can be an especially pervasive.
 
-3. Check linearity assumption for all predictors
+3. Fit the regression model to your data. Obtain the estimated coefficients for each predictor, along with their standard errors.
 
-4. Fit the regression model: Use the appropriate regression method (e.g., ordinary least squares, logistic regression) to fit the regression model to your data. Obtain the estimated coefficients for each predictor, along with their standard errors.
+4. Evaluate linearity assumption (if using univariate model, can do this step before model fitting via a simple scatterplot).
 
-5. Evaluate normality of errors
+5. Evaluate normality of errors assumption
 
 6. Calculate the test statistic: Calculate the test statistic based on the estimated coefficient and its standard error. The test statistic depends on the specific regression model and hypothesis being tested. Common test statistics include t-statistic, z-statistic, or F-statistic.
 
@@ -63,15 +63,15 @@ The procedure for testing whether predictor(s) have a statistically significant 
 It's important to note that significance tests provide statistical evidence for or against the null hypothesis, but they should be interpreted alongside other factors such as effect size, practical significance, and the context of the problem being studied. Additionally, it's crucial to consider the assumptions and limitations of the regression model and the underlying data when interpreting the model.
 
 ### 0. Load and prep data
-For this episode, we'll explore the impact of adding additional preditors to our model, as well as how to rigorously evaluate the statistics of the model.
+For this episode, we'll explore how to rigorously evaluate the statistics of a multivarite regression model.
 
 
 ```python
 from sklearn.datasets import fetch_openml
-housing = fetch_openml(name="house_prices", as_frame=True) #
+housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
 ```
 
-Let's assume we only have additional variable recorded in this dataset — sale condition. What values can the sale condition variable take?
+Let's assume we have two predictors recorded in this dataset — sale condition and OverallQual. What values can the sale condition variable take?
 
 
 ```python
@@ -79,11 +79,18 @@ y=housing['target']
 new_predictor = 'SaleCondition'#'SaleType'#'Heating' #  SaleCondition
 predictors = ['OverallQual', new_predictor]#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF']
 X=housing['data'][predictors]
-print(type(X))
-print(type(y))
-X.head()
-# X[new_predictor].unique()
+print(X.head())
+print(X[new_predictor].unique())
 ```
+
+       OverallQual SaleCondition
+    0            7        Normal
+    1            6        Normal
+    2            7        Normal
+    3            7       Abnorml
+    4            8        Normal
+    ['Normal' 'Abnorml' 'Partial' 'AdjLand' 'Alloca' 'Family']
+    
 
 Below code is a quick fix that would take care of issue of violating assumption of normality. However, I think with how small we deviate from normality, better to just leave it in as a more realistic example. Normality assumption is not quite as strict as some others (e.g., multicollinearity).
 
@@ -133,9 +140,103 @@ one_hot.head()
 ```
 
 
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Abnorml</th>
+      <th>AdjLand</th>
+      <th>Alloca</th>
+      <th>Family</th>
+      <th>Normal</th>
+      <th>Partial</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
 ```python
 one_hot.sum()
 ```
+
+
+
+
+    Abnorml     101
+    AdjLand       4
+    Alloca       12
+    Family       20
+    Normal     1198
+    Partial     125
+    dtype: int64
+
+
 
 
 ```python
@@ -146,46 +247,181 @@ X = X.join(one_hot)
 X.head()
 ```
 
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>OverallQual</th>
+      <th>Abnorml</th>
+      <th>AdjLand</th>
+      <th>Alloca</th>
+      <th>Family</th>
+      <th>Normal</th>
+      <th>Partial</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>6</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>7</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>7</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>8</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
 ### 1. Specify hypotheses
-We begin by formulating the null hypothesis (H₀) and alternative hypothesis (H₁) for each predictor we intend to include in the model. The null hypothesis states that the predictor has no effect on the response variable, while the alternative hypothesis suggests that there is a significant effect. Before we can reject the null hypothesis, we must make sure to satisfy all multivariate regression assumptions to ensure reliable and valid inference.
+We begin by formulating the null hypothesis (H₀) and alternative hypothesis (H₁) for each predictor we intend to include in the model. The null hypothesis states that the predictor has no effect on the response variable, while the alternative hypothesis suggests that there is a significant effect (typically < 5% chance of observing the relationship by chance alone). Before we can reject the null hypothesis, we must make sure to satisfy all multivariate regression assumptions to ensure reliable and valid inference.
 
 ### 2. Check for multicollinearity 
 
-"Multicollinearity creates a problem in the multiple regression model because the inputs are all influencing each other. Therefore, they are not actually independent, and it is difficult to test how much the combination of the independent variables affects the dependent variable, or outcome, within the regression model.
+In statistics, multicollinearity is a phenomenon in which one or more predictors in a multivariate regression model can be linearly predicted from the others with a substantial degree of accuracy. In other words, it means that one or more predictors are highly correlated with one another.
 
-While multicollinearity does not reduce a model's overall predictive power, it can produce estimates of the regression coefficients that are not statistically significant. In a sense, it can be thought of as a kind of double-counting in the model.
+Multicollinearity presents a problem in multivariate regression because, without having independent/uncorrelated predictors, it is difficult to know how much each predictor truly contributes to predicting the target variable. In other words, when two or more predictors are closely related or measure almost the same thing, then the underlying impact on the target varible is being accounted for twice (or more) across the predictors.
 
-In statistical terms, a multiple regression model where there is high multicollinearity will make it more difficult to estimate the relationship between each of the independent variables and the dependent variable. In other words, when two or more independent variables are closely related or measure almost the same thing, then the underlying effect that they measure is being accounted for twice (or more) across the variables. When the independent variables are closely-related, it becomes difficult to say which variable is influencing the dependent variables."
+While multicollinearity does not reduce a model's overall predictive power, it can produce estimates of the regression coefficients that are not statistically valid.
 
-TODO: About VIF score and why you want values lower than 10
+#### Variance Inflation Factor (VIF) 
+The VIF (Variance Inflation Factor) is a statistical measure used to detect multicollinearity in regression analysis. VIF helps to quantify the extent to which multicollinearity is present in the model.
+
+The intuition behind the VIF score is based on the idea that if two or more predictor variables are highly correlated, it becomes difficult for the model to distinguish the individual effects of these variables on the dependent variable. Consequently, the coefficient estimates for these variables become unstable, and their standard errors become inflated, making the results less reliable.
+
+The VIF is calculated for each independent variable in the regression model. Specifically, to calculate the VIF for predictor i, the following steps are taken:
+
+* Fit a regression model with variable i as the dependent variable and all other independent variables (excluding i) as predictors.
+
+* Calculate the R-squared value (R²) for this regression model. R² represents the proportion of variance in variable i that can be explained by the other independent variables.
+
+* Calculate the VIF for variable i using the formula: VIF(i) = 1 / (1 - R²)
+
+* The interpretation of the VIF score is as follows:
+
+    * A VIF of 1 indicates that there is no multicollinearity for the variable, meaning it is not correlated with any other independent variable in the model.
+
+    * VIF values between 1 and 5 generally indicate low to moderate multicollinearity, which is typically considered acceptable in most cases.
+
+    * VIF values greater than 5 (some sources use a threshold of 10) suggest high multicollinearity, indicating that the variable is highly correlated with other independent variables, and its coefficient estimates may be unreliable.
+
+    * In extreme cases, VIF can take on very high values, approaching infinity, indicating an almost perfect linear relationship between the variable and other predictors in the model.
+
+
 
 
 ```python
 from statsmodels.stats.outliers_influence import variance_inflation_factor
 
-# Calculate VIF for each predictor in X
-vif = pd.DataFrame()
-vif["Variable"] = X.columns
-vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+def calc_print_VIF(X):
+    # Calculate VIF for each predictor in X
+    vif = pd.DataFrame()
+    vif["Variable"] = X.columns
+    vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
 
-# Display the VIF values
-print(vif)
+    # Display the VIF values
+    print(vif)
 ```
+
+
+```python
+calc_print_VIF(X)
+```
+
+          Variable        VIF
+    0  OverallQual   1.128173
+    1      Abnorml   2.268743
+    2      AdjLand   1.040428
+    3       Alloca   1.142339
+    4       Family   1.271997
+    5       Normal  18.474457
+    6      Partial   3.888230
+    
 
 It looks like one of the predictors, "Normal", has a high VIF score. We can further investigate this score by creating a plot of the correlation matrix of all predictors.
 
 
 ```python
-import pandas as pd
-import seaborn as sns
+# import pandas as pd
+# import seaborn as sns
 import matplotlib.pyplot as plt
 from helper_functions import plot_corr_matrix 
 
 # Calculate correlation matrix
 corr_matrix = X.corr()
-plot_corr_matrix(corr_matrix)
-
+fig = plot_corr_matrix(corr_matrix)
+# plt.savefig('..//fig//regression//corrMat_multicollinearity.png', bbox_inches='tight', dpi=300, facecolor='white');
+plt.show()
 ```
+
+
+    
+
+    
+
+
+<img src="../fig/regression/corrMat_multicollinearity.png"  align="center" width="60%" height="60%">
 
 SaleCondition: Condition of sale
 
@@ -196,14 +432,11 @@ SaleCondition: Condition of sale
        Family	Sale between family members
        Partial	Home was not completed when last assessed (associated with New Homes)
 
-The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value or "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal. 
-
-
+The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value of "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal. 
 
 
 ```python
 X = X.drop('Normal',axis = 1)
-
 ```
 
 After dropping the problematic variable with multicollinearity, we can recalculate VIF for each predictor in X
@@ -211,64 +444,17 @@ After dropping the problematic variable with multicollinearity, we can recalcula
 
 
 ```python
-vif = pd.DataFrame()
-vif["Variable"] = X.columns
-vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
-
-# Display the VIF values
-print(vif)
-
-# Calculate correlation matrix
-corr_matrix = X.corr()
-plot_corr_matrix(corr_matrix)
+calc_print_VIF(X)
 ```
 
-### 3. Check linearity assumption
-How can we test if a linear model is appropriate for this data? A good method to start with is to simply plot scatterplots between each predictor variable and the target variable
-
-#### Why do we care?
-As discussed in the previous episode, the predictions will be inaccurate because our model is underfitting (i.e., not adquately capturing the variance of the data since you can't effectively draw a line through nonlinear data). In addition to having a fatal impact on predictive power, violations of linearity can affect the validity of hypothesis tests on the regression coefficients. The p-values associated with the coefficients may not accurately reflect the statistical significance, potentially leading to erroneous conclusions. For example, if nonlinearity is present, the p-values may be underestimated, making some predictors appear statistically significant when they are not or vice versa.
-
-Violations of the linearity assumption can also impact other assumptions in statistical tests. For example, violations of linearity may be associated with heteroscedasticity (unequal variances) or autocorrelation (dependence between residuals), which violate assumptions of independence and constant variance in regression models. This can affect the reliability and validity of other statistical tests or model diagnostics.
-
-#### How to remedy
-To fix this problem, you can...
-
-1. Apply nonlinear transformations (e.g., log transform)
-2. Try adding additional variables to help capture the relationship between the predictors and the label. 
-3. Add polynomial terms to some of the predictors (i.e., polynomial regression) 
-
-
-If none of those approaches work, you can also consider nonlinear models if you have a sufficiently large dataset (learning nonlinear relationships requires lots of data).
-
-Recall that we observed a nonlinear trend between OverallQual and SalePrice in the previous episode, but log transforming SalePrice fixed this issue. Let's see if the remaining predicotrs have a linear trend with log(SalePrice).
-
-
-```python
-import matplotlib.pyplot as plt
-# Number of predictor variables (change as per your dataframe)
-num_predictors = X.shape[1]
-import numpy as np
-y_log = y.apply(np.log)
-
-# Create subplots for scatterplots
-fig, axes = plt.subplots(nrows=num_predictors, ncols=1, figsize=(5, 3*num_predictors))
-fig.subplots_adjust(hspace=0.5)
-
-# Iterate over predictor variables and create scatterplots
-for i, predictor in enumerate(X.columns):
-    ax = axes[i]
-    ax.scatter(X[predictor], y_log, alpha=.03)
-    ax.set_xlabel(predictor)
-    ax.set_ylabel('Target Variable')
-    ax.set_title(f'Scatterplot of {predictor} vs Target Variable')
-
-# Show the scatterplots
-plt.tight_layout()
-plt.show()
-```
-
-It can be challenging to evaluate linearity when looking at binary predictors since binary predictors are inherently nonlinear. What we're looking for in these plots is a change in the mean sale price when each predictor's value changes from 0 to 1. It looks like the Partial variable a clear linear trend. The remaining variables may have a mild linear impact on saleprice, but it is difficult to tell by these scatterplots alone. We will see later how we can more rigorously evaluate the liearity assumption after fitting our regression model.
+          Variable       VIF
+    0  OverallQual  1.249628
+    1      Abnorml  1.068676
+    2      AdjLand  1.002188
+    3       Alloca  1.007705
+    4       Family  1.014723
+    5      Partial  1.156336
+    
 
 #### Train/test split
 Discuss why stats should be evaluated on test set error.
@@ -278,7 +464,7 @@ Discuss why stats should be evaluated on test set error.
 # TODO: Train/test split
 ```
 
-### 4. Fit the model
+### 3. Fit the model
 
 
 ```python
@@ -315,6 +501,50 @@ ax.ylabel('predicted')
 # ax1.axis('equal')
 
 ax.plot([0, 1], [0, 1], transform=ax.transAxes)
+```
+
+### 3. Check linearity assumption
+The linearity assumption of multiple/multivariate regression states that the relationship between the predictors and the target variable should be approximately linear. This means that the OVERALL pattern of the data should resemble a straight line, but it doesn't imply that each predictor must have a perfectly linear relationship. In fact, all predictors could indivually have a nonlinear relationship with the target variable without violating the linearity assumption. It all depends on how each predictor's contribution to predicting the target sums together. If the sum of effects is linear, then the linearity has been met. When working with univariate models, we are able to assess the linearity assumption PRIOR to model fitting simply by creating a scatterplot between the predictor and target. With multivariate approaches, we will first need to fit the model before we can evaluate the linearity assumption.
+
+#### Why do we care?
+As discussed in the previous episode, the predictions will be inaccurate because our model is underfitting (i.e., not adquately capturing the variance of the data since you can't effectively draw a line through nonlinear data). In addition to having a fatal impact on predictive power, violations of linearity can affect the validity of hypothesis tests on the regression coefficients. The p-values associated with the coefficients may not accurately reflect the statistical significance, potentially leading to erroneous conclusions. For example, if nonlinearity is present, the p-values may be underestimated, making some predictors appear statistically significant when they are not or vice versa.
+
+Violations of the linearity assumption can also impact other assumptions in statistical tests. For example, violations of linearity may be associated with heteroscedasticity (unequal variances) or autocorrelation (dependence between residuals), which violate assumptions of independence and constant variance in regression models. This can affect the reliability and validity of other statistical tests or model diagnostics.
+
+
+```python
+#### How to remedy
+To fix this problem, you can...
+
+1. Apply nonlinear transformations (e.g., log transform)
+2. Try adding additional variables to help capture the relationship between the predictors and the label. 
+3. Add polynomial terms to some of the predictors (i.e., polynomial regression) 
+
+If none of those approaches work, you can also consider nonlinear models if you have a sufficiently large dataset (learning nonlinear relationships requires lots of data).
+
+Recall that we observed a nonlinear trend between OverallQual and SalePrice in the previous episode, but log transforming SalePrice fixed this issue. Let's see if the remaining predicotrs have a linear trend with log(SalePrice).
+
+import matplotlib.pyplot as plt
+# Number of predictor variables (change as per your dataframe)
+num_predictors = X.shape[1]
+import numpy as np
+y_log = y.apply(np.log)
+
+# Create subplots for scatterplots
+fig, axes = plt.subplots(nrows=num_predictors, ncols=1, figsize=(5, 3*num_predictors))
+fig.subplots_adjust(hspace=0.5)
+
+# Iterate over predictor variables and create scatterplots
+for i, predictor in enumerate(X.columns):
+    ax = axes[i]
+    ax.scatter(X[predictor], y_log, alpha=.03)
+    ax.set_xlabel(predictor)
+    ax.set_ylabel('Target Variable')
+    ax.set_title(f'Scatterplot of {predictor} vs Target Variable')
+
+# Show the scatterplots
+plt.tight_layout()
+plt.show()
 ```
 
 ### 5. Evaluate normality of residuals assumption

@@ -203,33 +203,35 @@ def plot_model_predictions(predictor,
         ax2.title.set_text('Test Data')
 
     # Fig2. Line of best fit 
-    #train data
-    fig2, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
-    if logTransformY:
-        fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. log(sale_price)')
-    else:
-        fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
-    ax1.scatter(x_train,y_train,alpha=.1) 
-    ax1.plot(x_train,y_pred_train,color='k') 
-    ax1.set_ylim([min_y, np.max(all_y)])
+    fig2 = None
+    if x_train.shape[1]==1:
+        #train data
+        fig2, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
+        if logTransformY:
+            fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. log(sale_price)')
+        else:
+            fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
+        ax1.scatter(x_train,y_train,alpha=.1) 
+        ax1.plot(x_train,y_pred_train,color='k') 
+        ax1.set_ylim([min_y, np.max(all_y)])
 
-    ax1.set_xlabel(predictor)
-    if logTransformY:
-        ax1.set_ylabel('log(sale_price)')
-    else:
-        ax1.set_ylabel('Sale Price')
-    if train_err is not None:
-        ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
-    else:
-        ax1.title.set_text('Train Data')
-    #test data
-    ax2.scatter(x_test,y_test,alpha=.1) 
-    ax2.plot(x_test,y_pred_test,color='k') 
-    if test_err is not None:
-        ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
-    else:
-        ax2.title.set_text('Test Data')
-    ax2.set_ylim([min_y, np.max(all_y)])
+        ax1.set_xlabel(predictor)
+        if logTransformY:
+            ax1.set_ylabel('log(sale_price)')
+        else:
+            ax1.set_ylabel('Sale Price')
+        if train_err is not None:
+            ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
+        else:
+            ax1.title.set_text('Train Data')
+        #test data
+        ax2.scatter(x_test,y_test,alpha=.1) 
+        ax2.plot(x_test,y_pred_test,color='k') 
+        if test_err is not None:
+            ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
+        else:
+            ax2.title.set_text('Test Data')
+        ax2.set_ylim([min_y, np.max(all_y)])
 
     return (fig1, fig2)
     
@@ -353,9 +355,9 @@ def plot_corr_matrix_allVars(df: pd.DataFrame) -> pd.DataFrame:
     plt.show()
     return corr_mat
 
-def plot_corr_matrix(corr_matrix: pd.DataFrame) -> pd.DataFrame:
+def plot_corr_matrix(corr_matrix: pd.DataFrame) -> plt.figure:
     # Create a heatmap with variable labels
-    plt.figure(figsize=(10, 8))
+    fig = plt.figure(figsize=(10, 8))
     sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm",
                 square=True, cbar=True, linewidths=0.5)
 
@@ -369,7 +371,7 @@ def plot_corr_matrix(corr_matrix: pd.DataFrame) -> pd.DataFrame:
 
     # Show the plot
     plt.tight_layout()
-    plt.show()
+    return fig
 
 
 def plot_regression_corr_matrix(df: pd.DataFrame) -> pd.DataFrame:

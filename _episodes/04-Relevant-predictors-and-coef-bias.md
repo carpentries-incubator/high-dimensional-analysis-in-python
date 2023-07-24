@@ -1,5 +1,5 @@
 ---
-title: Explanatory models - relevant predictors
+title: Model validity and relevant predictors
 teaching: 45
 exercises: 2
 keypoints:
@@ -16,7 +16,7 @@ questions:
 With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist?
 
 There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss the first in detail throughout this episode.
-1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
+1. **Accounting for relevant predictors**: Have we included as many relevant predictors in the model as possible?
 2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
 
@@ -87,7 +87,7 @@ Since the relationship doesn't appear to be quite as linear as we were hoping, w
 import numpy as np
 y_log = y.apply(np.log)
 plt.scatter(X,y_log, alpha=.3);
-plt.savefig('..//fig//regression//scatterplot_fullBath_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//scatterplot_fullBath_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -120,7 +120,9 @@ X.head()
 
 
 
-Fit the model
+For efficiency, we will skip train/test splits in this episode. Recall that train/test splits aren't as essential when working with only a handful or predictors.
+
+Fit the model.
 
 
 ```python
@@ -181,7 +183,7 @@ plt.scatter(X, y_log);
 
 
 
-As before,, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
+As before, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
 
 
 ```python
