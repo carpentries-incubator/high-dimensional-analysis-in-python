@@ -48,6 +48,10 @@ from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True) #
 ```
 
+    C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\sklearn\datasets\_openml.py:968: FutureWarning: The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4. You can set `parser='auto'` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml's API doc for details.
+      warn(
+
+
 ##### Reminder of basic data properties
 1. How many observations and features are there in the data?
 2. What are some of the features available?
@@ -59,6 +63,14 @@ print(f"housing['data'].shape = {housing['data'].shape}\n") # 80 features total,
 print(f"housing['feature_names'] = {housing['feature_names']}\n")
 print(f"housing['target_names'] = {housing['target_names']}\n")
 ```
+
+    housing['data'].shape = (1460, 80)
+
+    housing['feature_names'] = ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType', 'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1', 'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual', 'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType', 'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual', 'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC', 'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType', 'SaleCondition']
+
+    housing['target_names'] = ['SalePrice']
+
+
 
 #### 2) Extract predictor variable and target variable from dataframe
 Next, we'll extract the two variables we'll use for our model — the target variable that we'll attempt to predict (SalePrice), and a single predictor variable that will be used to predict the target variable. For this example, we'll explore how well the "YearBuilt" variable (i.e., the predictor variable) can predict sale prices.
@@ -83,6 +95,12 @@ plt.ylabel('Sale Price');
 plt.savefig('..//fig//regression//scatterplot_x_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
+
+
+
+
+
+
 <img src="../fig/regression/scatterplot_x_vs_salePrice.png"  align="center" width="30%" height="30%">
 
 Unfortunately, sale price appears to grow almost exponentially—not linearly—with the predictor variable. Any line we draw through this data cloud is going to fail in capturing the true trend we see here.
@@ -103,6 +121,12 @@ plt.xlabel(predictor)
 plt.ylabel('Sale Price');
 plt.savefig('..//fig//regression//scatterplot_x_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white')
 ```
+
+
+
+
+
+
 
 <img src="../fig/regression/scatterplot_x_vs_logSalePrice.png"  align="center" width="30%" height="30%">
 
@@ -134,6 +158,10 @@ print(x_train.shape)
 print(x_test.shape)
 ```
 
+    (978,)
+    (482,)
+
+
 Reshape single-var predictor matrix in preparation for model-fitting step (requires a 2-D representation)
 
 
@@ -143,6 +171,10 @@ x_test = x_test.values.reshape(-1,1)
 print(x_train.shape)
 print(x_test.shape)
 ```
+
+    (978, 1)
+    (482, 1)
+
 
 #### 4) Fit the model to the training dataset
 
@@ -183,6 +215,18 @@ pl.figure(fig2.number)
 plt.savefig('..//fig//regression//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
 
 ```
+
+
+
+
+
+
+
+
+
+
+
+
 
 <img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
 <img src="../fig/regression/univariate_x_vs_predPrice.png"  align="center" width="40%" height="40%">
@@ -236,6 +280,9 @@ mean_sale_price = pd.Series(mean_sale_price)
 mean_sale_price = mean_sale_price.repeat(len(y))
 ```
 
+    mean sale price = 180921.19589041095
+
+
 **Root Mean Squared Error (RMSE)**:
 The RMSE provides an easy-to-interpret number that represents error in terms of the units of the target variable. With our univariate model, the "YearBuilt" predictor variable (a.k.a. model feature) predicts sale prices within +/- $68,106 from the true sale price. We always use the RMSE of the test set to assess the model's ability to generalize on unseen data. An extremely low prediction error in the train set is also a good indicator of overfitting.
 
@@ -252,6 +299,11 @@ print(f"Train RMSE = {RMSE_train}")
 print(f"Test RMSE = {RMSE_test}")
 ```
 
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 45534.34940950763
+    Test RMSE = 44762.77229823455
+
+
 Here, both train and test RMSE are very similar to one another. As expected with most univariate models, we do not see any evidence of overfitting. This model performs substantially better than the baseline. However, an average error of +/- $44,726 is likely too high for this model to be useful in practice. That is, the model is underfitting the data given its poor ability to predict the true housing prices.
 
 **Mean Absolute Percentage Error**:
@@ -267,6 +319,11 @@ print(f"Train MAPE = {MAPE_train*100}")
 print(f"Test MAPE = {MAPE_test*100}")
 ```
 
+    Baseline MAPE = 36.3222261212389
+    Train MAPE = 18.75854039670096
+    Test MAPE = 16.753971728816907
+
+
 With the MAPE measurement (max value of 1 which corresponds to 100%), we can state that our model over/under estimates sale prices by an average of 23.41% (25.28%) across all houses included in the test set (train set). Certainly seems there is room for improvement based on this measure.
 
 **R-Squared**: Another useful error measurement to use with regression models is the coefficient of determination — $R^2$. Oftentimes pronounced simply "R-squared",  this measure assesses the proportion of the variation in the target variable that is predictable from the predictor variable(s). Using sklearn's metrics, we can calculate this as follows:
@@ -281,6 +338,11 @@ print(f"Train R-squared = {R2_train}")
 print(f"Test R-squared = {R2_test}")
 
 ```
+
+    Baseline R-squared = 0.0
+    Train R-squared = 0.6521389099611015
+    Test R-squared = 0.7012721408788911
+
 
 Our model predicts 70.1% (65.2%) of the variance across sale prices in the test set (train set).
 

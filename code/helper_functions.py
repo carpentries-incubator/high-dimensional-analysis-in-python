@@ -232,7 +232,7 @@ def plot_model_predictions(predictor,
         else:
             ax2.title.set_text('Test Data')
         ax2.set_ylim([min_y, np.max(all_y)])
-
+        
     return (fig1, fig2)
     
 # PCA

@@ -175,6 +175,7 @@ When transformed to the original data scale, this coefficient tells us that incr
 ```python
 X=housing['data']['GrLivArea']
 plt.scatter(X, y_log);
+plt.savefig('..//fig//regression//scatterplot_GrLivArea_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -182,6 +183,8 @@ plt.scatter(X, y_log);
 
 
 
+
+<img src="../fig/regression/scatterplot_GrLivArea_vs_logSalePrice.png"  align="center" width="30%" height="30%">
 
 As before, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
 
