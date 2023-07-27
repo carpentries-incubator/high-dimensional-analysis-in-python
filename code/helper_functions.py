@@ -639,3 +639,26 @@ def plot_eigenvectors(p: PCA) -> Tuple[plt.Figure, plt.Axes]:
     ax.set_xlabel('eigenvector')
     plt.colorbar(im)
     return plt.Figure, plt.Axes
+
+
+import statsmodels.graphics.gofplots as smg
+from scipy import stats
+import statsmodels.api as sm
+
+def assess_normal_resid(trained_model: sm.regression.linear_model.RegressionResultsWrapper, test_residuals: pd.Series) -> None:
+    # Extract the residuals and calculate median — should lie close to 0 if it is a normal distribution
+    print('Median of residuals:', np.median(test_residuals))
+    plt.hist(test_residuals);
+
+    # Plot the QQ-plot of residuals
+    smg.qqplot(test_residuals, line='s')
+
+    # Add labels and title
+    plt.xlabel('Theoretical Quantiles')
+    plt.ylabel('Sample Quantiles')
+    plt.title('QQ-Plot of Residuals')
+    
+    shapiro_stat, shapiro_p = stats.shapiro(test_residuals)
+    print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f}")
+
+    plt.show()
