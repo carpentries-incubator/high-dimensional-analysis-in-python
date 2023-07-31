@@ -1,8 +1,15 @@
 import numpy as np
 import pandas as pd
 from sklearn.decomposition import PCA
-import matplotlib
+    
+import math
+import matplotlib as mpl
+import matplotlib.pyplot as plt
+import numpy as np
+import seaborn as sns
+from typing import Optional, Tuple
 
+from sklearn.datasets import make_classification
 
 # def clean_data(housing):
     
@@ -133,10 +140,44 @@ def get_feat_types():
 
 # regression 
 import matplotlib.pyplot as plt
-def plot_model_predictions(predictor,
+
+def plot_predictions(ax, y, y_pred, log_transform_y, keep_tick_labels):
+    if log_transform_y:
+        min_y = 11#np.percentile(all_y, 1)
+        max_y = 13.6#np.percentile(all_y, 100)
+        tick_dist = .5
+    else:
+        min_y = 50000#np.percentile(all_y, 2)
+        max_y = 350001#np.percentile(all_y, 95)
+        tick_dist = 50000
+        
+
+    # ax.set_aspect('equal')
+    ax.scatter(y, y_pred, alpha=.1) 
+    ax.set_aspect('equal')
+    ax.set_xlim([min_y, max_y])
+    ax.set_ylim([min_y, max_y])
+    ax.plot([0, 1], [0, 1], transform=ax.transAxes, color='blue', linestyle='dashed')
+    sns.regplot(x=y, y=y_pred, lowess=True, ax=ax, line_kws={'color': 'red'})
+
+    ax.xaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
+    ax.yaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
+    
+    ax.set_xlabel('True')
+    ax.set_ylabel('Predicted')
+    if keep_tick_labels:
+        for tick in ax.get_xticklabels():
+            tick.set_rotation(45)
+    else:
+        ax.xaxis.set_tick_params(labelbottom=False)
+        ax.yaxis.set_tick_params(labelleft=False)
+        
+    return ax
+
+def plot_train_test_predictions(predictor,
                            x_train, x_test,
                            y_train, y_test,
-                           y_pred_train, y_pred_test,logTransformY,
+                           y_pred_train, y_pred_test,log_transform_y,
                            err_type=None,train_err=None,test_err=None):
     
     if type(y_train) != 'numpy.ndarray':
@@ -150,7 +191,7 @@ def plot_model_predictions(predictor,
         
     # get min and max y values
     all_y = np.concatenate((y_train, y_test, y_pred_train, y_pred_test), axis=0)
-    if logTransformY:
+    if log_transform_y:
         min_y = 11#np.percentile(all_y, 1)
         max_y = 13.6#np.percentile(all_y, 100)
         tick_dist = .5
@@ -161,46 +202,25 @@ def plot_model_predictions(predictor,
     
     # Fig1. True vs predicted sale price
     fig1, (ax1, ax2) = plt.subplots(1,2)#, sharex=True, sharey=True)
-    if logTransformY:
+    if log_transform_y:
         fig1.suptitle('True vs. Predicted log(Sale_Price)')
     else:
         fig1.suptitle('True vs. Predicted Sale Price')
 
-    #train set
-    ax1.scatter(y_train, y_pred_train, alpha=.1) 
-
+    # train set
     if train_err is not None:
         ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
     else:
         ax1.title.set_text('Train Data')
-    ax1.set_xlabel('True')
-    ax1.set_ylabel('Predicted')
-    ax1.set_aspect('equal')
-    # ax1.axis('equal')
-    ax1.set_xlim([min_y, max_y])
-    ax1.set_ylim([min_y, max_y])
-    ax1.plot([0, 1], [0, 1], transform=ax1.transAxes)
-    ax1.xaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
-    ax1.yaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
-    for tick in ax1.get_xticklabels():
-        tick.set_rotation(45)
+    
+    ax1 = plot_predictions(ax1, y_train, y_pred_train, log_transform_y, keep_tick_labels=True)
 
     #test set
-    ax2.scatter(y_test, y_pred_test, alpha=.1) 
-    ax2.set_aspect('equal')
-    ax2.set_xlim([min_y, max_y])
-    ax2.set_ylim([min_y, max_y])
-    ax2.plot([0, 1], [0, 1], transform=ax2.transAxes)
-    ax2.xaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
-    ax2.yaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
-
-    ax2.xaxis.set_tick_params(labelbottom=False)
-    ax2.yaxis.set_tick_params(labelleft=False)
-
     if test_err is not None:
         ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
     else:
         ax2.title.set_text('Test Data')
+    ax2 = plot_predictions(ax2, y_test, y_pred_test, log_transform_y, keep_tick_labels=False)
 
     # Fig2. Line of best fit 
     fig2 = None
@@ -234,21 +254,15 @@ def plot_model_predictions(predictor,
         ax2.set_ylim([min_y, np.max(all_y)])
         
     return (fig1, fig2)
+
+
+
     
 # PCA
 def my_PCA(X: pd.DataFrame, variance_thresh: float) -> pd.DataFrame:
     raise NotImplementedError    
     
-    
-import math
-import pandas as pd
-import matplotlib as mpl
-import matplotlib.pyplot as plt
-import numpy as np
-import seaborn as sns
-from typing import Optional, Tuple
 
-from sklearn.datasets import make_classification
 
 
 def plot_salesprice(df: pd.DataFrame, ylog: bool = False) -> None:
@@ -641,24 +655,3 @@ def plot_eigenvectors(p: PCA) -> Tuple[plt.Figure, plt.Axes]:
     return plt.Figure, plt.Axes
 
 
-import statsmodels.graphics.gofplots as smg
-from scipy import stats
-import statsmodels.api as sm
-
-def assess_normal_resid(trained_model: sm.regression.linear_model.RegressionResultsWrapper, test_residuals: pd.Series) -> None:
-    # Extract the residuals and calculate median — should lie close to 0 if it is a normal distribution
-    print('Median of residuals:', np.median(test_residuals))
-    plt.hist(test_residuals);
-
-    # Plot the QQ-plot of residuals
-    smg.qqplot(test_residuals, line='s')
-
-    # Add labels and title
-    plt.xlabel('Theoretical Quantiles')
-    plt.ylabel('Sample Quantiles')
-    plt.title('QQ-Plot of Residuals')
-    
-    shapiro_stat, shapiro_p = stats.shapiro(test_residuals)
-    print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f}")
-
-    plt.show()
