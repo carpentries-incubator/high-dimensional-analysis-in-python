@@ -808,9 +808,11 @@ We will call a pre-baked helper function to generate the plots and calculate a t
 #### **Fig1.** Predictions vs actual values
 * **Linearity:** We want to observe the data scattered about the diagonal to ensure the linearity assumption is met
 * **Homoscedasticity (Constant Variance)**: If the variance of the data changes as you move along the X-axis, this indicates heterscedasticity
+
 #### **Fig2.** Residuals vs predicted values
 * **Linearity:** In the predicted vs residuals scatterplot, if we observe a random scattering of points around the red dashed line (y=0), it suggests that the linearity assumption is met. However, if we notice any patterns, such as a curved shape or a funnel-like structure, it might indicate a nonlinear relationship, and we may need to consider transformations or alternative modeling approaches to address the nonlinearity.
 * **Homoscedasticity (Constant Variance)**: In the same plot, you examine whether the spread of the residuals remains consistent along the range of predicted values. If the spread of points around y = 0 does not change noticeably as you move along the x-axis (the predicted values), it suggests homoscedasticity.
+
 #### **Goldfeld-Quandt test**
 The Goldfeld-Quandt test is a statistical test used to check for heteroscedasticity (unequal variances) in a regression model. It splits the data into two groups based on a specified split point (default is the median) and then estimates separate variances for each group. The test statistic is calculated based on the F-distribution, and the p-value is obtained by comparing the test statistic to the critical value from the F-distribution. If the p-value is greater than your chosen significance level (e.g., 0.05), you fail to reject the null hypothesis, indicating no evidence of heteroscedasticity. In this case, the variance of residuals is assumed to be equal for both groups.
 If the p-value is less than your significance level, you can reject the null hypothesis, suggesting the presence of heteroscedasticity. This means that the variance of residuals is different for different groups, indicating potential issues with the regression model's assumptions.
@@ -843,7 +845,7 @@ fig.savefig('..//fig//regression//assumptions//linearity-homoscedasticity_pred_v
 
 <img src="../fig/regression/assumptions/linearity-homoscedasticity_pred_v_residuals.png"  align="center" width="40%" height="40%">
 
-#### Inspect the plot and Goldfeld-Quandt test
+### Inspect the plot and Goldfeld-Quandt test
 
 #### **Fig1.** Predictions vs actual values
 * **Linearity:** While the model is somewhat linear, it appears to be overestimating the value of low-cost homes while underestimating the most expensive homes.
