@@ -366,7 +366,6 @@ def plot_corr_matrix_allVars(df: pd.DataFrame) -> pd.DataFrame:
     upper_triangle_mask = np.triu(corr_mat)
     sns.heatmap(corr_mat, cmap='magma', ax=ax, mask=upper_triangle_mask)
     plt.title('correlation heatmap')
-    plt.show()
     return corr_mat
 
 def plot_corr_matrix(corr_matrix: pd.DataFrame) -> plt.figure:
@@ -384,7 +383,7 @@ def plot_corr_matrix(corr_matrix: pd.DataFrame) -> plt.figure:
     plt.xticks(rotation=45, ha="right")
 
     # Show the plot
-    plt.tight_layout()
+    # plt.tight_layout()
     return fig
 
 

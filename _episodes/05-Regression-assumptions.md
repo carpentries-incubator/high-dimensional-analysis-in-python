@@ -4,66 +4,70 @@ teaching: 45
 exercises: 2
 keypoints:
 - "All models are wrong, but some are useful."
-- "Before reading into a model's estimated coefficients, modelers must take care to test the 5 assumptions of linear regression."
+- "Before reading into a model's estimated coefficients, modelers must take care to check for evidence of overfitting and assess the 5 assumptions of linear regression."
+- "One-hot enoding, while necesssary, can often produce very sparse binary predictors which have little information. Predictors with very little variability should be removed prior to model fitting."
 objectives:
-- "Understand how to assess the validity of a multivariate regression model." 
+- "Understand how to assess the validity of a multivariate regression model."
 - "Understand how to use statistics to evaluate the likelihood of existing relationships recovered by a multivariate model."
 questions:
 - "How can multivariate models be used to detect interesting relationships found in nature?"
 - "What are the assumptions of linear regression models?"
 - "How can we rigorously evaluate the validity and accuracy of a multivariate regression model?"
+- "How should we preprocess categorical predictors and sparse binary predictors?"
 ---
 
-### Intro
-With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist? 
+## Model Validity & Interpretability
+With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist?
 
-There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss all three in detail throughout this episode.
+There are four critical questions we must ask before we can read too far into our model's estimations.
 1. **Accounting for relevant predictors**: Have we included as many relevant predictors in the model as possible?
 2. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
 3. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
+4. **Hypothesis testing**: What is the likelihood that the relationship revealed by the model is due to chance alone?
 
-### 2. Regression assumptions and hypothesis testing
-What does it mean to be statistically signficiant? It means that an observed relationship is unlikely (< 5% chance if p=.005) to occur due to chance alone. 
+### Hypothesis testing
+We will ultimately use hypothesis testing to determine if our model has found any statistically signficant relationships. What does it mean to be statistically signficiant? It means that an observed relationship is unlikely (< 5% chance if p=.005) to occur due to chance alone.
 
 To run statistics on a regression model, we start with two hypotheses — one null and one alternative.
 * $H_0$ (Null hypothesis): $m$ = 0 (i.e., slope is flat)
-* $H_A$ (Alternative hypothesis): $m \neq 0$ (i.e.., slope is not completely flat) 
+* $H_A$ (Alternative hypothesis): $m \neq 0$ (i.e.., slope is not completely flat)
 
 In other words, we are testing to see if a predictor has a consistent effect on some target variable. We are NOT testing the magnitidute of the effect (we will discuss effect sizes later); simply whether or not an observed effect is due to chance or not. In statistics, we start with the null hypothesis as our default and review evidence (the fitted model and its estimated parameters and error measurement) to see if the observed data suggests that the null hypothesis should be rejected.
 
-#### Linear regression assumptions
+### Linear regression assumptions
 The assumptions of regression (mostly) need to be met before rejecting the null hypothesis because violating these assumptions can lead to biased and unreliable parameter estimates, incorrect standard errors, and misleading hypothesis test results. Failing to meet the assumptions can compromise the validity and interpretability of the regression model. When testing multivariate models for signficant coefficients, the following assumpitons should be met to assure validty of results.
 1. **Linearity**: There is a linear relation between Y and X
 2. **Normality**: The error terms (residuals) are normally distributed
 3. **Homoscedasticity**: The variance of the error terms is constant over all X values (homoscedasticity)
 4. **Independence**: The error terms are independent
-5. **Limited multicollinearity among predictors**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves. 
+5. **Limited multicollinearity among predictors**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves.
 
-#### Testing procedure
+### Overview of hypothesis testing procedure
 The procedure for testing whether predictor(s) have a statistically significant effect on a target variable in a regression model typically involves the following steps:
 
-1. Formulate the null hypothesis (H₀) and alternative hypothesis (H₁) for the test. The null hypothesis typically states that the predictor has no effect on the response variable (coef=0), while the alternative hypothesis suggests that there is a significant effect (coef!=0).
+1. **Formulate the null hypothesis (H₀) and alternative hypothesis (H₁) for the test.** The null hypothesis typically states that the predictor has no effect on the response variable (coef=0), while the alternative hypothesis suggests that there is a significant effect (coef!=0).
 
-2. If using multiple predictors, check for multicollinearity. Multicollinearity can be an especially pervasive.
+2. **If using multiple predictors, check for multicollinearity.** Multicollinearity can be an especially pervasive.
 
-3. Fit the regression model to your data. Obtain the estimated coefficients for each predictor, along with their standard errors.
+3. **Fit the regression model to your data.** Obtain the estimated coefficients for each predictor, along with their standard errors.
 
-4. Evaluate linearity assumption (if using univariate model, can do this step before model fitting via a simple scatterplot).
+4. **Check for evidence of overfitting**: If overfitting occurs, it doesn't make much sense to make general claims about observed relationships in the model.
 
-5. Evaluate normality of errors assumption
+4. **Evaluate linearity assumption**: If using a univariate model, can do this step before model fitting via a simple scatterplot.
 
-6. Calculate the test statistic: Calculate the test statistic based on the estimated coefficient and its standard error. The test statistic depends on the specific regression model and hypothesis being tested. Common test statistics include t-statistic, z-statistic, or F-statistic.
+5. **Evaluate normality of errors assumption.**
 
-6. Determine the critical value: Determine the critical value or significance level (α) at which you want to test the hypothesis. The significance level typically ranges from 0.01 to 0.05, depending on the desired level of confidence.
+6. **Calculate the test statistic**: Calculate the test statistic based on the estimated coefficient and its standard error. The test statistic depends on the specific regression model and hypothesis being tested. Common test statistics include t-statistic, z-statistic, or F-statistic.
 
-7. Compare the test statistic and critical value: Compare the calculated test statistic with the critical value. If the test statistic falls within the critical region (i.e., the calculated p-value is less than the significance level), you reject the null hypothesis and conclude that the predictor is statistically significant. If the test statistic does not fall within the critical region, you fail to reject the null hypothesis, indicating that the predictor is not statistically significant.
+6. **Determine the critical value**: Determine the critical value or significance level (α) at which you want to test the hypothesis. The significance level typically ranges from 0.01 to 0.05, depending on the desired level of confidence.
 
-8. Interpret the results: Based on the conclusion from the hypothesis test, interpret the significance of the predictor. If the predictor is deemed statistically significant, it suggests that there is evidence of a relationship between the predictor and the response variable. If the predictor is not statistically significant, it implies that there is no significant evidence of an effect.
+7. **Compare the test statistic and critical value**: Compare the calculated test statistic with the critical value. If the test statistic falls within the critical region (i.e., the calculated p-value is less than the significance level), you reject the null hypothesis and conclude that the predictor is statistically significant. If the test statistic does not fall within the critical region, you fail to reject the null hypothesis, indicating that the predictor is not statistically significant.
+
+8. **Interpret the results**: Based on the conclusion from the hypothesis test, interpret the significance of the predictor. If the predictor is deemed statistically significant, it suggests that there is evidence of a relationship between the predictor and the response variable. If the predictor is not statistically significant, it implies that there is no significant evidence of an effect.
 
 It's important to note that significance tests provide statistical evidence for or against the null hypothesis, but they should be interpreted alongside other factors such as effect size, practical significance, and the context of the problem being studied. Additionally, it's crucial to consider the assumptions and limitations of the regression model and the underlying data when interpreting the model.
 
 ### 0. Load and prep data
-For this episode, we'll explore how to rigorously evaluate the statistics of a multivarite regression model.
 
 
 ```python
@@ -71,13 +75,27 @@ from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
 ```
 
-Let's assume we have two predictors recorded in this dataset — sale condition and OverallQual. What values can the sale condition variable take?
-
 
 ```python
 y=housing['target']
-cat_predictor = 'SaleCondition'#'SaleType'#'Heating' #  SaleCondition
-predictors = ['OverallQual', cat_predictor]#'YrSold']#, 'GrLivArea', 'GarageCars', 'GarageArea', 'TotalBsmtSF']
+```
+
+#### Log scale SalePrices
+In our previous univariate models, we observed that several predictors tend to linearly relate more with the log version of SalePrices. Target variables that exhibit an exponential trend, as we observe with house prices, typically need to be log scaled in order to observe a linear relationship with predictors that scale linearly. For this reason, we'll log scale our target variable here as well.
+
+
+```python
+import numpy as np
+y_log = y.apply(np.log)
+```
+
+#### Set predictors
+Let's assume we have two predictors recorded in this dataset — sale condition and OverallQual (don't worry, we'll use many more predictors in the next few episodes!). What values can the sale condition variable take?
+
+
+```python
+cat_predictor = 'SaleCondition'
+predictors = ['OverallQual', cat_predictor]
 X=housing['data'][predictors]
 print(X.head())
 print(X[cat_predictor].unique())
@@ -90,30 +108,16 @@ print(X[cat_predictor].unique())
     3            7       Abnorml
     4            8        Normal
     ['Normal' 'Abnorml' 'Partial' 'AdjLand' 'Alloca' 'Family']
-    
 
-
-```python
-with open('Ames_data_readme.txt', 'w') as f:
-    f.write(housing.DESCR)
-```
 
 SaleCondition: Condition of sale
 
        Normal	Normal Sale
        Abnorml	Abnormal Sale -  trade, foreclosure, short sale
        AdjLand	Adjoining Land Purchase
-       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit	
+       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit
        Family	Sale between family members
        Partial	Home was not completed when last assessed (associated with New Homes)
-Heating: Type of heating
-		
-       Floor	Floor Furnace
-       GasA	Gas forced warm air furnace
-       GasW	Gas hot water or steam heat
-       Grav	Gravity furnace	
-       OthW	Hot water or steam heat other than gas
-       Wall	Wall furnace
 
 #### Encode categorical data as multiple binary predictors
 
@@ -207,39 +211,15 @@ one_hot.head()
 
 
 
-#### Handling sparse binary predictors
-After we've split our category variable into 6 binary predictors, it is important to assess the quantity of information present in each predictor. If a predictor shows very little variability (e.g., nearly all 0's or 1's in a binary variable), then it will be challenging to detect a meaningful relationship between that predictor and the target. The model needs to observe examples from both classes of a binary variable in order to reveal a measurable effect between a binary variable and the target.
-
-To assess the degree or sparsity in each binary predictor, we'll calculate the count and total percentage of observations where a 1 occurs.
-
 
 ```python
-print(one_hot.sum())
-print(one_hot.sum()/one_hot.shape[0]*100)
-```
+# Join the encoded df
+X = X.join(one_hot)
 
-    Abnorml     101
-    AdjLand       4
-    Alloca       12
-    Family       20
-    Normal     1198
-    Partial     125
-    dtype: int64
-    Abnorml     6.917808
-    AdjLand     0.273973
-    Alloca      0.821918
-    Family      1.369863
-    Normal     82.054795
-    Partial     8.561644
-    dtype: float64
-    
+# Drop column SaleCondition as it is now encoded
+X = X.drop(cat_predictor,axis = 1)
+X.head()
 
-A few of the predictors (AdjLand, Alloca, Family) contain very little information since they are filled almost entirely with 0's. With few observations to rely on, this makes it difficult to assess how house price changes when these predictors become active (1 instead of 0). If you encounter extremely sparse predictors, it's best to remove them from the start to avoid wasting computational resources. You can use a percentage threshold or a total count threshold to refine the list of viable/studyable predictors. Here, we'll remove predictors that don't have at least 20 observations. The exact threshold chosen is somewhat arbitrary. It's more important that you follow-up this choice with a thorough investigation of the resulting model and adjust the model downstream, if necessary.
-
-
-```python
-one_hot = one_hot.drop(['AdjLand', 'Alloca'], axis = 1)
-one_hot.head()
 ```
 
 
@@ -263,7 +243,10 @@ one_hot.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>OverallQual</th>
       <th>Abnorml</th>
+      <th>AdjLand</th>
+      <th>Alloca</th>
       <th>Family</th>
       <th>Normal</th>
       <th>Partial</th>
@@ -272,100 +255,53 @@ one_hot.head()
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>1</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-X.head()
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>OverallQual</th>
-      <th>SaleCondition</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
       <td>7</td>
-      <td>Normal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>1</th>
       <td>6</td>
-      <td>Normal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>2</th>
       <td>7</td>
-      <td>Normal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>3</th>
       <td>7</td>
-      <td>Abnorml</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
     </tr>
     <tr>
       <th>4</th>
       <td>8</td>
-      <td>Normal</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
@@ -375,66 +311,65 @@ X.head()
 
 
 ```python
-# Drop column SaleCondition as it is now encoded
-X = X.drop(cat_predictor,axis = 1)
-X.head()
+# from sklearn.ensemble import IsolationForest
+
+# # Combine the target and predictor columns
+# all_data = pd.concat([y_log, X], axis=1)
+# contamination = 0.05
+# # Perform outlier detection using Isolation Forest
+# outlier_detector = IsolationForest(contamination=contamination)
+# outliers = outlier_detector.fit_predict(all_data)
+# # Add an 'outlier' column to mark the outliers
+# all_data['outlier'] = np.where(outliers == -1, True, False)
+# # Reprot number of outliers
+# print(all_data['outlier'].sum())
+
+# # Separate the cleaned data and target variable
+# X_clean = all_data.drop(columns=['outlier', y_log.name])
+# y_log_clean = all_data[y_log.name]
+
+# # Remove rows with outliers from the data
+# X = X_clean[~all_data['outlier']].copy()
+# y_log = y_log_clean[~all_data['outlier']].copy()
+# X.head()
 ```
 
+#### Handling sparse binary predictors
+After we've split our category variable into 6 binary predictors, it is important to assess the quantity of information present in each predictor. If a predictor shows very little variability (e.g., nearly all 0's or 1's in a binary variable), then it will be challenging to detect a meaningful relationship between that predictor and the target. The model needs to observe examples from both classes of a binary variable in order to reveal a measurable effect between a binary variable and the target.
 
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>OverallQual</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>7</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>6</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>7</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>7</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>8</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
+To assess the degree or sparsity in each binary predictor, we'll calculate the count and total percentage of observations where a 1 occurs.
 
 
 ```python
-# Join the encoded df
-X = X.join(one_hot)
+nonzero_counts = X.astype(bool).sum()
+print(nonzero_counts)
+print(nonzero_counts/X.shape[0]*100)
+```
+
+    OverallQual    1460
+    Abnorml         101
+    AdjLand           4
+    Alloca           12
+    Family           20
+    Normal         1198
+    Partial         125
+    dtype: int64
+    OverallQual    100.000000
+    Abnorml          6.917808
+    AdjLand          0.273973
+    Alloca           0.821918
+    Family           1.369863
+    Normal          82.054795
+    Partial          8.561644
+    dtype: float64
+
+
+A few of the predictors (AdjLand, Alloca, Family) contain very little information since they are filled almost entirely with 0's. With few observations to rely on, this makes it difficult to assess how house price changes when these predictors become active (1 instead of 0). If you encounter extremely sparse predictors, it's best to remove them from the start to avoid wasting computational resources. You can use a percentage threshold or a total count threshold to refine the list of viable/studyable predictors. Here, we'll remove predictors that don't have at least 20 observations. The exact threshold chosen is somewhat arbitrary. It's more important that you follow-up this choice with a thorough investigation of the resulting model and adjust the model downstream, if necessary.
+
+
+```python
+X = X.drop(['AdjLand', 'Alloca'], axis = 1)
+# X = X.drop(['Family','AdjLand', 'Alloca'], axis = 1)
 X.head()
 ```
 
@@ -516,38 +451,36 @@ X.head()
 ### 1. Specify hypotheses
 We begin by formulating the null hypothesis (H₀) and alternative hypothesis (H₁) for each predictor we intend to include in the model. The null hypothesis states that the predictor has no effect on the response variable, while the alternative hypothesis suggests that there is a significant effect (typically < 5% chance of observing the relationship by chance alone). Before we can reject the null hypothesis, we must make sure to satisfy all multivariate regression assumptions to ensure reliable and valid inference.
 
-### 2. Check for multicollinearity 
+### 2. Check for multicollinearity
 
-In statistics, multicollinearity is a phenomenon in which one or more predictors in a multivariate regression model can be linearly predicted from the others with a substantial degree of accuracy. In other words, it means that one or more predictors are highly correlated with one another.
+**Multicollinearity**: In statistics, multicollinearity is a phenomenon in which one or more predictors in a multivariate regression model can be linearly predicted from the others with a substantial degree of accuracy. In other words, it means that one or more predictors are highly correlated with one another.
 
 Multicollinearity presents a problem in multivariate regression because, without having independent/uncorrelated predictors, it is difficult to know how much each predictor truly contributes to predicting the target variable. In other words, when two or more predictors are closely related or measure almost the same thing, then the underlying impact on the target varible is being accounted for twice (or more) across the predictors.
 
-While multicollinearity does not reduce a model's overall predictive power, it can produce estimates of the regression coefficients that are not statistically valid.
+***While multicollinearity does not reduce a model's overall predictive power, it can produce estimates of the regression coefficients that are not statistically valid.***
 
-#### Variance Inflation Factor (VIF) 
-The VIF (Variance Inflation Factor) is a statistical measure used to detect multicollinearity in regression analysis. VIF helps to quantify the extent to which multicollinearity is present in the model.
+#### Variance Inflation Factor (VIF)
+The **VIF (Variance Inflation Factor)** is a statistical measure used to detect multicollinearity in regression analysis. VIF helps to quantify the extent to which multicollinearity is present in the model.
 
-The intuition behind the VIF score is based on the idea that if two or more predictor variables are highly correlated, it becomes difficult for the model to distinguish the individual effects of these variables on the dependent variable. Consequently, the coefficient estimates for these variables become unstable, and their standard errors become inflated, making the results less reliable.
+The intuition behind the VIF score is based on the idea that if two or more predictor variables are highly related, it becomes difficult for the model to distinguish the individual effects of these variables on the dependent variable. Consequently, the coefficient estimates for these variables become unstable, and their standard errors become inflated, making the results less reliable.
 
 The VIF is calculated for each independent variable in the regression model. Specifically, to calculate the VIF for predictor i, the following steps are taken:
 
-* Fit a regression model with variable i as the dependent variable and all other independent variables (excluding i) as predictors.
+1. Fit a regression model with predictor variable i as the target/dependent variable and all other independent variables (excluding i) as predictors.
 
-* Calculate the R-squared value (R²) for this regression model. R² represents the proportion of variance in variable i that can be explained by the other independent variables.
+2. Calculate the R-squared value (R²) for this regression model. R² represents the proportion of variance in variable i that can be explained by the other independent variables.
 
-* Calculate the VIF for variable i using the formula: VIF(i) = 1 / (1 - R²)
+3. Calculate the VIF for variable i using the formula: VIF(i) = 1 / (1 - R²)
 
-* The interpretation of the VIF score is as follows:
+4. The interpretation of the VIF score is as follows:
 
     * A VIF of 1 indicates that there is no multicollinearity for the variable, meaning it is not correlated with any other independent variable in the model.
 
-    * VIF values between 1 and 5 generally indicate low to moderate multicollinearity, which is typically considered acceptable in most cases.
+    * VIF values between 1 and 5 (or an R² between 0 and .80) generally indicate low to moderate multicollinearity, which is typically considered acceptable in most cases.
 
     * VIF values greater than 5 (some sources use a threshold of 10) suggest high multicollinearity, indicating that the variable is highly correlated with other independent variables, and its coefficient estimates may be unreliable.
 
-    * In extreme cases, VIF can take on very high values, approaching infinity, indicating an almost perfect linear relationship between the variable and other predictors in the model.
-
-
+We can calculate VIF for all predictors quickly using the variance_inflation_factor function from the statsmodels package.
 
 
 ```python
@@ -574,88 +507,87 @@ calc_print_VIF(X)
     2       Family   1.229967
     3       Normal  15.774223
     4      Partial   3.441928
-    
 
-It looks like two of the predictors, "Normal" and "OverallQual", hvehigh VIF scores. We can further investigate this score by creating a plot of the correlation matrix of all predictors.
+
+It looks like two of the predictors, "Normal" and "OverallQual", have high VIF scores. We can further investigate this score by creating a plot of the correlation matrix of all predictors.
 
 
 ```python
 # import pandas as pd
 # import seaborn as sns
 import matplotlib.pyplot as plt
-from helper_functions import plot_corr_matrix 
+from helper_functions import plot_corr_matrix
 
 # Calculate correlation matrix
 corr_matrix = X.corr()
 fig = plot_corr_matrix(corr_matrix)
-plt.savefig('..//fig//regression//corrMat_multicollinearity.png', bbox_inches='tight', dpi=300, facecolor='white');
+plt.savefig('..//fig//regression//assumptions//corrMat_multicollinearity.png', bbox_inches='tight', dpi=300, facecolor='white');
 plt.show()
 ```
 
 
-    
-
-    
 
 
-<img src="../fig/regression/corrMat_multicollinearity.png"  align="center" width="60%" height="60%">
 
-SaleCondition: Condition of sale
 
-       Normal	Normal Sale
-       Abnorml	Abnormal Sale -  trade, foreclosure, short sale
-       AdjLand	Adjoining Land Purchase
-       Alloca	Allocation - two linked properties with separate deeds, typically condo with a garage unit	
-       Family	Sale between family members
-       Partial	Home was not completed when last assessed (associated with New Homes)
 
-The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value of "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal. 
+<img src="../fig/regression/assumptions/corrMat_multicollinearity.png"  align="center" width="60%" height="60%">
+
+The Normal variable appears to be highly negatively correlated with both Partial and Abnormal. In fact, Normal has a considerable amount of negative corrleation with all predictors. If we think about our predictors holistically, it appears we have several categories describing somewhat rarer sale conditions, and then a more common/default "normal" condition. Regardless of the value of "Normal", if all other predictors are set to 0, that is a very good indication that it was a "Normal" sale. Since "Normal" tends to negate the remaining predictors presense and is redundant, it makes sense to remove it form the list of predictors and only consider the manner in which the sale was unusal.
+
+#### Correlation matrix vs VIF
+You might wonder why we even bother calculating the VIF score given that we could easily inspect the correlation matrices instead. VIF scores give a more reliable estimate of multicollinearity mainly due to their ability to assess multivariate interactions. That is, the correlation matrix only shows pairwise relationships between variables, but it does not reveal the impact of all independent variables simultaneously on each other. The VIF, on the other hand, takes into account all other independent variables when assessing multicollinearity for a specific variable. This individual assessment allows you to pinpoint which variables are causing multicollinearity issues. In addition, the VIF helps identify which variables are causing the problem, enabling you to take appropriate actions to address the issue.
+
+In summary, while the correlation matrix can give you a general idea of potential multicollinearity, the VIF score provides a more comprehensive and quantitative assessment, helping you identify, measure, and address multicollinearity issues in a regression model effectively.
 
 
 ```python
 X = X.drop('Normal',axis = 1)
 ```
 
-After dropping the problematic variable with multicollinearity, we can recalculate VIF for each predictor in X
+
+```python
+X.columns
+```
+
+
+
+
+    Index(['OverallQual', 'Abnorml', 'Family', 'Partial'], dtype='object')
+
+
+
+After dropping the problematic variable with multicollinearity, we can recalculate VIF for each predictor in X. This time we'll call a helper function to save a little time.
 
 
 
 ```python
-calc_print_VIF(X)
-corr_matrix = X.corr()
-fig = plot_corr_matrix(corr_matrix)
-plt.savefig('..//fig//regression//corrMat_multicollinearity2.png', bbox_inches='tight', dpi=300, facecolor='white');
-plt.show()
+from check_assumptions import multicollinearity_test
+multicollinearity_test(X);
 ```
 
+
+    ==========================
+    VERIFYING MULTICOLLINEARITY...
           Variable       VIF
-    0  OverallQual  1.237386
-    1      Abnorml  1.068003
-    2       Family  1.014579
+    0      Abnorml  1.068003
+    1       Family  1.014579
+    2  OverallQual  1.237386
     3      Partial  1.154805
-    
 
 
-    
-
-    
 
 
-<img src="../fig/regression/corrMat_multicollinearity2.png"  align="center" width="60%" height="60%">
 
-Low VIF but high correlation or vice versa? See here for a discussion: https://stats.stackexchange.com/questions/445189/why-high-correlation-coefficient-doesnt-guarantee-high-vif#:~:text=But%20to%20get%20a%20VIF,still%20have%20%22low%22%20VIF's.
+
+
+
+<img src="../fig/regression/assumptions/corrMat_multicollinearity2.png"  align="center" width="60%" height="60%">
+
+Note that we still see some correlation between OverallQual and Partial. However, the correlation is not so strong that those predictors can be reasonably well predicted from one another (low VIF score).
 
 ### 3. Fit the model
-Before we can assess the remaining assumptions of the model (linearity, normality, homoscedasticiy, and independence), we first must fit the model. 
-
-#### Log scale SalePrices
-In our previous univariate models, we observed that several predictors tend to linearly relate more with the log version of SalePrices. Variables that exhibit an exponential trend, as we observe with house prices, typically need to be log scaled in order to observe a linear relationship with predictors that scale linearly.
-
-
-```python
-import numpy as np
-y_log = y.apply(np.log)
-```
+Before we can assess the remaining assumptions of the model (linearity, normality, homoscedasticiy, and independence), we first must fit the model.
 
 #### Train/test split
 Since we're working with multiple predictors, we must take care evaluate evidence of overfitting in this model. The test set will be left out during model fitting/training so that we can measure the model's ability to generalize to new data.
@@ -664,9 +596,9 @@ Since we're working with multiple predictors, we must take care evaluate evidenc
 ```python
 from sklearn.model_selection import train_test_split
 
-X_train, X_test, y_train, y_test = train_test_split(X, y_log, 
-                                                    test_size=0.33, 
-                                                    random_state=2)
+X_train, X_test, y_train, y_test = train_test_split(X, y_log,
+                                                    test_size=0.33,
+                                                    random_state=4)
 
 print(X_train.shape)
 print(X_test.shape)
@@ -674,7 +606,7 @@ print(X_test.shape)
 
     (978, 4)
     (482, 4)
-    
+
 
 
 ```python
@@ -718,7 +650,7 @@ X_test.head()
   </thead>
   <tbody>
     <tr>
-      <th>503</th>
+      <th>280</th>
       <td>1.0</td>
       <td>7</td>
       <td>0</td>
@@ -726,36 +658,36 @@ X_test.head()
       <td>0</td>
     </tr>
     <tr>
-      <th>101</th>
-      <td>1.0</td>
-      <td>6</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>608</th>
-      <td>1.0</td>
-      <td>8</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>1089</th>
-      <td>1.0</td>
-      <td>8</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
-    </tr>
-    <tr>
-      <th>819</th>
+      <th>1365</th>
       <td>1.0</td>
       <td>7</td>
       <td>0</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>132</th>
+      <td>1.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>357</th>
+      <td>1.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+    </tr>
+    <tr>
+      <th>438</th>
+      <td>1.0</td>
+      <td>5</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
     </tr>
   </tbody>
 </table>
@@ -772,12 +704,31 @@ trained_model = model.fit()
 
 ### 4. Evaluate evidence of overfitting or *severe* underfitting
 
-Before we go any further in assessing the model's assumptions and ultimately running hypothesis tests, we should first check to see if there is evidence of overfitting or *severe* underfitting. 
-- **Overfitting**: If R-squared is notably higher (accounting for sample size) in the test set than the train set, this indicates overfitting. Recall that overfitting means that the model will poorly generalize. When running hypothesis tests, the goal is to reveal general relationships that hold true across datasets. Therefore, overfitting must first be ruled out before we bother with hypothesis testing. 
-- **Severe underfitting**: If the R-squared is extremely low in the train set, this indicates the model describes the data poorly and is underfitting. What consitutes a too low is dependent on your particular field of study. In the context of hypothesis testing, it is okay for predictors to have small but consistent effects (low R-squared). It's just when there is no noticeable effect that you might have to be concerned. Some researchers might consider R-squared values above 0.50 or 0.60 to be satisfactory in certain contexts. Others might find R-squared values as low as 0.20 or 0.30 to be meaningful, depending on many factors (dataset size, model relevance in ongoing studies, standard R-squared values reported in field of study, common benchmarks, etc.)
+Before we go any further in assessing the model's assumptions and ultimately running hypothesis tests, we should first check to see if there is evidence of overfitting or *severe* underfitting.
+- **Overfitting**: If R-squared is notably higher (accounting for sample size) in the test set than the train set, this indicates overfitting. Recall that overfitting means that the model will poorly generalize. When running hypothesis tests, the goal is typically to reveal general relationships that hold true across datasets. Therefore, overfitting must first be ruled out before we bother with hypothesis testing.
+- **Severe underfitting**: If the R-squared is extremely low in the train set, this indicates the model describes the data poorly and is underfitting. What consitutes a too low is dependent on your particular field of study. In the context of hypothesis testing, it is okay for predictors to have small but consistent effects (low R-squared). It's just when there is no noticeable effect that you might have to be concerned. Some researchers might consider R-squared values above 0.50 or 0.60 to be satisfactory in certain contexts. Others might find R-squared values as low as 0.20 or 0.30 to be meaningful, depending on many factors (dataset size, model relevance in ongoing studies, common benchmarks, etc.)
 
 
 
+
+```python
+# to calculate residuals and R-squared for the test set, we'll need to get the model predictions first
+y_pred_train = trained_model.predict(X_train)
+y_pred_test = trained_model.predict(X_test)
+
+# sklearn can help us quickly calculate R-squared
+from sklearn import metrics
+R2_train = metrics.r2_score(y_train, y_pred_train)
+R2_test = metrics.r2_score(y_test, y_pred_test)
+print('train R2:', R2_train)
+print('test R2:', R2_test)
+```
+
+    train R2: 0.6656610907646398
+    test R2: 0.7039490404354984
+
+
+You can also extract rsquared for the training data directly from the trained model.
 
 
 ```python
@@ -786,40 +737,22 @@ R2_train = trained_model.rsquared
 print(R2_train)
 ```
 
-    0.6808733417109347
-    
+    0.6656610907646399
 
 
-```python
-# to calculate residuals and R-squared for the test set, we'll need to get the model predictions first
-y_pred_test = trained_model.predict(X_test)
+No evidence of overfitting (test and train errors are comparable) or severe underfitting (R-squared is not astonishingly low). You may notice that the test set R-squared is actually slightly higher than the train set R-squared. This may come as a surprise given that the test set was left out during model training. However, test set performance often can appear to be slightly better than train set simply given the limited number of samples often available in the test set.
 
-# calculate residuals 
-test_residuals = y_pred_test - y_test
-
-# sklearn can help us quickly calculate R-squared 
-from sklearn import metrics
-R2_test = metrics.r2_score(y_test, y_pred_test) 
-print(R2_test)
-
-```
-
-    0.6688693615261174
-    
-
-No evidence of overfitting (test and train errors are comparable) or severe underfitting (R-squared is not astonishingly low).
-
-### 3. Check linearity assumption
-The linearity assumption of multivariate regression states that the *overall relationship* between the predictors and the target variable should be approximately linear. This doesn't necessarily imply that each predictor must have a perfectly linear relationship. So long as the sum of combined effects is linear, then the linearity assumption has been met. That said, if you observe a strong nonlinear pattern between one or more predictors, this often does cascade into an overall nonlinear effect in the model. We will review one method to investigate each individual predictor's relationship with the target as well 
+### 5a) Check linearity assumption
+The linearity assumption of multivariate regression states that the *overall relationship* between the predictors and the target variable should be approximately linear. This doesn't necessarily imply that each predictor must have a perfectly linear relationship. So long as the sum of combined effects is linear, then the linearity assumption has been met. That said, if you observe a strong nonlinear pattern between one or more predictors, this often does cascade into an overall nonlinear effect in the model. We will review one method to investigate each individual predictor's relationship with the target as well
 
 #### Why do we care?
 As discussed in the previous episode, the predictions will be inaccurate because our model is underfitting (i.e., not adquately capturing the variance of the data since you can't effectively draw a line through nonlinear data). In addition to having a fatal impact on predictive power, violations of linearity can affect the validity of hypothesis tests on the regression coefficients. The p-values associated with the coefficients may not accurately reflect the statistical significance, potentially leading to erroneous conclusions.
 
 #### Visualizing linearity in multivariate models
-When working with univariate models, we are able to assess the linearity assumption PRIOR to model fitting simply by creating a scatterplot between the predictor and target. With multivariate models, however, we need a different approach in order to isolate the relationship between individual predictors and the target. That is, we need to account for effects of the remaining predictors. 
+When working with univariate models, we are able to assess the linearity assumption PRIOR to model fitting simply by creating a scatterplot between the predictor and target. With multivariate models, however, we need a different approach in order to isolate the relationship between individual predictors and the target. That is, we need to account for effects of the remaining predictors.
 
 #### Partial regression plots
-Partial regression plots, otherwise known as added variable plots, help visualize the relationship between a single predictor and the target variable while taking into account the effects of other predictor variables. By plotting the partial regressions against the target variable of interest, we can assess whether the relationship is approximately linear for each predictor. 
+Partial regression plots, otherwise known as added variable plots, help visualize the relationship between a single predictor and the target variable while taking into account the effects of other predictor variables. By plotting the partial regressions against the target variable of interest, we can assess whether the relationship is approximately linear for each predictor.
 
 Partial regression plots are formed by:
 
@@ -838,192 +771,159 @@ from statsmodels.graphics.regressionplots import plot_partregress_grid;
 
 fig = plt.figure(figsize=(12, 8));
 plot_partregress_grid(trained_model, fig=fig, exog_idx=list(range(1,X_train.shape[1])))
-plt.savefig('..//fig//regression//partialRegression.png', bbox_inches='tight', dpi=300, facecolor='white');
+fig.savefig('..//fig//regression//assumptions//partialRegression.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
     eval_env: 1
     eval_env: 1
     eval_env: 1
     eval_env: 1
-    
 
 
-    
-
-    
 
 
-<img src="../fig/regression/partialRegression.png"  align="center" width="30%" height="30%">
+
+
+
+
+<img src="../fig/regression/assumptions/partialRegression.png"  align="center" width="30%" height="30%">
 
 ##### Inspect the plots
-- You may notice how Partial and Abnormal now appear to be continuous predictors rather than binary predictors. This effect is commonly observed when you plot partial regressions of correlated predictors. Correlated predictors make it difficult to fully isolate the effect of just one predictor. However, the correlation is not so bad that we need to be concerned about the validity of our hypothesis tests later
+- You may notice how Partial and Abnormal now appear to be continuous predictors rather than binary predictors. This effect is commonly observed when you plot partial regressions of correlated predictors. Correlated predictors make it difficult to fully isolate the effect of just one predictor. However, the correlation is not so bad that we need to be concerned about the validity of our hypothesis tests later (based on the VIF scores we observed)
 - The plots show the impact of adding each individual predictor while accounting for the remaining predictor effects
 - The plot can be used to investigate whether or not each predictor has a linear relationship with the target
 - Binary predictors will, by definition, always show a linear relationship since they will always have two means
 - Some predictors, like Family, may show a non-zero slope, which indicates that this predictor is not really very useful in our model. We can wait until we run our hypothesis tests before fully excluding this predictor from the model
 
-In conclusion, our model appears to be satisfying the linearity assumption based on these plots. 
+In conclusion, our model appears to be satisfying the linearity assumption based on these plots.
 
-#### Bonus material: CCPR Grid
-#TODO
-<!-- from statsmodels.graphics.regressionplots import plot_partregress_grid, plot_ccpr_grid
+### 5b) A more wholesome view of linearity (and homoscedasticity)
+What if instead of 4 predictors, we have 100 predictors in our model? Partial regression plots can become burdensome to look through when working with many predictors. Furthermore, we still need to assess whether or not the overall relationship revealed by the model is linear or not. For this analysis, we can create two plots that both help evaluate both homoscedasticity and linearity.
 
-fig = plt.figure(figsize=(12, 8))
-plot_ccpr_grid(trained_model, fig=fig)
-plt.show() -->
+**Homoscedasticity** refers to when the variance of the model residuals is constant over all X values. Homoscedasticity
+ is desirable because we want the residuals to be the same across all values of the independent variables / predictors. For hypothesis testing, confidence intervals, and p-values to be valid and meaningful, it is crucial that the underlying assumptions, including homoscedasticity, are met. If the assumption is violated, the inference drawn from the hypothesis tests may not be accurate.
 
-#### A more wholesome view of linearity
-What if instead of 4 predictors, we have 100 predictors in our model? Partial regression plots can become burdensome to look through when working with many predictors. Furthermore, we still need to assess whether or not the overall relationship revealed by the model is linear or not. For this analysis, we can plot the model's results vs the model's predicted valeus.
+We will call a pre-baked helper function to generate the plots and calculate a test statistic that assesses homoscedasticity (Goldfeld-Quandt test).
 
-In the scatter plot, if we observe a random scattering of points around the red dashed line (y=0), it suggests that the linearity assumption is met. However, if we notice any patterns, such as a curved shape or a funnel-like structure, it might indicate a nonlinear relationship, and we may need to consider transformations or alternative modeling approaches to address the nonlinearity.
-
-
-```python
-# Create a scatter plot of residuals against predicted values
-plt.scatter(y_pred_test, test_residuals, alpha=.4)
-plt.axhline(0, color='red', linestyle='dashed')  # Add a horizontal line at y=0
-plt.xlabel('Predicted Values')
-plt.ylabel('Residuals')
-plt.title('Residual Plot')
-plt.savefig('..//fig//regression//reg_assumptions-linearity_pred_v_residuals.png',bbox_inches='tight', dpi=300)
-plt.show()
-```
-
-
-    
-
-    
-
-
-<img src="../fig/regression/reg_assumptions-linearity_pred_v_residuals.png"  align="center" width="30%" height="30%">
-
-The errors in the above plot appear to be sufficiently randomized. There is maybe a slight pattern insofar as the errors become a bit less variable towards lower predicted values
+#### **Fig1.** Predictions vs actual values
+* **Linearity:** We want to observe the data scattered about the diagonal to ensure the linearity assumption is met
+* **Homoscedasticity (Constant Variance)**: If the variance of the data changes as you move along the X-axis, this indicates heterscedasticity
+#### **Fig2.** Residuals vs predicted values
+* **Linearity:** In the predicted vs residuals scatterplot, if we observe a random scattering of points around the red dashed line (y=0), it suggests that the linearity assumption is met. However, if we notice any patterns, such as a curved shape or a funnel-like structure, it might indicate a nonlinear relationship, and we may need to consider transformations or alternative modeling approaches to address the nonlinearity.
+* **Homoscedasticity (Constant Variance)**: In the same plot, you examine whether the spread of the residuals remains consistent along the range of predicted values. If the spread of points around y = 0 does not change noticeably as you move along the x-axis (the predicted values), it suggests homoscedasticity.
+#### **Goldfeld-Quandt test**
+The Goldfeld-Quandt test is a statistical test used to check for heteroscedasticity (unequal variances) in a regression model. It splits the data into two groups based on a specified split point (default is the median) and then estimates separate variances for each group. The test statistic is calculated based on the F-distribution, and the p-value is obtained by comparing the test statistic to the critical value from the F-distribution. If the p-value is greater than your chosen significance level (e.g., 0.05), you fail to reject the null hypothesis, indicating no evidence of heteroscedasticity. In this case, the variance of residuals is assumed to be equal for both groups.
+If the p-value is less than your significance level, you can reject the null hypothesis, suggesting the presence of heteroscedasticity. This means that the variance of residuals is different for different groups, indicating potential issues with the regression model's assumptions.
 
 
 ```python
-# %matplotlib inline
-# import matplotlib.pyplot as plt
-```
-
-Alternatively, we can plot the model predictions vs the true sale prices.
-
-
-```python
-from helper_functions import plot_model_predictions 
-y_pred_train = trained_model.predict(X_train)
-
-
-(fig1, fig2) = plot_model_predictions(predictor=", ".join(predictors),
-                                      x_train=X_train, x_test=X_test,
-                                      y_train=y_train, y_test=y_test,
-                                      y_pred_train=y_pred_train, y_pred_test=y_pred_test,
-                                      logTransformY=True);
-```
-
-
-    
-
-    
-
-
-
-```python
-from IPython.display import display
-display(fig1)
-fig1.savefig('..//fig//regression//reg_assumptions-linearity_truePrice_vs_predPrice.png',bbox_inches='tight', dpi=300)
+from check_assumptions import homoscedasticity_linearity_test
+fig = homoscedasticity_linearity_test(trained_model, y_train, y_pred_train)
+fig.savefig('..//fig//regression//assumptions//linearity-homoscedasticity_pred_v_residuals.png',bbox_inches='tight', dpi=300)
 
 ```
 
 
-    
+    =======================================
+    VERIFYING LINEARITY & HOMOSCEDASTICITY...
 
-    
+     Goldfeld-Quandt test (homoscedasticity) ----
+                    value
+    F statistic  0.920670
+    p-value      0.818216
+
+     Residuals plots ----
 
 
-<img src="../fig/regression/reg_assumptions-linearity_truePrice_vs_predPrice.png"  align="center" width="30%" height="30%">
+
+
+
+
+
+
+<img src="../fig/regression/assumptions/linearity-homoscedasticity_pred_v_residuals.png"  align="center" width="40%" height="40%">
+
+#### Inspect the plot and Goldfeld-Quandt test
+
+#### **Fig1.** Predictions vs actual values
+* **Linearity:** While the model is somewhat linear, it appears to be overestimating the value of low-cost homes while underestimating the most expensive homes.
+* **Homoscedasticity (Constant Variance)**: The variance of the data appears to be mostly consistent across the diagonal.
+
+#### **Fig2.** Residuals vs predicted values
+* **Linearity**: The errors have some curvature across predicted values indicating that the linearity assumption is again questionable with this data.
+* **Homoscedasticity**: The errors here are fairly consistently distributed across the x-axis
+
 
 #### How to remedy issues with linearity
 If you encounter issues with the linearity assumption, you can try the following solutions:
-1. Apply nonlinear transformations to X and/or Y. Common transformations are the natural logarithm, square root, and inverse. A Box-Cox transformation of the outcome may help, as well. Partial regression plots can help identify predictors that have a nonlinear relationship with Y.
-2. Remove predictors that exhibit a nonlinear trend with the target
-3. Try adding additional variables to help capture the relationship between the predictors and the label. Remember, we really just need the overall relationship between target and predictors to be linear. Sometimes, adding additional predictors that relate to the target can help produce an overall linear model.
-4. Add polynomial terms to some of the predictors (i.e., polynomial regression). In a similar vein to solution 1, polynomial regression will allow you to include transformed predictors which may linearly relate to the target.
+1. **Transformations**: Apply nonlinear transformations to X and/or Y. Common transformations are the natural logarithm, square root, and inverse. A Box-Cox transformation of the outcome may help, as well. Partial regression plots can help identify predictors that have a nonlinear relationship with Y.
+2. **Remove nonlinear predictors**: Remove predictors that exhibit a nonlinear trend with the target (e.g., via inspecting partial regression plots)
+3. **Limit range of training data**: With data like ours, you could try to limit the training data to sale prices in the 25-75th percentile range. This would yield an accurate (linear) description of the data, but the model would not generalize well to sale prices outside this range. If your goal is only to describe data and not extrapolate to unseen datasets, this approach may be sufficient.
+3. **Adding additional predictors:** Add predictors to help capture the relationship between the predictors and the label. Remember, we really just need the overall relationship between target and predictors to be linear. Sometimes, adding additional predictors that relate to the target can help produce an overall linear model. With our housing data, there may be
+4. **Try spline or polynomial regression**: In polynomial regression, you add polynomial terms to some of the predictors (i.e., polynomial regression). In a similar vein to solution 1, polynomial regression will allow you to include transformed predictors which may linearly relate to the target. Spline regression is similar, however, it allows you to fit separate polynomials to different segments of the data
 
 If none of those approaches work, you can also consider nonlinear models if you have a sufficiently large dataset (learning nonlinear relationships requires lots of data).
 
-### 5. Evaluate normality of residuals assumption
-In general, the violation of the assumption of normality of errors in a linear regression model does not automatically invalidate the ability to reject the null hypothesis. While the assumption of normality of errors is important for making valid statistical inferences and obtaining accurate p-values, violations of this assumption do not necessarily invalidate the estimated coefficients or render them meaningless. In some cases, even with departures from normality, the coefficient estimates can still be consistent and unbiased. However, it's important to interpret the results with caution and consider the potential impact of the violation on the reliability of the estimates.
+### 5. Evaluate normality of residuals & constant variance (homoscedasticity) of residuals
+Given that the linearity assumption is in question with this model, we would typically begin exploring alternative models/predictors/transformations for our analysis. However, we will check the remaining assumptions here as practice for future work.
 
-If the normality assumption is significantly violated and it is crucial to rely on accurate p-values or confidence intervals, you may consider alternative statistical methods that are more robust to violations of normality. These methods include robust regression techniques or bootstrapping, which can provide valid inference even in the presence of non-normal errors.
+**Normal residuals**: In a linear regression model, it is assumed that the model residuals/errors are normally distributed. If the residuals are not normally distributed, their randomness is lost, which implies that the model is not able to explain the relation in the data.
 
-It's also worth noting that the violation of the normality assumption can be assessed visually through diagnostic plots, such as QQ-plots or histograms of residuals, to get a sense of the departure from normality and understand the potential impact on the analysis.
+Many statistical tests and estimators used in multivariate regression, such as t-tests and confidence intervals, also rely on the assumption of normality. If the residuals are not approximately normally distributed, the results of these tests and estimators may be invalid or biased.
 
-In summary, while violations of the assumption of normality can impact the interpretation and reliability of the results, they do not necessarily invalidate the ability to reject the null hypothesis. It is important to carefully consider the specific context, magnitude of violations, and potential alternative methods that may be more appropriate for your analysis.
+#### Histograms
+Histograms can help give a preliminary sense of the overall distribution of the data. We can also quickly calculate the "skew" of a distribution using numpy's skew() function.
 
-To test this assumption, we can create a **quantile-quantile plot (QQ-plot)** of the model residuals. Quantiles — often referred to as percentiles — indicate values in your data below which a certain proportion of the data falls. For instance, if data comes from a classical bell-curve Normal distrubtion with a mean of 0 and a standard deviation of 1, the 0.5 quantile, or 50th percentile, is 0 (half the data falls above 0, half below zero). The 90th percentile would lie right around @[INSERT_NUMBER]
 
-@[INSERT_IMAGE_OF_NORMAL_DIST_WITH_QUANTILES_MARKED]
+```python
+# Extract the residuals and calculate median — should lie close to 0 if it is a normal distribution
+resids = y_train - y_pred_train
+print('Median of residuals:', np.median(resids))
+plt.hist(resids);
+resids.skew()
+plt.savefig('..//fig//regression//assumptions//normal_resids_histogram.png',bbox_inches='tight', dpi=300)
+
+```
+
+    Median of residuals: 0.004774460786039825
+
+
+
+
+
+
+
+
+<img src="../fig/regression/assumptions/normal_resids_histogram.png"  align="center" width="40%" height="40%">
+
+#### Quantile-quantile (QQ) plots
+While histograms are helpful as a preliminary glance at the data, it can be difficult to tell by eye just how different the distribution is from a normal distribtion. Instead, we can use a popular type of plot known as a  **quantile-quantile plot (QQ-plot)** of the model residuals. Quantiles — often referred to as percentiles — indicate values in your data below which a certain proportion of the data falls. For instance, if data comes from a classical bell-curve Normal distrubtion with a mean of 0 and a standard deviation of 1, the 0.5 quantile, or 50th percentile, is 0 (half the data falls above 0, half below zero).
 
 
 ```python
 import statsmodels.graphics.gofplots as smg
 
-# Extract the residuals
-residuals = results.resid
-print(np.median(residuals))
-plt.hist(residuals);
-plt.xlabel('Bin Values');
-plt.ylabel('Bin Counts');
-```
-
-
-    ---------------------------------------------------------------------------
-
-    NameError                                 Traceback (most recent call last)
-
-    Cell In[26], line 4
-          1 import statsmodels.graphics.gofplots as smg
-          3 # Extract the residuals
-    ----> 4 residuals = results.resid
-          5 print(np.median(residuals))
-          6 plt.hist(residuals);
-    
-
-    NameError: name 'results' is not defined
-
-
-
-```python
-# To quantitatively assess a distribution's skewness, we can use pandas' skew() function
-residuals.skew() 
-```
-
-· If the skewness is between -0.5 and 0.5, the data are fairly symmetrical
-
-· If the skewness is between -1 and — 0.5 or between 0.5 and 1, the data are moderately skewed
-
-· If the skewness is less than -1 or greater than 1, the data are highly skewed
-
-
-```python
 # Plot the QQ-plot of residuals
-smg.qqplot(residuals, line='s')
+smg.qqplot(resids, line='s')
 
 # Add labels and title
 plt.xlabel('Theoretical Quantiles')
 plt.ylabel('Sample Quantiles')
 plt.title('QQ-Plot of Residuals')
 
-# Shapiro-Wilk test for normality
-from scipy import stats
-shapiro_stat, shapiro_p = stats.shapiro(residuals)
-print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f}")
-
-plt.show()
+plt.savefig('..//fig//regression//assumptions//normal_resids_QQplot.png',bbox_inches='tight', dpi=300)
 ```
 
+
+
+
+
+
+
+<img src="../fig/regression/assumptions/normal_resids_QQplot.png"  align="center" width="40%" height="40%">
+
 #### Unpacking the QQ-plot
-To construct a QQ-plot, the raw data is first sorted from smaller to larger values. Then, empirical quantiles can be assigned to each sample in the dataset. These measurements can then be compared to theoretical quantiles from a normal distribution. Oftentimes, QQ-plots show zscores rather than actual quantile values since zscores can be interpreted more easily. 
+To construct a QQ-plot, the raw data is first sorted from smaller to larger values. Then, empirical quantiles can be assigned to each sample in the dataset. These measurements can then be compared to theoretical quantiles from a normal distribution. Oftentimes, QQ-plots show zscores rather than actual quantile values since zscores can be interpreted more easily.
 
 **X-axis: Theoretical Quantiles**
 This x-axis represents nothing but Z-values/Z-scores of standard normal distribution.
@@ -1039,115 +939,113 @@ The y-axis captures the true z-scores of each observed sample in our dataset. Th
 Data drawn from a normal distribution fall along the line y = x in the Q-Q plot.
 
 **Common Diagnostics**
-1. Right-skewed: If the data falls above the red line (where y=x) where x > 0, that means that you have a right skewed distrution (long tail on the right side of the distrubtion). A right-skewed distribution will have have higher than expected z-scores for data that is greater than the mean (zscore = 0).
-2. Left-skewed: If the data falls below the red line (where y=x) where x < 0, that means that you have a left skewed distrution (long tail on the left side of the distrubtion). This causes the sample distribtuion to have lower (more negative) than expected z-scores for data that is greater than the mean (zscore = 0).
-3. Long tails / tall peak: Combination of 1&2 above — points below the mean (zscore = 0) will fall below the red line, and points above the mean will fall above the red line
+1. **Right-skewed**: If the data falls above the red line (where y=x) where x > 0, that means that you have a right skewed distrution (long tail on the right side of the distrubtion). A right-skewed distribution will have have higher than expected z-scores for data that is greater than the mean (zscore = 0).
+2. **Left-skewed**: If the data falls below the red line (where y=x) where x < 0, that means that you have a left skewed distrution (long tail on the left side of the distrubtion). This causes the sample distribtuion to have lower (more negative) than expected z-scores for data that is greater than the mean (zscore = 0).
+3. **Long tails / tall peak**: Combination of 1&2 above — points below the mean (zscore = 0) will fall below the red line, and points above the mean will fall above the red line
 
-#### **Can adding additional predictor variables fix violations of the assumption of normality?**
-Adding additional predictor variables to a regression model may or may not fix violations of the assumption of normality, depending on the underlying reasons for the violation. In some cases, including additional predictors can help improve the approximation of the normality assumption, but it is not a guaranteed solution.
-
-The assumption of normality in linear regression pertains to the errors or residuals of the model rather than the predictor variables themselves. The errors are the differences between the observed target variable values and the predicted values from the regression model. Violations of normality in the errors can arise due to various factors, such as outliers, non-linear relationships, or heteroscedasticity.
-
-Adding more predictor variables can potentially capture more of the variation in the target variable and reduce the influence of certain factors that might contribute to non-normality in the errors. For example, if a non-linear relationship between a predictor and the target variable is causing the violation, adding additional predictors that capture the non-linear patterns may help improve the normality assumption.
-
-However, it is important to note that adding more predictors does not guarantee the resolution of normality violations. The appropriateness of additional predictors depends on the underlying relationship with the target variable and the specific nature of the violations. In some cases, alternative modeling approaches or transformations of variables may be more effective in addressing non-normality.
-
-It is crucial to carefully assess the assumptions, diagnose the sources of violations, and consider appropriate remedies based on the specific context and data characteristics.
-
-To better understand QQ-plots, we'll first generate some example data from a normal distribution
+#### Quantitative assessments of normality
+**Shapiro-Wilk test and Kolmogorov–Smirnov tests**: There are a couple of methods that can yield quantiative assessments of normality. However, they are both very sensitive to sample size and pale in comparison to visual inspection of the residuals (via histogram/density plot or a QQ-plot). With larger sample sizes (>1000 observations), even minor deviations from normality may lead to rejecting the null hypothesis, making these tests less useful.
 
 
 ```python
-np.random.seed(0) # set seed for reproducibility
-normal_data = np.random.normal(loc=0, scale=1, size=10000) # mean of 0, std of 1, 50 samples
-normal_data.shape
-
-plt.hist(normal_data);
-plt.xlabel('Bin Values');
-plt.ylabel('Bin Counts');
-```
-
-
-```python
-## create qq-plot
-import statsmodels.api as sm
-sm.qqplot(normal_data, line='s');
-
-# Shapiro-Wilk test for normality
-shapiro_stat, shapiro_p = stats.shapiro(normal_data)
-print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f}")
-```
-
-What happens if we decrease the sample size of our simulation? Let's try to generate a QQ-plot containing only 200 samples.
-
-
-```python
-np.random.seed(0) # set seed for reproducibility
-normal_data = np.random.normal(loc=0, scale=1, size=200) # mean of 0, std of 1, len(samples) = number of observations used to train/fit model
-normal_data.shape
-
-## create qq-plot
-import statsmodels.api as sm
-sm.qqplot(normal_data, line='s');
-
-# Shapiro-Wilk test for normality
-shapiro_stat, shapiro_p = stats.shapiro(normal_data)
-print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f}")
-```
-
-Notice how the SW test nearly fails even though this data comes from a normal distrition. Testing normality can be a difficult task when data is very limited. What happens if we decrease the sample size of our simulation? Let's try to generate a QQ-plot containing the same number of samples used to train our model.
-
-
-```python
-np.random.seed(0) # set seed for reproducibility
-normal_data = np.random.normal(loc=0, scale=1, size=len(residuals)) # mean of 0, std of 1, len(samples) = number of observations used to train/fit model
-normal_data.shape
-
-## create qq-plot
-import statsmodels.api as sm
-sm.qqplot(normal_data, line='s');
-
-# Shapiro-Wilk test for normality
-shapiro_stat, shapiro_p = stats.shapiro(normal_data)
-print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f}")
-```
-
-**Common Diagnostics**
-1. Right-skewed: If the data falls above the red line (where y=x) where x > 0, that means that you have a right skewed distrution (long tail on the right side of the distrubtion). A right-skewed distribution will have have higher than expected z-scores for data that is greater than the mean (zscore = 0).
-2. Left-skewed: If the data falls below the red line (where y=x) where x < 0, that means that you have a left skewed distrution (long tail on the left side of the distrubtion). This causes the sample distribtuion to have lower (more negative) than expected z-scores for data that is greater than the mean (zscore = 0).
-3. Long tails / tall peak: Combination of 1&2 above — points below the mean (zscore = 0) will fall below the red line, and points above the mean will fall above the red line
-
-Now that we understand QQ-plots better, let's try creating a QQ-plot of the model residuals. 
-
-
-```python
-import statsmodels.api as sm
-
-resid = y_pred_test_log - y_test_log
-sm.qqplot(resid, line='s');
-```
-
-
-```python
-plt.hist(resid)
-```
-
-
-```python
-# Maybe include Shapiro-Wilk test of normality as well?
+#
 from scipy import stats
-rng = np.random.default_rng()
-# x = stats.norm.rvs(loc=5, scale=3, size=100, random_state=rng)
-shapiro_test = stats.shapiro(resid)
-shapiro_test
+shapiro_stat, shapiro_p = stats.shapiro(resids)
+print(f"Shapiro-Wilk test: statistic={shapiro_stat:.4f}, p-value={shapiro_p:.10f}")
+
+# Perform the Kolmogorov-Smirnov test on the test_residuals
+ks_stat, ks_p = stats.kstest(resids, 'norm')
+print(f"Kolmogorov-Smirnov test: statistic={ks_stat:.4f}, p-value={ks_p:.10f}")
+
+# Display the plot (assuming you have implemented a plot in your function)
+plt.show()
 ```
 
-violations of normality often arise either because (a) the distributions of the dependent and/or independent variables are themselves significantly non-normal, and/or (b) the linearity assumption is violated.
+    Shapiro-Wilk test: statistic=0.9825, p-value=0.0000000019
+    Kolmogorov-Smirnov test: statistic=0.3115, p-value=0.0000000000
 
-Neither the dependent nor independent variable needs to be normally distributed. In fact they can have all kinds of loopy distributions. The normality assumption applies to the distribution of the errors (Yi−Yˆi).
 
-### 5. Calculate the test statistic
-t-statistic: The t-statistic is typically used to test the statistical significance of individual coefficient estimates in the regression model. It measures the ratio of the estimated coefficient to its standard error. The t-test helps assess whether a specific predictor variable has a significant effect on the response variable while accounting for the uncertainty in the coefficient estimate.
+#### Causes of non-normal residuals
+
+Violations of normality often arise due to...
+- Outliers present in the target variable
+- Violations of the linearity assumption: If the relationship between the dependent variable and one or more predictor variables is nonlinear, the residuals may show a pattern that deviates from normality. Nonlinear relationships can cause the model to under- or overestimate the dependent variable, leading to non-normal residuals.
+- Violations of homoscedasticity: Non-constant variance can lead to residuals that have a non-normal distribution, particularly if the variance increases or decreases systematically with the predicted values.
+- M-issing Predictor Variables: Omitted variable bias can occur when important predictor variables are not included in the model. If these omitted variables are related to the dependent variable, the residuals can deviate from normality.
+
+Later in the workshop, we can use the following helper function to run the normality tests/visualizations.
+
+
+```python
+from check_assumptions import normal_resid_test
+fig = normal_resid_test(resids)
+fig.savefig('..//fig//regression//assumptions//normal_resids_fullTest.png',bbox_inches='tight', dpi=300)
+```
+
+
+    ==========================
+    VERIFYING NORMAL ERRORS...
+    Median of residuals: 0.004774460786039825
+    Shapiro-Wilk test: statistic=0.9825, p-value=0.0000000019
+    Kolmogorov-Smirnov test: statistic=0.3115, p-value=0.0000000000
+
+
+
+
+
+
+
+
+### 6. Independent errors test
+**Independent errors assumption**: In the context of linear regression, the independent errors assumption states that the errors (also called residuals) in the model are not correlated with each other. In other words, the residual for one observation should not provide any information or pattern that can help predict the residual for another observation. This assumption is crucial because if errors are correlated, it can lead to biased and inefficient estimates of the regression coefficients, affecting the validity of the statistical inference and prediction.
+
+Mathematically, for a linear regression model, the independent errors assumption can be written as:
+
+Corr(εi, εj) = 0 for all i ≠ j
+
+Where:
+
+* εi is the error (residual) for the ith observation.
+* εj is the error (residual) for the jth observation.
+* Corr(εi, εj) represents the correlation between the errors for the ith and jth observations.
+
+#### Durbin-Watson Test
+The Durbin-Watson test is a statistical test that checks for autocorrelation in the residuals. If the residuals are independent, there should be no significant autocorrelation. The test statistic ranges between 0 and 4. A value around 2 indicates no autocorrelation, while values significantly below 2 indicate positive autocorrelation, and values above 2 indicate negative autocorrelation. You can use the statsmodels library to calculate the Durbin-Watson test statistic:
+
+
+```python
+from statsmodels.stats.stattools import durbin_watson
+durbin_watson_statistic = durbin_watson(resids)
+print(f"Durbin-Watson test statistic: {durbin_watson_statistic}")
+```
+
+    Durbin-Watson test statistic: 1.9864287360736377
+
+
+It can also be helpful to re-examine the model predictions vs residual plot to look for violations of this assumption. If the errors are independent, the residuals should be randomly scattered around zero with no specific patterns or trends. We'll call a pre-baked helper function to quickly create this plot and run the Durbin-Watson test.
+
+
+
+```python
+from check_assumptions import independent_resid_test
+fig = independent_resid_test(y_pred_train, resids, include_plot=True)
+fig.savefig('..//fig//regression//assumptions//independentResids_fullTest.png',bbox_inches='tight', dpi=300)
+```
+
+
+    ==========================
+    VERIFYING INDEPENDENT ERRORS...
+    Durbin-Watson test statistic: 1.9864287360736377
+
+
+
+
+
+
+
+
+### 7. Calculate the test statistic
+**t-statistic**: The t-statistic is typically used to test the statistical significance of individual coefficient estimates in the regression model. It measures the ratio of the estimated coefficient to its standard error. The t-test helps assess whether a specific predictor variable has a significant effect on the response variable while accounting for the uncertainty in the coefficient estimate.
 
 P-values for t-statistics are calculated based on the t-distribution. The t-distribution is a probability distribution that is used when the population standard deviation is unknown and needs to be estimated from the sample.
 
@@ -1157,7 +1055,9 @@ To calculate the p-value for a t-statistic, you follow these general steps:
 
 2. Calculate the t-statistic for the test using the formula:
 
-3. t = (estimate - null_value) / standard_error, where "estimate" is the estimated coefficient or difference, "null_value" is the value specified under the null hypothesis (often 0), and "standard_error" is the standard error of the coefficient or difference estimate.
+    t = (estimate - null_value) / standard_error
+
+    where "estimate" is the estimated coefficient or difference, "null_value" is the value specified under the null hypothesis (often 0), and "standard_error" is the standard error of the coefficient or difference estimate.
 
 4. Determine the degrees of freedom (df) for the t-distribution. In simple linear regression, the degrees of freedom are typically n - 2, where n is the number of observations. In multivariate regression, the degrees of freedom depend on the number of predictors and the sample size.
 
@@ -1167,7 +1067,7 @@ To calculate the p-value for a t-statistic, you follow these general steps:
 
 By calculating the p-value for the t-statistic, you can assess the statistical significance of the coefficient estimate or the difference being tested. A lower p-value indicates stronger evidence against the null hypothesis and suggests a more significant relationship or effect.
 
-#### The more manual route of calculating p-values... 
+#### The more manual route of calculating p-values...
 
 In this code, after fitting the multivariate regression model and obtaining the coefficient estimates in the coefs Series and the standard errors in the std_errs Series, we calculate the t-values by dividing the coefficient estimates by the standard errors. The t-value represents the ratio of the estimated coefficient (or difference) to its standard error. It measures the number of standard errors by which the estimated coefficient differs from zero. The standard error reflects the precision of the estimated coefficient, and a larger t-value indicates a larger difference relative to the standard error.
 
@@ -1182,43 +1082,199 @@ In summary, dividing the t-value by the standard error is a way to standardize t
 from scipy import stats
 
 # Get the coefficient estimates and standard errors
-coefs = results.params
-std_errs = results.bse
+coefs = trained_model.params
+std_errs = trained_model.bse
 
 # Calculate the t-values and p-values
 t_values = coefs / std_errs
-p_values = stats.t.sf(np.abs(t_values), df=results.df_resid) * 2
+p_values = stats.t.sf(np.abs(t_values), df=trained_model.df_resid) * 2
 p_values
 ```
+
+
+
+
+    array([0.00000000e+000, 1.59902730e-210, 1.28853847e-004, 1.04675586e-001,
+           1.19866109e-003])
+
+
+
+Note: while our tests show that all predictors are significant, we can't rely on these results since the linearity assumption was violated with this model/dataset.
 
 #### Quicker route
 
 
 ```python
-# Get the p-values of the predictors
-p_values = results.pvalues
-coefficients = results.params
+p_values = trained_model.pvalues
+print(p_values)
 
-# Create a DataFrame to store the p-values
-p_values_df = pd.DataFrame({'Predictor': p_values.index, 'P-value': p_values, 'Coefficient': coefficients})
-
-# Add a column indicating if p-value < 0.005
-p_values_df['Significant'] = p_values_df['P-value'] < 0.05
-
-# Print the DataFrame
-print("P-values of the predictors:")
-print(p_values_df)           
+trained_model.summary()
 ```
 
-#### Show and unpack model summary
-One very useful function incorporated into statsmodels is the summary function. You can use this function to quickly view the model's....
-- estiamted coefficients
-- R-squared
-- p-values
+    const           0.000000e+00
+    OverallQual    1.599027e-210
+    Abnorml         1.288538e-04
+    Family          1.046756e-01
+    Partial         1.198661e-03
+    dtype: float64
 
+
+
+
+
+<table class="simpletable">
+<caption>OLS Regression Results</caption>
+<tr>
+  <th>Dep. Variable:</th>        <td>SalePrice</td>    <th>  R-squared:         </th> <td>   0.666</td>
+</tr>
+<tr>
+  <th>Model:</th>                   <td>OLS</td>       <th>  Adj. R-squared:    </th> <td>   0.664</td>
+</tr>
+<tr>
+  <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   484.3</td>
+</tr>
+<tr>
+  <th>Date:</th>             <td>Tue, 01 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.07e-229</td>
+</tr>
+<tr>
+  <th>Time:</th>                 <td>15:36:25</td>     <th>  Log-Likelihood:    </th> <td>  31.778</td>
+</tr>
+<tr>
+  <th>No. Observations:</th>      <td>   978</td>      <th>  AIC:               </th> <td>  -53.56</td>
+</tr>
+<tr>
+  <th>Df Residuals:</th>          <td>   973</td>      <th>  BIC:               </th> <td>  -29.13</td>
+</tr>
+<tr>
+  <th>Df Model:</th>              <td>     4</td>      <th>                     </th>     <td> </td>
+</tr>
+<tr>
+  <th>Covariance Type:</th>      <td>nonrobust</td>    <th>                     </th>     <td> </td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+       <td></td>          <th>coef</th>     <th>std err</th>      <th>t</th>      <th>P>|t|</th>  <th>[0.025</th>    <th>0.975]</th>
+</tr>
+<tr>
+  <th>const</th>       <td>   10.6169</td> <td>    0.035</td> <td>  300.077</td> <td> 0.000</td> <td>   10.547</td> <td>   10.686</td>
+</tr>
+<tr>
+  <th>OverallQual</th> <td>    0.2308</td> <td>    0.006</td> <td>   40.433</td> <td> 0.000</td> <td>    0.220</td> <td>    0.242</td>
+</tr>
+<tr>
+  <th>Abnorml</th>     <td>   -0.1181</td> <td>    0.031</td> <td>   -3.844</td> <td> 0.000</td> <td>   -0.178</td> <td>   -0.058</td>
+</tr>
+<tr>
+  <th>Family</th>      <td>   -0.0994</td> <td>    0.061</td> <td>   -1.624</td> <td> 0.105</td> <td>   -0.220</td> <td>    0.021</td>
+</tr>
+<tr>
+  <th>Partial</th>     <td>    0.0929</td> <td>    0.029</td> <td>    3.249</td> <td> 0.001</td> <td>    0.037</td> <td>    0.149</td>
+</tr>
+</table>
+<table class="simpletable">
+<tr>
+  <th>Omnibus:</th>       <td>57.983</td> <th>  Durbin-Watson:     </th> <td>   1.986</td>
+</tr>
+<tr>
+  <th>Prob(Omnibus):</th> <td> 0.000</td> <th>  Jarque-Bera (JB):  </th> <td> 120.004</td>
+</tr>
+<tr>
+  <th>Skew:</th>          <td>-0.376</td> <th>  Prob(JB):          </th> <td>8.74e-27</td>
+</tr>
+<tr>
+  <th>Kurtosis:</th>      <td> 4.542</td> <th>  Cond. No.          </th> <td>    51.9</td>
+</tr>
+</table><br/><br/>Notes:<br/>[1] Standard Errors assume that the covariance matrix of the errors is correctly specified.
+
+
+
+#### Running all assumptions tests at once
+
+
+```python
+from check_assumptions import eval_regression_assumptions
+eval_regression_assumptions(trained_model, X_train, y_train, y_pred_train);
+```
+
+
+    ==========================
+    VERIFYING MULTICOLLINEARITY...
+          Variable       VIF
+    0      Abnorml  1.067576
+    1       Family  1.015308
+    2  OverallQual  1.226972
+    3      Partial  1.144088
+
+
+
+
+
+
+
+
+
+    =======================================
+    VERIFYING LINEARITY & HOMOSCEDASTICITY...
+
+     Goldfeld-Quandt test (homoscedasticity) ----
+                    value
+    F statistic  0.920670
+    p-value      0.818216
+
+     Residuals plots ----
+
+
+
+
+
+
+
+
+
+    ==========================
+    VERIFYING NORMAL ERRORS...
+    Median of residuals: 0.004774460786039825
+    Shapiro-Wilk test: statistic=0.9825, p-value=0.0000000019
+    Kolmogorov-Smirnov test: statistic=0.3115, p-value=0.0000000000
+
+
+
+
+
+
+
+
+
+    ==========================
+    VERIFYING INDEPENDENT ERRORS...
+    Durbin-Watson test statistic: 1.9864287360736377
 
 
 
 ```python
-trained_model.summary()
+X_train.columns
+```
+
+
+
+
+    Index(['const', 'OverallQual', 'Abnorml', 'Family', 'Partial'], dtype='object')
+
+
+
+> ## Exploring an alternative set of predictors
+> 
+> 
+> > ## Solution
+> >
+> > Including all relevant predictor variables in a model is important for several reasons:
+> > 
+> {:.solution}
+{:.challenge}
+
+
+
+```python
+
 ```
