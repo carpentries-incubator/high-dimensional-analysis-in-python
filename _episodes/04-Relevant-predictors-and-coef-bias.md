@@ -1,5 +1,5 @@
 ---
-title: Model validity and relevant predictors
+title: Model validity - relevant predictors
 teaching: 45
 exercises: 2
 keypoints:
@@ -12,13 +12,17 @@ questions:
 - "What are the benfits/costs of including additional predictors in a regression model?"
 ---
 
-### Intro
-With the help of statistical tests and a careful consideration of the phenonemon in study, multivariate regression models can help us test the existence of interesting relationships found in nature. How can we rigorously determine if a regression model is detecting relationships (i.e., non-zero slopes or model coefs) that truly exist?
+### Model Validity And Interpretation
+While using models strictly for predictive purposes is a completely valid approach for some domains and problems, researchers typically care more about being able to interpret their models such that interesting relationships (between predictor(s) and target) can be discovered and measured. When interpretting a linear regression model, we can look at the model's estimated coefficients and p-values associated with each predictor. The coefficient's magnitude can inform us of the effect size associated with a predictor, and the p-value tells us whether or not a predictor has a consistent (statistically significant) effect on the target.
 
-There are three critical questions we must ask before we can read too far into our model's estimations. We will discuss the first in detail throughout this episode.
+**Before we can blindly accept the model's estimated coefficients and p-values, we must answer three questions that will help us determine whether or not our model is valid.**
+
+#### Model Validity Assessments
 1. **Accounting for relevant predictors**: Have we included as many relevant predictors in the model as possible?
 2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
+
+We will discuss the first — accounting for relevant predictors — in detail throughout this episode.
 
 ### 1. Relevant predictors
 
@@ -502,10 +506,15 @@ print('R-squared:', results.rsquared)
 {:.challenge}
 
 
-### Other considerations
+### Summary
+In summary, leaving out relevant predictors can lead to biased coefficient estimates and model misspecification. Without including the most essential predictors, the model will place too much focus on the predictors included and over/underestimate their contributions to the target variable.
+
+In addition, while researchers should strive to include as many relevant predictors in their models as possible, this must be balanced with overfitting concerns. Obtaining good coefficient estimates can become difficult as the number of predictors increases. As a general rule of thumb, obtaining reliable estimates from linear regression models requires that you have at least 10X as many observations than model coefficients/predictors. The exact ratio may change depending on the variability of your data and whether or not each observation is truly independent (time-series models, for instance, often require much more data since observations are rarely independent).
+
+#### Other considerations
 So far, we've explored the importance of including relevant predictors in a model before we attempt to read too far into the model's estimates. However, recall that there are three critical questions we must ask before we can read too far into our model's estimations
 1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
 2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
 
-In the next episode, we'll review a handful of assumptions that must be met prior to running any hypothesis tests on a regression model.
+In the next episode, we'll review a handful of assumptions that must be evaluated prior to running any hypothesis tests on a regression model.

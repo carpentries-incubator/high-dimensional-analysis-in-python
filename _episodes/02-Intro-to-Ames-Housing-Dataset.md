@@ -28,6 +28,10 @@ df = df.set_index('Id')           # set Id column to be the index of the DataFra
 df                                # evaluate result
 ```
 
+    C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\sklearn\datasets\_openml.py:968: FutureWarning: The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4. You can set `parser='auto'` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml's API doc for details.
+      warn(
+
+
 
 
 
@@ -99,10 +103,10 @@ df                                # evaluate result
   <tbody>
     <tr>
       <th>1</th>
-      <td>60.0</td>
+      <td>60</td>
       <td>RL</td>
       <td>65.0</td>
-      <td>8450.0</td>
+      <td>8450</td>
       <td>Pave</td>
       <td>None</td>
       <td>Reg</td>
@@ -110,23 +114,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Inside</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2008.0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>2008</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>20.0</td>
+      <td>20</td>
       <td>RL</td>
       <td>80.0</td>
-      <td>9600.0</td>
+      <td>9600</td>
       <td>Pave</td>
       <td>None</td>
       <td>Reg</td>
@@ -134,23 +138,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>FR2</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>5.0</td>
-      <td>2007.0</td>
+      <td>0</td>
+      <td>5</td>
+      <td>2007</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>60.0</td>
+      <td>60</td>
       <td>RL</td>
       <td>68.0</td>
-      <td>11250.0</td>
+      <td>11250</td>
       <td>Pave</td>
       <td>None</td>
       <td>IR1</td>
@@ -158,23 +162,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Inside</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>9.0</td>
-      <td>2008.0</td>
+      <td>0</td>
+      <td>9</td>
+      <td>2008</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>70.0</td>
+      <td>70</td>
       <td>RL</td>
       <td>60.0</td>
-      <td>9550.0</td>
+      <td>9550</td>
       <td>Pave</td>
       <td>None</td>
       <td>IR1</td>
@@ -182,23 +186,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Corner</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2006.0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>2006</td>
       <td>WD</td>
       <td>Abnorml</td>
     </tr>
     <tr>
       <th>5</th>
-      <td>60.0</td>
+      <td>60</td>
       <td>RL</td>
       <td>84.0</td>
-      <td>14260.0</td>
+      <td>14260</td>
       <td>Pave</td>
       <td>None</td>
       <td>IR1</td>
@@ -206,14 +210,14 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>FR2</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>12.0</td>
-      <td>2008.0</td>
+      <td>0</td>
+      <td>12</td>
+      <td>2008</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
@@ -243,10 +247,10 @@ df                                # evaluate result
     </tr>
     <tr>
       <th>1456</th>
-      <td>60.0</td>
+      <td>60</td>
       <td>RL</td>
       <td>62.0</td>
-      <td>7917.0</td>
+      <td>7917</td>
       <td>Pave</td>
       <td>None</td>
       <td>Reg</td>
@@ -254,23 +258,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Inside</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>8.0</td>
-      <td>2007.0</td>
+      <td>0</td>
+      <td>8</td>
+      <td>2007</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
     <tr>
       <th>1457</th>
-      <td>20.0</td>
+      <td>20</td>
       <td>RL</td>
       <td>85.0</td>
-      <td>13175.0</td>
+      <td>13175</td>
       <td>Pave</td>
       <td>None</td>
       <td>Reg</td>
@@ -278,23 +282,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Inside</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>MnPrv</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>2.0</td>
-      <td>2010.0</td>
+      <td>0</td>
+      <td>2</td>
+      <td>2010</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
     <tr>
       <th>1458</th>
-      <td>70.0</td>
+      <td>70</td>
       <td>RL</td>
       <td>66.0</td>
-      <td>9042.0</td>
+      <td>9042</td>
       <td>Pave</td>
       <td>None</td>
       <td>Reg</td>
@@ -302,23 +306,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Inside</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>GdPrv</td>
       <td>Shed</td>
-      <td>2500.0</td>
-      <td>5.0</td>
-      <td>2010.0</td>
+      <td>2500</td>
+      <td>5</td>
+      <td>2010</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
     <tr>
       <th>1459</th>
-      <td>20.0</td>
+      <td>20</td>
       <td>RL</td>
       <td>68.0</td>
-      <td>9717.0</td>
+      <td>9717</td>
       <td>Pave</td>
       <td>None</td>
       <td>Reg</td>
@@ -326,23 +330,23 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Inside</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>4.0</td>
-      <td>2010.0</td>
+      <td>0</td>
+      <td>4</td>
+      <td>2010</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
     <tr>
       <th>1460</th>
-      <td>20.0</td>
+      <td>20</td>
       <td>RL</td>
       <td>75.0</td>
-      <td>9937.0</td>
+      <td>9937</td>
       <td>Pave</td>
       <td>None</td>
       <td>Reg</td>
@@ -350,14 +354,14 @@ df                                # evaluate result
       <td>AllPub</td>
       <td>Inside</td>
       <td>...</td>
-      <td>0.0</td>
-      <td>0.0</td>
+      <td>0</td>
+      <td>0</td>
       <td>None</td>
       <td>None</td>
       <td>None</td>
-      <td>0.0</td>
-      <td>6.0</td>
-      <td>2008.0</td>
+      <td>0</td>
+      <td>6</td>
+      <td>2008</td>
       <td>WD</td>
       <td>Normal</td>
     </tr>
@@ -1095,8 +1099,3 @@ In this session we:
 2. Determined the number of features and observations
 3. Understood some variables
 4. Viewed the 'target variable': SalePrice
-
-
-```python
-
-```

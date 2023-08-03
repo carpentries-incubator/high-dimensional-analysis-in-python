@@ -45,12 +45,8 @@ We'll start by loading in the Ames housing data as we have done previously in th
 # See here for thorough documentation regarding the feature set:
 # https://www.openml.org/d/42165
 from sklearn.datasets import fetch_openml
-housing = fetch_openml(name="house_prices", as_frame=True) #
+housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
 ```
-
-    C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\sklearn\datasets\_openml.py:968: FutureWarning: The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4. You can set `parser='auto'` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml's API doc for details.
-      warn(
-
 
 ##### Reminder of basic data properties
 1. How many observations and features are there in the data?
@@ -72,7 +68,7 @@ print(f"housing['target_names'] = {housing['target_names']}\n")
 
 
 
-#### 2) Extract predictor variable and target variable from dataframe
+#### Extract predictor variable and target variable from dataframe
 Next, we'll extract the two variables we'll use for our model — the target variable that we'll attempt to predict (SalePrice), and a single predictor variable that will be used to predict the target variable. For this example, we'll explore how well the "YearBuilt" variable (i.e., the predictor variable) can predict sale prices.
 
 
@@ -83,7 +79,7 @@ predictor = 'OverallQual'#'TotalBsmtSF'#'GarageArea'
 x = housing['data'][predictor]
 ```
 
-#### 3) Visualize the relationship between x and y
+#### Visualize the relationship between x and y
 Before fitting any models in a univariate context, we should first explore the data to get a sense for the relationship between the predictor variable, "YearBuilt", and the response variable, "SalePrice". If this relationship does not look linear, we won't be able to fit a good linear model (i.e., a model with low average prediction error in a predictive modeling context) to the data.
 
 
@@ -199,20 +195,20 @@ y_pred_test=reg.predict(x_test)
 
 
 ```python
-from helper_functions import plot_model_predictions
-(fig1, fig2) = plot_model_predictions(predictor=predictor,
+from helper_functions import plot_train_test_predictions
+(fig1, fig2) = plot_train_test_predictions(predictor=predictor,
                                       x_train=x_train, x_test=x_test,
                                       y_train=y_train, y_test=y_test,
                                       y_pred_train=y_pred_train, y_pred_test=y_pred_test,
-                                      logTransformY=True);
+                                      log_transform_y=True);
 
 # print(type(fig1))
-import matplotlib.pyplot as plt
-import pylab as pl
-pl.figure(fig1.number)
-plt.savefig('..//fig//regression//univariate_truePrice_vs_predPrice.png',bbox_inches='tight', dpi=300)
-pl.figure(fig2.number)
-plt.savefig('..//fig//regression//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
+# import matplotlib.pyplot as plt
+# import pylab as pl
+# pl.figure(fig1.number)
+# plt.savefig('..//fig//regression//univariate_truePrice_vs_predPrice.png',bbox_inches='tight', dpi=300)
+# pl.figure(fig2.number)
+# plt.savefig('..//fig//regression//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
 
 ```
 
@@ -357,7 +353,7 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 > >
 > > 
 > > **Explaining the relationship between the predictor(s) and the response Variable**
-> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable (i.e., has a statistically significant effect) is typically always interesting — regardless of the the effect size.
+> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable (i.e., has a statistically significant effect) is typically always interesting — regardless of the the effect size. The exception to this rule is if you have a near-zero R-squared, which suggests that the model does not explain any of the variance in the data.
 > > 
 > > **Predicting the response variable**
 > > If your main objective is to predict the value of the response variable accurately using the predictor variable, then R-squared is important. The value for R-squared can range from 0 to 1. A value of 0 indicates that the response variable cannot be explained by the predictor variable at all. A value of 1 indicates that the response variable can be perfectly explained without error by the predictor variable. In general, the larger the R-squared value, the more precisely the predictor variables are able to predict the value of the response variable. How high an R-squared value needs to be depends on how precise you need to be for your specific model's application. To find out what is considered a “good” R-squared value, you will need to explore what R-squared values are generally accepted in your particular field of study.
@@ -367,7 +363,7 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 
 
 > ## Determine which single variable is most predictive of housing prices
-> Given a high-dimensional dataset, one potential direciton of inquiry is to ask — which single variable is most predictive of sales price?
+> Given a high-dimensional dataset, one potential direction of inquiry is to ask — which single variable is most predictive of sales price?
 > 
 > > ## Solution
 > >
@@ -376,5 +372,5 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 {:.challenge}
 
 
-#### 7) Explaining model predictions using statistics
-At this point, we have assessed the predictive accuracy of our model. However, what if we want to make scientific claims regarding whether or not a single predictor has a consistent or above chance (i.e., statistically significant) impact sales price? For this kind of question, we need to incorporate statistical analyses after fitting our model. This next section will explore the assumptions required for running basic statistics on a linear regression model.
+#### 7) Explaining models
+At this point, we have assessed the predictive accuracy of our model. However, what if we want to interpret our model to understand which predictor(s) have a consistent or above chance (i.e., statistically significant) impact sales price? For this kind of question and other questions related to model interpretability, we need to first carefully validate our model. The next two episodes will explore some of the necessary checks you must perform before reading too far into your model's estimations.
