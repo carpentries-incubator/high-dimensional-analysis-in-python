@@ -101,14 +101,12 @@ The *index* is not a dimension.
 
 1. surface (x, y, z)
 2. scatter plot with variable as size per point (x, y, size)
-3. [consecutive pulses of CP 1919](https://www.wemadethis.co.uk/blog/2015/03/unknown-pleasures-and-cp-1919/) (time, x, y)
+3. 2d black and white image (x, y, pixel_value)
+4. moves log from a game of 'battleship' (index: move number, x-coord, y-coord, hit/miss)
+5. [consecutive pulses of CP 1919](https://www.wemadethis.co.uk/blog/2015/03/unknown-pleasures-and-cp-1919/) (time, x, y)
 <center>
             <img src="../fig/day_1/CP1919_pulses_crop.png"/>
 </center>
-4. 2d black and white image (x, y, pixel_value)
-5. moves log from a game of 'battleship' (move number, x coord, y coord, hit or not)
-
-
 
 # 4 D
 1. surface plus coloration, (x, y, z, color_label)
@@ -124,15 +122,17 @@ human gene expression e.g.
 </center>
 
 > ## Exercise - Battleship moves:
-> ### discussion point is this 3d or 4d?
+> discussion point is this 3d or 4d?
 > 
 > is the move number a dimension or an index?
+>
 > |move_id|column (A-J)|row (1-10)| hit |
 > | :-: | :-: | :-: | :- |
 > |0|A|1|False|
 > |1|J|10|True|
 > |2|C|7|False|
 > |n|...|...|
+>
 > > ## Solution
 > > ### 3d: move_id is an index!
 > > 1. order sequence matters but not the specific value of the move number
@@ -140,6 +140,7 @@ human gene expression e.g.
 > > ### 4d: move_id is a dimension!
 > > 1. odd or even tells you which player is making which move
 > > 2. order sequence is important, but when a specific moves get made might matter - what if you wanted to analyze moves as a function of game length?
+> > 
 > > ### There is always an index
 > > 1. move_id is an index
 > > 2. that doesn't mean there is no information there
@@ -164,46 +165,57 @@ human gene expression e.g.
 > {:.solution}
 {:.challenge}
 
-> what dimensions are there per observation?
+> ## Exercise: How many dimensions are there per observation?
 > > ## Solution:
+> > There are three dimensions per observation:
+> > 
 > > 1. pixel row (0-2159)
 > > 2. pixel col (0-4095)
 > > 3. pixel grey value (0-255)
 > {:.solution}
 {:.challenge}
 
-> How many dimensions would there be if the film was longer, or shorter?
+> ## Exercise: How many dimensions would there be if the film was longer, or shorter?
 > > ## Solution:
 > > 1. The number of dimensions would NOT change.
 > > 2. There would simply be a greater or fewer number of 'observations'
 > {:.solution}
 {:.challenge}
 
-> How many dimensions would there be if the film was in color?
+> ## Exercise: How many dimensions would there be if the film was in color?
 > > ## Solution:
-> > 5 dimensions
-> > There are more features per observation now.
-> > 1. pixel row (0-2159)
-> > 2. pixel col (0-4095)
-> > 3. pixel red value (0-255)
-> > 4. pixel green value (0-255)
-> > 5. pixel blue value (0-255)
+> > 4 dimensions.
+> > 
+> > There is an extra dimension per observation now.
+> > 1. channel value (red, green, blue)
+> > 2. pixel row (0-2159)
+> > 3. pixel col (0-4095)
+> > 4. pixel intensity (0-255)
 > {:.solution}
 {:.challenge}
 
 > ## Exercise: Titanic dataset
 > Look at the kaggle [Titantic Dataset](https://www.kaggle.com/competitions/titanic/data).
-> ```python
-> with open('../files/day_1_titanic_table.html', 'r') as f:
->     table = ''.join(f.readlines())
-> HTML(table)
-> ```
-> > What column is the index?
-> > PassengerId
-> > {:.solution}
+>
+> | passenger_id | pclass |                         name                         |   sex  |  age | sibsp | parch | ticket |  fare  | cabin | embarked | boat | body |         home.dest        | survived |
+> |:------------:|:------:|:----------------------------------------------------:|:------:|:----:|:-----:|:-----:|:------:|:------:|:-----:|:--------:|:----:|:----:|:------------------------:|:--------:|
+> | 1216         | 3      | Smyth, Miss. Julia                                   | female |      | 0     | 0     | 335432 | 7.7333 |       | Q        | 13   |      |                          | 1        |
+> | 699          | 3      | Cacic, Mr. Luka                                      | male   | 38.0 | 0     | 0     | 315089 | 8.6625 |       | S        |      |      | Croatia                  | 0        |
+> | 1267         | 3      | Van Impe, Mrs. Jean Baptiste (Rosalie Paula Govaert) | female | 30.0 | 1     | 1     | 345773 | 24.15  |       | S        |      |      |                          | 0        |
+> | 449          | 2      | Hocking, Mrs. Elizabeth (Eliza Needs)                | female | 54.0 | 1     | 3     | 29105  | 23.0   |       | S        | 4    |      | Cornwall / Akron, OH     | 1        |
+> | 576          | 2      | Veal, Mr. James                                      | male   | 40.0 | 0     | 0     | 28221  | 13.0   |       | S        |      |      | Barre, Co Washington, VT | 0        |
+>
+> What column is the index?
+> > ## Solution:
+> > 
+> >  PassengerId
+> > 
+> {:.solution}
 {:.challenge}
 
-> ## What columns are the dimensions?
+> ## Exercise: What columns are the dimensions?
+> > 
+> > ## Solution:
 > > 1. pclass
 > > 2. name
 > > 3. sex
@@ -215,15 +227,20 @@ human gene expression e.g.
 > > 9. cabin
 > > 10. embarked
 > > 11. survived
-> > {:.solution}
+> > 
+> {:.solution}
 {:.challenge}
 
-> ## how many dimensions are there?
+> ## Exercise: how many dimensions are there?
+> > ## Solution:
+> >
 > > 11
-> > {:.solution}
+> >
+> {:.solution}
 {:.challenge}
 
-> ## Imagine building a model to predict survival on the titantic
+> ## Exercise: Imagine building a model to predict survival on the titantic
+>
 > 1. would you use every dimension?
 > 2. what makes a dimension useful?
 > 3. could you remove some dimensions?
@@ -231,7 +248,9 @@ human gene expression e.g.
 > 5. how would you combine those dimensions?
 > 6. do you have fewer dimensions after combining?
 > 7. do you have less information after combining?
-> > ## Solution
+>
+> > ## Solution:
+> >
 > > 1. No, some variables are poor predictors and can be ignored
 > > 2. If it is (anti-)correlated with survival (in some context) i.e. has information.
 > > 3. Yes any mostly null columns are not useful (add no information), any highly correlated columns also (no additional information)
@@ -239,6 +258,7 @@ human gene expression e.g.
 > > 5. Maybe add SibSp and Parch into one 'family count'.
 > > 6. Yes.
 > > 7. Yes, but more data than if columns had been excluded.
+> >
 > {:.solution}
 {:.challenge}
 
