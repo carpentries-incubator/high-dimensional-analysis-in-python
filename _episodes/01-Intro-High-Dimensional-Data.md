@@ -122,17 +122,17 @@ human gene expression e.g.
 </center>
 
 > ## Exercise - Battleship moves:
-> ### discussion point is this 3d or 4d?
+> discussion point is this 3d or 4d?
 > 
 > is the move number a dimension or an index?
-
+>
 > |move_id|column (A-J)|row (1-10)| hit |
 > | :-: | :-: | :-: | :- |
 > |0|A|1|False|
 > |1|J|10|True|
 > |2|C|7|False|
 > |n|...|...|
-
+>
 > > ## Solution
 > > ### 3d: move_id is an index!
 > > 1. order sequence matters but not the specific value of the move number
@@ -165,7 +165,7 @@ human gene expression e.g.
 > {:.solution}
 {:.challenge}
 
-> How many dimensions are there per observation?
+> ## Exercise: How many dimensions are there per observation?
 > > ## Solution:
 > > There are three dimensions per observation:
 > > 
@@ -175,14 +175,14 @@ human gene expression e.g.
 > {:.solution}
 {:.challenge}
 
-> How many dimensions would there be if the film was longer, or shorter?
+> ## Exercise: How many dimensions would there be if the film was longer, or shorter?
 > > ## Solution:
 > > 1. The number of dimensions would NOT change.
 > > 2. There would simply be a greater or fewer number of 'observations'
 > {:.solution}
 {:.challenge}
 
-> How many dimensions would there be if the film was in color?
+> ## Exercise: How many dimensions would there be if the film was in color?
 > > ## Solution:
 > > 4 dimensions
 > > There is an extra dimension per observation now.
@@ -209,7 +209,7 @@ human gene expression e.g.
 > > {:.solution}
 {:.challenge}
 
-> ## What columns are the dimensions?
+> ## Exercise: What columns are the dimensions?
 > > ## Solution:
 > > 1. pclass
 > > 2. name
@@ -225,13 +225,13 @@ human gene expression e.g.
 > > {:.solution}
 {:.challenge}
 
-> ## how many dimensions are there?
+> ## Exercise: how many dimensions are there?
 > > ## Solution:
 > > 11
 > > {:.solution}
 {:.challenge}
 
-> ## Imagine building a model to predict survival on the titantic
+> ## Exercise: Imagine building a model to predict survival on the titantic
 > 1. would you use every dimension?
 > 2. what makes a dimension useful?
 > 3. could you remove some dimensions?
