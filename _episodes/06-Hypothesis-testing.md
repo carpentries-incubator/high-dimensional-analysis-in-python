@@ -1,5 +1,5 @@
 ---
-title: Model validity - regression assumptions
+title: Hypothesis testing
 teaching: 45
 exercises: 2
 keypoints:
