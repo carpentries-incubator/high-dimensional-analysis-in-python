@@ -207,11 +207,14 @@ human gene expression e.g.
 >
 > What column is the index?
 > > ## Solution:
-> > PassengerId
-> > {:.solution}
+> > 
+> >  PassengerId
+> > 
+> {:.solution}
 {:.challenge}
 
 > ## Exercise: What columns are the dimensions?
+> > 
 > > ## Solution:
 > > 1. pclass
 > > 2. name
@@ -224,13 +227,16 @@ human gene expression e.g.
 > > 9. cabin
 > > 10. embarked
 > > 11. survived
-> > {:.solution}
+> > 
+> {:.solution}
 {:.challenge}
 
 > ## Exercise: how many dimensions are there?
 > > ## Solution:
+> >
 > > 11
-> > {:.solution}
+> >
+> {:.solution}
 {:.challenge}
 
 > ## Exercise: Imagine building a model to predict survival on the titantic
