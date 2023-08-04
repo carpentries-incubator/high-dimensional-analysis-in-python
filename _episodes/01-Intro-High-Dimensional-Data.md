@@ -184,7 +184,8 @@ human gene expression e.g.
 
 > ## Exercise: How many dimensions would there be if the film was in color?
 > > ## Solution:
-> > 4 dimensions
+> > 4 dimensions.
+> > 
 > > There is an extra dimension per observation now.
 > > 1. channel value (red, green, blue)
 > > 2. pixel row (0-2159)
@@ -195,6 +196,7 @@ human gene expression e.g.
 
 > ## Exercise: Titanic dataset
 > Look at the kaggle [Titantic Dataset](https://www.kaggle.com/competitions/titanic/data).
+>
 > | passenger_id | pclass |                         name                         |   sex  |  age | sibsp | parch | ticket |  fare  | cabin | embarked | boat | body |         home.dest        | survived |
 > |:------------:|:------:|:----------------------------------------------------:|:------:|:----:|:-----:|:-----:|:------:|:------:|:-----:|:--------:|:----:|:----:|:------------------------:|:--------:|
 > | 1216         | 3      | Smyth, Miss. Julia                                   | female |      | 0     | 0     | 335432 | 7.7333 |       | Q        | 13   |      |                          | 1        |
@@ -232,6 +234,7 @@ human gene expression e.g.
 {:.challenge}
 
 > ## Exercise: Imagine building a model to predict survival on the titantic
+>
 > 1. would you use every dimension?
 > 2. what makes a dimension useful?
 > 3. could you remove some dimensions?
@@ -239,7 +242,9 @@ human gene expression e.g.
 > 5. how would you combine those dimensions?
 > 6. do you have fewer dimensions after combining?
 > 7. do you have less information after combining?
-> > ## Solution
+>
+> > ## Solution:
+> >
 > > 1. No, some variables are poor predictors and can be ignored
 > > 2. If it is (anti-)correlated with survival (in some context) i.e. has information.
 > > 3. Yes any mostly null columns are not useful (add no information), any highly correlated columns also (no additional information)
@@ -247,6 +252,7 @@ human gene expression e.g.
 > > 5. Maybe add SibSp and Parch into one 'family count'.
 > > 6. Yes.
 > > 7. Yes, but more data than if columns had been excluded.
+> >
 > {:.solution}
 {:.challenge}
 
