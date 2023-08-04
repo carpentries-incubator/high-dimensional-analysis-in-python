@@ -1,3 +1,6 @@
+import numpy as np
+import pandas as pd
+
 def encode_predictors_housing_data(X):
     # get lists of continuous features, nominal features, etc.
     exclude_fields, nominal_fields, ordinal_fields, dichotomous, continuous_fields = get_feat_types()
@@ -48,17 +51,16 @@ def remove_bad_cols(X, limited_var_thresh):
         sum_nans = np.sum(np.isnan(this_X)) # sum up nans present in column/feature
         unique_vals = np.unique(this_X) # sum up number of unique possible values for this column/feature
         val_counts = X[feat_name].value_counts(normalize=True) # check for nearly constant columns
-
         # exclude column if there are any NaNs or if column contains a constant (1 unique value only)
         if sum_nans > 0: 
             rem_cols.append(feat_name)
-            print(feat_name + ' removed due to presence of NaNs (sum of nans = ' + str(sum_nans) + ')')
+            # print(feat_name + ' removed due to presence of NaNs (sum of nans = ' + str(sum_nans) + ')')
         elif sum(val_counts > limited_var_thresh):
             rem_cols.append(feat_name)
-            print(feat_name + ' removed due to lack of variance ( >' + str(limited_var_thresh*100) + '% rows have the same value value)')
+            # print(feat_name + ' removed due to lack of variance ( >' + str(limited_var_thresh*100) + '% rows have the same value value)')
             
-    print('All columns removed:', rem_cols)
     print('# of columns removed:', len(rem_cols))
+    print('Columns removed:', rem_cols)
 
     X=X.drop(rem_cols, axis = 1)
     
