@@ -8,6 +8,13 @@ def encode_predictors_housing_data(X):
     # init list of features/variables to keep
     keep_cols=[]
  
+    # to allow for subsets of the data to be processed with this function, reduce lists to predictors present in X
+    exclude_fields = list(set(exclude_fields).intersection(X.columns))
+    nominal_fields = list(set(nominal_fields).intersection(X.columns))
+    ordinal_fields = list(set(ordinal_fields).intersection(X.columns))
+    dichotomous = list(set(dichotomous).intersection(X.columns))
+    continuous_fields = list(set(continuous_fields).intersection(X.columns))
+    
     # add nominal fields as dummy vars
     X[nominal_fields]=X[nominal_fields].astype("category")
     dummy_vars=pd.get_dummies(X[nominal_fields])

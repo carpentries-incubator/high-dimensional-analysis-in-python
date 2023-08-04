@@ -20,8 +20,7 @@ While using models strictly for predictive purposes is a completely valid approa
 #### Model Validity Assessments
 1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
 2. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
-3. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
-
+3. **Model assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 
 We will discuss the first two assessments in detail throughout this episode.
 
@@ -803,7 +802,7 @@ X_encoded_good.head()
 
 
 
-Next, we will perform a train/test split so that we can test for overfitting effects.
+Next, we will perform a train/test split so that we can test for overfitting effects. We will limit the size of the training set here to illustrate a point. Typically, you'd want to use around 30% of the data for testing.
 
 
 ```python
@@ -1450,6 +1449,6 @@ In addition, while researchers should strive to include as many relevant predict
 So far, we've explored the importance of including relevant predictors and checking for overfitting before we attempt to read too far into the model's estimates. However, recall that there are three critical questions we must ask before we can read too far into our model's estimations
 1. **Accounting for relevant predictors**: Have we included all relevant predictors in the model?
 2. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
-3. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
+3. **Model assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 
 In the next episode, we'll review a handful of assumptions that must be evaluated prior to running any hypothesis tests on a regression model.

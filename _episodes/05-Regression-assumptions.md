@@ -23,18 +23,22 @@ While using models strictly for predictive purposes is a completely valid approa
 
 #### Model Validity Assessments
 1. **Accounting for relevant predictors**: Have we included as many relevant predictors in the model as possible?
-2. **Regression assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
-3. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
+2. **Bias/variance or under/overfitting**: Does the model capture the variability of the target variable well? Does the model generalize well?
+3. **Model assumptions**: Does the fitted model follow the 5 assumptions of linear regression?
 
-We will discuss the second — regression assumptions — in detail throughout this episode.
+We will discuss the third assessment — regression assumptions — in detail throughout this episode.
 
 ### Linear regression assumptions
-The assumptions of regression (mostly) need to be met before rejecting the null hypothesis because violating these assumptions can lead to biased and unreliable parameter estimates, incorrect standard errors, and misleading hypothesis test results. Failing to meet the assumptions can compromise the validity and interpretability of the regression model. When testing multivariate models for signficant coefficients, the following assumpitons should be met to assure validty of results.
+The main goal of linear regression is to model the relationship between the target variable and the predictor variables using a linear equation. The assumptions that are typically discussed in the context of linear regression are related to how well this linear model represents the underlying data-generating process. These assumptions ensure that the linear regression estimates are accurate, interpretable, and can be used for valid statistical inference.
+
+When interpretting multivariate models (coefficient size and p-values), the following assumpitons should be met to assure validty of results.
 1. **Linearity**: There is a linear relation between Y and X
 2. **Normality**: The error terms (residuals) are normally distributed
 3. **Homoscedasticity**: The variance of the error terms is constant over all X values (homoscedasticity)
 4. **Independence**: The error terms are independent
 5. **Limited multicollinearity among predictors**: This assumption applies to multivariate regression models but is not relevant in univariate regression since there is only one predictor variable. Multicollinearity refers to the presence of high correlation or linear dependence among the predictor variables in a regression model. It indicates that there is a strong linear relationship between two or more predictor variables. Multicollinearity can make it challenging to isolate the individual effects of predictors and can lead to unstable and unreliable coefficient estimates. It primarily focuses on the relationships among the predictors themselves.
+
+We will explore assess all five assumptions using a multivariate model built from the Ames housing data.
 
 ### 0. Load and prep data
 
@@ -1058,6 +1062,238 @@ X_train.columns
 
 
     Index(['const', 'OverallQual', 'Abnorml', 'Family', 'Partial'], dtype='object')
+
+
+
+### Exploring an alternative set of predictors
+
+
+```python
+housing['data'].columns
+```
+
+
+
+
+    Index(['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street',
+           'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig',
+           'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType',
+           'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd',
+           'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType',
+           'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual',
+           'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1',
+           'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating',
+           'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF',
+           'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath',
+           'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual',
+           'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType',
+           'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual',
+           'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF',
+           'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC',
+           'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType',
+           'SaleCondition'],
+          dtype='object')
+
+
+
+
+```python
+len(housing['data']['Neighborhood'].unique())
+# one_hot_encoded_target = pd.get_dummies(housing['data']['Neighborhood'])
+# X = pd.concat([X, log_sale_price], axis=1)
+# X.head()
+```
+
+
+
+
+    25
+
+
+
+
+```python
+# continuous_fields=['LotFrontage','LotArea','YearBuilt','YearRemodAdd',
+#                   'OverallQual','OverallCond','MasVnrArea','BsmtFinSF1',
+#                   'BsmtFinSF2','BsmtUnfSF','TotalBsmtSF','1stFlrSF',
+#                   '2ndFlrSF','LowQualFinSF','GrLivArea','BsmtFullBath',
+#                   'BsmtHalfBath','FullBath','HalfBath','KitchenAbvGr','BedroomAbvGr',
+#                   'TotRmsAbvGrd','Fireplaces','GarageYrBlt','GarageCars',
+#                   'GarageArea','WoodDeckSF','OpenPorchSF','EnclosedPorch',
+#                   '3SsnPorch','ScreenPorch','PoolArea','YrSold','MoSold']
+```
+
+Extract target, `y` and predictors, `X`.
+
+
+```python
+y_log = np.log(housing['target'])
+predictors = ['LotArea', 'YearBuilt', 'YearRemodAdd', 'GarageArea', 'GarageCars', 'Neighborhood']
+X=housing['data'][predictors]
+```
+
+Preprocess the data
+
+
+```python
+from preprocessing import encode_predictors_housing_data
+X_encoded = X.copy(deep=True)
+X_encoded = encode_predictors_housing_data(X_encoded)
+X_encoded.head()
+
+from preprocessing import remove_bad_cols
+X_encoded_good = remove_bad_cols(X_encoded, .95)
+X_encoded_good.head()
+
+print(X_encoded_good.shape)
+print(y.shape)
+print(X_encoded_good.columns)
+```
+
+    # of columns removed: 16
+    Columns removed: ['Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NoRidge', 'Neighborhood_SWISU', 'Neighborhood_SawyerW', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker']
+    (1460, 14)
+    (1460,)
+    Index(['Neighborhood_CollgCr', 'Neighborhood_Edwards', 'Neighborhood_Gilbert',
+           'Neighborhood_NAmes', 'Neighborhood_NWAmes', 'Neighborhood_NridgHt',
+           'Neighborhood_OldTown', 'Neighborhood_Sawyer', 'Neighborhood_Somerst',
+           'YearRemodAdd', 'GarageCars', 'GarageArea', 'YearBuilt', 'LotArea'],
+          dtype='object')
+
+
+
+```python
+from sklearn.model_selection import train_test_split
+X_train, X_test, y_train, y_test = train_test_split(X_encoded_good, y_log, test_size=0.33)
+```
+
+
+```python
+# Add a constant column to the predictor variables dataframe
+X_train = sm.add_constant(X_train)
+
+# Add the constant to the test set as well so we can use the model to form predictions on the test set later
+X_test = sm.add_constant(X_test)
+X_test.head()
+# Fit the multivariate regression model
+model = sm.OLS(y_train, X_train)
+trained_model = model.fit()
+```
+
+
+```python
+eval_regression_assumptions(trained_model, X_train, y_train, y_pred_train);
+```
+
+
+    ==========================
+    VERIFYING MULTICOLLINEARITY...
+                    Variable          VIF
+    0             GarageArea    30.485737
+    1             GarageCars    35.081461
+    2                LotArea     2.489479
+    3   Neighborhood_CollgCr     1.405041
+    4   Neighborhood_Edwards     1.264577
+    5   Neighborhood_Gilbert     1.233108
+    6     Neighborhood_NAmes     1.518176
+    7    Neighborhood_NWAmes     1.178625
+    8   Neighborhood_NridgHt     1.309585
+    9   Neighborhood_OldTown     1.500214
+    10   Neighborhood_Sawyer     1.189338
+    11  Neighborhood_Somerst     1.248233
+    12             YearBuilt  9924.468372
+    13          YearRemodAdd  9814.888760
+
+
+
+
+
+
+
+
+
+    =======================================
+    VERIFYING LINEARITY & HOMOSCEDASTICITY...
+
+
+
+    ---------------------------------------------------------------------------
+
+    ValueError                                Traceback (most recent call last)
+
+    Cell In[45], line 1
+    ----> 1 eval_regression_assumptions(trained_model, X_train, y_train, y_pred_train)
+
+
+    File ~\Documents\GitHub\high-dim-data-lesson\code\check_assumptions.py:158, in eval_regression_assumptions(trained_model, X, y, y_pred)
+        156 resids = y - y_pred
+        157 multicollinearity_test(X)
+    --> 158 homoscedasticity_linearity_test(trained_model, y, y_pred)
+        159 normal_resid_test(resids)
+        160 independent_resid_test(y_pred, resids, include_plot=False)
+
+
+    File ~\Documents\GitHub\high-dim-data-lesson\code\check_assumptions.py:123, in homoscedasticity_linearity_test(trained_model, y, y_pred)
+        120 resids = y_pred - y
+        122 # Predictions vs residuals
+    --> 123 ax2 = plot_pred_v_resid(y_pred, resids, ax2)
+        125 # GQ test
+        126 gq_test = pd.DataFrame(sms.het_goldfeldquandt(resids, trained_model.model.exog)[:-1],
+        127                        columns=['value'],
+        128                        index=['F statistic', 'p-value'])
+
+
+    File ~\Documents\GitHub\high-dim-data-lesson\code\check_assumptions.py:92, in plot_pred_v_resid(y_pred, resids, ax)
+         90 def plot_pred_v_resid(y_pred, resids, ax):
+    ---> 92     sns.regplot(x=y_pred, y=resids, lowess=True, ax=ax, line_kws={'color': 'red'})
+         93     ax.axhline(0, color='blue', linestyle='dashed')  # Add a horizontal line at y=0
+         95     # ax2.set_title('Residuals vs Fitted', fontsize=16)
+
+
+    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\seaborn\regression.py:747, in regplot(data, x, y, x_estimator, x_bins, x_ci, scatter, fit_reg, ci, n_boot, units, seed, order, logistic, lowess, robust, logx, x_partial, y_partial, truncate, dropna, x_jitter, y_jitter, label, color, marker, scatter_kws, line_kws, ax)
+        736 def regplot(
+        737     data=None, *, x=None, y=None,
+        738     x_estimator=None, x_bins=None, x_ci="ci",
+       (...)
+        744     scatter_kws=None, line_kws=None, ax=None
+        745 ):
+    --> 747     plotter = _RegressionPlotter(x, y, data, x_estimator, x_bins, x_ci,
+        748                                  scatter, fit_reg, ci, n_boot, units, seed,
+        749                                  order, logistic, lowess, robust, logx,
+        750                                  x_partial, y_partial, truncate, dropna,
+        751                                  x_jitter, y_jitter, color, label)
+        753     if ax is None:
+        754         ax = plt.gca()
+
+
+    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\seaborn\regression.py:112, in _RegressionPlotter.__init__(self, x, y, data, x_estimator, x_bins, x_ci, scatter, fit_reg, ci, n_boot, units, seed, order, logistic, lowess, robust, logx, x_partial, y_partial, truncate, dropna, x_jitter, y_jitter, color, label)
+        110 # Drop null observations
+        111 if dropna:
+    --> 112     self.dropna("x", "y", "units", "x_partial", "y_partial")
+        114 # Regress nuisance variables out of the data
+        115 if self.x_partial is not None:
+
+
+    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\seaborn\regression.py:60, in _LinearPlotter.dropna(self, *vars)
+         58 vals = [getattr(self, var) for var in vars]
+         59 vals = [v for v in vals if v is not None]
+    ---> 60 not_na = np.all(np.column_stack([pd.notnull(v) for v in vals]), axis=1)
+         61 for var in vars:
+         62     val = getattr(self, var)
+
+
+    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\numpy\lib\shape_base.py:652, in column_stack(tup)
+        650         arr = array(arr, copy=False, subok=True, ndmin=2).T
+        651     arrays.append(arr)
+    --> 652 return _nx.concatenate(arrays, 1)
+
+
+    ValueError: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 0, the array at index 0 has size 978 and the array at index 1 has size 1289
+
+
+
+
+
 
 
 
