@@ -18,11 +18,26 @@ questions:
 - "How can we evaluate a model's ability to capture a true signal/relationship in the data versus spurious noise?"
 ---
 
-## Goals of Linear Regression
-Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset **linearly relate** to some *target variable* (e.g., house sale prices). By modeling these relationships in the housing data, we can:
+# Linear Regression
+Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset **linearly relate** to some *target variable* (e.g., house sale prices). Starting with linear models when working with high-dimensional data can offer several advantages including:
+
+* Simplicity and Interpretability: Linear models, such as linear regression, are relatively simple and interpretable. They provide a clear understanding of how each predictor variable contributes to the outcome, which can be especially valuable in exploratory analysis.
+
+* Baseline Understanding: Linear models can serve as a baseline for assessing the predictive power of individual features. This baseline helps you understand which features have a significant impact on the target variable and which ones might be less influential.
+
+* Feature Selection: Linear models can help you identify relevant features by looking at the estimated coefficients. Features with large coefficients are likely to have a stronger impact on the outcome, while those with small coefficients might have negligible effects
+
+While linear models have their merits, it's important to recognize that they might not capture complex (nonlinear) relationships present in the data. However, they are often the best option available when working in a high-dimensional context unless data is extremely limited.
+
+##  Goals of Linear Regression
+By fitting linear models to the Ames housing dataset, we can...
 
 1. **Predict**: Use predictive modeling to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
-2. **Explain**: Use statistics to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable
+2. **Explain**: Use statistics to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable (a.k.a. response / dependent variable)
+
+**"Target" and "Predictor" Synonyms**
+* Predictor = independent = feature
+* Target = dependent = response = outcome
 
 In this workshop, we will explore how we can exploit well-established machine learning methods, including *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals on high-dimensional datasets.
 
@@ -42,45 +57,28 @@ We'll start by loading in the Ames housing data as we have done previously in th
 
 
 ```python
-# See here for thorough documentation regarding the feature set:
-# https://www.openml.org/d/42165
 from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
 ```
 
-##### Reminder of basic data properties
-1. How many observations and features are there in the data?
-2. What are some of the features available?
-3. What is the name of the target feature?
-
-
-```python
-print(f"housing['data'].shape = {housing['data'].shape}\n") # 80 features total, 1460 observations
-print(f"housing['feature_names'] = {housing['feature_names']}\n")
-print(f"housing['target_names'] = {housing['target_names']}\n")
-```
-
-    housing['data'].shape = (1460, 80)
-
-    housing['feature_names'] = ['Id', 'MSSubClass', 'MSZoning', 'LotFrontage', 'LotArea', 'Street', 'Alley', 'LotShape', 'LandContour', 'Utilities', 'LotConfig', 'LandSlope', 'Neighborhood', 'Condition1', 'Condition2', 'BldgType', 'HouseStyle', 'OverallQual', 'OverallCond', 'YearBuilt', 'YearRemodAdd', 'RoofStyle', 'RoofMatl', 'Exterior1st', 'Exterior2nd', 'MasVnrType', 'MasVnrArea', 'ExterQual', 'ExterCond', 'Foundation', 'BsmtQual', 'BsmtCond', 'BsmtExposure', 'BsmtFinType1', 'BsmtFinSF1', 'BsmtFinType2', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', 'Heating', 'HeatingQC', 'CentralAir', 'Electrical', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'KitchenAbvGr', 'KitchenQual', 'TotRmsAbvGrd', 'Functional', 'Fireplaces', 'FireplaceQu', 'GarageType', 'GarageYrBlt', 'GarageFinish', 'GarageCars', 'GarageArea', 'GarageQual', 'GarageCond', 'PavedDrive', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'PoolArea', 'PoolQC', 'Fence', 'MiscFeature', 'MiscVal', 'MoSold', 'YrSold', 'SaleType', 'SaleCondition']
-
-    housing['target_names'] = ['SalePrice']
-
-
-
 #### Extract predictor variable and target variable from dataframe
-Next, we'll extract the two variables we'll use for our model — the target variable that we'll attempt to predict (SalePrice), and a single predictor variable that will be used to predict the target variable. For this example, we'll explore how well the "YearBuilt" variable (i.e., the predictor variable) can predict sale prices.
+Next, we'll extract the two variables we'll use for our model — the target variable that we'll attempt to predict (SalePrice), and a single predictor variable that will be used to predict the target variable. For this example, we'll explore how well the "OverallQual" variable (i.e., the predictor variable) can predict sale prices.
+
+**OverallQual**: Rates the overall material and finish of the house
+
+       10	Very Excellent
+       1	Very Poor
 
 
 ```python
-# Extract x (single predictor variable = YearBuilt) and y (target variable = SalePrice)
+# Extract x (predictor) and y (target)
 y = housing['target']
-predictor = 'OverallQual'#'TotalBsmtSF'#'GarageArea'
+predictor = 'OverallQual'
 x = housing['data'][predictor]
 ```
 
 #### Visualize the relationship between x and y
-Before fitting any models in a univariate context, we should first explore the data to get a sense for the relationship between the predictor variable, "YearBuilt", and the response variable, "SalePrice". If this relationship does not look linear, we won't be able to fit a good linear model (i.e., a model with low average prediction error in a predictive modeling context) to the data.
+Before fitting any models in a univariate context, we should first explore the data to get a sense for the relationship between the predictor variable, "OverallQual", and the response variable, "SalePrice". If this relationship does not look linear, we won't be able to fit a good linear model (i.e., a model with low average prediction error in a predictive modeling context) to the data.
 
 
 ```python
@@ -88,7 +86,7 @@ import matplotlib.pyplot as plt
 plt.scatter(x,y, alpha=.1)
 plt.xlabel(predictor)
 plt.ylabel('Sale Price');
-plt.savefig('..//fig//regression//scatterplot_x_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//scatterplot_x_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -115,7 +113,7 @@ y_log = y.apply(np.log)
 plt.scatter(x,y_log, alpha=.1)
 plt.xlabel(predictor)
 plt.ylabel('Sale Price');
-plt.savefig('..//fig//regression//scatterplot_x_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white')
+# plt.savefig('..//fig//regression//scatterplot_x_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white')
 ```
 
 
@@ -343,30 +341,36 @@ print(f"Test R-squared = {R2_test}")
     Test R-squared = 0.7012721408788911
 
 
-Our model predicts 70.1% (65.2%) of the variance across sale prices in the test set (train set).
+Our model predicts 70.1% (65.2%) of the variance across sale prices in the test set (train set). The R-squared for the baseline model is 0 because the numerator and denominator in the equation for R-squared are equivalent:
+
+**R-squared**: R-squared = 1 - (Sum of squared residuals) / (Total sum of squares)
+
+**Sum of Squared Residuals (SSR)**:
+SSR = Sum of (Actual Value - Predicted Value)^2 for all data points
+
+**Total Sum of Squares (TSS)**:
+TSS = Sum of (Actual Value - Mean of Actual Values)^2 for all data points
 
 To read more about additional error/loss measurements, visit [sklearn's metrics documentation](https://scikit-learn.org/stable/modules/model_evaluation.html).
 
 > ## More on R-squared
 > Our above example model is able to explain roughly 70.1% of the variance in the test dataset. Is this a “good” value for R-squared?
 > 
-> **Hint**: The answer to this question depends on your objective for the regression model. This relates back to the two modeling goals of *explaining* vs *predicting*. Depending on the objective, the answer to "What is a good value for R-squared?" will be different.
-> 
 > > ## Solution
 > >
+> > The answer to this question depends on your objective for the regression model. This relates back to the two modeling goals of *explaining* vs *predicting*. Depending on the objective, the answer to "What is a good value for R-squared?" will be different.
 > > 
-> > **Explaining the relationship between the predictor(s) and the response Variable**
-> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable (i.e., has a statistically significant effect) is typically always interesting — regardless of the the effect size. The exception to this rule is if you have a near-zero R-squared, which suggests that the model does not explain any of the variance in the data.
-> > 
-> > **Predicting the response variable**
+> > **Predicting the response variable:**
 > > If your main objective is to predict the value of the response variable accurately using the predictor variable, then R-squared is important. The value for R-squared can range from 0 to 1. A value of 0 indicates that the response variable cannot be explained by the predictor variable at all. A value of 1 indicates that the response variable can be perfectly explained without error by the predictor variable. In general, the larger the R-squared value, the more precisely the predictor variables are able to predict the value of the response variable. How high an R-squared value needs to be depends on how precise you need to be for your specific model's application. To find out what is considered a “good” R-squared value, you will need to explore what R-squared values are generally accepted in your particular field of study.
+> > 
+> > **Explaining the relationship between the predictor(s) and the response variable:**
+> > If your main objective for your regression model is to explain the relationship(s) between the predictor(s) and the response variable, the R-squared is mostly irrelevant. A predictor variable that consistently relates to a change in the response variable (i.e., has a statistically significant effect) is typically always interesting — regardless of the the effect size. The exception to this rule is if you have a near-zero R-squared, which suggests that the model does not explain any of the variance in the data.
 > > 
 > {:.solution}
 {:.challenge}
 
 
 > ## Determine which single variable is most predictive of housing prices
-> Given a high-dimensional dataset, one potential direction of inquiry is to ask — which single variable is most predictive of sales price?
 > 
 > > ## Solution
 > >

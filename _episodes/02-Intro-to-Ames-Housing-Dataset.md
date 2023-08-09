@@ -9,7 +9,7 @@ questions:
 ---
 # Intro to Ames Housing Dataset
 
-Here we introduce the data we'll be analyzing: The Ames Housing Dataset
+Throughout this workshop, we will explore how to efficiently detect patterns and extract insights from high-dimensional data. We will focus on a widely accessible dataset known as the Ames housing data. This dataset will serve as a foundational example, allowing us to grasp the challenges and opportunities presented by high-dimensional data analysis.
 
 ## Load the dataset
 
@@ -20,17 +20,13 @@ Here we load the dataset from the sklearn library, and see a preview
 from sklearn.datasets import fetch_openml
 
 # load the dataset
-housing = fetch_openml(name="house_prices", as_frame=True)
+housing = fetch_openml(name="house_prices", as_frame=True, parser='auto')
 
 df = housing.data.copy(deep=True) # create new DataFrame copy of original dataset
-df = df.astype({'Id': int})        # set data type of Id to int
+df = df.astype({'Id': int})       # set data type of Id to int
 df = df.set_index('Id')           # set Id column to be the index of the DataFrame
 df                                # evaluate result
 ```
-
-    C:\Users\Endemann\anaconda3\envs\highdim_workshop\Lib\site-packages\sklearn\datasets\_openml.py:968: FutureWarning: The default value of `parser` will change from `'liac-arff'` to `'auto'` in 1.4. You can set `parser='auto'` to silence this warning. Therefore, an `ImportError` will be raised from 1.4 if the dataset is dense and pandas is not installed. Note that the pandas parser may return different data types. See the Notes Section in fetch_openml's API doc for details.
-      warn(
-
 
 
 
@@ -108,7 +104,7 @@ df                                # evaluate result
       <td>65.0</td>
       <td>8450</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>Reg</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -116,9 +112,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>2</td>
       <td>2008</td>
@@ -132,7 +128,7 @@ df                                # evaluate result
       <td>80.0</td>
       <td>9600</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>Reg</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -140,9 +136,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>5</td>
       <td>2007</td>
@@ -156,7 +152,7 @@ df                                # evaluate result
       <td>68.0</td>
       <td>11250</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>IR1</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -164,9 +160,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>9</td>
       <td>2008</td>
@@ -180,7 +176,7 @@ df                                # evaluate result
       <td>60.0</td>
       <td>9550</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>IR1</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -188,9 +184,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>2</td>
       <td>2006</td>
@@ -204,7 +200,7 @@ df                                # evaluate result
       <td>84.0</td>
       <td>14260</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>IR1</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -212,9 +208,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>12</td>
       <td>2008</td>
@@ -252,7 +248,7 @@ df                                # evaluate result
       <td>62.0</td>
       <td>7917</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>Reg</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -260,9 +256,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>8</td>
       <td>2007</td>
@@ -276,7 +272,7 @@ df                                # evaluate result
       <td>85.0</td>
       <td>13175</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>Reg</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -284,9 +280,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>MnPrv</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>0</td>
       <td>2</td>
       <td>2010</td>
@@ -300,7 +296,7 @@ df                                # evaluate result
       <td>66.0</td>
       <td>9042</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>Reg</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -308,7 +304,7 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>GdPrv</td>
       <td>Shed</td>
       <td>2500</td>
@@ -324,7 +320,7 @@ df                                # evaluate result
       <td>68.0</td>
       <td>9717</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>Reg</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -332,9 +328,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>4</td>
       <td>2010</td>
@@ -348,7 +344,7 @@ df                                # evaluate result
       <td>75.0</td>
       <td>9937</td>
       <td>Pave</td>
-      <td>None</td>
+      <td>NaN</td>
       <td>Reg</td>
       <td>Lvl</td>
       <td>AllPub</td>
@@ -356,9 +352,9 @@ df                                # evaluate result
       <td>...</td>
       <td>0</td>
       <td>0</td>
-      <td>None</td>
-      <td>None</td>
-      <td>None</td>
+      <td>NaN</td>
+      <td>NaN</td>
+      <td>NaN</td>
       <td>0</td>
       <td>6</td>
       <td>2008</td>
@@ -386,13 +382,21 @@ print(df.columns.tolist())
 > > ## Solution
 > >
 > > 79
-> > ##### EXERCISE_END
-> > 
-> > #### EXERCISE: How many observations are there?
-> > ##### ANSWER: 1460
-> > ##### EXERCISE_END
-> > #### EXERCISE: What are all the feature names?
-> > ##### ANSWER:
+> {:.solution}
+{:.challenge}
+
+
+#### EXERCISE: How many observations are there?
+> > ## Solution
+> >
+> > 1460
+> {:.solution}
+{:.challenge}
+
+
+#### EXERCISE: What are all the feature names?
+> > ## Solution
+> >
 > > ~~~
 > > print(df.columns.tolist())
 > > ~~~
@@ -956,6 +960,7 @@ print(df.columns.tolist())
 > {:.solution}
 {:.challenge}
 
+
 #### EXERCISE_START
 What type of variable is BsmtFinType2 (categorical or numeric, then nominal/ordinal or discrete/continuous)?
 > > ## Solution
@@ -964,6 +969,7 @@ What type of variable is BsmtFinType2 (categorical or numeric, then nominal/ordi
 > {:.solution}
 {:.challenge}
 
+
 #### EXERCISE_START
 What information is represented by GrLivArea?
 > > ## Solution
@@ -971,6 +977,7 @@ What information is represented by GrLivArea?
 > > Above grade (ground) living area square feet
 > {:.solution}
 {:.challenge}
+
 
 #### EXERCISE_START
 What type of variable is GrLivArea? (categorical or numeric, then nominal/ordinal or discrete/continuous)?
@@ -983,7 +990,7 @@ What type of variable is GrLivArea? (categorical or numeric, then nominal/ordina
 
 
 
-# Load the Target Variable - Housing Price
+# Load the Target (Response) Variable - Housing Price
 
 
 ```python
@@ -1065,6 +1072,7 @@ What is the range of housing prices in the dataset?
 > > min: $34,900, max: $755,000
 > {:.solution}
 {:.challenge}
+
 
 #### EXERCISE_START
 Are the price data skewed? What distribution might you expect?

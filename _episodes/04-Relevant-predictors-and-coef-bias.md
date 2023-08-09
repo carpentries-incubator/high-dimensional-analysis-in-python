@@ -189,7 +189,7 @@ results.summary()
   <th>Date:</th>             <td>Fri, 04 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>2.12e-140</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>15:48:33</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
+  <th>Time:</th>                 <td>16:53:41</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>  1460</td>      <th>  AIC:               </th> <td>   829.3</td>
@@ -620,7 +620,7 @@ print(y.shape)
 ```
 
     # of columns removed: 133
-    Columns removed: ['MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', 'Alley_Grvl', 'Alley_Pave', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LotConfig_FR2', 'LotConfig_FR3', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NoRidge', 'Neighborhood_SWISU', 'Neighborhood_SawyerW', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'Condition1_Artery', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'MasVnrType_BrkCmn', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'Utilities_AllPub', 'Utilities_NoSeWa', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'KitchenAbvGr', 'GarageYrBlt', '3SsnPorch', 'PoolArea', 'Street']
+    Columns removed: ['GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NoRidge', 'Neighborhood_SWISU', 'Neighborhood_SawyerW', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'Alley_Grvl', 'Alley_Pave', 'Utilities_AllPub', 'Utilities_NoSeWa', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'LotConfig_FR2', 'LotConfig_FR3', 'Condition1_Artery', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'MasVnrType_BrkCmn', 'KitchenAbvGr', 'LotFrontage', 'PoolArea', 'GarageYrBlt', 'LowQualFinSF', 'MasVnrArea', '3SsnPorch', 'Street']
     (1460, 82)
     (1460,)
 
@@ -651,52 +651,52 @@ X_encoded_good.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>GarageType_Attchd</th>
+      <th>GarageType_BuiltIn</th>
+      <th>GarageType_Detchd</th>
+      <th>RoofStyle_Gable</th>
+      <th>RoofStyle_Hip</th>
       <th>MSSubClass_20</th>
       <th>MSSubClass_50</th>
       <th>MSSubClass_60</th>
       <th>MSSubClass_120</th>
-      <th>MSZoning_RL</th>
-      <th>MSZoning_RM</th>
-      <th>LandContour_Lvl</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
-      <th>LotConfig_Inside</th>
+      <th>Exterior1st_'Wd Sdng'</th>
       <th>...</th>
       <th>Fireplaces</th>
       <th>GarageCars</th>
-      <th>GarageArea</th>
-      <th>WoodDeckSF</th>
-      <th>OpenPorchSF</th>
-      <th>EnclosedPorch</th>
+      <th>BsmtFinSF1</th>
       <th>ScreenPorch</th>
-      <th>YrSold</th>
+      <th>GrLivArea</th>
       <th>MoSold</th>
+      <th>OverallQual</th>
+      <th>BsmtFullBath</th>
+      <th>BsmtHalfBath</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
       <td>...</td>
       <td>0</td>
       <td>2</td>
-      <td>548</td>
+      <td>706</td>
       <td>0</td>
-      <td>61</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2008</td>
+      <td>1710</td>
       <td>2</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0</td>
       <td>1</td>
     </tr>
     <tr>
@@ -704,95 +704,95 @@ X_encoded_good.head()
       <td>1</td>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>1</td>
+      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
       <td>1</td>
       <td>2</td>
-      <td>460</td>
-      <td>298</td>
+      <td>978</td>
       <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2007</td>
+      <td>1262</td>
       <td>5</td>
+      <td>6</td>
+      <td>0</td>
+      <td>1</td>
       <td>1</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>1</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
+      <td>0</td>
+      <td>0</td>
       <td>...</td>
       <td>1</td>
       <td>2</td>
-      <td>608</td>
+      <td>486</td>
       <td>0</td>
-      <td>42</td>
-      <td>0</td>
-      <td>0</td>
-      <td>2008</td>
+      <td>1786</td>
       <td>9</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0</td>
       <td>1</td>
     </tr>
     <tr>
       <th>3</th>
       <td>0</td>
       <td>0</td>
-      <td>0</td>
-      <td>0</td>
-      <td>1</td>
-      <td>0</td>
       <td>1</td>
       <td>1</td>
       <td>0</td>
       <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>0</td>
+      <td>1</td>
       <td>...</td>
       <td>1</td>
       <td>3</td>
-      <td>642</td>
+      <td>216</td>
       <td>0</td>
-      <td>35</td>
-      <td>272</td>
-      <td>0</td>
-      <td>2006</td>
+      <td>1717</td>
       <td>2</td>
+      <td>7</td>
+      <td>1</td>
+      <td>0</td>
       <td>1</td>
     </tr>
     <tr>
       <th>4</th>
+      <td>1</td>
       <td>0</td>
       <td>0</td>
       <td>1</td>
       <td>0</td>
-      <td>1</td>
+      <td>0</td>
       <td>0</td>
       <td>1</td>
-      <td>0</td>
       <td>0</td>
       <td>0</td>
       <td>...</td>
       <td>1</td>
       <td>3</td>
-      <td>836</td>
-      <td>192</td>
-      <td>84</td>
+      <td>655</td>
       <td>0</td>
-      <td>0</td>
-      <td>2008</td>
+      <td>2198</td>
       <td>12</td>
+      <td>8</td>
+      <td>1</td>
+      <td>0</td>
       <td>1</td>
     </tr>
   </tbody>
@@ -869,149 +869,149 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
+      <th>GarageType_Attchd</th>
+      <th>GarageType_BuiltIn</th>
+      <th>GarageType_Detchd</th>
+      <th>RoofStyle_Gable</th>
+      <th>RoofStyle_Hip</th>
       <th>MSSubClass_20</th>
       <th>MSSubClass_50</th>
       <th>MSSubClass_60</th>
       <th>MSSubClass_120</th>
-      <th>MSZoning_RL</th>
-      <th>MSZoning_RM</th>
-      <th>LandContour_Lvl</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
-      <th>LotConfig_Inside</th>
+      <th>Exterior1st_'Wd Sdng'</th>
       <th>...</th>
       <th>Fireplaces</th>
       <th>GarageCars</th>
-      <th>GarageArea</th>
-      <th>WoodDeckSF</th>
-      <th>OpenPorchSF</th>
-      <th>EnclosedPorch</th>
+      <th>BsmtFinSF1</th>
       <th>ScreenPorch</th>
-      <th>YrSold</th>
+      <th>GrLivArea</th>
       <th>MoSold</th>
+      <th>OverallQual</th>
+      <th>BsmtFullBath</th>
+      <th>BsmtHalfBath</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>444</th>
-      <td>-0.665201</td>
-      <td>-0.324552</td>
-      <td>1.710488</td>
+      <th>5</th>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>-0.774762</td>
+      <td>2.84066</td>
+      <td>-0.517416</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
       <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>-0.474696</td>
-      <td>-0.28447</td>
-      <td>0.643907</td>
       <td>...</td>
-      <td>0.482658</td>
-      <td>0.391429</td>
-      <td>0.202984</td>
-      <td>0.318605</td>
-      <td>1.071365</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>0.123645</td>
-      <td>0.160472</td>
-      <td>0.28447</td>
+      <td>-1.145210</td>
+      <td>0.216482</td>
+      <td>0.599222</td>
+      <td>-0.270798</td>
+      <td>-0.392862</td>
+      <td>1.171898</td>
+      <td>-0.841802</td>
+      <td>1.159982</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>1059</th>
-      <td>-0.665201</td>
-      <td>3.060064</td>
-      <td>-0.580624</td>
+      <th>403</th>
+      <td>-1.339892</td>
+      <td>5.292150</td>
+      <td>-0.538549</td>
+      <td>-1.774741</td>
+      <td>1.808744</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
       <td>-0.419767</td>
-      <td>-2.365958</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
-      <td>-1.542382</td>
       <td>...</td>
-      <td>0.482658</td>
-      <td>0.391429</td>
-      <td>-0.117260</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>-0.020675</td>
-      <td>-0.248917</td>
-      <td>-0.661233</td>
-      <td>-1.281311</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>0.216482</td>
+      <td>-1.050998</td>
+      <td>-0.270798</td>
+      <td>1.261357</td>
+      <td>0.106978</td>
+      <td>1.277217</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>662</th>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <th>138</th>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
       <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
-      <td>-1.542382</td>
       <td>...</td>
-      <td>2.048614</td>
-      <td>0.391429</td>
-      <td>0.638725</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>3.950198</td>
-      <td>-0.248917</td>
-      <td>0.908523</td>
-      <td>0.160472</td>
-      <td>0.28447</td>
+      <td>1.922692</td>
+      <td>1.480736</td>
+      <td>0.454941</td>
+      <td>-0.270798</td>
+      <td>0.506769</td>
+      <td>1.881844</td>
+      <td>1.277217</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>141</th>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <th>1051</th>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>1.281879</td>
+      <td>-0.34962</td>
+      <td>-0.517416</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
       <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>-0.474696</td>
-      <td>-0.28447</td>
-      <td>0.643907</td>
       <td>...</td>
-      <td>-1.083298</td>
-      <td>0.391429</td>
-      <td>1.079717</td>
-      <td>0.438900</td>
-      <td>-0.404289</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>-1.446111</td>
-      <td>-2.002202</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>0.216482</td>
+      <td>-1.050998</td>
+      <td>-0.270798</td>
+      <td>-0.477318</td>
+      <td>1.171898</td>
+      <td>0.570877</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>122</th>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <th>221</th>
+      <td>-1.339892</td>
+      <td>5.292150</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
       <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
-      <td>-1.542382</td>
       <td>...</td>
-      <td>-1.083298</td>
-      <td>-1.112483</td>
-      <td>-0.873245</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>-0.362063</td>
-      <td>2.621342</td>
-      <td>0.123645</td>
-      <td>-0.199973</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>0.216482</td>
+      <td>-1.050998</td>
+      <td>-0.270798</td>
+      <td>1.268701</td>
+      <td>1.881844</td>
+      <td>-0.135462</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
   </tbody>
 </table>
@@ -1051,148 +1051,148 @@ X_train_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
+      <th>GarageType_Attchd</th>
+      <th>GarageType_BuiltIn</th>
+      <th>GarageType_Detchd</th>
+      <th>RoofStyle_Gable</th>
+      <th>RoofStyle_Hip</th>
       <th>MSSubClass_20</th>
       <th>MSSubClass_50</th>
       <th>MSSubClass_60</th>
       <th>MSSubClass_120</th>
-      <th>MSZoning_RL</th>
-      <th>MSZoning_RM</th>
-      <th>LandContour_Lvl</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
       <th>...</th>
       <th>Fireplaces</th>
       <th>GarageCars</th>
-      <th>GarageArea</th>
-      <th>WoodDeckSF</th>
-      <th>OpenPorchSF</th>
-      <th>EnclosedPorch</th>
+      <th>BsmtFinSF1</th>
       <th>ScreenPorch</th>
-      <th>YrSold</th>
+      <th>GrLivArea</th>
       <th>MoSold</th>
+      <th>OverallQual</th>
+      <th>BsmtFullBath</th>
+      <th>BsmtHalfBath</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>444</th>
+      <th>5</th>
       <td>1.0</td>
-      <td>-0.665201</td>
-      <td>-0.324552</td>
-      <td>1.710488</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>-0.774762</td>
+      <td>2.84066</td>
+      <td>-0.517416</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>-0.474696</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>0.482658</td>
-      <td>0.391429</td>
-      <td>0.202984</td>
-      <td>0.318605</td>
-      <td>1.071365</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>0.123645</td>
-      <td>0.160472</td>
-      <td>0.28447</td>
+      <td>-1.145210</td>
+      <td>0.216482</td>
+      <td>0.599222</td>
+      <td>-0.270798</td>
+      <td>-0.392862</td>
+      <td>1.171898</td>
+      <td>-0.841802</td>
+      <td>1.159982</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>1059</th>
+      <th>403</th>
       <td>1.0</td>
-      <td>-0.665201</td>
-      <td>3.060064</td>
-      <td>-0.580624</td>
+      <td>-1.339892</td>
+      <td>5.292150</td>
+      <td>-0.538549</td>
+      <td>-1.774741</td>
+      <td>1.808744</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>-2.365958</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>0.482658</td>
-      <td>0.391429</td>
-      <td>-0.117260</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>-0.020675</td>
-      <td>-0.248917</td>
-      <td>-0.661233</td>
-      <td>-1.281311</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>0.216482</td>
+      <td>-1.050998</td>
+      <td>-0.270798</td>
+      <td>1.261357</td>
+      <td>0.106978</td>
+      <td>1.277217</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>662</th>
+      <th>138</th>
       <td>1.0</td>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>2.048614</td>
-      <td>0.391429</td>
-      <td>0.638725</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>3.950198</td>
-      <td>-0.248917</td>
-      <td>0.908523</td>
-      <td>0.160472</td>
-      <td>0.28447</td>
+      <td>1.922692</td>
+      <td>1.480736</td>
+      <td>0.454941</td>
+      <td>-0.270798</td>
+      <td>0.506769</td>
+      <td>1.881844</td>
+      <td>1.277217</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>141</th>
+      <th>1051</th>
       <td>1.0</td>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>1.281879</td>
+      <td>-0.34962</td>
+      <td>-0.517416</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>-0.474696</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>-1.083298</td>
-      <td>0.391429</td>
-      <td>1.079717</td>
-      <td>0.438900</td>
-      <td>-0.404289</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>-1.446111</td>
-      <td>-2.002202</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>0.216482</td>
+      <td>-1.050998</td>
+      <td>-0.270798</td>
+      <td>-0.477318</td>
+      <td>1.171898</td>
+      <td>0.570877</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>122</th>
+      <th>221</th>
       <td>1.0</td>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <td>-1.339892</td>
+      <td>5.292150</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>-1.083298</td>
-      <td>-1.112483</td>
-      <td>-0.873245</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>-0.362063</td>
-      <td>2.621342</td>
-      <td>0.123645</td>
-      <td>-0.199973</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>0.216482</td>
+      <td>-1.050998</td>
+      <td>-0.270798</td>
+      <td>1.268701</td>
+      <td>1.881844</td>
+      <td>-0.135462</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
   </tbody>
 </table>
@@ -1231,148 +1231,148 @@ X_test_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
+      <th>GarageType_Attchd</th>
+      <th>GarageType_BuiltIn</th>
+      <th>GarageType_Detchd</th>
+      <th>RoofStyle_Gable</th>
+      <th>RoofStyle_Hip</th>
       <th>MSSubClass_20</th>
       <th>MSSubClass_50</th>
       <th>MSSubClass_60</th>
       <th>MSSubClass_120</th>
-      <th>MSZoning_RL</th>
-      <th>MSZoning_RM</th>
-      <th>LandContour_Lvl</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
       <th>...</th>
       <th>Fireplaces</th>
       <th>GarageCars</th>
-      <th>GarageArea</th>
-      <th>WoodDeckSF</th>
-      <th>OpenPorchSF</th>
-      <th>EnclosedPorch</th>
+      <th>BsmtFinSF1</th>
       <th>ScreenPorch</th>
-      <th>YrSold</th>
+      <th>GrLivArea</th>
       <th>MoSold</th>
+      <th>OverallQual</th>
+      <th>BsmtFullBath</th>
+      <th>BsmtHalfBath</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>36</th>
+      <th>4</th>
       <td>1.0</td>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>0.559603</td>
+      <td>-0.549083</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>-1.083298</td>
-      <td>0.391429</td>
-      <td>1.142715</td>
-      <td>2.183171</td>
-      <td>0.137236</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>0.908523</td>
-      <td>-0.199973</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>1.480736</td>
+      <td>0.425634</td>
+      <td>-0.270798</td>
+      <td>1.142018</td>
+      <td>1.881844</td>
+      <td>1.277217</td>
+      <td>1.159982</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>589</th>
+      <th>1159</th>
       <td>1.0</td>
-      <td>-0.665201</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>-1.774741</td>
+      <td>1.808744</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>-1.710488</td>
-      <td>2.365958</td>
-      <td>0.419767</td>
-      <td>-0.474696</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>-1.083298</td>
-      <td>-1.112483</td>
-      <td>-0.768247</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>0.123645</td>
-      <td>0.520918</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>0.216482</td>
+      <td>-0.054553</td>
+      <td>-0.270798</td>
+      <td>0.550832</td>
+      <td>0.106978</td>
+      <td>-0.135462</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>1009</th>
+      <th>515</th>
       <td>1.0</td>
-      <td>-0.665201</td>
-      <td>3.060064</td>
-      <td>-0.580624</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>-1.774741</td>
+      <td>1.808744</td>
+      <td>1.281879</td>
+      <td>-0.34962</td>
+      <td>-0.517416</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>-0.474696</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>-1.083298</td>
-      <td>-2.616395</td>
-      <td>-2.385214</td>
-      <td>-0.764045</td>
-      <td>-0.729203</td>
-      <td>2.117487</td>
-      <td>-0.248917</td>
-      <td>-1.446111</td>
-      <td>-0.199973</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>1.480736</td>
+      <td>2.186319</td>
+      <td>-0.270798</td>
+      <td>0.815214</td>
+      <td>0.816924</td>
+      <td>2.689897</td>
+      <td>1.159982</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>683</th>
+      <th>526</th>
       <td>1.0</td>
-      <td>1.493008</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>-1.774741</td>
+      <td>1.808744</td>
+      <td>1.281879</td>
+      <td>-0.34962</td>
+      <td>-0.517416</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>0.482658</td>
-      <td>1.895341</td>
-      <td>1.300212</td>
-      <td>1.168186</td>
-      <td>-0.119988</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>-0.661233</td>
-      <td>0.160472</td>
-      <td>0.28447</td>
+      <td>-1.145210</td>
+      <td>-1.047772</td>
+      <td>-0.201089</td>
+      <td>-0.270798</td>
+      <td>-1.189678</td>
+      <td>-0.247995</td>
+      <td>-0.841802</td>
+      <td>-0.856177</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
     <tr>
-      <th>262</th>
+      <th>527</th>
       <td>1.0</td>
-      <td>-0.665201</td>
-      <td>-0.324552</td>
-      <td>-0.580624</td>
+      <td>0.741217</td>
+      <td>-0.187665</td>
+      <td>-0.538549</td>
+      <td>-1.774741</td>
+      <td>1.808744</td>
+      <td>-0.774762</td>
+      <td>-0.34962</td>
+      <td>1.919445</td>
       <td>-0.255428</td>
-      <td>0.580624</td>
-      <td>-0.419767</td>
-      <td>0.419767</td>
-      <td>2.092181</td>
-      <td>-0.28447</td>
       <td>...</td>
-      <td>0.482658</td>
-      <td>0.391429</td>
-      <td>0.197734</td>
-      <td>1.431330</td>
-      <td>-0.566746</td>
-      <td>-0.362063</td>
-      <td>-0.248917</td>
-      <td>-1.446111</td>
-      <td>0.160472</td>
-      <td>0.28447</td>
+      <td>0.388741</td>
+      <td>1.480736</td>
+      <td>1.947353</td>
+      <td>-0.270798</td>
+      <td>2.087549</td>
+      <td>1.526871</td>
+      <td>1.983557</td>
+      <td>1.159982</td>
+      <td>-0.22364</td>
+      <td>0.239946</td>
     </tr>
   </tbody>
 </table>
@@ -1408,8 +1408,8 @@ print(R2_train)
 print(R2_test)
 ```
 
-    0.9450636526328873
-    0.7442173061840465
+    0.9665357480273615
+    0.7321665998421403
 
 
 We can see that this model exhibits signs of overfitting. That is, the test set performance is substantially lower than train set performance. Since the model does not generalize well to other datasets — we shouldn't read too much into the model's estimated coefficients and p-values. An overfit model is a model that learns nuances/noise in the training data, and the coefficients/p-values may be biased towards uninteresting patterns in the data (i.e., patterns that don't generalize).

@@ -1066,6 +1066,65 @@ X_train.columns
 
 
 ### Exploring an alternative set of predictors
+Now that you know how to assess the 5 assumptions of linear regression, try validating a multivariate linear model that predicts log(SalePrice) from the following predictors:
+
+* LotArea
+* YearBuilt
+* YearRemodAdd
+* GarageArea
+* GarageCars
+* Neighborhood
+
+**1. First, extract the data you'll be using to fit the model.**
+
+```
+y_log = np.log(housing['target'])
+predictors = ['LotArea', 'YearBuilt', 'YearRemodAdd', 'GarageArea', 'GarageCars', 'Neighborhood']
+X=housing['data'][predictors]
+```
+
+**2. Next, preprocess the data.**
+
+a. Check to see if there are any categorical predictors. If so, encode those predictors using "one-hot encoding".
+
+```
+one_hot = pd.get_dummies(X[cat_predictor])
+
+# Join the encoded df
+X = X.join(one_hot)
+
+# Drop column SaleCondition as it is now encoded
+X = X.drop(cat_predictor,axis = 1)
+X.head()
+```
+
+b. Check if there are any predictors/features which are too sparse. Remove any predictors that are >= 99% sparse.
+
+```
+nonzero_counts = X.astype(bool).sum()
+print(nonzero_counts)
+print(nonzero_counts/X.shape[0]*100)
+```
+
+
+3. First check the multicollinearity assumption. If this assumption is violated, remove the problematic predictors that cause multicollinearity. Remember that you should recalculate the VIF score each time you remove a predictor.
+
+4. Check all remaining assumptions using eval_regression_assumptions()
+
+
+
+
+```python
+> ## Exploring an alternative set of predictors
+> 
+> 
+> > ## Solution
+> >
+> > 
+> {:.solution}
+{:.challenge}
+
+```
 
 
 ```python
@@ -1130,6 +1189,7 @@ Extract target, `y` and predictors, `X`.
 y_log = np.log(housing['target'])
 predictors = ['LotArea', 'YearBuilt', 'YearRemodAdd', 'GarageArea', 'GarageCars', 'Neighborhood']
 X=housing['data'][predictors]
+X.head()
 ```
 
 Preprocess the data
@@ -1182,6 +1242,13 @@ trained_model = model.fit()
 
 
 ```python
+# to calculate residuals and R-squared for the test set, we'll need to get the model predictions first
+y_pred_train = trained_model.predict(X_train)
+y_pred_test = trained_model.predict(X_test)
+```
+
+
+```python
 eval_regression_assumptions(trained_model, X_train, y_train, y_pred_train);
 ```
 
@@ -1215,80 +1282,12 @@ eval_regression_assumptions(trained_model, X_train, y_train, y_pred_train);
     =======================================
     VERIFYING LINEARITY & HOMOSCEDASTICITY...
 
+     Goldfeld-Quandt test (homoscedasticity) ----
+                    value
+    F statistic  0.926533
+    p-value      0.796761
 
-
-    ---------------------------------------------------------------------------
-
-    ValueError                                Traceback (most recent call last)
-
-    Cell In[45], line 1
-    ----> 1 eval_regression_assumptions(trained_model, X_train, y_train, y_pred_train)
-
-
-    File ~\Documents\GitHub\high-dim-data-lesson\code\check_assumptions.py:158, in eval_regression_assumptions(trained_model, X, y, y_pred)
-        156 resids = y - y_pred
-        157 multicollinearity_test(X)
-    --> 158 homoscedasticity_linearity_test(trained_model, y, y_pred)
-        159 normal_resid_test(resids)
-        160 independent_resid_test(y_pred, resids, include_plot=False)
-
-
-    File ~\Documents\GitHub\high-dim-data-lesson\code\check_assumptions.py:123, in homoscedasticity_linearity_test(trained_model, y, y_pred)
-        120 resids = y_pred - y
-        122 # Predictions vs residuals
-    --> 123 ax2 = plot_pred_v_resid(y_pred, resids, ax2)
-        125 # GQ test
-        126 gq_test = pd.DataFrame(sms.het_goldfeldquandt(resids, trained_model.model.exog)[:-1],
-        127                        columns=['value'],
-        128                        index=['F statistic', 'p-value'])
-
-
-    File ~\Documents\GitHub\high-dim-data-lesson\code\check_assumptions.py:92, in plot_pred_v_resid(y_pred, resids, ax)
-         90 def plot_pred_v_resid(y_pred, resids, ax):
-    ---> 92     sns.regplot(x=y_pred, y=resids, lowess=True, ax=ax, line_kws={'color': 'red'})
-         93     ax.axhline(0, color='blue', linestyle='dashed')  # Add a horizontal line at y=0
-         95     # ax2.set_title('Residuals vs Fitted', fontsize=16)
-
-
-    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\seaborn\regression.py:747, in regplot(data, x, y, x_estimator, x_bins, x_ci, scatter, fit_reg, ci, n_boot, units, seed, order, logistic, lowess, robust, logx, x_partial, y_partial, truncate, dropna, x_jitter, y_jitter, label, color, marker, scatter_kws, line_kws, ax)
-        736 def regplot(
-        737     data=None, *, x=None, y=None,
-        738     x_estimator=None, x_bins=None, x_ci="ci",
-       (...)
-        744     scatter_kws=None, line_kws=None, ax=None
-        745 ):
-    --> 747     plotter = _RegressionPlotter(x, y, data, x_estimator, x_bins, x_ci,
-        748                                  scatter, fit_reg, ci, n_boot, units, seed,
-        749                                  order, logistic, lowess, robust, logx,
-        750                                  x_partial, y_partial, truncate, dropna,
-        751                                  x_jitter, y_jitter, color, label)
-        753     if ax is None:
-        754         ax = plt.gca()
-
-
-    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\seaborn\regression.py:112, in _RegressionPlotter.__init__(self, x, y, data, x_estimator, x_bins, x_ci, scatter, fit_reg, ci, n_boot, units, seed, order, logistic, lowess, robust, logx, x_partial, y_partial, truncate, dropna, x_jitter, y_jitter, color, label)
-        110 # Drop null observations
-        111 if dropna:
-    --> 112     self.dropna("x", "y", "units", "x_partial", "y_partial")
-        114 # Regress nuisance variables out of the data
-        115 if self.x_partial is not None:
-
-
-    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\seaborn\regression.py:60, in _LinearPlotter.dropna(self, *vars)
-         58 vals = [getattr(self, var) for var in vars]
-         59 vals = [v for v in vals if v is not None]
-    ---> 60 not_na = np.all(np.column_stack([pd.notnull(v) for v in vals]), axis=1)
-         61 for var in vars:
-         62     val = getattr(self, var)
-
-
-    File ~\anaconda3\envs\highdim_workshop\Lib\site-packages\numpy\lib\shape_base.py:652, in column_stack(tup)
-        650         arr = array(arr, copy=False, subok=True, ndmin=2).T
-        651     arrays.append(arr)
-    --> 652 return _nx.concatenate(arrays, 1)
-
-
-    ValueError: all the input array dimensions except for the concatenation axis must match exactly, but along dimension 0, the array at index 0 has size 978 and the array at index 1 has size 1289
+     Residuals plots ----
 
 
 
@@ -1297,12 +1296,21 @@ eval_regression_assumptions(trained_model, X_train, y_train, y_pred_train);
 
 
 
-> ## Exploring an alternative set of predictors
-> 
-> 
-> > ## Solution
-> >
-> > Including all relevant predictor variables in a model is important for several reasons:
-> > 
-> {:.solution}
-{:.challenge}
+
+    ==========================
+    VERIFYING NORMAL ERRORS...
+    Median of residuals: -0.00015663156790513
+    Shapiro-Wilk test: statistic=0.9806, p-value=0.0000000004
+    Kolmogorov-Smirnov test: statistic=0.3077, p-value=0.0000000000
+
+
+
+
+
+
+
+
+
+    ==========================
+    VERIFYING INDEPENDENT ERRORS...
+    Durbin-Watson test statistic: 1.9972526684069372
