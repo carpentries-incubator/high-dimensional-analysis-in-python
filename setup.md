@@ -135,8 +135,7 @@ print('pandas version: ', pandas.__version__)
 {:.language-python}
 
 This should output the versions of all required packages without giving errors.
-Most versions will work fine with this lesson, but:
-- For sklearn, the minimum version is 1.2.2
+Most versions will work fine with this lesson, but for sklearn, the minimum version is 1.2.2.
 
 ## Fallback option: cloud environment
-If a local installation does not work for you, it is also possible to run this lesson using [Google colab](https://colab.research.google.com/). If you open a jupyter notebook from colab, the required packages are already pre-installed. Note that colab uses jupyter notebook instead of jupyter lab.
+If a local installation does not work for you, it is also possible to run this lesson using [Google colab](https://colab.research.google.com/). If you open a jupyter notebook from Colab, the required packages are already pre-installed. 
