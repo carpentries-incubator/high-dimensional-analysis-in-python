@@ -4,7 +4,7 @@ title: "Setup"
 ---
 
 ## Setup Project Folder
-1) Create a folder named, "highdim_workshop" on your Desktop which will store all of the code we generate throughout the workshop
+Create a folder named, "highdim_workshop" on your Desktop which will store all of the code we generate throughout the workshop
 
 - `C:\Users\username\Desktop\highdim_workshop # Windows path`
 
