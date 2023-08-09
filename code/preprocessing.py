@@ -1,5 +1,7 @@
 import numpy as np
 import pandas as pd
+import matplotlib.pyplot as plt
+
 
 def encode_predictors_housing_data(X):
     # get lists of continuous features, nominal features, etc.
@@ -142,3 +144,24 @@ def get_feat_types():
                       '3SsnPorch','ScreenPorch','PoolArea','YrSold','MoSold']
     
     return exclude_fields, nominal_fields, ordinal_fields, dichotomous, continuous_fields
+
+
+def plot_dist_before_after(before: pd.DataFrame, after: pd.DataFrame, column: str) -> None:
+    """show a columns distribution before and after z scoring"""
+    # choose column
+    column = '1stFlrSF'
+
+    # plot
+    fig, axs = plt.subplots(1,2, figsize=(8,4))
+    plot_configs = zip(
+        axs, 
+        [before, after], 
+        ["blue", "orange"], 
+        [f"original {column}", f"z-scored {column}"]
+    ) 
+    for (ax, df, color, title) in plot_configs:
+        ax.hist(df[column], color=color)
+        ax.set_title(title) 
+
+    plt.show()
+
