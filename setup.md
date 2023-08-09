@@ -4,16 +4,14 @@ title: "Setup"
 ---
 
 ## Setup Project Folder
-1. Create a folder named, "high-dim" on your Desktop which will store all of the code we generate throughout the workshop
+Create a folder named, "highdim_workshop" on your Desktop which will store all of the code we generate throughout the workshop
 
-- `C:\Users\username\Desktop\high-dim # Windows path`
+- `C:\Users\username\Desktop\highdim_workshop # Windows path`
 
-- `/Users/username/Desktop/high-dim # Mac`
+- `/Users/username/Desktop/highdim_workshop # Mac`
 
-- `/home/username/Desktop/high-dim # Linux`
+- `/home/username/Desktop/highdim_workshop # Linux`
 
-2. Download the helper_functions.py script and add it to the high-dim folder you just created.
-Click to download: [helper_functions.py](/code/helper_functions.py)
 {% include links.md %}
 
 
@@ -137,8 +135,7 @@ print('pandas version: ', pandas.__version__)
 {:.language-python}
 
 This should output the versions of all required packages without giving errors.
-Most versions will work fine with this lesson, but:
-- For sklearn, the minimum version is 1.2.2
+Most versions will work fine with this lesson, but for sklearn, the minimum version is 1.2.2.
 
 ## Fallback option: cloud environment
-If a local installation does not work for you, it is also possible to run this lesson using [Google colab](https://colab.research.google.com/). If you open a jupyter notebook from colab, the required packages are already pre-installed. Note that colab uses jupyter notebook instead of jupyter lab.
+If a local installation does not work for you, it is also possible to run this lesson using [Google colab](https://colab.research.google.com/). If you open a jupyter notebook from Colab, the required packages are already pre-installed. 
