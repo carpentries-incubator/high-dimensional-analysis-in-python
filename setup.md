@@ -11,7 +11,6 @@ title: "Setup"
 - `/Users/username/Desktop/high-dim # Mac`
 
 - `/home/username/Desktop/high-dim # Linux`
-
 2. Download the helper_functions.py script and add it to the high-dim folder you just created.
 Click to download: [helper_functions.py](/code/helper_functions.py)
 {% include links.md %}
