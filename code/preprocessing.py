@@ -5,7 +5,12 @@ import matplotlib.pyplot as plt
 
 def encode_predictors_housing_data(X):
     # get lists of continuous features, nominal features, etc.
-    exclude_fields, nominal_fields, ordinal_fields, dichotomous, continuous_fields = get_feat_types()
+    predictor_type_dict = get_feat_types()
+    exclude_fields = predictor_type_dict['exclude_fields']
+    nominal_fields = predictor_type_dict['nominal_fields']
+    ordinal_fields = predictor_type_dict['ordinal_fields']
+    dichotomous = predictor_type_dict['dichotomous']
+    continuous_fields = predictor_type_dict['continuous_fields']
     
     # init list of features/variables to keep
     keep_cols=[]
@@ -62,9 +67,11 @@ def remove_bad_cols(X, limited_var_thresh):
         val_counts = X[feat_name].value_counts(normalize=True) # check for nearly constant columns
         # exclude column if there are any NaNs or if column contains a constant (1 unique value only)
         if sum_nans > 0: 
+            print(feat_name, 'contains', sum_nans, 'NA''s')
             rem_cols.append(feat_name)
             # print(feat_name + ' removed due to presence of NaNs (sum of nans = ' + str(sum_nans) + ')')
         elif sum(val_counts > limited_var_thresh):
+            print(feat_name, 'sparsity =', val_counts[0])
             rem_cols.append(feat_name)
             # print(feat_name + ' removed due to lack of variance ( >' + str(limited_var_thresh*100) + '% rows have the same value value)')
             
@@ -143,8 +150,14 @@ def get_feat_types():
                       'GarageArea','WoodDeckSF','OpenPorchSF','EnclosedPorch',
                       '3SsnPorch','ScreenPorch','PoolArea','YrSold','MoSold']
     
-    return exclude_fields, nominal_fields, ordinal_fields, dichotomous, continuous_fields
+    predictor_type_dict = {}
+    predictor_type_dict['exclude_fields']=exclude_fields
+    predictor_type_dict['nominal_fields']=nominal_fields
+    predictor_type_dict['ordinal_fields']=ordinal_fields
+    predictor_type_dict['dichotomous']=dichotomous
+    predictor_type_dict['continuous_fields']=continuous_fields
 
+    return predictor_type_dict
 
 def plot_dist_before_after(before: pd.DataFrame, after: pd.DataFrame, column: str) -> None:
     """show a columns distribution before and after z scoring"""

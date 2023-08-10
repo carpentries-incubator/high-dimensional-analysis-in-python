@@ -196,12 +196,12 @@ y_pred_test=reg.predict(x_test)
 
 
 ```python
-from helper_functions import plot_train_test_predictions
-(fig1, fig2) = plot_train_test_predictions(predictor=predictor,
-                                      x_train=x_train, x_test=x_test,
-                                      y_train=y_train, y_test=y_test,
-                                      y_pred_train=y_pred_train, y_pred_test=y_pred_test,
-                                      log_transform_y=True);
+from regression_predict_sklearn import plot_train_test_predictions
+(fig1, fig2) = plot_train_test_predictions(predictors=[predictor],
+                                           X_train=x_train, X_test=x_test,
+                                           y_train=y_train, y_test=y_test,
+                                           y_pred_train=y_pred_train, y_pred_test=y_pred_test,
+                                           log_scaled=True);
 
 # print(type(fig1))
 # import matplotlib.pyplot as plt
@@ -343,13 +343,13 @@ print(f"Test R-squared = {R2_test}")
 
 Our model predicts 70.1% (65.2%) of the variance across sale prices in the test set (train set). The R-squared for the baseline model is 0 because the numerator and denominator in the equation for R-squared are equivalent:
 
-**R-squared**: R-squared = 1 - (Sum of squared residuals) / (Total sum of squares)
+### R-squared equation: R-squared = 1 - (Sum of squared residuals) / (Total sum of squares)
 
 **Sum of Squared Residuals (SSR)**:
-SSR = Sum of (Actual Value - Predicted Value)^2 for all data points
+SSR = Sum of (Actual Value - Predicted Value)^2 for all data points. The Sum of Squared Residuals (SSR) is equivalent to the variance of the residuals in a regression model. Residuals are the differences between the actual observed values and the predicted values produced by the model. Squaring these differences and summing them up yields the SSR.
 
 **Total Sum of Squares (TSS)**:
-TSS = Sum of (Actual Value - Mean of Actual Values)^2 for all data points
+TSS = Sum of (Actual Value - Mean of Actual Values)^2 for all data points. The TSS represents the total variability or dispersion in the observed values of the target variable. It measures the total squared differences between each data point's value and the mean of the observed values.
 
 To read more about additional error/loss measurements, visit [sklearn's metrics documentation](https://scikit-learn.org/stable/modules/model_evaluation.html).
 
@@ -370,13 +370,403 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 {:.challenge}
 
 
-> ## Determine which single variable is most predictive of housing prices
-> 
-> > ## Solution
-> >
-> > 
-> {:.solution}
-{:.challenge}
+#### Comparing univariate models
+
+1. Use get_feat_types() to get a list of continuous predictors
+2. Create an X variable containing only continuous predictors from `housing['data']`
+3. Extract sale prices from `housing['target']` and log scale it
+4. Use the remove_bad_cols helper function to remove predictors with nans or containing > 97% constant values (typically 0's)
+4. Perform a train/test split leaving 1/3 of the data out for the test set
+5. Call the `fit_eval_model()` helper function for each predictor being tested. Store the train/test errors for each predictor
+6. Create a `df_model_err` df that contains the following data stored for each predictor: 'Predictor Variable', 'RMSE_train', 'Test RMSE'.
+
+
+```python
+# preprocess
+from preprocessing import get_feat_types
+predictor_type_dict = get_feat_types()
+continuous_fields = predictor_type_dict['continuous_fields']
+X = housing['data'][continuous_fields]
+y_log = np.log(housing['target'])
+
+# remove columns with nans or containing > 97% constant values (typically 0's)
+from preprocessing import remove_bad_cols
+X_good = remove_bad_cols(X, .9)
+
+# train/test split
+X_train, X_test, y_train, y_test = train_test_split(X_good, y_log,
+                                                    test_size=1/3,
+                                                    random_state=0)
+
+```
+
+    LotFrontage contains 259 NAs
+    MasVnrArea contains 8 NAs
+    LowQualFinSF sparsity = 0.9821917808219178
+    BsmtHalfBath sparsity = 0.9438356164383561
+    KitchenAbvGr sparsity = 0.0006849315068493151
+    GarageYrBlt contains 81 NAs
+    3SsnPorch sparsity = 0.9835616438356164
+    ScreenPorch sparsity = 0.9205479452054794
+    PoolArea sparsity = 0.9952054794520548
+    # of columns removed: 9
+    Columns removed: ['LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'BsmtHalfBath', 'KitchenAbvGr', 'GarageYrBlt', '3SsnPorch', 'ScreenPorch', 'PoolArea']
+
+
+
+```python
+RMSE_train_list=[None] * len(X_train.columns)
+RMSE_test_list=[None] * len(X_train.columns)
+```
+
+
+```python
+from regression_predict_sklearn import fit_eval_model
+
+feat_index=0
+for feat in X_train.columns:
+    # fit univariate model and return train/test RMSE
+    RMSE_train, RMSE_test = fit_eval_model(X_train=X_train, y_train=y_train,
+                                           X_test=X_test, y_test=y_test,
+                                           predictors=[feat],
+                                           metric='RMSE', log_scaled=True,
+                                           model_type='unregularized', include_plots=False)
+    print('')
+    # store model errors
+    RMSE_train_list[feat_index] = RMSE_train
+    RMSE_test_list[feat_index] = RMSE_test#metrics.mean_squared_error(y_test, predicted_test,squared=False) # squared=False to get RMSE instead of MSE
+    feat_index+=1
+
+# store errors in pandas dataframe for ease of access downstream
+df_model_err = pd.DataFrame()
+df_model_err['Predictor Variable'] = X_train.columns
+df_model_err['Train RMSE'] = RMSE_train_list
+df_model_err['Test RMSE'] = RMSE_test_list
+```
+
+    # of predictor vars = 1 (LotArea)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 83028.37305855636
+    Test RMSE = 80420.2670800344
+    (Test-Train)/Train: -3%
+
+    # of predictor vars = 1 (YearBuilt)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 67215.86073110496
+    Test RMSE = 67183.55371908506
+    (Test-Train)/Train: -0%
+
+    # of predictor vars = 1 (YearRemodAdd)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 68425.7461018627
+    Test RMSE = 70019.97319311542
+    (Test-Train)/Train: 2%
+
+    # of predictor vars = 1 (OverallQual)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 45623.065303950156
+    Test RMSE = 44642.13568108219
+    (Test-Train)/Train: -2%
+
+    # of predictor vars = 1 (OverallCond)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 80366.68673923709
+    Test RMSE = 81631.48127835637
+    (Test-Train)/Train: 2%
+
+    # of predictor vars = 1 (BsmtFinSF1)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 72748.93172833491
+    Test RMSE = 84771.1336800596
+    (Test-Train)/Train: 17%
+
+    # of predictor vars = 1 (BsmtFinSF2)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 80295.68858571006
+    Test RMSE = 81327.64920427596
+    (Test-Train)/Train: 1%
+
+    # of predictor vars = 1 (BsmtUnfSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 78478.49546769331
+    Test RMSE = 79032.7639585704
+    (Test-Train)/Train: 1%
+
+    # of predictor vars = 1 (TotalBsmtSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 62981.24495506702
+    Test RMSE = 170676.30200173028
+    (Test-Train)/Train: 171%
+
+    # of predictor vars = 1 (1stFlrSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 64348.596396317
+    Test RMSE = 90726.32385904736
+    (Test-Train)/Train: 41%
+
+    # of predictor vars = 1 (2ndFlrSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 75117.80767062792
+    Test RMSE = 77249.37774777155
+    (Test-Train)/Train: 3%
+
+    # of predictor vars = 1 (GrLivArea)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 59694.54179405045
+    Test RMSE = 88001.68930541775
+    (Test-Train)/Train: 47%
+
+    # of predictor vars = 1 (BsmtFullBath)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 78071.07788085632
+    Test RMSE = 79234.17602495886
+    (Test-Train)/Train: 1%
+
+    # of predictor vars = 1 (FullBath)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 64947.13616029772
+    Test RMSE = 67724.41387357097
+    (Test-Train)/Train: 4%
+
+    # of predictor vars = 1 (HalfBath)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 76875.2154503375
+    Test RMSE = 78089.50157989419
+    (Test-Train)/Train: 2%
+
+    # of predictor vars = 1 (BedroomAbvGr)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 78859.0099196976
+    Test RMSE = 80928.58649269452
+    (Test-Train)/Train: 3%
+
+    # of predictor vars = 1 (TotRmsAbvGrd)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 67314.34638993855
+    Test RMSE = 70487.08719845899
+    (Test-Train)/Train: 5%
+
+    # of predictor vars = 1 (Fireplaces)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 71383.16839222088
+    Test RMSE = 72654.45183574369
+    (Test-Train)/Train: 2%
+
+    # of predictor vars = 1 (GarageCars)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 58760.717829791596
+    Test RMSE = 62329.76283145285
+    (Test-Train)/Train: 6%
+
+    # of predictor vars = 1 (GarageArea)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 60861.68865273488
+    Test RMSE = 68169.47489305338
+    (Test-Train)/Train: 12%
+
+    # of predictor vars = 1 (WoodDeckSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 76667.47730395387
+    Test RMSE = 76269.68336294664
+    (Test-Train)/Train: -1%
+
+    # of predictor vars = 1 (OpenPorchSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 77211.32431815827
+    Test RMSE = 77835.48585472786
+    (Test-Train)/Train: 1%
+
+    # of predictor vars = 1 (EnclosedPorch)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 79649.97674905702
+    Test RMSE = 80370.50946830492
+    (Test-Train)/Train: 1%
+
+    # of predictor vars = 1 (YrSold)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 80208.64778880267
+    Test RMSE = 81384.86909780584
+    (Test-Train)/Train: 1%
+
+    # of predictor vars = 1 (MoSold)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 80211.76963270074
+    Test RMSE = 81188.01231524699
+    (Test-Train)/Train: 1%
+
+
+
+
+```python
+from regression_predict_sklearn import compare_univariate_models_plot
+sorted_predictors = compare_univariate_models_plot(df_model_err)
+```
+
+    45623.065303950156
+    44642.13568108219
+
+
+
+
+
+
+
+
+### Examing the worst/best performers
+
+
+```python
+feat_index=0
+for feat in sorted_predictors[-5:]:
+    # fit univariate model and return train/test RMSE
+    RMSE_train, RMSE_test = fit_eval_model(X_train=X_train, y_train=y_train,
+                                           X_test=X_test, y_test=y_test,
+                                           predictors=[feat],
+                                           metric='RMSE', log_scaled=True,
+                                           model_type='unregularized', include_plots=True)
+    print('')
+    # store model errors
+    RMSE_train_list[feat_index] = RMSE_train
+    RMSE_test_list[feat_index] = RMSE_test#metrics.mean_squared_error(y_test, predicted_test,squared=False) # squared=False to get RMSE instead of MSE
+    feat_index+=1
+
+# store errors in pandas dataframe for ease of access downstream
+df_model_err = pd.DataFrame()
+df_model_err['Predictor Variable'] = X_train.columns
+df_model_err['Train RMSE'] = RMSE_train_list
+df_model_err['Test RMSE'] = RMSE_test_list
+```
+
+    # of predictor vars = 1 (OverallCond)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 80366.68673923709
+    Test RMSE = 81631.48127835637
+    (Test-Train)/Train: 2%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # of predictor vars = 1 (BsmtFinSF1)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 72748.93172833491
+    Test RMSE = 84771.1336800596
+    (Test-Train)/Train: 17%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # of predictor vars = 1 (GrLivArea)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 59694.54179405045
+    Test RMSE = 88001.68930541775
+    (Test-Train)/Train: 47%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # of predictor vars = 1 (1stFlrSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 64348.596396317
+    Test RMSE = 90726.32385904736
+    (Test-Train)/Train: 41%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    # of predictor vars = 1 (TotalBsmtSF)
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 62981.24495506702
+    Test RMSE = 170676.30200173028
+    (Test-Train)/Train: 171%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 #### 7) Explaining models
