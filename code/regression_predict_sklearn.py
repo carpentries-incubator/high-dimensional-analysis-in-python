@@ -164,20 +164,24 @@ def plot_train_test_predictions(predictors,
     return (fig1, fig2)
 
 
-
 def fit_eval_model(X_train, y_train, 
                    X_test, y_test, 
                    predictors, 
                    metric, log_scaled, 
                    model_type, include_plots):
-    '''This function uses the predictor vars specified by predictor_vars to predict housing price. Function returns RMSE for both train and test data'''
+    '''This function uses the predictor vars specified by predictor_vars to predict housing price. Function returns error metric for both train and test data'''
     
     # Convert response vectors from pandas series to numpy arrays. 
     # This is necessary for downstream analyses (required format for linear regression fucntion we'll use).
     y_train=np.array(y_train) 
     y_test=np.array(y_test) 
 
+    if isinstance(predictors, str):
+        # if working with a single predictor, convert to list (fit_eval_model expects a list of predictors, not a char)
+        predictors = [predictors]
+        
     # Index specific predictor vars. Use reshape to handle case of just one predictor var (convert to shape=[numRows,numvars] rather than shape=[numRows,] )
+
     X_train=np.array(X_train[predictors]).reshape(-1, len(predictors)) # index subset of predictor vars
     X_test=np.array(X_test[predictors]).reshape(-1, len(predictors)) # do the same for test set
 
@@ -191,7 +195,7 @@ def fit_eval_model(X_train, y_train,
     print('# of predictor vars = ' + str(len(predictors)) + preview_predict_var)
     print('# of train observations = ' + str(X_train.shape[0]))
     print('# of test observations = ' + str(X_test.shape[0]))
-  
+    
     # fit model to training data
     reg = train_linear_model(X_train, y_train, model_type)
 
@@ -211,6 +215,7 @@ def fit_eval_model(X_train, y_train,
     perc_diff = "{:.0%}".format(perc_diff)
     print('(Test-Train)/Train:', perc_diff)
     
+
     if include_plots:
         (fig1, fig2) = plot_train_test_predictions(predictors=predictors,
                                                    X_train=X_train, X_test=X_test,
@@ -218,43 +223,75 @@ def fit_eval_model(X_train, y_train,
                                                    y_pred_train=y_pred_train, y_pred_test=y_pred_test,
                                                    log_scaled=log_scaled);
     
+    print('')
     
     return train_err, test_err
 
 
-def compare_univariate_models_plot(df_model_err):
+def compare_models_plot(df_model_err, metric):
 
     # Let's take a closer look at the results by sorting the test error from best feature to worst. We'll then plot performance by feature for both train and test data.
-    RMSE_test = np.asarray(df_model_err['Test RMSE'])
-    sort_inds=[i[0] for i in sorted(enumerate(RMSE_test), key=lambda x:x[1])]
+    test_err = np.asarray(df_model_err['Test Error'])
+    sort_inds=[i[0] for i in sorted(enumerate(test_err), key=lambda x:x[1])]
     sort_inds = np.array(sort_inds)
 
     # now that we have the sort indices based on test set performance, we'll sort the trainErr, testErr, and feature name vectors
-    RMSE_train = np.asarray(df_model_err['Train RMSE'])
+    train_err = np.asarray(df_model_err['Train Error'])
     all_feats = df_model_err['Predictor Variable']
-    RMSE_train=RMSE_train[sort_inds]
-    RMSE_test=RMSE_test[sort_inds]
+    train_err=train_err[sort_inds]
+    test_err=test_err[sort_inds]
     labels=all_feats[sort_inds] 
-
-    # plot out top 10 features based on RMSE; try tight layout or set fig size 
+    print(labels)
+    print(len(labels))
+    
+    # plot out top 10 features based on error; try tight layout or set fig size 
     num_feats_plot=min(30,len(labels))
     fig, ax = plt.subplots()
-    ax.plot(RMSE_train[0:num_feats_plot], linestyle='--', marker='o', color='b')
-    ax.plot(RMSE_test[0:num_feats_plot], linestyle='--', marker='o', color='r')
+    ax.plot(train_err[0:num_feats_plot], linestyle='--', marker='o', color='b')
+    ax.plot(test_err[0:num_feats_plot], linestyle='--', marker='o', color='r')
     
     ax.set_xticks(list(range(0, num_feats_plot)))
     ax.set_xticklabels(labels[0:num_feats_plot], rotation=45, ha='right')
     
-    ax.set_ylabel('RMSE')
+    ax.set_ylabel(metric)
     ax.legend(['train','test']);
     # increase fig size a bit
     fig = plt.gcf()
     fig.set_size_inches(14, 7) 
     # remind ourselves of train/test error for top-performing predictor variable
-    print(RMSE_train[0])
-    print(RMSE_test[0])
+    print(train_err[0])
+    print(test_err[0])
     
     return labels
     
+
+def compare_models(X_train, y_train, 
+                   X_test, y_test,
+                   predictors_list, 
+                   metric, log_scaled, 
+                   model_type, include_plots):
+    feat_index=0
+    train_err_list=[None] * len(X_train.columns)
+    test_err_list=[None] * len(X_train.columns)
+    for predictors in predictors_list:  
+
+        train_err, test_err = fit_eval_model(X_train=X_train, y_train=y_train, 
+                                               X_test=X_test, y_test=y_test,
+                                               predictors=predictors, 
+                                               metric=metric, log_scaled=log_scaled, 
+                                               model_type=model_type, include_plots=include_plots)
+
+        # store model errors
+        train_err_list[feat_index] = train_err
+        test_err_list[feat_index] = test_err
+        feat_index+=1
+
+    # store errors in pandas dataframe for ease of access downstream
+    df_model_err = pd.DataFrame()
+    df_model_err['Predictor Variable'] = X_train.columns
+    df_model_err['Train Error'] = train_err_list
+    df_model_err['Test Error'] = test_err_list
     
+    return df_model_err
+
     
