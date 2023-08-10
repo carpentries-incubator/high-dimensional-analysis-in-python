@@ -21,11 +21,11 @@ questions:
 # Linear Regression
 Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset **linearly relate** to some *target variable* (e.g., house sale prices). Starting with linear models when working with high-dimensional data can offer several advantages including:
 
-* Simplicity and Interpretability: Linear models, such as linear regression, are relatively simple and interpretable. They provide a clear understanding of how each predictor variable contributes to the outcome, which can be especially valuable in exploratory analysis.
+* **Simplicity and Interpretability**: Linear models, such as linear regression, are relatively simple and interpretable. They provide a clear understanding of how each predictor variable contributes to the outcome, which can be especially valuable in exploratory analysis.
 
-* Baseline Understanding: Linear models can serve as a baseline for assessing the predictive power of individual features. This baseline helps you understand which features have a significant impact on the target variable and which ones might be less influential.
+* **Baseline Understanding**: Linear models can serve as a baseline for assessing the predictive power of individual features. This baseline helps you understand which features have a significant impact on the target variable and which ones might be less influential.
 
-* Feature Selection: Linear models can help you identify relevant features by looking at the estimated coefficients. Features with large coefficients are likely to have a stronger impact on the outcome, while those with small coefficients might have negligible effects
+* **Feature Selection**: Linear models can help you identify relevant features by looking at the estimated coefficients. Features with large coefficients are likely to have a stronger impact on the outcome, while those with small coefficients might have negligible effects
 
 While linear models have their merits, it's important to recognize that they might not capture complex (nonlinear) relationships present in the data. However, they are often the best option available when working in a high-dimensional context unless data is extremely limited.
 
@@ -35,9 +35,9 @@ By fitting linear models to the Ames housing dataset, we can...
 1. **Predict**: Use predictive modeling to predict hypothetical/future sale prices based on observed values of the predictor variables in our dataset (e.g., garage size, year built, etc.).
 2. **Explain**: Use statistics to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable (a.k.a. response / dependent variable)
 
-**"Target" and "Predictor" Synonyms**
-* Predictor = independent = feature
-* Target = dependent = response = outcome
+**Terminology note:** "target" and "predictor" synonyms
+* Predictor = independent variable = feature
+* Target = dependent variable = response = outcome
 
 In this workshop, we will explore how we can exploit well-established machine learning methods, including *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals on high-dimensional datasets.
 
@@ -50,8 +50,24 @@ In this workshop, we will explore how we can exploit well-established machine le
 {:.challenge}
 
 
-### Predicting housing prices with a single predictor
+## Predicting housing prices with a single predictor
 We'll start with the first goal: prediction. How can we use regression models to predict housing sale prices? For clarity, we will begin this question through the lens of simple univariate regression models.
+
+### General procedure for fitting and evaluating predictive models
+We'll follow this general procedure to fit and evaluate predictive models:
+
+1. **Extract predictor(s), X, and target, y, variables**
+2. **Preprocess the data: check for NaNs and extreme sparsity**
+3. **Visualize the relationship between X and y**
+4. **Transform target variable, if necessary, to get a linear relationship between predictors**
+5. **Train/test split the data**
+6. **Fit the model to the training data**
+7. **Evaluate model**
+
+    a. Plot the data vs predictions - qualitative assessment
+
+    b. Measure train/test set errors and check for signs of underfitting or overfitting
+
 
 We'll start by loading in the Ames housing data as we have done previously in this workshop.
 
@@ -61,7 +77,7 @@ from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
 ```
 
-#### Extract predictor variable and target variable from dataframe
+### 1) Extract predictor variable and target variable from dataframe
 Next, we'll extract the two variables we'll use for our model — the target variable that we'll attempt to predict (SalePrice), and a single predictor variable that will be used to predict the target variable. For this example, we'll explore how well the "OverallQual" variable (i.e., the predictor variable) can predict sale prices.
 
 **OverallQual**: Rates the overall material and finish of the house
@@ -77,7 +93,20 @@ predictor = 'OverallQual'
 x = housing['data'][predictor]
 ```
 
-#### Visualize the relationship between x and y
+### 2) Preprocess the data
+
+
+```python
+# remove columns with nans or containing > 97% constant values (typically 0's)
+from preprocessing import remove_bad_cols
+x_good = remove_bad_cols(x, .9)
+```
+
+    # of columns removed: 0
+    Columns removed: []
+
+
+### 3) Visualize the relationship between x and y
 Before fitting any models in a univariate context, we should first explore the data to get a sense for the relationship between the predictor variable, "OverallQual", and the response variable, "SalePrice". If this relationship does not look linear, we won't be able to fit a good linear model (i.e., a model with low average prediction error in a predictive modeling context) to the data.
 
 
@@ -97,6 +126,7 @@ plt.ylabel('Sale Price');
 
 <img src="../fig/regression/scatterplot_x_vs_salePrice.png"  align="center" width="30%" height="30%">
 
+### 4) Transform target variable, if necessary
 Unfortunately, sale price appears to grow almost exponentially—not linearly—with the predictor variable. Any line we draw through this data cloud is going to fail in capturing the true trend we see here.
 
 ##### Log scaling
@@ -126,7 +156,7 @@ plt.ylabel('Sale Price');
 
 This plot looks much better than the previous one. That is, the trend between OverallQual and log(SalePrice) appears fairly linear. Whether or not it is sufficiently linear can be addressed when we evaluate the model's performance later.
 
-#### 3) Train/test split
+### 5) Train/test split
 Next, we will prepare two subsets of our data to be used for *model-fitting* and *model evaluation*. This process is standard for any predictive modeling task that involves a model "learning" from observed data (e.g., fitting a line to the observed data).
 
 During the model-fitting step, we use a subset of the data referred to as **training data** to estimate the model's coefficients (the slope of the model). The univariate model will find a line of best fit through this data.
@@ -170,7 +200,7 @@ print(x_test.shape)
     (482, 1)
 
 
-#### 4) Fit the model to the training dataset
+### 6) Fit the model to the training dataset
 
 During the model fitting step, we use a subset of the data referred to as **training data** to estimate the model's coefficients. The univariate model will find a line of best fit through this data.
 
@@ -183,7 +213,8 @@ from sklearn.linear_model import LinearRegression
 reg = LinearRegression().fit(x_train,y_train)
 ```
 
-#### 5) Get model predictions for train and test data
+### 7) Evaluate model
+#### a) Plot the data vs predictions - qualitative assessment
 
 
 ```python
@@ -191,12 +222,52 @@ y_pred_train=reg.predict(x_train)
 y_pred_test=reg.predict(x_test)
 ```
 
-#### 6) Plot the data vs predictions - qualitative assessment
+
+```python
+from regression_predict_sklearn import plot_train_test_predictions
+
+?plot_train_test_predictions
+```
+
+
+    [1;31mSignature:[0m
+    [0mplot_train_test_predictions[0m[1;33m([0m[1;33m
+    [0m    [0mpredictors[0m[1;33m:[0m [0mList[0m[1;33m[[0m[0mstr[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mX_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mX_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_pred_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_pred_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0merr_type[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mstr[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
+    [0m    [0mtrain_err[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mfloat[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
+    [0m    [0mtest_err[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mfloat[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
+    [0m[1;33m)[0m [1;33m->[0m [0mTuple[0m[1;33m[[0m[0mOptional[0m[1;33m[[0m[0mmatplotlib[0m[1;33m.[0m[0mfigure[0m[1;33m.[0m[0mFigure[0m[1;33m][0m[1;33m,[0m [0mOptional[0m[1;33m[[0m[0mmatplotlib[0m[1;33m.[0m[0mfigure[0m[1;33m.[0m[0mFigure[0m[1;33m][0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+    [1;31mDocstring:[0m
+    Plot true vs. predicted values for train and test sets and line of best fit.
+
+    Args:
+        predictors (List[str]): List of predictor names.
+        X_train (np.ndarray): Training feature data.
+        X_test (np.ndarray): Test feature data.
+        y_train (np.ndarray): Actual target values for the training set.
+        y_test (np.ndarray): Actual target values for the test set.
+        y_pred_train (np.ndarray): Predicted target values for the training set.
+        y_pred_test (np.ndarray): Predicted target values for the test set.
+        log_scaled (bool): Whether the target values are log-scaled or not.
+        err_type (Optional[str]): Type of error metric.
+        train_err (Optional[float]): Training set error value.
+        test_err (Optional[float]): Test set error value.
+
+    Returns:
+        Tuple[Optional[plt.Figure], Optional[plt.Figure]]: Figures for true vs. predicted values and line of best fit.
+    [1;31mFile:[0m      c:\users\endemann\documents\github\high-dim-data-lesson\code\regression_predict_sklearn.py
+    [1;31mType:[0m      function
 
 
 
 ```python
-from regression_predict_sklearn import plot_train_test_predictions
 (fig1, fig2) = plot_train_test_predictions(predictors=[predictor],
                                            X_train=x_train, X_test=x_test,
                                            y_train=y_train, y_test=y_test,
@@ -237,7 +308,7 @@ from regression_predict_sklearn import plot_train_test_predictions
 > 
 > > ## Solution
 > >
-> > 1. Based on visual inspection, this linear model does a fairly good job in capturing the relationship between "OverallQual" and sale price. While sales price appears to follow a predictable trend, it may be best to first quantitatively evaluate the model before overrelying on its predictions.
+> > 1. Based on visual inspection, this linear model does a fairly good job in capturing the relationship between "OverallQual" and sale price. However, there is a tendency for the model to underpredict more expensive homes and overpredict less expensive homes.
 > > 
 > > 2. Since the train and test set plots look very similar, overfitting is not a concern. Generally speaking, overfitting is not encountered with univariate models unless you have an incredily small number of samples to train the model on. Since the model follows the trajectory of sale price reasonably well, it also does not appear to underfit the data (at least not to an extreme extent).
 > > 
@@ -247,7 +318,7 @@ from regression_predict_sklearn import plot_train_test_predictions
 {:.challenge}
 
 
-#### 5) Measure model error and assess under/overfitting
+#### b. Measure train/test set errors and check for signs of underfitting or overfitting
 While qualitative examinations of model performance are extremely helpful, it is always a good idea to pair such evaluations with a quantitative analysis of the model's performance.
 
 **Convert back to original data scale**
@@ -255,11 +326,11 @@ There are several error measurements that can't be used to measure a regression 
 
 
 ```python
-salePrice_train = np.exp(y_train)
-pred_salePrice_train = np.exp(y_pred_train)
+expY_train = np.exp(y_train)
+pred_expY_train = np.exp(y_pred_train)
 
-salePrice_test = np.exp(y_test)
-pred_salePrice_test = np.exp(y_pred_test)
+expY_test = np.exp(y_test)
+pred_expY_test = np.exp(y_pred_test)
 ```
 
 **Measure baseline performance**
@@ -269,15 +340,33 @@ pred_salePrice_test = np.exp(y_pred_test)
 from math import sqrt
 import pandas as pd
 
-mean_sale_price = y.mean()
-print('mean sale price =', mean_sale_price)
-
+baseline_predict = y.mean()
+print('mean sale price =', baseline_predict)
 # convert to series same length as y sets for ease of comparison
-mean_sale_price = pd.Series(mean_sale_price)
-mean_sale_price = mean_sale_price.repeat(len(y))
+baseline_predict = pd.Series(baseline_predict)
+baseline_predict = baseline_predict.repeat(len(y))
+baseline_predict
 ```
 
     mean sale price = 180921.19589041095
+
+
+
+
+
+    0    180921.19589
+    0    180921.19589
+    0    180921.19589
+    0    180921.19589
+    0    180921.19589
+             ...
+    0    180921.19589
+    0    180921.19589
+    0    180921.19589
+    0    180921.19589
+    0    180921.19589
+    Length: 1460, dtype: float64
+
 
 
 **Root Mean Squared Error (RMSE)**:
@@ -287,9 +376,9 @@ The RMSE provides an easy-to-interpret number that represents error in terms of 
 ```python
 from sklearn import metrics
 
-RMSE_baseline = metrics.mean_squared_error(y, mean_sale_price, squared=False)
-RMSE_train = metrics.mean_squared_error(salePrice_train, pred_salePrice_train, squared=False)
-RMSE_test = metrics.mean_squared_error(salePrice_test, pred_salePrice_test, squared=False)
+RMSE_baseline = metrics.mean_squared_error(y, baseline_predict, squared=False)
+RMSE_train = metrics.mean_squared_error(expY_train, pred_expY_train, squared=False)
+RMSE_test = metrics.mean_squared_error(expY_test, pred_expY_test, squared=False)
 
 print(f"Baseline RMSE = {RMSE_baseline}")
 print(f"Train RMSE = {RMSE_train}")
@@ -306,11 +395,55 @@ Here, both train and test RMSE are very similar to one another. As expected with
 **Mean Absolute Percentage Error**:
 What if we wanted to know the percent difference between the true sale price and the predicted sale price? For this, we can use the **mean absolute percentage error (MAPE)**...
 
+#### Practice using helper function, `measure_model_err`
+This code will be identical to the code above except for changing `metrics.mean_squared_error` to `metrics.mean_absolute_percentage_error`.
+
+Rather than copying and pasting the code above, let's try using one of the helper functions provided for this workshop.
+
 
 ```python
-MAPE_baseline = metrics.mean_absolute_percentage_error(y, mean_sale_price)
-MAPE_train = metrics.mean_absolute_percentage_error(salePrice_train, pred_salePrice_train)
-MAPE_test = metrics.mean_absolute_percentage_error(salePrice_test, pred_salePrice_test)
+from regression_predict_sklearn import measure_model_err
+?measure_model_err
+```
+
+
+    [1;31mSignature:[0m
+    [0mmeasure_model_err[0m[1;33m([0m[1;33m
+    [0m    [0my[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mbaseline_pred[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mfloat[0m[1;33m,[0m [0mnumpy[0m[1;33m.[0m[0mfloat64[0m[1;33m,[0m [0mnumpy[0m[1;33m.[0m[0mfloat32[0m[1;33m,[0m [0mint[0m[1;33m,[0m [0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_pred_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0my_pred_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mmetric[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
+    [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m[1;33m)[0m [1;33m->[0m [0mTuple[0m[1;33m[[0m[0mfloat[0m[1;33m,[0m [0mfloat[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+    [1;31mDocstring:[0m
+    Measures the error of a regression model's predictions on train and test sets.
+
+    Args:
+        y (Union[np.ndarray, pd.Series]): Actual target values for full dataset (not transformed)
+        baseline_pred (Union[float, np.float64, np.float32, int, np.ndarray, pd.Series]): Single constant or array of predictions equal to the length of y. Baseline is also not transformed.
+        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+        y_pred_train (Union[np.ndarray, pd.Series]): Predicted target values for the training set.
+        y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
+        y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
+        metric (str): The error metric to calculate ('RMSE', 'R-squared', or 'MAPE').
+        log_scaled (bool): Whether the target values are log-scaled or not.
+
+    Returns:
+        Tuple[float, float]: A tuple containing the error values for the training set and test set.
+    [1;31mFile:[0m      c:\users\endemann\documents\github\high-dim-data-lesson\code\regression_predict_sklearn.py
+    [1;31mType:[0m      function
+
+
+
+```python
+MAPE_baseline, MAPE_train, MAPE_test = measure_model_err(y=y, baseline_pred=baseline_predict,
+                                                         y_train=expY_train, y_pred_train=pred_expY_train,
+                                                         y_test=expY_test, y_pred_test=pred_expY_test,
+                                                         metric='MAPE', log_scaled=False)
+
 print(f"Baseline MAPE = {MAPE_baseline*100}")
 print(f"Train MAPE = {MAPE_train*100}")
 print(f"Test MAPE = {MAPE_test*100}")
@@ -327,18 +460,19 @@ With the MAPE measurement (max value of 1 which corresponds to 100%), we can sta
 
 
 ```python
-R2_baseline = metrics.r2_score(y, mean_sale_price)
-R2_train = metrics.r2_score(y_train, y_pred_train)
-R2_test = metrics.r2_score(y_test, y_pred_test)
+R2_baseline, R2_train, R2_test = measure_model_err(y=y, baseline_pred=baseline_predict,
+                                                   y_train=expY_train, y_pred_train=pred_expY_train,
+                                                   y_test=expY_test, y_pred_test=pred_expY_test,
+                                                   metric='R-squared', log_scaled=False)
+
 print(f"Baseline R-squared = {R2_baseline}")
 print(f"Train R-squared = {R2_train}")
 print(f"Test R-squared = {R2_test}")
-
 ```
 
     Baseline R-squared = 0.0
-    Train R-squared = 0.6521389099611015
-    Test R-squared = 0.7012721408788911
+    Train R-squared = 0.6668752959029058
+    Test R-squared = 0.6904634915571379
 
 
 Our model predicts 70.1% (65.2%) of the variance across sale prices in the test set (train set). The R-squared for the baseline model is 0 because the numerator and denominator in the equation for R-squared are equivalent:
@@ -370,15 +504,18 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 {:.challenge}
 
 
-#### Comparing univariate models
+## Comparing univariate models
+Let's see how well the other predictors in our dataset can predict sale prices. For simplicity, we'll compare just continous predictors for now.
+
+### General procedure for comparing predictive models
+We'll follow this general procedure to compare models:
 
 1. Use get_feat_types() to get a list of continuous predictors
 2. Create an X variable containing only continuous predictors from `housing['data']`
 3. Extract sale prices from `housing['target']` and log scale it
 4. Use the remove_bad_cols helper function to remove predictors with nans or containing > 97% constant values (typically 0's)
-4. Perform a train/test split leaving 1/3 of the data out for the test set
-5. Call the `fit_eval_model()` helper function for each predictor being tested. Store the train/test errors for each predictor
-6. Create a `df_model_err` df that contains the following data stored for each predictor: 'Predictor Variable', 'RMSE_train', 'Test RMSE'.
+5. Perform a train/validation/test split using 60% of the data to train, 20% for validation (model selection), and 20% for final testing of the data
+6. Use the `compare_models` helper function to quickly calculate train/validation errors for all possible single predictors. Returns a `df_model_err` df that contains the following data stored for each predictor: 'Predictor Variable', 'Train Error', 'Validation Error'.
 
 
 ```python
@@ -392,12 +529,6 @@ y_log = np.log(housing['target'])
 # remove columns with nans or containing > 97% constant values (typically 0's)
 from preprocessing import remove_bad_cols
 X_good = remove_bad_cols(X, .9)
-
-# train/test split
-X_train, X_test, y_train, y_test = train_test_split(X_good, y_log,
-                                                    test_size=1/3,
-                                                    random_state=0)
-
 ```
 
     LotFrontage contains 259 NAs
@@ -415,259 +546,356 @@ X_train, X_test, y_train, y_test = train_test_split(X_good, y_log,
 
 
 ```python
-RMSE_train_list=[None] * len(X_train.columns)
-RMSE_test_list=[None] * len(X_train.columns)
+# train/holdout split
+X_train, X_holdout, y_train, y_holdout = train_test_split(X_good, y_log,
+                                                          test_size=0.4,
+                                                          random_state=0)
+
+# validation/test split
+X_val, X_test, y_val, y_test = train_test_split(X_holdout, y_holdout,
+                                                test_size=0.5,
+                                                random_state=0)
 ```
 
 
 ```python
-from regression_predict_sklearn import fit_eval_model
+from regression_predict_sklearn import compare_models
+?compare_models
+```
 
-feat_index=0
-for feat in X_train.columns:
-    # fit univariate model and return train/test RMSE
-    RMSE_train, RMSE_test = fit_eval_model(X_train=X_train, y_train=y_train,
-                                           X_test=X_test, y_test=y_test,
-                                           predictors=[feat],
-                                           metric='RMSE', log_scaled=True,
-                                           model_type='unregularized', include_plots=False)
-    print('')
-    # store model errors
-    RMSE_train_list[feat_index] = RMSE_train
-    RMSE_test_list[feat_index] = RMSE_test#metrics.mean_squared_error(y_test, predicted_test,squared=False) # squared=False to get RMSE instead of MSE
-    feat_index+=1
 
-# store errors in pandas dataframe for ease of access downstream
-df_model_err = pd.DataFrame()
-df_model_err['Predictor Variable'] = X_train.columns
-df_model_err['Train RMSE'] = RMSE_train_list
-df_model_err['Test RMSE'] = RMSE_test_list
+    [1;31mSignature:[0m
+    [0mcompare_models[0m[1;33m([0m[1;33m
+    [0m    [0my[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mbaseline_pred[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mX_train[0m[1;33m:[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m,[0m[1;33m
+    [0m    [0my_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mX_val[0m[1;33m:[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m,[0m[1;33m
+    [0m    [0my_val[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mpredictors_list[0m[1;33m:[0m [0mList[0m[1;33m[[0m[0mList[0m[1;33m[[0m[0mstr[0m[1;33m][0m[1;33m][0m[1;33m,[0m[1;33m
+    [0m    [0mmetric[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
+    [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0mmodel_type[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
+    [0m    [0minclude_plots[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m[1;33m)[0m [1;33m->[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m[0m[1;33m[0m[0m
+    [1;31mDocstring:[0m
+    Compare different models based on predictor variables and evaluate their errors.
+
+    Args:
+        y (Union[np.ndarray, pd.Series]): Target variable in its original scale (raw/untransformed).
+        baseline_pred (Union[np.ndarray, pd.Series]): Baseline predictions (in same scale as original target, y).
+        X_train (pd.DataFrame): Training feature data.
+        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+        X_val (pd.DataFrame): Validation feature data.
+        y_val (Union[np.ndarray, pd.Series]): Actual target values for the validation set.
+        predictors_list (List[List[str]]): List of predictor variables for different models.
+        metric (str): The error metric to calculate.
+        log_scaled (bool): Whether the model was trained on log-scaled target values or not.
+        model_type (str): Type of the model being used.
+        include_plots (bool): Whether to include plots.
+
+    Returns:
+        pd.DataFrame: A DataFrame containing model errors for different predictor variables.
+    [1;31mFile:[0m      c:\users\endemann\documents\github\high-dim-data-lesson\code\regression_predict_sklearn.py
+    [1;31mType:[0m      function
+
+
+
+```python
+df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
+                              X_train=X_train, y_train=y_train,
+                              X_val=X_val, y_val=y_val,
+                              predictors_list=X_train.columns,
+                              metric='RMSE', log_scaled=True,
+                              model_type='unregularized', include_plots=False)
 ```
 
     # of predictor vars = 1 (LotArea)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 83028.37305855636
-    Test RMSE = 80420.2670800344
-    (Test-Train)/Train: -3%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 82875.38085495801
+    Holdout RMSE = 84323.18923359209
+    (Holdout-Train)/Train: 2%
 
     # of predictor vars = 1 (YearBuilt)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 67215.86073110496
-    Test RMSE = 67183.55371908506
-    (Test-Train)/Train: -0%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 67679.79091967695
+    Holdout RMSE = 69727.34105729726
+    (Holdout-Train)/Train: 3%
 
     # of predictor vars = 1 (YearRemodAdd)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 68425.7461018627
-    Test RMSE = 70019.97319311542
-    (Test-Train)/Train: 2%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 69055.74101358843
+    Holdout RMSE = 70634.28565335085
+    (Holdout-Train)/Train: 2%
 
     # of predictor vars = 1 (OverallQual)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 45623.065303950156
-    Test RMSE = 44642.13568108219
-    (Test-Train)/Train: -2%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 45516.18554163278
+    Holdout RMSE = 46993.501005708364
+    (Holdout-Train)/Train: 3%
 
     # of predictor vars = 1 (OverallCond)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 80366.68673923709
-    Test RMSE = 81631.48127835637
-    (Test-Train)/Train: 2%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 81016.56620745258
+    Holdout RMSE = 84915.45225176154
+    (Holdout-Train)/Train: 5%
 
     # of predictor vars = 1 (BsmtFinSF1)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 72748.93172833491
-    Test RMSE = 84771.1336800596
-    (Test-Train)/Train: 17%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 73380.6957528966
+    Holdout RMSE = 93695.51432329496
+    (Holdout-Train)/Train: 28%
 
     # of predictor vars = 1 (BsmtFinSF2)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 80295.68858571006
-    Test RMSE = 81327.64920427596
-    (Test-Train)/Train: 1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 81032.9999001109
+    Holdout RMSE = 84932.09816351396
+    (Holdout-Train)/Train: 5%
 
     # of predictor vars = 1 (BsmtUnfSF)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 78478.49546769331
-    Test RMSE = 79032.7639585704
-    (Test-Train)/Train: 1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 79102.09029562424
+    Holdout RMSE = 82834.52706053828
+    (Holdout-Train)/Train: 5%
 
     # of predictor vars = 1 (TotalBsmtSF)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 62981.24495506702
-    Test RMSE = 170676.30200173028
-    (Test-Train)/Train: 171%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 63479.544551733954
+    Holdout RMSE = 220453.4404000341
+    (Holdout-Train)/Train: 247%
 
     # of predictor vars = 1 (1stFlrSF)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 64348.596396317
-    Test RMSE = 90726.32385904736
-    (Test-Train)/Train: 41%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 65085.562454919695
+    Holdout RMSE = 105753.38603752904
+    (Holdout-Train)/Train: 62%
 
     # of predictor vars = 1 (2ndFlrSF)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 75117.80767062792
-    Test RMSE = 77249.37774777155
-    (Test-Train)/Train: 3%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 75823.9442116895
+    Holdout RMSE = 82198.0727208069
+    (Holdout-Train)/Train: 8%
 
     # of predictor vars = 1 (GrLivArea)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 59694.54179405045
-    Test RMSE = 88001.68930541775
-    (Test-Train)/Train: 47%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 60495.94129708608
+    Holdout RMSE = 106314.04818601975
+    (Holdout-Train)/Train: 76%
 
     # of predictor vars = 1 (BsmtFullBath)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 78071.07788085632
-    Test RMSE = 79234.17602495886
-    (Test-Train)/Train: 1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 78743.02284141965
+    Holdout RMSE = 81578.57649938941
+    (Holdout-Train)/Train: 4%
 
     # of predictor vars = 1 (FullBath)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 64947.13616029772
-    Test RMSE = 67724.41387357097
-    (Test-Train)/Train: 4%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 65268.05249448099
+    Holdout RMSE = 71179.80571404072
+    (Holdout-Train)/Train: 9%
 
     # of predictor vars = 1 (HalfBath)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 76875.2154503375
-    Test RMSE = 78089.50157989419
-    (Test-Train)/Train: 2%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 77596.37795287734
+    Holdout RMSE = 80738.02793699679
+    (Holdout-Train)/Train: 4%
 
     # of predictor vars = 1 (BedroomAbvGr)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 78859.0099196976
-    Test RMSE = 80928.58649269452
-    (Test-Train)/Train: 3%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 79493.20470404223
+    Holdout RMSE = 85212.09548505505
+    (Holdout-Train)/Train: 7%
 
     # of predictor vars = 1 (TotRmsAbvGrd)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 67314.34638993855
-    Test RMSE = 70487.08719845899
-    (Test-Train)/Train: 5%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 67840.8636310711
+    Holdout RMSE = 71515.1768065365
+    (Holdout-Train)/Train: 5%
 
     # of predictor vars = 1 (Fireplaces)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 71383.16839222088
-    Test RMSE = 72654.45183574369
-    (Test-Train)/Train: 2%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 72316.07195521964
+    Holdout RMSE = 74450.34818815267
+    (Holdout-Train)/Train: 3%
 
     # of predictor vars = 1 (GarageCars)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 58760.717829791596
-    Test RMSE = 62329.76283145285
-    (Test-Train)/Train: 6%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 59791.540810726234
+    Holdout RMSE = 63397.45129071621
+    (Holdout-Train)/Train: 6%
 
     # of predictor vars = 1 (GarageArea)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 60861.68865273488
-    Test RMSE = 68169.47489305338
-    (Test-Train)/Train: 12%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 62024.37703005484
+    Holdout RMSE = 73482.26232929318
+    (Holdout-Train)/Train: 18%
 
     # of predictor vars = 1 (WoodDeckSF)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 76667.47730395387
-    Test RMSE = 76269.68336294664
-    (Test-Train)/Train: -1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 77392.84834191747
+    Holdout RMSE = 79652.94391102252
+    (Holdout-Train)/Train: 3%
 
     # of predictor vars = 1 (OpenPorchSF)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 77211.32431815827
-    Test RMSE = 77835.48585472786
-    (Test-Train)/Train: 1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 77758.02983921244
+    Holdout RMSE = 80447.97275506181
+    (Holdout-Train)/Train: 3%
 
     # of predictor vars = 1 (EnclosedPorch)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 79649.97674905702
-    Test RMSE = 80370.50946830492
-    (Test-Train)/Train: 1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 80431.83354350468
+    Holdout RMSE = 83927.50566035754
+    (Holdout-Train)/Train: 4%
 
     # of predictor vars = 1 (YrSold)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 80208.64778880267
-    Test RMSE = 81384.86909780584
-    (Test-Train)/Train: 1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 80915.74311359474
+    Holdout RMSE = 85361.89584710822
+    (Holdout-Train)/Train: 5%
 
     # of predictor vars = 1 (MoSold)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 80211.76963270074
-    Test RMSE = 81188.01231524699
-    (Test-Train)/Train: 1%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 80954.47906260118
+    Holdout RMSE = 84837.77118209275
+    (Holdout-Train)/Train: 5%
 
 
 
 
 ```python
-from regression_predict_sklearn import compare_univariate_models_plot
-sorted_predictors = compare_univariate_models_plot(df_model_err)
+df_model_err.head()
 ```
 
-    45623.065303950156
-    44642.13568108219
 
 
 
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Predictor Variable</th>
+      <th>Baseline Error</th>
+      <th>Train Error</th>
+      <th>Validation Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LotArea</td>
+      <td>79415.291886</td>
+      <td>82875.380855</td>
+      <td>84323.189234</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>YearBuilt</td>
+      <td>79415.291886</td>
+      <td>67679.790920</td>
+      <td>69727.341057</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>YearRemodAdd</td>
+      <td>79415.291886</td>
+      <td>69055.741014</td>
+      <td>70634.285653</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>OverallQual</td>
+      <td>79415.291886</td>
+      <td>45516.185542</td>
+      <td>46993.501006</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>OverallCond</td>
+      <td>79415.291886</td>
+      <td>81016.566207</td>
+      <td>84915.452252</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
-
-
-
-### Examing the worst/best performers
 
 
 ```python
-feat_index=0
-for feat in sorted_predictors[-5:]:
-    # fit univariate model and return train/test RMSE
-    RMSE_train, RMSE_test = fit_eval_model(X_train=X_train, y_train=y_train,
-                                           X_test=X_test, y_test=y_test,
-                                           predictors=[feat],
-                                           metric='RMSE', log_scaled=True,
-                                           model_type='unregularized', include_plots=True)
-    print('')
-    # store model errors
-    RMSE_train_list[feat_index] = RMSE_train
-    RMSE_test_list[feat_index] = RMSE_test#metrics.mean_squared_error(y_test, predicted_test,squared=False) # squared=False to get RMSE instead of MSE
-    feat_index+=1
-
-# store errors in pandas dataframe for ease of access downstream
-df_model_err = pd.DataFrame()
-df_model_err['Predictor Variable'] = X_train.columns
-df_model_err['Train RMSE'] = RMSE_train_list
-df_model_err['Test RMSE'] = RMSE_test_list
+from regression_predict_sklearn import compare_models_plot
+sorted_predictors = compare_models_plot(df_model_err, 'RMSE');
 ```
 
-    # of predictor vars = 1 (OverallCond)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 80366.68673923709
-    Test RMSE = 81631.48127835637
-    (Test-Train)/Train: 2%
+    Best model train error = 45516.18554163278
+    Best model validation error = 46993.501005708364
+    Worst model train error = 63479.544551733954
+    Worst model validation error = 220453.4404000341
 
 
 
@@ -676,19 +904,25 @@ df_model_err['Test RMSE'] = RMSE_test_list
 
 
 
+### Examing the worst performers
 
 
+```python
+df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
+                              X_train=X_train, y_train=y_train,
+                              X_val=X_val, y_val=y_val,
+                              predictors_list=sorted_predictors[-3:],
+                              metric='RMSE', log_scaled=True,
+                              model_type='unregularized', include_plots=True)
+```
 
-
-
-
-
-    # of predictor vars = 1 (BsmtFinSF1)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 72748.93172833491
-    Test RMSE = 84771.1336800596
-    (Test-Train)/Train: 17%
+    # of predictor vars = 1 (1stFlrSF)
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 65085.562454919695
+    Holdout RMSE = 105753.38603752904
+    (Holdout-Train)/Train: 62%
 
 
 
@@ -705,32 +939,12 @@ df_model_err['Test RMSE'] = RMSE_test_list
 
 
     # of predictor vars = 1 (GrLivArea)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 59694.54179405045
-    Test RMSE = 88001.68930541775
-    (Test-Train)/Train: 47%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # of predictor vars = 1 (1stFlrSF)
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 64348.596396317
-    Test RMSE = 90726.32385904736
-    (Test-Train)/Train: 41%
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 60495.94129708608
+    Holdout RMSE = 106314.04818601975
+    (Holdout-Train)/Train: 76%
 
 
 
@@ -747,12 +961,282 @@ df_model_err['Test RMSE'] = RMSE_test_list
 
 
     # of predictor vars = 1 (TotalBsmtSF)
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 63479.544551733954
+    Holdout RMSE = 220453.4404000341
+    (Holdout-Train)/Train: 247%
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+It appears the worst performing predictors do not have much of a linear relationship with log(salePrice) and have some extreme outliers in the test set data. We also see some mild indication that some of these predictors may have other external variables that cause them to produce multiple distributions between predictor and log(salePrice). For example, it looks like there may be two data clouds in the TotalBsmtSF vs log(sale_price) plot. The type of basement finish may intersect with that relationship — producing multiple distributions. This is one reason why it is essential to include as many relevant variables in a model as possible.
+
+### Fitting all predictors
+Let's assume all predictors in the Ames housing dataset are related to at least some extent to sale price, and fit a multivariate regression model using all continuous predictors.
+
+
+```python
+df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
+                              X_train=X_train, y_train=y_train,
+                              X_val=X_val, y_val=y_val,
+                              predictors_list=[X_train.columns],
+                              metric='RMSE', log_scaled=True,
+                              model_type='unregularized', include_plots=True)
+```
+
+    # of predictor vars = 25
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 34882.115731053294
+    Holdout RMSE = 142964.987928765
+    (Holdout-Train)/Train: 310%
+
+
+
+
+
+
+
+
+
+
+
+### compare permutations of models with different numbers of predictors
+
+
+```python
+import itertools
+import random
+
+def generate_combinations(items, K):
+    return list(itertools.combinations(items, K))
+
+# Example usage
+X_train_columns = list(X_train.columns)
+K = 16  # Number of columns in each combination
+num_samples = 20
+
+all_combinations = generate_combinations(X_train_columns, K)
+sampled_combinations = random.sample(all_combinations, min(num_samples, len(all_combinations)))
+sampled_combinations = [list(combo) for combo in sampled_combinations] # convert to list of lists
+
+for combo in sampled_combinations:
+    print(combo)
+
+df_model_err = compare_models(X_train=X_train, y_train=y_train,
+                   X_test=X_test, y_test=y_test,
+                   predictors_list=sampled_combinations,
+                   metric='RMSE', log_scaled=True,
+                   model_type='unregularized', include_plots=False)
+
+sorted_predictors = compare_models_plot(df_model_err, 'RMSE')
+```
+
+    ['LotArea', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'EnclosedPorch', 'MoSold']
+    ['LotArea', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', '1stFlrSF', '2ndFlrSF', 'BsmtFullBath', 'FullBath', 'HalfBath', 'Fireplaces', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
+    ['YearBuilt', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '2ndFlrSF', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageArea', 'OpenPorchSF', 'EnclosedPorch', 'MoSold']
+    ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF1', 'TotalBsmtSF', '2ndFlrSF', 'GrLivArea', 'FullBath', 'HalfBath', 'TotRmsAbvGrd', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'YrSold', 'MoSold']
+    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'OverallCond', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'Fireplaces', 'GarageCars', 'GarageArea', 'OpenPorchSF', 'EnclosedPorch', 'YrSold', 'MoSold']
+    ['LotArea', 'OverallQual', 'OverallCond', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
+    ['LotArea', 'YearBuilt', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'FullBath', 'Fireplaces', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 'YrSold', 'MoSold']
+    ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF2', 'BsmtUnfSF', '1stFlrSF', 'GrLivArea', 'BsmtFullBath', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'YrSold', 'MoSold']
+    ['YearBuilt', 'BsmtFinSF1', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'GarageArea', 'EnclosedPorch', 'YrSold', 'MoSold']
+    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'FullBath', 'HalfBath', 'Fireplaces', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch']
+    ['LotArea', 'YearBuilt', 'OverallQual', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'BedroomAbvGr', 'WoodDeckSF', 'YrSold', 'MoSold']
+    ['YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'MoSold']
+    ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'BsmtFinSF1', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'FullBath', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'EnclosedPorch', 'YrSold', 'MoSold']
+    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF2', 'BsmtUnfSF', 'GrLivArea', 'BsmtFullBath', 'BedroomAbvGr', 'Fireplaces', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 'YrSold']
+    ['YearBuilt', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '2ndFlrSF', 'GrLivArea', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'Fireplaces', 'GarageCars', 'WoodDeckSF', 'EnclosedPorch']
+    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'BsmtFinSF1', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'OpenPorchSF', 'EnclosedPorch', 'YrSold']
+    ['YearBuilt', 'OverallQual', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'HalfBath', 'TotRmsAbvGrd', 'Fireplaces', 'WoodDeckSF', 'EnclosedPorch', 'YrSold', 'MoSold']
+    ['LotArea', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF1', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
+    ['LotArea', 'YearBuilt', 'OverallQual', 'BsmtFinSF2', 'BsmtUnfSF', '2ndFlrSF', 'BsmtFullBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'Fireplaces', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
+    ['LotArea', 'YearRemodAdd', 'OverallQual', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'HalfBath', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'MoSold']
+    # of predictor vars = 16
     # of train observations = 973
     # of test observations = 487
-    Train RMSE = 62981.24495506702
-    Test RMSE = 170676.30200173028
+    Train RMSE = 44501.907407993735
+    Test RMSE = 165133.51857708755
+    (Test-Train)/Train: 271%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 40080.24411630359
+    Test RMSE = 90100.72801158622
+    (Test-Train)/Train: 125%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 36353.8202812514
+    Test RMSE = 154265.47547974318
+    (Test-Train)/Train: 324%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 36696.2163499506
+    Test RMSE = 118841.22847233835
+    (Test-Train)/Train: 224%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 38474.08752561942
+    Test RMSE = 89496.02093486271
+    (Test-Train)/Train: 133%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 36358.51062647036
+    Test RMSE = 98590.23875605517
     (Test-Train)/Train: 171%
 
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 41404.04288173085
+    Test RMSE = 177883.0959053497
+    (Test-Train)/Train: 330%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 35503.42533146411
+    Test RMSE = 66750.12003363922
+    (Test-Train)/Train: 88%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 44441.22224450497
+    Test RMSE = 157790.9042683851
+    (Test-Train)/Train: 255%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 39099.062002021776
+    Test RMSE = 174087.85418686905
+    (Test-Train)/Train: 345%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 40959.287529578636
+    Test RMSE = 136114.31830108684
+    (Test-Train)/Train: 232%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 37150.51755208934
+    Test RMSE = 117451.98416959836
+    (Test-Train)/Train: 216%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 34249.835099681906
+    Test RMSE = 114909.73628432401
+    (Test-Train)/Train: 236%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 33555.77772436982
+    Test RMSE = 55276.71640821062
+    (Test-Train)/Train: 65%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 39565.008323192786
+    Test RMSE = 139380.15750391112
+    (Test-Train)/Train: 252%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 43038.96121037037
+    Test RMSE = 191863.36663309642
+    (Test-Train)/Train: 346%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 37676.15611392981
+    Test RMSE = 118035.79633539334
+    (Test-Train)/Train: 213%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 36166.58397878597
+    Test RMSE = 80152.32788819952
+    (Test-Train)/Train: 122%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 34233.86878865497
+    Test RMSE = 45822.75695507571
+    (Test-Train)/Train: 34%
+
+    # of predictor vars = 16
+    # of train observations = 973
+    # of test observations = 487
+    Train RMSE = 36971.77722218436
+    Test RMSE = 106457.90933135293
+    (Test-Train)/Train: 188%
+
+    18       GarageCars
+    13         FullBath
+    7         BsmtUnfSF
+    17       Fireplaces
+    4       OverallCond
+    1         YearBuilt
+    5        BsmtFinSF1
+    19       GarageArea
+    12     BsmtFullBath
+    11        GrLivArea
+    16     TotRmsAbvGrd
+    3       OverallQual
+    10         2ndFlrSF
+    14         HalfBath
+    2      YearRemodAdd
+    8       TotalBsmtSF
+    0           LotArea
+    9          1stFlrSF
+    6        BsmtFinSF2
+    15     BedroomAbvGr
+    20       WoodDeckSF
+    21      OpenPorchSF
+    22    EnclosedPorch
+    23           YrSold
+    24           MoSold
+    Name: Predictor Variable, dtype: object
+    25
+    34233.86878865497
+    45822.75695507571
 
 
 
@@ -761,6 +1245,228 @@ df_model_err['Test RMSE'] = RMSE_test_list
 
 
 
+
+```python
+df_model_err
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Predictor Variable</th>
+      <th>Train Error</th>
+      <th>Test Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>LotArea</td>
+      <td>44501.907408</td>
+      <td>165133.518577</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>YearBuilt</td>
+      <td>40080.244116</td>
+      <td>90100.728012</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>YearRemodAdd</td>
+      <td>36353.820281</td>
+      <td>154265.475480</td>
+    </tr>
+    <tr>
+      <th>3</th>
+      <td>OverallQual</td>
+      <td>36696.216350</td>
+      <td>118841.228472</td>
+    </tr>
+    <tr>
+      <th>4</th>
+      <td>OverallCond</td>
+      <td>38474.087526</td>
+      <td>89496.020935</td>
+    </tr>
+    <tr>
+      <th>5</th>
+      <td>BsmtFinSF1</td>
+      <td>36358.510626</td>
+      <td>98590.238756</td>
+    </tr>
+    <tr>
+      <th>6</th>
+      <td>BsmtFinSF2</td>
+      <td>41404.042882</td>
+      <td>177883.095905</td>
+    </tr>
+    <tr>
+      <th>7</th>
+      <td>BsmtUnfSF</td>
+      <td>35503.425331</td>
+      <td>66750.120034</td>
+    </tr>
+    <tr>
+      <th>8</th>
+      <td>TotalBsmtSF</td>
+      <td>44441.222245</td>
+      <td>157790.904268</td>
+    </tr>
+    <tr>
+      <th>9</th>
+      <td>1stFlrSF</td>
+      <td>39099.062002</td>
+      <td>174087.854187</td>
+    </tr>
+    <tr>
+      <th>10</th>
+      <td>2ndFlrSF</td>
+      <td>40959.287530</td>
+      <td>136114.318301</td>
+    </tr>
+    <tr>
+      <th>11</th>
+      <td>GrLivArea</td>
+      <td>37150.517552</td>
+      <td>117451.984170</td>
+    </tr>
+    <tr>
+      <th>12</th>
+      <td>BsmtFullBath</td>
+      <td>34249.835100</td>
+      <td>114909.736284</td>
+    </tr>
+    <tr>
+      <th>13</th>
+      <td>FullBath</td>
+      <td>33555.777724</td>
+      <td>55276.716408</td>
+    </tr>
+    <tr>
+      <th>14</th>
+      <td>HalfBath</td>
+      <td>39565.008323</td>
+      <td>139380.157504</td>
+    </tr>
+    <tr>
+      <th>15</th>
+      <td>BedroomAbvGr</td>
+      <td>43038.961210</td>
+      <td>191863.366633</td>
+    </tr>
+    <tr>
+      <th>16</th>
+      <td>TotRmsAbvGrd</td>
+      <td>37676.156114</td>
+      <td>118035.796335</td>
+    </tr>
+    <tr>
+      <th>17</th>
+      <td>Fireplaces</td>
+      <td>36166.583979</td>
+      <td>80152.327888</td>
+    </tr>
+    <tr>
+      <th>18</th>
+      <td>GarageCars</td>
+      <td>34233.868789</td>
+      <td>45822.756955</td>
+    </tr>
+    <tr>
+      <th>19</th>
+      <td>GarageArea</td>
+      <td>36971.777222</td>
+      <td>106457.909331</td>
+    </tr>
+    <tr>
+      <th>20</th>
+      <td>WoodDeckSF</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>21</th>
+      <td>OpenPorchSF</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>22</th>
+      <td>EnclosedPorch</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>23</th>
+      <td>YrSold</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+    <tr>
+      <th>24</th>
+      <td>MoSold</td>
+      <td>NaN</td>
+      <td>NaN</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
+
+```python
+sorted_predictors = compare_models_plot(df_model_err, 'RMSE')
+```
+
+    18       GarageCars
+    13         FullBath
+    7         BsmtUnfSF
+    17       Fireplaces
+    4       OverallCond
+    1         YearBuilt
+    5        BsmtFinSF1
+    19       GarageArea
+    12     BsmtFullBath
+    11        GrLivArea
+    16     TotRmsAbvGrd
+    3       OverallQual
+    10         2ndFlrSF
+    14         HalfBath
+    2      YearRemodAdd
+    8       TotalBsmtSF
+    0           LotArea
+    9          1stFlrSF
+    6        BsmtFinSF2
+    15     BedroomAbvGr
+    20       WoodDeckSF
+    21      OpenPorchSF
+    22    EnclosedPorch
+    23           YrSold
+    24           MoSold
+    Name: Predictor Variable, dtype: object
+    25
+    34233.86878865497
+    45822.75695507571
 
 
 
