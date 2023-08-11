@@ -296,13 +296,6 @@ from regression_predict_sklearn import plot_train_test_predictions
 
 
 
-    <class 'matplotlib.figure.Figure'>
-
-
-
-    <Figure size 640x480 with 0 Axes>
-
-
 <img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
 <img src="../fig/regression/univariate_x_vs_predPrice.png"  align="center" width="40%" height="40%">
 
@@ -816,10 +809,11 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
 sorted_predictors, best_train_err, best_val_err = compare_models_plot(df_model_err, 'RMSE')
 ```
 
-    Best model train error = 41810.2470081927
-    Best model validation error = 43673.421540992196
-    Worst model train error = 63915.6512949506
-    Worst model validation error = 238255.72357163005
+    [['LotArea', 'OverallCond'], ['OverallCond', '2ndFlrSF']]
+    Best model train error = 45227.296435140604
+    Best model validation error = 46096.334211313
+    Worst model train error = 58090.00889671407
+    Worst model validation error = 432023.298020248
 
 
 
