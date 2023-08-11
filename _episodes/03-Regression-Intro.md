@@ -930,7 +930,7 @@ sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=30)
 print(sampled_combinations[0:2])
 ```
 
-    [['2ndFlrSF', 'GarageCars'], ['Fireplaces', 'WoodDeckSF']]
+    [['GrLivArea', 'KitchenAbvGr'], ['LotArea', 'YearBuilt']]
 
 
 #### Compare efficacy of different numbers of predictors
@@ -959,8 +959,8 @@ for K in n_predictors:
 ```
 
     K = 1
-    Best model train error = 59791.540810726234
-    Best model validation error = 63397.45129071621
+    Best model train error = 45516.18554163278
+    Best model validation error = 46993.501005708364
     Worst model train error = 63479.544551733954
     Worst model validation error = 220453.4404000341
 
@@ -972,10 +972,10 @@ for K in n_predictors:
 
 
     K = 2
-    Best model train error = 45412.486097791
-    Best model validation error = 46671.22187234466
-    Worst model train error = 63915.6512949506
-    Worst model validation error = 238255.72357163005
+    Best model train error = 45372.03630284794
+    Best model validation error = 47605.58931968338
+    Worst model train error = 63037.76023452979
+    Worst model validation error = 229440.80364597624
 
 
 
@@ -985,10 +985,10 @@ for K in n_predictors:
 
 
     K = 5
-    Best model train error = 40892.18656082118
-    Best model validation error = 51117.9280299162
-    Worst model train error = 51162.12813413476
-    Worst model validation error = 278020.83867677924
+    Best model train error = 43593.861447065894
+    Best model validation error = 44419.422820807755
+    Worst model train error = 56300.44653143042
+    Worst model validation error = 425862.1543596524
 
 
 
@@ -998,10 +998,10 @@ for K in n_predictors:
 
 
     K = 10
-    Best model train error = 37310.283011071675
-    Best model validation error = 47850.00646318061
-    Worst model train error = 62282.26136722979
-    Worst model validation error = 407907.25593616534
+    Best model train error = 37765.31005061791
+    Best model validation error = 39652.7001038106
+    Worst model train error = 53139.760955892925
+    Worst model validation error = 371695.3083476124
 
 
 
@@ -1011,10 +1011,10 @@ for K in n_predictors:
 
 
     K = 20
-    Best model train error = 38590.76358858509
-    Best model validation error = 91350.83460324538
-    Worst model train error = 44273.749573455105
-    Worst model validation error = 232478.87909245736
+    Best model train error = 34525.435899415745
+    Best model validation error = 60026.778029041794
+    Worst model train error = 40712.55951193902
+    Worst model validation error = 208391.4413436783
 
 
 
@@ -1024,10 +1024,10 @@ for K in n_predictors:
 
 
     K = 25
-    Best model train error = 33944.16140505309
-    Best model validation error = 116036.64983057066
-    Worst model train error = 38695.35301462394
-    Worst model validation error = 188438.1815700615
+    Best model train error = 33341.27877200449
+    Best model validation error = 88029.1738708029
+    Worst model train error = 38575.36786723158
+    Worst model validation error = 166730.73685601898
 
 
 
@@ -1045,7 +1045,7 @@ plt.plot(n_predictors, best_val_errs, '-o')
 
 
 
-    [<matplotlib.lines.Line2D at 0x2631afafa50>]
+    [<matplotlib.lines.Line2D at 0x1e1982e9b50>]
 
 
 
