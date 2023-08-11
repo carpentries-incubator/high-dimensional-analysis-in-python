@@ -240,7 +240,8 @@ from regression_predict_sklearn import plot_train_test_predictions
     [0m    [0my_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
     [0m    [0my_pred_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
     [0m    [0my_pred_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0my_log_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0mplot_raw[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
     [0m    [0merr_type[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mstr[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
     [0m    [0mtrain_err[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mfloat[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
     [0m    [0mtest_err[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mfloat[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
@@ -250,13 +251,14 @@ from regression_predict_sklearn import plot_train_test_predictions
 
     Args:
         predictors (List[str]): List of predictor names.
-        X_train (np.ndarray): Training feature data.
-        X_test (np.ndarray): Test feature data.
-        y_train (np.ndarray): Actual target values for the training set.
-        y_test (np.ndarray): Actual target values for the test set.
-        y_pred_train (np.ndarray): Predicted target values for the training set.
-        y_pred_test (np.ndarray): Predicted target values for the test set.
-        log_scaled (bool): Whether the target values are log-scaled or not.
+        X_train (Union[np.ndarray, pd.Series, pd.DataFrame]): Training feature data.
+        X_test (Union[np.ndarray, pd.Series, pd.DataFrame]): Test feature data.
+        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+        y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
+        y_pred_train (Union[np.ndarray, pd.Series]): Predicted target values for the training set.
+        y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
+        y_log_scaled (bool): Whether the target values are log-scaled or not.
+        plot_raw (bool): Whether to plot raw or log-scaled values.
         err_type (Optional[str]): Type of error metric.
         train_err (Optional[float]): Training set error value.
         test_err (Optional[float]): Test set error value.
@@ -273,7 +275,7 @@ from regression_predict_sklearn import plot_train_test_predictions
                                            X_train=x_train, X_test=x_test,
                                            y_train=y_train, y_test=y_test,
                                            y_pred_train=y_pred_train, y_pred_test=y_pred_test,
-                                           log_scaled=True);
+                                           y_log_scaled=True, plot_raw=True);
 
 # print(type(fig1))
 # import matplotlib.pyplot as plt
@@ -417,7 +419,7 @@ from regression_predict_sklearn import measure_model_err
     [0m    [0my_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
     [0m    [0my_pred_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
     [0m    [0mmetric[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
-    [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0my_log_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
     [0m[1;33m)[0m [1;33m->[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m[0m[1;33m[0m[0m
     [1;31mDocstring:[0m
     Measures the error of a regression model's predictions on train and test sets.
@@ -430,7 +432,7 @@ from regression_predict_sklearn import measure_model_err
         y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
         y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
         metric (str): The error metric to calculate ('RMSE', 'R-squared', or 'MAPE').
-        log_scaled (bool): Whether the target values are log-scaled or not.
+        y_log_scaled (bool): Whether the target values are log-scaled or not.
 
     Returns:
         pd.DataFrame: A DataFrame containing the error values for the baseline, training set, and test set.
@@ -443,7 +445,7 @@ from regression_predict_sklearn import measure_model_err
 error_df = measure_model_err(y=y, baseline_pred=baseline_predict,
                                                          y_train=expY_train, y_pred_train=pred_expY_train,
                                                          y_test=expY_test, y_pred_test=pred_expY_test,
-                                                         metric='MAPE', log_scaled=False)
+                                                         metric='MAPE', y_log_scaled=False)
 
 error_df.head()
 ```
@@ -496,7 +498,7 @@ With the MAPE measurement (max value of 1 which corresponds to 100%), we can sta
 error_df = measure_model_err(y=y, baseline_pred=baseline_predict,
                                                    y_train=expY_train, y_pred_train=pred_expY_train,
                                                    y_test=expY_test, y_pred_test=pred_expY_test,
-                                                   metric='R-squared', log_scaled=False)
+                                                   metric='R-squared', y_log_scaled=False)
 
 error_df.head()
 ```
@@ -634,9 +636,10 @@ from regression_predict_sklearn import compare_models
     [0m    [0my_val[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
     [0m    [0mpredictors_list[0m[1;33m:[0m [0mList[0m[1;33m[[0m[0mList[0m[1;33m[[0m[0mstr[0m[1;33m][0m[1;33m][0m[1;33m,[0m[1;33m
     [0m    [0mmetric[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
-    [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0my_log_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
     [0m    [0mmodel_type[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
     [0m    [0minclude_plots[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0mplot_raw[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
     [0m    [0mverbose[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
     [0m[1;33m)[0m [1;33m->[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m[0m[1;33m[0m[0m
     [1;31mDocstring:[0m
@@ -651,7 +654,7 @@ from regression_predict_sklearn import compare_models
         y_val (Union[np.ndarray, pd.Series]): Actual target values for the validation set.
         predictors_list (List[List[str]]): List of predictor variables for different models.
         metric (str): The error metric to calculate.
-        log_scaled (bool): Whether the model was trained on log-scaled target values or not.
+        y_log_scaled (bool): Whether the model was trained on log-scaled target values or not.
         model_type (str): Type of the model being used.
         include_plots (bool): Whether to include plots.
 
@@ -667,9 +670,9 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               X_train=X_train, y_train=y_train,
                               X_val=X_val, y_val=y_val,
                               predictors_list=X_train.columns,
-                              metric='RMSE', log_scaled=True,
+                              metric='RMSE', y_log_scaled=True,
                               model_type='unregularized',
-                              include_plots=False, verbose=False)
+                              include_plots=False, plot_raw=False, verbose=False)
 
 df_model_err.head()
 ```
@@ -769,9 +772,9 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               X_train=X_train, y_train=y_train,
                               X_val=X_val, y_val=y_val,
                               predictors_list=sorted_predictors[-3:],
-                              metric='RMSE', log_scaled=True,
+                              metric='RMSE', y_log_scaled=True,
                               model_type='unregularized',
-                              include_plots=True, verbose=False)
+                              include_plots=True, plot_raw=True, verbose=False)
 
 df_model_err.head()
 ```
@@ -881,9 +884,9 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               X_train=X_train, y_train=y_train,
                               X_val=X_val, y_val=y_val,
                               predictors_list=[X_train.columns],
-                              metric='RMSE', log_scaled=True,
+                              metric='RMSE', y_log_scaled=True,
                               model_type='unregularized',
-                              include_plots=True, verbose=True)
+                              include_plots=True, plot_raw=False, verbose=True)
 
 ```
 
@@ -923,31 +926,11 @@ X_train.shape
 
 ```python
 from regression_predict_sklearn import get_predictor_combos
-sampled_combinations = get_predictor_combos(X_train=X_train, K=25, n=30)
+sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=30)
 print(sampled_combinations[0:2])
-
-df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
-                              X_train=X_train, y_train=y_train,
-                              X_val=X_val, y_val=y_val,
-                              predictors_list=sampled_combinations,
-                              metric='RMSE', log_scaled=True,
-                              model_type='unregularized',
-                              include_plots=False, verbose=False)
-
-sorted_predictors, train_errs, val_errs = compare_models_plot(df_model_err, 'RMSE')
 ```
 
-    [['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'KitchenAbvGr', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 'ScreenPorch', 'MoSold'], ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'HalfBath', 'KitchenAbvGr', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'YrSold', 'MoSold']]
-    Best model train error = 34004.07226395195
-    Best model validation error = 105721.40650578606
-    Worst model train error = 38838.83140207073
-    Worst model validation error = 177601.74948562018
-
-
-
-
-
-
+    [['2ndFlrSF', 'GarageCars'], ['Fireplaces', 'WoodDeckSF']]
 
 
 #### Compare efficacy of different numbers of predictors
@@ -966,9 +949,9 @@ for K in n_predictors:
                                   X_train=X_train, y_train=y_train,
                                   X_val=X_val, y_val=y_val,
                                   predictors_list=sampled_combinations,
-                                  metric='RMSE', log_scaled=True,
+                                  metric='RMSE', y_log_scaled=True,
                                   model_type='unregularized',
-                                  include_plots=False, verbose=False)
+                                  include_plots=False, plot_raw=True, verbose=False)
 
     sorted_predictors, train_errs, val_errs = compare_models_plot(df_model_err, 'RMSE')
     best_train_errs.append(np.median(train_errs))
@@ -989,10 +972,10 @@ for K in n_predictors:
 
 
     K = 2
-    Best model train error = 44406.98354647077
-    Best model validation error = 47233.53396897671
-    Worst model train error = 63032.615433919666
-    Worst model validation error = 297751.1800916412
+    Best model train error = 45412.486097791
+    Best model validation error = 46671.22187234466
+    Worst model train error = 63915.6512949506
+    Worst model validation error = 238255.72357163005
 
 
 
@@ -1002,10 +985,10 @@ for K in n_predictors:
 
 
     K = 5
-    Best model train error = 41140.15169290632
-    Best model validation error = 42898.252848115306
-    Worst model train error = 53393.92263654968
-    Worst model validation error = 228538.0239584098
+    Best model train error = 40892.18656082118
+    Best model validation error = 51117.9280299162
+    Worst model train error = 51162.12813413476
+    Worst model validation error = 278020.83867677924
 
 
 
@@ -1015,10 +998,10 @@ for K in n_predictors:
 
 
     K = 10
-    Best model train error = 35724.21557545412
-    Best model validation error = 45124.45455583034
-    Worst model train error = 62635.94681774283
-    Worst model validation error = 509253.58581532974
+    Best model train error = 37310.283011071675
+    Best model validation error = 47850.00646318061
+    Worst model train error = 62282.26136722979
+    Worst model validation error = 407907.25593616534
 
 
 
@@ -1028,10 +1011,10 @@ for K in n_predictors:
 
 
     K = 20
-    Best model train error = 36291.45423356553
-    Best model validation error = 99251.70429940021
-    Worst model train error = 44054.80580280614
-    Worst model validation error = 194535.85001034802
+    Best model train error = 38590.76358858509
+    Best model validation error = 91350.83460324538
+    Worst model train error = 44273.749573455105
+    Worst model validation error = 232478.87909245736
 
 
 
@@ -1041,10 +1024,10 @@ for K in n_predictors:
 
 
     K = 25
-    Best model train error = 32215.41041117005
-    Best model validation error = 99500.18115783713
-    Worst model train error = 38457.98372361079
-    Worst model validation error = 193118.03125413682
+    Best model train error = 33944.16140505309
+    Best model validation error = 116036.64983057066
+    Worst model train error = 38695.35301462394
+    Worst model validation error = 188438.1815700615
 
 
 
@@ -1062,7 +1045,7 @@ plt.plot(n_predictors, best_val_errs, '-o')
 
 
 
-    [<matplotlib.lines.Line2D at 0x29027f3fb90>]
+    [<matplotlib.lines.Line2D at 0x2631afafa50>]
 
 
 

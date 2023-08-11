@@ -32,7 +32,7 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
                       y_pred_train: Union[np.ndarray, pd.Series],
                       y_test: Union[np.ndarray, pd.Series],
                       y_pred_test: Union[np.ndarray, pd.Series],
-                      metric: str, log_scaled: bool) -> pd.DataFrame:
+                      metric: str, y_log_scaled: bool) -> pd.DataFrame:
     """
     Measures the error of a regression model's predictions on train and test sets.
 
@@ -44,7 +44,7 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
         y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
         y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
         metric (str): The error metric to calculate ('RMSE', 'R-squared', or 'MAPE').
-        log_scaled (bool): Whether the target values are log-scaled or not.
+        y_log_scaled (bool): Whether the target values are log-scaled or not.
 
     Returns:
         pd.DataFrame: A DataFrame containing the error values for the baseline, training set, and test set.
@@ -56,7 +56,7 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
         baseline_pred = baseline_pred.repeat(len(y))
     
     # reverse log transformation (exponential)
-    if log_scaled:
+    if y_log_scaled:
         y_pred_train = np.exp(y_pred_train)
         y_pred_test = np.exp(y_pred_test)
         y_train = np.exp(y_train)
@@ -90,7 +90,7 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
 
 
 def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
-                     log_transform_y: bool, keep_tick_labels: bool) -> plt.Axes:
+                     y_log_scaled: bool, plot_raw: bool, keep_tick_labels: bool) -> plt.Axes:
     """
     Plot true vs. predicted values.
 
@@ -98,24 +98,28 @@ def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
         ax (plt.Axes): Matplotlib axis for plotting.
         y (np.ndarray): True target values.
         y_pred (np.ndarray): Predicted target values.
-        log_transform_y (bool): Whether the target values are log-transformed.
+        y_log_scaled (bool): Whether the target values are log-transformed.
+        plot_raw (bool): Whether to plot raw or log-scaled values.
         keep_tick_labels (bool): Whether to keep tick labels.
 
     Returns:
         plt.Axes: Matplotlib axis with the plot.
     """
     
-    if log_transform_y:
+    if y_log_scaled and plot_raw:
         y = np.exp(y)
         y_pred = np.exp(y_pred)
-    #     min_y = 10.5#np.percentile(all_y, 1)
-    #     max_y = 14#np.percentile(all_y, 100)
-    #     tick_dist = .5
-    # else:
-    min_y = 40000#np.percentile(all_y, 2)
-    max_y = 800001#np.percentile(all_y, 95)
-    tick_dist = 50000
-        
+        min_y = 40000#np.percentile(all_y, 2)
+        max_y = 800001#np.percentile(all_y, 95)
+        tick_dist = 100000
+    elif y_log_scaled and not plot_raw:
+        min_y = 10.5#np.percentile(all_y, 1)
+        max_y = 14#np.percentile(all_y, 100)
+        tick_dist = .5
+    else:
+        min_y = 40000#np.percentile(all_y, 2)
+        max_y = 800001#np.percentile(all_y, 95)
+        tick_dist = 100000
 
     # ax.set_aspect('equal')
     # ax.scatter(y, y_pred, alpha=.1) 
@@ -123,16 +127,15 @@ def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
     ax.set_xlim([min_y, max_y])
     ax.set_ylim([min_y, max_y])
     ax.plot([0, 1], [0, 1], transform=ax.transAxes, color='blue', linestyle='dashed')
-    sns.regplot(x=y, y=y_pred, lowess=True, ax=ax, line_kws={'color': 'red'}, scatter_kws={'alpha': 0.1})
+    sns.regplot(x=y, y=y_pred, lowess=True, ax=ax, line_kws={'color': 'red'}, scatter_kws={'alpha': 0.05})
     sse = np.sum((y - y_pred) ** 2)
     mse = metrics.mean_squared_error(y, y_pred, squared=True)
     rmse_sanity_check = round(metrics.mean_squared_error(y, y_pred, squared=False),3)
 
-#     if log_transform_y:
-#         title = f"RMSE (log units): {rmse_sanity_check}"
-
-#     else:
-    title = f"RMSE: {rmse_sanity_check}"
+    if y_log_scaled and not plot_raw:
+        title = f"RMSE (log units): {rmse_sanity_check}"
+    else:
+        title = f"RMSE: {rmse_sanity_check}"
         
     # Create a formatted title with line breaks and decreased font size
     ax.set_title(title, fontsize=12)  # Adjust the fontsize as needed
@@ -151,10 +154,14 @@ def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
     return ax
 
 def plot_train_test_predictions(predictors: List[str],
-                                X_train: Union[np.ndarray, pd.Series, pd.DataFrame], X_test: Union[np.ndarray, pd.Series, pd.DataFrame],
-                                y_train: Union[np.ndarray, pd.Series], y_test: Union[np.ndarray, pd.Series],
-                                y_pred_train: Union[np.ndarray, pd.Series], y_pred_test: Union[np.ndarray, pd.Series],
-                                log_scaled: bool,
+                                X_train: Union[np.ndarray, pd.Series, pd.DataFrame],
+                                X_test: Union[np.ndarray, pd.Series, pd.DataFrame],
+                                y_train: Union[np.ndarray, pd.Series],
+                                y_test: Union[np.ndarray, pd.Series],
+                                y_pred_train: Union[np.ndarray, pd.Series],
+                                y_pred_test: Union[np.ndarray, pd.Series],
+                                y_log_scaled: bool,
+                                plot_raw: bool,
                                 err_type: Optional[str] = None,
                                 train_err: Optional[float] = None,
                                 test_err: Optional[float] = None) -> Tuple[Optional[plt.Figure], Optional[plt.Figure]]:
@@ -163,13 +170,14 @@ def plot_train_test_predictions(predictors: List[str],
 
     Args:
         predictors (List[str]): List of predictor names.
-        X_train (np.ndarray): Training feature data.
-        X_test (np.ndarray): Test feature data.
-        y_train (np.ndarray): Actual target values for the training set.
-        y_test (np.ndarray): Actual target values for the test set.
-        y_pred_train (np.ndarray): Predicted target values for the training set.
-        y_pred_test (np.ndarray): Predicted target values for the test set.
-        log_scaled (bool): Whether the target values are log-scaled or not.
+        X_train (Union[np.ndarray, pd.Series, pd.DataFrame]): Training feature data.
+        X_test (Union[np.ndarray, pd.Series, pd.DataFrame]): Test feature data.
+        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+        y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
+        y_pred_train (Union[np.ndarray, pd.Series]): Predicted target values for the training set.
+        y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
+        y_log_scaled (bool): Whether the target values are log-scaled or not.
+        plot_raw (bool): Whether to plot raw or log-scaled values.
         err_type (Optional[str]): Type of error metric.
         train_err (Optional[float]): Training set error value.
         test_err (Optional[float]): Test set error value.
@@ -177,7 +185,8 @@ def plot_train_test_predictions(predictors: List[str],
     Returns:
         Tuple[Optional[plt.Figure], Optional[plt.Figure]]: Figures for true vs. predicted values and line of best fit.
     """
-    
+
+    # Typecast y_train, y_test, y_pred_train, y_pred_test to numpy arrays if needed
     if type(y_train) != 'numpy.ndarray':
         y_train=np.asarray(y_train)
     if type(y_test) != 'numpy.ndarray':
@@ -189,18 +198,18 @@ def plot_train_test_predictions(predictors: List[str],
         
     # get min and max y values
     all_y = np.concatenate((y_train, y_test, y_pred_train, y_pred_test), axis=0)
-    # if log_scaled:
-    #     min_y = 10#np.percentile(all_y, 1)
-    #     max_y = 14#np.percentile(all_y, 100)
-    #     tick_dist = .5
-    # else:
-    min_y = 40000#np.percentile(all_y, 2)
-    max_y = 600001#np.percentile(all_y, 95)
-    tick_dist = 50000
+    if y_log_scaled and not plot_raw:
+        min_y = 10#np.percentile(all_y, 1)
+        max_y = 14#np.percentile(all_y, 100)
+        tick_dist = .5
+    else:
+        min_y = 40000#np.percentile(all_y, 2)
+        max_y = 600001#np.percentile(all_y, 95)
+        tick_dist = 100000
     
     # Fig1. True vs predicted sale price
     fig1, (ax1, ax2) = plt.subplots(1,2)#, sharex=True, sharey=True)
-    if log_scaled:
+    if y_log_scaled and not plot_raw:
         fig1.suptitle('True vs. Predicted log(Sale_Price)')
     else:
         fig1.suptitle('True vs. Predicted Sale Price')
@@ -211,14 +220,17 @@ def plot_train_test_predictions(predictors: List[str],
     else:
         ax1.title.set_text('Train Data')
     
-    ax1 = plot_predictions(ax1, y_train, y_pred_train, log_scaled, keep_tick_labels=True)
-
+    ax1 = plot_predictions(ax1, y_train, y_pred_train, y_log_scaled, plot_raw, keep_tick_labels=True)
+    # ax1.set_ylim([min_y, max_y])
+    
     #test set
     if test_err is not None:
         ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
     else:
         ax2.title.set_text('Test Data')
-    ax2 = plot_predictions(ax2, y_test, y_pred_test, log_scaled, keep_tick_labels=False)
+    ax2 = plot_predictions(ax2, y_test, y_pred_test, y_log_scaled, plot_raw, keep_tick_labels=False)
+    # ax2.set_ylim([min_y, max_y])
+    
     plt.show()
     # Fig2. Line of best fit 
     fig2 = None
@@ -226,14 +238,17 @@ def plot_train_test_predictions(predictors: List[str],
         predictor = predictors[0]
         #train data
         fig2, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
-        if log_scaled:
+        if y_log_scaled and plot_raw:
             y_train = np.exp(y_train)
             y_pred_train = np.exp(y_pred_train)
             y_test = np.exp(y_test)
             y_pred_test = np.exp(y_pred_test)
-            # fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. log(sale_price)')
-        # else:
-        fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
+            fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
+        elif y_log_scaled:
+            fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. log(sale_price)')
+        else:
+            fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
+            
         ax1.scatter(X_train,y_train,alpha=.1) 
         # Sort X_train and y_pred_train based on X_train values
         sorted_indices = np.argsort(X_train.squeeze())
@@ -241,16 +256,17 @@ def plot_train_test_predictions(predictors: List[str],
         y_pred_train_sorted = y_pred_train[sorted_indices]
         ax1.plot(X_train_sorted,y_pred_train_sorted,color='k') 
         ax1.set_ylim([min_y, max_y])
-
         ax1.set_xlabel(predictor)
-        # if log_scaled:
-        #     ax1.set_ylabel('log(sale_price)')
-        # else:
-        ax1.set_ylabel('Sale Price')
+        if y_log_scaled and not plot_raw:
+            ax1.set_ylabel('log(sale_price)')
+        else:
+            ax1.set_ylabel('Sale Price')
+            
         if train_err is not None:
             ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
         else:
             ax1.title.set_text('Train Data')
+            
         #test data
         ax2.scatter(X_test, y_test,alpha=.1) 
         # Sort X_train and y_pred_train based on X_train values
@@ -268,15 +284,38 @@ def plot_train_test_predictions(predictors: List[str],
     return (fig1, fig2)
 
 
-def fit_eval_model(y, baseline_pred,
-                   X_train, y_train, 
-                   X_test, y_test, 
-                   predictors, 
-                   metric, log_scaled, 
-                   model_type, 
-                   include_plots, verbose):
-    '''This function uses the predictor vars specified by predictor_vars to predict housing price. Function returns error metric for both train and test data'''
-    
+def fit_eval_model(y: Union[np.ndarray, pd.Series],
+                   baseline_pred: Union[np.ndarray, pd.Series],
+                   X_train: Union[np.ndarray, pd.DataFrame],
+                   y_train: Union[np.ndarray, pd.Series],
+                   X_test: Union[np.ndarray, pd.DataFrame],
+                   y_test: Union[np.ndarray, pd.Series],
+                   predictors: Union[str, List[str]],
+                   metric: str,
+                   y_log_scaled: bool,
+                   model_type: LinearRegression,
+                   include_plots: bool, plot_raw: bool,
+                   verbose: bool) -> Tuple[float, float, float]:
+    """
+    Fits a linear regression model using specified predictor variables and evaluates its performance.
+
+    Args:
+        y (Union[np.ndarray, pd.Series]): Actual target values for full dataset (not transformed).
+        baseline_pred (Union[np.ndarray, pd.Series]): Array of baseline predictions for full dataset.
+        X_train (Union[np.ndarray, pd.DataFrame]): Training feature data.
+        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+        X_test (Union[np.ndarray, pd.DataFrame]): Test feature data.
+        y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
+        predictors (Union[str, List[str]]): List of predictor names.
+        metric (str): The error metric to calculate ('RMSE', 'R-squared', or 'MAPE').
+        y_log_scaled (bool): Whether the target values are log-scaled or not.
+        model_type (LinearRegression): Type of linear regression model to use.
+        include_plots (bool): Whether to include plots for visualization.
+        verbose (bool): Whether to print verbose output.
+
+    Returns:
+        Tuple[float, float, float]: Baseline error, training error, and test error.
+    """
     # Convert response vectors from pandas series to numpy arrays. 
     # This is necessary for downstream analyses (required format for linear regression fucntion we'll use).
     y_train=np.array(y_train) 
@@ -313,7 +352,7 @@ def fit_eval_model(y, baseline_pred,
     error_df = measure_model_err(y, baseline_pred,
                                   y_train, y_pred_train,
                                   y_test, y_pred_test,
-                                  metric, log_scaled)
+                                  metric, y_log_scaled)
     
     baseline_err = error_df.loc[0,'Baseline Error']
     train_err = error_df.loc[0,'Train Error']
@@ -333,7 +372,7 @@ def fit_eval_model(y, baseline_pred,
                                                    X_train=X_train, X_test=X_test,
                                                    y_train=y_train, y_test=y_test,
                                                    y_pred_train=y_pred_train, y_pred_test=y_pred_test,
-                                                   log_scaled=log_scaled);
+                                                   y_log_scaled=y_log_scaled, plot_raw=plot_raw);
     if verbose:
         # add space between results
         print('')
@@ -403,9 +442,9 @@ def compare_models(y: Union[np.ndarray, pd.Series],
                    X_train: pd.DataFrame, y_train: Union[np.ndarray, pd.Series],
                    X_val: pd.DataFrame, y_val: Union[np.ndarray, pd.Series],
                    predictors_list: List[List[str]],
-                   metric: str, log_scaled: bool,
+                   metric: str, y_log_scaled: bool,
                    model_type: str, 
-                   include_plots: bool, verbose: bool) -> pd.DataFrame:
+                   include_plots: bool, plot_raw: bool, verbose: bool) -> pd.DataFrame:
     """
     Compare different models based on predictor variables and evaluate their errors.
 
@@ -418,7 +457,7 @@ def compare_models(y: Union[np.ndarray, pd.Series],
         y_val (Union[np.ndarray, pd.Series]): Actual target values for the validation set.
         predictors_list (List[List[str]]): List of predictor variables for different models.
         metric (str): The error metric to calculate.
-        log_scaled (bool): Whether the model was trained on log-scaled target values or not.
+        y_log_scaled (bool): Whether the model was trained on log-scaled target values or not.
         model_type (str): Type of the model being used.
         include_plots (bool): Whether to include plots.
 
@@ -433,9 +472,9 @@ def compare_models(y: Union[np.ndarray, pd.Series],
                                                           X_train=X_train, y_train=y_train, 
                                                           X_test=X_val, y_test=y_val,
                                                           predictors=predictors, 
-                                                          metric=metric, log_scaled=log_scaled, 
+                                                          metric=metric, y_log_scaled=y_log_scaled, 
                                                           model_type=model_type, 
-                                                          include_plots=include_plots, verbose=verbose)
+                                                          include_plots=include_plots, plot_raw=plot_raw, verbose=verbose)
 
         model_err_rows.append({'Baseline Error': baseline_err,
                                'Train Error': train_err,
