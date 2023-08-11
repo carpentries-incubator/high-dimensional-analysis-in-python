@@ -3,6 +3,7 @@ import pandas as pd
 import matplotlib.pyplot as plt
 from typing import Optional, Tuple, List, Union
 
+from collections import Counter # remove_bad_cols()
 
 def encode_predictors_housing_data(X):
     # get lists of continuous features, nominal features, etc.
@@ -23,38 +24,37 @@ def encode_predictors_housing_data(X):
     dichotomous = list(set(dichotomous).intersection(X.columns))
     continuous_fields = list(set(continuous_fields).intersection(X.columns))
     
-    # add nominal fields as dummy vars
-    X[nominal_fields]=X[nominal_fields].astype("category")
-    dummy_vars=pd.get_dummies(X[nominal_fields])
-    keep_cols.extend(dummy_vars.columns)
-    X=X.join(dummy_vars)
-
     # continuous fields can be stored without any changes
     keep_cols.extend(continuous_fields)
     
-    # ordinal fields are skipped since they require some additional code to map different strings to different numerical values
-    X=X
+    # add nominal fields as dummy vars
+    X_enc = X.copy()
+    X_enc.loc[:, nominal_fields]=X[nominal_fields].astype("category")
+    one_hot = pd.get_dummies(X_enc[nominal_fields])
+    keep_cols.extend(one_hot.columns)
+    X_enc=X_enc.join(one_hot)
+
+
+    
+    # ordinal fields are skipped since they require some additional code to map different strings to different numerical values. we'll leave them out for this workshop
     
     # binary vars can be stored as numeric representations (using factorize function)
     for bin_var in dichotomous:
         if bin_var=='Street':
-            new_vals, uniques = X['Street'].factorize(['Grvl','Pave'])
-            X['Street'] = new_vals
+            new_vals, uniques = X_enc['Street'].factorize(['Grvl','Pave'])
+            X_enc['Street'] = new_vals
         elif bin_var=='CentralAir':
             new_vals, uniques = X['CentralAir'].factorize(['N','Y'])
-            X['CentralAir'] = new_vals
+            X_enc['CentralAir'] = new_vals
         else:
             raise ValueError(('A new binary variable needs to be appropriately factorized:', bin_var))
             
     keep_cols.extend(dichotomous)
-#     dummy_vars=pd.get_dummies(X[dichotomous])
-#     keep_cols.extend(dummy_vars.columns)
-#     X=X.join(dummy_vars)
     
     # keep only these columns (continous features and one-hot encoded features) 
-    X=X[keep_cols]
+    X_enc=X_enc[keep_cols]
     
-    return X
+    return X_enc
 
 # import pandas as pd
 # import numpy as np
@@ -81,17 +81,32 @@ def remove_bad_cols(X: Union[pd.Series, pd.DataFrame], limited_var_thresh: float
         this_X = np.array(X.loc[:, feat_name]).reshape(-1, 1)
         sum_nans = np.sum(np.isnan(this_X))
         unique_vals = np.unique(this_X)
-        val_counts = X[feat_name].value_counts(normalize=True)
+
+        # Use Counter to get counts and corresponding values
+        value_counts = Counter(X[feat_name])
+
+        # Create a DataFrame to store values and counts
+        value_counts_df = pd.DataFrame(value_counts.items(), columns=['Value', 'Count'])
+
+        # Calculate the percentage of rows for each value
+        value_counts_df['Percentage'] = (value_counts_df['Count'] / len(X)) * 100
+
+        # sort the result
+        value_counts_df = value_counts_df.sort_values(by='Count', ascending=False)
+
+        most_common_val_perc = value_counts_df.loc[0,'Percentage'] 
+        most_common_val = value_counts_df.loc[0,'Value'] 
         
         if sum_nans > 0: 
-            print(feat_name, 'contains', sum_nans, 'NAs')
+            print(feat_name +  ': removed due to ' + str(sum_nans) + ' NaNs')
             rem_cols.append(feat_name)
-        elif sum(val_counts > limited_var_thresh):
-            print(feat_name, 'sparsity =', val_counts[0])
+        elif most_common_val_perc > limited_var_thresh:
+            print(feat_name + ': most_common_val = ' + str(most_common_val) + ', presence = ' + str(round(most_common_val_perc,2)))
             rem_cols.append(feat_name)
             
     print('# of columns removed:', len(rem_cols))
-    print('Columns removed:', rem_cols)
+    if len(rem_cols) > 0:
+        print('Columns removed:', rem_cols)
 
     X = X.drop(rem_cols, axis=1)
     

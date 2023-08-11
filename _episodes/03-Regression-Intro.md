@@ -102,8 +102,9 @@ from preprocessing import remove_bad_cols
 x_good = remove_bad_cols(x, .9)
 ```
 
-    # of columns removed: 0
-    Columns removed: []
+    OverallQual: most_common_val = 7, presence = 21.85
+    # of columns removed: 1
+    Columns removed: ['OverallQual']
 
 
 ### 3) Visualize the relationship between x and y
@@ -417,7 +418,7 @@ from regression_predict_sklearn import measure_model_err
     [0m    [0my_pred_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
     [0m    [0mmetric[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
     [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m[1;33m)[0m [1;33m->[0m [0mTuple[0m[1;33m[[0m[0mfloat[0m[1;33m,[0m [0mfloat[0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
+    [0m[1;33m)[0m [1;33m->[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m[0m[1;33m[0m[0m
     [1;31mDocstring:[0m
     Measures the error of a regression model's predictions on train and test sets.
 
@@ -432,26 +433,58 @@ from regression_predict_sklearn import measure_model_err
         log_scaled (bool): Whether the target values are log-scaled or not.
 
     Returns:
-        Tuple[float, float]: A tuple containing the error values for the training set and test set.
+        pd.DataFrame: A DataFrame containing the error values for the baseline, training set, and test set.
     [1;31mFile:[0m      c:\users\endemann\documents\github\high-dim-data-lesson\code\regression_predict_sklearn.py
     [1;31mType:[0m      function
 
 
 
 ```python
-MAPE_baseline, MAPE_train, MAPE_test = measure_model_err(y=y, baseline_pred=baseline_predict,
+error_df = measure_model_err(y=y, baseline_pred=baseline_predict,
                                                          y_train=expY_train, y_pred_train=pred_expY_train,
                                                          y_test=expY_test, y_pred_test=pred_expY_test,
                                                          metric='MAPE', log_scaled=False)
 
-print(f"Baseline MAPE = {MAPE_baseline*100}")
-print(f"Train MAPE = {MAPE_train*100}")
-print(f"Test MAPE = {MAPE_test*100}")
+error_df.head()
 ```
 
-    Baseline MAPE = 36.3222261212389
-    Train MAPE = 18.75854039670096
-    Test MAPE = 16.753971728816907
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline Error</th>
+      <th>Train Error</th>
+      <th>Test Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.363222</td>
+      <td>0.187585</td>
+      <td>0.16754</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 With the MAPE measurement (max value of 1 which corresponds to 100%), we can state that our model over/under estimates sale prices by an average of 23.41% (25.28%) across all houses included in the test set (train set). Certainly seems there is room for improvement based on this measure.
@@ -460,19 +493,51 @@ With the MAPE measurement (max value of 1 which corresponds to 100%), we can sta
 
 
 ```python
-R2_baseline, R2_train, R2_test = measure_model_err(y=y, baseline_pred=baseline_predict,
+error_df = measure_model_err(y=y, baseline_pred=baseline_predict,
                                                    y_train=expY_train, y_pred_train=pred_expY_train,
                                                    y_test=expY_test, y_pred_test=pred_expY_test,
                                                    metric='R-squared', log_scaled=False)
 
-print(f"Baseline R-squared = {R2_baseline}")
-print(f"Train R-squared = {R2_train}")
-print(f"Test R-squared = {R2_test}")
+error_df.head()
 ```
 
-    Baseline R-squared = 0.0
-    Train R-squared = 0.6668752959029058
-    Test R-squared = 0.6904634915571379
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline Error</th>
+      <th>Train Error</th>
+      <th>Test Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>0.0</td>
+      <td>0.666875</td>
+      <td>0.690463</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 Our model predicts 70.1% (65.2%) of the variance across sale prices in the test set (train set). The R-squared for the baseline model is 0 because the numerator and denominator in the equation for R-squared are equivalent:
@@ -528,20 +593,15 @@ y_log = np.log(housing['target'])
 
 # remove columns with nans or containing > 97% constant values (typically 0's)
 from preprocessing import remove_bad_cols
-X_good = remove_bad_cols(X, .9)
+X_good = remove_bad_cols(X, 99)
 ```
 
-    LotFrontage contains 259 NAs
-    MasVnrArea contains 8 NAs
-    LowQualFinSF sparsity = 0.9821917808219178
-    BsmtHalfBath sparsity = 0.9438356164383561
-    KitchenAbvGr sparsity = 0.0006849315068493151
-    GarageYrBlt contains 81 NAs
-    3SsnPorch sparsity = 0.9835616438356164
-    ScreenPorch sparsity = 0.9205479452054794
-    PoolArea sparsity = 0.9952054794520548
-    # of columns removed: 9
-    Columns removed: ['LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'BsmtHalfBath', 'KitchenAbvGr', 'GarageYrBlt', '3SsnPorch', 'ScreenPorch', 'PoolArea']
+    LotFrontage: removed due to 259 NaNs
+    MasVnrArea: removed due to 8 NaNs
+    GarageYrBlt: removed due to 81 NaNs
+    PoolArea: most_common_val = 0, presence = 99.52
+    # of columns removed: 4
+    Columns removed: ['LotFrontage', 'MasVnrArea', 'GarageYrBlt', 'PoolArea']
 
 
 
@@ -610,10 +670,7 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               metric='RMSE', log_scaled=True,
                               model_type='unregularized',
                               include_plots=False, verbose=False)
-```
 
-
-```python
 df_model_err.head()
 ```
 
@@ -689,7 +746,7 @@ df_model_err.head()
 
 ```python
 from regression_predict_sklearn import compare_models_plot
-sorted_predictors, best_train_err, best_val_err = compare_models_plot(df_model_err, 'RMSE');
+sorted_predictors, train_errs, val_errs = compare_models_plot(df_model_err, 'RMSE');
 ```
 
     Best model train error = 45516.18554163278
@@ -715,6 +772,8 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               metric='RMSE', log_scaled=True,
                               model_type='unregularized',
                               include_plots=True, verbose=False)
+
+df_model_err.head()
 ```
 
 
@@ -750,6 +809,61 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
 
 
 
+
+
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline Error</th>
+      <th>Train Error</th>
+      <th>Validation Error</th>
+      <th>Predictors</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>79415.291886</td>
+      <td>65085.562455</td>
+      <td>105753.386038</td>
+      <td>1stFlrSF</td>
+    </tr>
+    <tr>
+      <th>1</th>
+      <td>79415.291886</td>
+      <td>60495.941297</td>
+      <td>106314.048186</td>
+      <td>GrLivArea</td>
+    </tr>
+    <tr>
+      <th>2</th>
+      <td>79415.291886</td>
+      <td>63479.544552</td>
+      <td>220453.440400</td>
+      <td>TotalBsmtSF</td>
+    </tr>
+  </tbody>
+</table>
+</div>
 
 
 
@@ -770,15 +884,16 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               metric='RMSE', log_scaled=True,
                               model_type='unregularized',
                               include_plots=True, verbose=True)
+
 ```
 
-    # of predictor vars = 25
+    # of predictor vars = 30
     # of train observations = 876
     # of test observations = 292
     Baseline RMSE = 79415.29188606751
-    Train RMSE = 34882.115731053294
-    Holdout RMSE = 142964.987928765
-    (Holdout-Train)/Train: 310%
+    Train RMSE = 34139.3449119712
+    Holdout RMSE = 134604.1997549234
+    (Holdout-Train)/Train: 294%
 
 
 
@@ -790,12 +905,25 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
 
 
 
-### compare permutations of models with different numbers of predictors
+### Compare permutations of models with different numbers of predictors
+
+
+```python
+X_train.head()
+X_train.shape
+```
+
+
+
+
+    (876, 30)
+
+
 
 
 ```python
 from regression_predict_sklearn import get_predictor_combos
-sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=100)
+sampled_combinations = get_predictor_combos(X_train=X_train, K=25, n=30)
 print(sampled_combinations[0:2])
 
 df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
@@ -806,14 +934,14 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               model_type='unregularized',
                               include_plots=False, verbose=False)
 
-sorted_predictors, best_train_err, best_val_err = compare_models_plot(df_model_err, 'RMSE')
+sorted_predictors, train_errs, val_errs = compare_models_plot(df_model_err, 'RMSE')
 ```
 
-    [['LotArea', 'OverallCond'], ['OverallCond', '2ndFlrSF']]
-    Best model train error = 45227.296435140604
-    Best model validation error = 46096.334211313
-    Worst model train error = 58090.00889671407
-    Worst model validation error = 432023.298020248
+    [['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'BsmtHalfBath', 'FullBath', 'HalfBath', 'KitchenAbvGr', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 'ScreenPorch', 'MoSold'], ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '2ndFlrSF', 'LowQualFinSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'HalfBath', 'KitchenAbvGr', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'EnclosedPorch', '3SsnPorch', 'ScreenPorch', 'YrSold', 'MoSold']]
+    Best model train error = 34004.07226395195
+    Best model validation error = 105721.40650578606
+    Worst model train error = 38838.83140207073
+    Worst model validation error = 177601.74948562018
 
 
 
@@ -822,16 +950,151 @@ sorted_predictors, best_train_err, best_val_err = compare_models_plot(df_model_e
 
 
 
-> ## Compare efficacy of different numbers of predictors
-> To quickly assess how well we can predict sale price with varying numbers of predictors, use the code we just prepared to determine the best validation error possible when testing 30 permutations containing K=2, 4, 8, and 16 predictors. How does the best validation error compare across the different number of predictors used?
-> 
-> > ## Solution
-> >
-> > 
-> > 
-> {:.solution}
-{:.challenge}
+#### Compare efficacy of different numbers of predictors
+To quickly assess how well we can predict sale price with varying numbers of predictors, use the code we just prepared in conjunction with a for loop to determine the best train/validation errors possible when testing 30 permutations containing K=1, 2, 5, 10, and 25 predictors. Plot the results (K vs train/test errors). Is there any trend?
 
+
+```python
+best_train_errs = []
+best_val_errs = []
+n_predictors  = [1, 2, 5, 10, 20, 25]
+
+for K in n_predictors:
+    print('K =', K)
+    sampled_combinations = get_predictor_combos(X_train=X_train, K=K, n=25)
+    df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
+                                  X_train=X_train, y_train=y_train,
+                                  X_val=X_val, y_val=y_val,
+                                  predictors_list=sampled_combinations,
+                                  metric='RMSE', log_scaled=True,
+                                  model_type='unregularized',
+                                  include_plots=False, verbose=False)
+
+    sorted_predictors, train_errs, val_errs = compare_models_plot(df_model_err, 'RMSE')
+    best_train_errs.append(np.median(train_errs))
+    best_val_errs.append(np.median(val_errs))
+```
+
+    K = 1
+    Best model train error = 59791.540810726234
+    Best model validation error = 63397.45129071621
+    Worst model train error = 63479.544551733954
+    Worst model validation error = 220453.4404000341
+
+
+
+
+
+
+
+
+    K = 2
+    Best model train error = 44406.98354647077
+    Best model validation error = 47233.53396897671
+    Worst model train error = 63032.615433919666
+    Worst model validation error = 297751.1800916412
+
+
+
+
+
+
+
+
+    K = 5
+    Best model train error = 41140.15169290632
+    Best model validation error = 42898.252848115306
+    Worst model train error = 53393.92263654968
+    Worst model validation error = 228538.0239584098
+
+
+
+
+
+
+
+
+    K = 10
+    Best model train error = 35724.21557545412
+    Best model validation error = 45124.45455583034
+    Worst model train error = 62635.94681774283
+    Worst model validation error = 509253.58581532974
+
+
+
+
+
+
+
+
+    K = 20
+    Best model train error = 36291.45423356553
+    Best model validation error = 99251.70429940021
+    Worst model train error = 44054.80580280614
+    Worst model validation error = 194535.85001034802
+
+
+
+
+
+
+
+
+    K = 25
+    Best model train error = 32215.41041117005
+    Best model validation error = 99500.18115783713
+    Worst model train error = 38457.98372361079
+    Worst model validation error = 193118.03125413682
+
+
+
+
+
+
+
+
+
+```python
+plt.plot(n_predictors, best_train_errs, '-o')
+plt.plot(n_predictors, best_val_errs, '-o')
+```
+
+
+
+
+    [<matplotlib.lines.Line2D at 0x29027f3fb90>]
+
+
+
+
+
+
+
+
+
+#### How much data is needed per new predictor? 10X rule of thumb
+As the number of observations begins to approach the number of model parameters (i.e., coefficients being estimated), the model will simply memorize the training data rather than learn anything useful. As a general rule of thumb, obtaining reliable estimates from linear regression models requires that you have at least 10X as many observations than model coefficients/predictors. The exact ratio may change depending on the variability of your data and whether or not each observation is truly independent (time-series models, for instance, often require much more data since observations are rarely independent).
+
+Let's see what the ratio is when we start to hit overfitting effects with our data. We need to determine the number of observations used to train the model as well as the number of estimated coefficients from the model (equal to number of predictors in this simple regression equation).
+
+
+```python
+[X_train.shape[0] / n for n in n_predictors]
+```
+
+
+
+
+    [876.0, 438.0, 175.2, 87.6, 43.8, 35.04]
+
+
+
+With our data, we start to see overfitting effects even when we have as much as 87.6 times as many observations as estimated model coefficients. if you find that your regression model is more prone to overfitting that the "10X rule", it could suggest that the training data might not be strictly independently and identically distributed (i.i.d.). Overfitting occurs when a model learns the noise and random fluctuations in the training data instead of the true underlying patterns, leading to poor generalization to new data.
+
+The reasons for overfitting can vary including:
+
+* Data Structure: If your data has inherent structure or dependencies that violate the i.i.d. assumption (e.g., temporal or spatial dependencies), your model might capture these patterns as noise and overfit to them.
+* Outliers and Noise: If your data contains outliers or noisy observations, these can influence the model's behavior and contribute to overfitting. This can be especially problematic with small datasets.
 
 #### 7) Explaining models
 At this point, we have assessed the predictive accuracy of our model. However, what if we want to interpret our model to understand which predictor(s) have a consistent or above chance (i.e., statistically significant) impact sales price? For this kind of question and other questions related to model interpretability, we need to first carefully validate our model. The next two episodes will explore some of the necessary checks you must perform before reading too far into your model's estimations.

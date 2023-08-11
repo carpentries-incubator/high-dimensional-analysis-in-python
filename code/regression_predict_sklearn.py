@@ -1,3 +1,6 @@
+from sklearn.linear_model import LinearRegression
+from sklearn import metrics
+
 import numpy as np
 import pandas as pd
 
@@ -8,11 +11,6 @@ import itertools
 import random
 
 from typing import Optional, Tuple, List, Union
-
-from sklearn.linear_model import LinearRegression
-from sklearn import metrics
-
-
 
 def train_linear_model(X_train, y_train, model_type):
     if model_type == "unregularized":
@@ -29,16 +27,15 @@ def get_train_test_pred(X_train, X_test, reg):
     
     return y_pred_train, y_pred_test
 
-# baseline_pred: Union[np.Series, pd.DataFrame], 
 def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[float, np.float64, np.float32, int, np.ndarray, pd.Series],
                       y_train: Union[np.ndarray, pd.Series],
                       y_pred_train: Union[np.ndarray, pd.Series],
                       y_test: Union[np.ndarray, pd.Series],
                       y_pred_test: Union[np.ndarray, pd.Series],
-                      metric: str, log_scaled: bool) -> Tuple[float, float]:
+                      metric: str, log_scaled: bool) -> pd.DataFrame:
     """
     Measures the error of a regression model's predictions on train and test sets.
-    
+
     Args:
         y (Union[np.ndarray, pd.Series]): Actual target values for full dataset (not transformed)
         baseline_pred (Union[float, np.float64, np.float32, int, np.ndarray, pd.Series]): Single constant or array of predictions equal to the length of y. Baseline is also not transformed.
@@ -50,12 +47,12 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
         log_scaled (bool): Whether the target values are log-scaled or not.
 
     Returns:
-        Tuple[float, float]: A tuple containing the error values for the training set and test set.
+        pd.DataFrame: A DataFrame containing the error values for the baseline, training set, and test set.
     """
     # Check if baseline is single constant - convert to list
     continuous_numeric_types = (float, np.float64, np.float32, int)
     if isinstance(baseline_pred, continuous_numeric_types):
-        baseline_pred = pd.Series(baseline_pred) 
+        baseline_pred = pd.Series(baseline_pred)
         baseline_pred = baseline_pred.repeat(len(y))
     
     # reverse log transformation (exponential)
@@ -80,8 +77,16 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
         test_err = metrics.mean_absolute_percentage_error(y_test, y_pred_test)
     else:
         raise ValueError("Invalid metric. Choose from 'RMSE', 'R-squared', or 'MAPE'.")
+    
+    # Create a DataFrame to store the error values
+    errors_df = pd.DataFrame({
+        'Baseline Error': [baseline_err],
+        'Train Error': [train_err],
+        'Test Error': [test_err]
+    })
 
-    return baseline_err, train_err, test_err
+    return errors_df
+
 
 
 def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
@@ -305,10 +310,14 @@ def fit_eval_model(y, baseline_pred,
     y_pred_train, y_pred_test = get_train_test_pred(X_train, X_test, reg)
     
     # get train and test set error
-    baseline_err, train_err, test_err = measure_model_err(y, baseline_pred,
-                                                          y_train, y_pred_train, 
-                                                          y_test, y_pred_test, 
-                                                          metric, log_scaled)
+    error_df = measure_model_err(y, baseline_pred,
+                                  y_train, y_pred_train,
+                                  y_test, y_pred_test,
+                                  metric, log_scaled)
+    
+    baseline_err = error_df.loc[0,'Baseline Error']
+    train_err = error_df.loc[0,'Train Error']
+    test_err = error_df.loc[0,'Test Error']
 
     # print results
     if verbose:
@@ -378,16 +387,15 @@ def compare_models_plot(df_model_err: pd.DataFrame, metric: str) -> List[str]:
     ax.legend(['train','validation']);
     # increase fig size a bit
     fig = plt.gcf()
-    fig.set_size_inches(14, 7) 
+    fig.set_size_inches(10, 5) 
     # remind ourselves of train/test error for top-performing predictor variable
-    best_train_err = train_err[0]
-    best_val_err = val_err[0]
     print('Best model train error =', train_err[0])
     print('Best model validation error =',val_err[0])
     print('Worst model train error =', train_err[-1])
     print('Worst model validation error =',val_err[-1])
+    plt.show()
     
-    return labels, best_train_err, best_val_err
+    return labels, train_err, val_err
     
 
 def compare_models(y: Union[np.ndarray, pd.Series],
