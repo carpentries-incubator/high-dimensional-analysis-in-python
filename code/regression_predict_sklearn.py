@@ -1,11 +1,17 @@
 import numpy as np
 import pandas as pd
+
 import matplotlib.pyplot as plt
 import seaborn as sns
 
+import itertools
+import random
+
+from typing import Optional, Tuple, List, Union
+
 from sklearn.linear_model import LinearRegression
 from sklearn import metrics
-from typing import Optional, Tuple, List, Union
+
 
 
 def train_linear_model(X_train, y_train, model_type):
@@ -95,23 +101,36 @@ def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
     """
     
     if log_transform_y:
-        min_y = 11#np.percentile(all_y, 1)
-        max_y = 13.6#np.percentile(all_y, 100)
-        tick_dist = .5
-    else:
-        min_y = 50000#np.percentile(all_y, 2)
-        max_y = 350001#np.percentile(all_y, 95)
-        tick_dist = 50000
+        y = np.exp(y)
+        y_pred = np.exp(y_pred)
+    #     min_y = 10.5#np.percentile(all_y, 1)
+    #     max_y = 14#np.percentile(all_y, 100)
+    #     tick_dist = .5
+    # else:
+    min_y = 40000#np.percentile(all_y, 2)
+    max_y = 800001#np.percentile(all_y, 95)
+    tick_dist = 50000
         
 
     # ax.set_aspect('equal')
-    ax.scatter(y, y_pred, alpha=.1) 
+    # ax.scatter(y, y_pred, alpha=.1) 
     ax.set_aspect('equal')
     ax.set_xlim([min_y, max_y])
     ax.set_ylim([min_y, max_y])
     ax.plot([0, 1], [0, 1], transform=ax.transAxes, color='blue', linestyle='dashed')
-    sns.regplot(x=y, y=y_pred, lowess=True, ax=ax, line_kws={'color': 'red'})
+    sns.regplot(x=y, y=y_pred, lowess=True, ax=ax, line_kws={'color': 'red'}, scatter_kws={'alpha': 0.1})
+    sse = np.sum((y - y_pred) ** 2)
+    mse = metrics.mean_squared_error(y, y_pred, squared=True)
+    rmse_sanity_check = round(metrics.mean_squared_error(y, y_pred, squared=False),3)
 
+#     if log_transform_y:
+#         title = f"RMSE (log units): {rmse_sanity_check}"
+
+#     else:
+    title = f"RMSE: {rmse_sanity_check}"
+        
+    # Create a formatted title with line breaks and decreased font size
+    ax.set_title(title, fontsize=12)  # Adjust the fontsize as needed
     ax.xaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
     ax.yaxis.set_ticks(np.arange(min_y, max_y, tick_dist))
     
@@ -165,14 +184,14 @@ def plot_train_test_predictions(predictors: List[str],
         
     # get min and max y values
     all_y = np.concatenate((y_train, y_test, y_pred_train, y_pred_test), axis=0)
-    if log_scaled:
-        min_y = 10#np.percentile(all_y, 1)
-        max_y = 14#np.percentile(all_y, 100)
-        tick_dist = .5
-    else:
-        min_y = 50000#np.percentile(all_y, 2)
-        max_y = 350001#np.percentile(all_y, 95)
-        tick_dist = 50000
+    # if log_scaled:
+    #     min_y = 10#np.percentile(all_y, 1)
+    #     max_y = 14#np.percentile(all_y, 100)
+    #     tick_dist = .5
+    # else:
+    min_y = 40000#np.percentile(all_y, 2)
+    max_y = 600001#np.percentile(all_y, 95)
+    tick_dist = 50000
     
     # Fig1. True vs predicted sale price
     fig1, (ax1, ax2) = plt.subplots(1,2)#, sharex=True, sharey=True)
@@ -203,30 +222,42 @@ def plot_train_test_predictions(predictors: List[str],
         #train data
         fig2, (ax1, ax2) = plt.subplots(1,2, sharex=True, sharey=True)
         if log_scaled:
-            fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. log(sale_price)')
-        else:
-            fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
+            y_train = np.exp(y_train)
+            y_pred_train = np.exp(y_pred_train)
+            y_test = np.exp(y_test)
+            y_pred_test = np.exp(y_pred_test)
+            # fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. log(sale_price)')
+        # else:
+        fig2.suptitle('Line of Best Fit - ' + predictor + ' vs. Sale Price')
         ax1.scatter(X_train,y_train,alpha=.1) 
-        ax1.plot(X_train,y_pred_train,color='k') 
-        ax1.set_ylim([min_y, np.max(all_y)])
+        # Sort X_train and y_pred_train based on X_train values
+        sorted_indices = np.argsort(X_train.squeeze())
+        X_train_sorted = X_train[sorted_indices]
+        y_pred_train_sorted = y_pred_train[sorted_indices]
+        ax1.plot(X_train_sorted,y_pred_train_sorted,color='k') 
+        ax1.set_ylim([min_y, max_y])
 
         ax1.set_xlabel(predictor)
-        if log_scaled:
-            ax1.set_ylabel('log(sale_price)')
-        else:
-            ax1.set_ylabel('Sale Price')
+        # if log_scaled:
+        #     ax1.set_ylabel('log(sale_price)')
+        # else:
+        ax1.set_ylabel('Sale Price')
         if train_err is not None:
             ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
         else:
             ax1.title.set_text('Train Data')
         #test data
-        ax2.scatter(X_test,y_test,alpha=.1) 
-        ax2.plot(X_test,y_pred_test,color='k') 
+        ax2.scatter(X_test, y_test,alpha=.1) 
+        # Sort X_train and y_pred_train based on X_train values
+        sorted_indices = np.argsort(X_test.squeeze())
+        X_test_sorted = X_test[sorted_indices]
+        y_pred_test_sorted = y_pred_test[sorted_indices]
+        ax2.plot(X_test_sorted, y_pred_test_sorted,color='k') 
         if test_err is not None:
             ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
         else:
             ax2.title.set_text('Test Data')
-        ax2.set_ylim([min_y, np.max(all_y)])
+        ax2.set_ylim([min_y, max_y])
         plt.show()
         
     return (fig1, fig2)
@@ -237,7 +268,8 @@ def fit_eval_model(y, baseline_pred,
                    X_test, y_test, 
                    predictors, 
                    metric, log_scaled, 
-                   model_type, include_plots):
+                   model_type, 
+                   include_plots, verbose):
     '''This function uses the predictor vars specified by predictor_vars to predict housing price. Function returns error metric for both train and test data'''
     
     # Convert response vectors from pandas series to numpy arrays. 
@@ -261,9 +293,10 @@ def fit_eval_model(y, baseline_pred,
         preview_predict_var = ''
 
     # print number of observations in train/test sets as well as number of features used to predict housing price
-    print('# of predictor vars = ' + str(len(predictors)) + preview_predict_var)
-    print('# of train observations = ' + str(X_train.shape[0]))
-    print('# of test observations = ' + str(X_test.shape[0]))
+    if verbose:
+        print('# of predictor vars = ' + str(len(predictors)) + preview_predict_var)
+        print('# of train observations = ' + str(X_train.shape[0]))
+        print('# of test observations = ' + str(X_test.shape[0]))
     
     # fit model to training data
     reg = train_linear_model(X_train, y_train, model_type)
@@ -278,12 +311,13 @@ def fit_eval_model(y, baseline_pred,
                                                           metric, log_scaled)
 
     # print results
-    print('Baseline', metric, '=', baseline_err)
-    print('Train', metric, '=', train_err)
-    print('Holdout', metric, '=', test_err)
-    perc_diff = (test_err-train_err)/train_err
-    perc_diff = "{:.0%}".format(perc_diff)
-    print('(Holdout-Train)/Train:', perc_diff)
+    if verbose:
+        print('Baseline', metric, '=', baseline_err)
+        print('Train', metric, '=', train_err)
+        print('Holdout', metric, '=', test_err)
+        perc_diff = (test_err-train_err)/train_err
+        perc_diff = "{:.0%}".format(perc_diff)
+        print('(Holdout-Train)/Train:', perc_diff)
     
     if include_plots:
         (fig1, fig2) = plot_train_test_predictions(predictors=predictors,
@@ -291,8 +325,11 @@ def fit_eval_model(y, baseline_pred,
                                                    y_train=y_train, y_test=y_test,
                                                    y_pred_train=y_pred_train, y_pred_test=y_pred_test,
                                                    log_scaled=log_scaled);
+    if verbose:
+        # add space between results
+        print('')
     
-    print('')
+
     
     return baseline_err, train_err, test_err
 
@@ -316,17 +353,24 @@ def compare_models_plot(df_model_err: pd.DataFrame, metric: str) -> List[str]:
 
     # now that we have the sort indices based on test set performance, we'll sort the trainErr, testErr, and feature name vectors
     train_err = np.asarray(df_model_err['Train Error'])
-    all_feats = df_model_err['Predictor Variable']
+    baseline_err = np.asarray(df_model_err['Baseline Error'])
+    all_feats = df_model_err['Predictors']
+    baseline_err = baseline_err[sort_inds] 
     train_err = train_err[sort_inds]
     val_err = val_err[sort_inds]
     labels = all_feats[sort_inds] 
     
+    if not isinstance(labels[0], str):
+        # indicates multiple predictors, change labels to IDs
+        labels = [i for i in range(len(train_err))]
+    
     # plot out top 10 features based on error; try tight layout or set fig size 
     num_feats_plot=min(30,len(labels))
     fig, ax = plt.subplots()
-    ax.plot(train_err[0:num_feats_plot], linestyle='--', marker='o', color='b')
-    ax.plot(val_err[0:num_feats_plot], linestyle='--', marker='o', color='r')
-    
+    ax.plot(train_err[0:num_feats_plot], linestyle='-', marker='o', color='b')
+    ax.plot(val_err[0:num_feats_plot], linestyle='-', marker='o', color='r')
+    ax.plot(baseline_err[0:num_feats_plot], linestyle='--', color='k')
+
     ax.set_xticks(list(range(0, num_feats_plot)))
     ax.set_xticklabels(labels[0:num_feats_plot], rotation=45, ha='right')
     
@@ -336,12 +380,14 @@ def compare_models_plot(df_model_err: pd.DataFrame, metric: str) -> List[str]:
     fig = plt.gcf()
     fig.set_size_inches(14, 7) 
     # remind ourselves of train/test error for top-performing predictor variable
+    best_train_err = train_err[0]
+    best_val_err = val_err[0]
     print('Best model train error =', train_err[0])
     print('Best model validation error =',val_err[0])
     print('Worst model train error =', train_err[-1])
     print('Worst model validation error =',val_err[-1])
     
-    return labels
+    return labels, best_train_err, best_val_err
     
 
 def compare_models(y: Union[np.ndarray, pd.Series],
@@ -350,7 +396,8 @@ def compare_models(y: Union[np.ndarray, pd.Series],
                    X_val: pd.DataFrame, y_val: Union[np.ndarray, pd.Series],
                    predictors_list: List[List[str]],
                    metric: str, log_scaled: bool,
-                   model_type: str, include_plots: bool) -> pd.DataFrame:
+                   model_type: str, 
+                   include_plots: bool, verbose: bool) -> pd.DataFrame:
     """
     Compare different models based on predictor variables and evaluate their errors.
 
@@ -370,31 +417,57 @@ def compare_models(y: Union[np.ndarray, pd.Series],
     Returns:
         pd.DataFrame: A DataFrame containing model errors for different predictor variables.
     """
-    feat_index=0
-    baseline_err_list=[None] * len(X_train.columns)
-    train_err_list=[None] * len(X_train.columns)
-    val_err_err_list=[None] * len(X_train.columns)
-    for predictors in predictors_list:  
+    df_model_err = pd.DataFrame(columns=['Baseline Error', 'Train Error', 'Validation Error', 'Predictors'])
+    model_err_rows = []
+
+    for predictors in predictors_list:
         baseline_err, train_err, val_err = fit_eval_model(y=y, baseline_pred=baseline_pred,
-                                             X_train=X_train, y_train=y_train, 
-                                             X_test=X_val, y_test=y_val,
-                                             predictors=predictors, 
-                                             metric=metric, log_scaled=log_scaled, 
-                                             model_type=model_type, include_plots=include_plots)
+                                                          X_train=X_train, y_train=y_train, 
+                                                          X_test=X_val, y_test=y_val,
+                                                          predictors=predictors, 
+                                                          metric=metric, log_scaled=log_scaled, 
+                                                          model_type=model_type, 
+                                                          include_plots=include_plots, verbose=verbose)
 
-        # store model errors
-        baseline_err_list[feat_index] = baseline_err
-        train_err_list[feat_index] = train_err
-        val_err_err_list[feat_index] = val_err
-        feat_index+=1
+        model_err_rows.append({'Baseline Error': baseline_err,
+                               'Train Error': train_err,
+                               'Validation Error': val_err,
+                               'Predictors': predictors})
 
-    # store errors in pandas dataframe for ease of access downstream
-    df_model_err = pd.DataFrame()
-    df_model_err['Predictor Variable'] = X_train.columns
-    df_model_err['Baseline Error'] = baseline_err
-    df_model_err['Train Error'] = train_err_list
-    df_model_err['Validation Error'] = val_err_err_list
-    
+    df_model_err = pd.DataFrame(model_err_rows)
+
     return df_model_err
 
+def generate_combinations(items: List[str], K: int) -> List[tuple]:
+    """
+    Generate all combinations of K items from the given list of items.
+
+    Args:
+        items (List[str]): List of items to choose combinations from.
+        K (int): Number of items in each combination.
+
+    Returns:
+        List[tuple]: A list of tuples representing the combinations.
+    """
+    return list(itertools.combinations(items, K))
+
+def get_predictor_combos(X_train: pd.DataFrame, K: int, n: int) -> List[List[str]]:
+    """
+    Get sampled predictor variable combinations from the training data.
+
+    Args:
+        X_train (pd.DataFrame): Training feature data.
+        K (int): Number of columns in each combination.
+        n (int): Number of combinations to sample.
+
+    Returns:
+        List[List[str]]: A list of lists representing the sampled predictor variable combinations.
+    """
+    X_train_columns = list(X_train.columns)
     
+    all_combinations = generate_combinations(X_train_columns, K)
+    sampled_combinations = random.sample(all_combinations, min(n, len(all_combinations)))
+    sampled_combinations = [list(combo) for combo in sampled_combinations]  # Convert to list of lists
+
+    return sampled_combinations
+

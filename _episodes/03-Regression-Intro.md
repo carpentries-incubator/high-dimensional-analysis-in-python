@@ -280,7 +280,7 @@ from regression_predict_sklearn import plot_train_test_predictions
 # pl.figure(fig1.number)
 # plt.savefig('..//fig//regression//univariate_truePrice_vs_predPrice.png',bbox_inches='tight', dpi=300)
 # pl.figure(fig2.number)
-# plt.savefig('..//fig//regression//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
+# fig2.savefig('..//fig//regression//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
 
 ```
 
@@ -294,6 +294,13 @@ from regression_predict_sklearn import plot_train_test_predictions
 
 
 
+
+
+    <class 'matplotlib.figure.Figure'>
+
+
+
+    <Figure size 640x480 with 0 Axes>
 
 
 <img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
@@ -504,7 +511,7 @@ To read more about additional error/loss measurements, visit [sklearn's metrics 
 {:.challenge}
 
 
-## Comparing univariate models
+## Comparing univariate predictive models
 Let's see how well the other predictors in our dataset can predict sale prices. For simplicity, we'll compare just continous predictors for now.
 
 ### General procedure for comparing predictive models
@@ -577,6 +584,7 @@ from regression_predict_sklearn import compare_models
     [0m    [0mlog_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
     [0m    [0mmodel_type[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
     [0m    [0minclude_plots[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
+    [0m    [0mverbose[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
     [0m[1;33m)[0m [1;33m->[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m[0m[1;33m[0m[0m
     [1;31mDocstring:[0m
     Compare different models based on predictor variables and evaluate their errors.
@@ -607,210 +615,9 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               X_val=X_val, y_val=y_val,
                               predictors_list=X_train.columns,
                               metric='RMSE', log_scaled=True,
-                              model_type='unregularized', include_plots=False)
+                              model_type='unregularized',
+                              include_plots=False, verbose=False)
 ```
-
-    # of predictor vars = 1 (LotArea)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 82875.38085495801
-    Holdout RMSE = 84323.18923359209
-    (Holdout-Train)/Train: 2%
-
-    # of predictor vars = 1 (YearBuilt)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 67679.79091967695
-    Holdout RMSE = 69727.34105729726
-    (Holdout-Train)/Train: 3%
-
-    # of predictor vars = 1 (YearRemodAdd)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 69055.74101358843
-    Holdout RMSE = 70634.28565335085
-    (Holdout-Train)/Train: 2%
-
-    # of predictor vars = 1 (OverallQual)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 45516.18554163278
-    Holdout RMSE = 46993.501005708364
-    (Holdout-Train)/Train: 3%
-
-    # of predictor vars = 1 (OverallCond)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 81016.56620745258
-    Holdout RMSE = 84915.45225176154
-    (Holdout-Train)/Train: 5%
-
-    # of predictor vars = 1 (BsmtFinSF1)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 73380.6957528966
-    Holdout RMSE = 93695.51432329496
-    (Holdout-Train)/Train: 28%
-
-    # of predictor vars = 1 (BsmtFinSF2)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 81032.9999001109
-    Holdout RMSE = 84932.09816351396
-    (Holdout-Train)/Train: 5%
-
-    # of predictor vars = 1 (BsmtUnfSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 79102.09029562424
-    Holdout RMSE = 82834.52706053828
-    (Holdout-Train)/Train: 5%
-
-    # of predictor vars = 1 (TotalBsmtSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 63479.544551733954
-    Holdout RMSE = 220453.4404000341
-    (Holdout-Train)/Train: 247%
-
-    # of predictor vars = 1 (1stFlrSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 65085.562454919695
-    Holdout RMSE = 105753.38603752904
-    (Holdout-Train)/Train: 62%
-
-    # of predictor vars = 1 (2ndFlrSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 75823.9442116895
-    Holdout RMSE = 82198.0727208069
-    (Holdout-Train)/Train: 8%
-
-    # of predictor vars = 1 (GrLivArea)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 60495.94129708608
-    Holdout RMSE = 106314.04818601975
-    (Holdout-Train)/Train: 76%
-
-    # of predictor vars = 1 (BsmtFullBath)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 78743.02284141965
-    Holdout RMSE = 81578.57649938941
-    (Holdout-Train)/Train: 4%
-
-    # of predictor vars = 1 (FullBath)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 65268.05249448099
-    Holdout RMSE = 71179.80571404072
-    (Holdout-Train)/Train: 9%
-
-    # of predictor vars = 1 (HalfBath)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 77596.37795287734
-    Holdout RMSE = 80738.02793699679
-    (Holdout-Train)/Train: 4%
-
-    # of predictor vars = 1 (BedroomAbvGr)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 79493.20470404223
-    Holdout RMSE = 85212.09548505505
-    (Holdout-Train)/Train: 7%
-
-    # of predictor vars = 1 (TotRmsAbvGrd)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 67840.8636310711
-    Holdout RMSE = 71515.1768065365
-    (Holdout-Train)/Train: 5%
-
-    # of predictor vars = 1 (Fireplaces)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 72316.07195521964
-    Holdout RMSE = 74450.34818815267
-    (Holdout-Train)/Train: 3%
-
-    # of predictor vars = 1 (GarageCars)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 59791.540810726234
-    Holdout RMSE = 63397.45129071621
-    (Holdout-Train)/Train: 6%
-
-    # of predictor vars = 1 (GarageArea)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 62024.37703005484
-    Holdout RMSE = 73482.26232929318
-    (Holdout-Train)/Train: 18%
-
-    # of predictor vars = 1 (WoodDeckSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 77392.84834191747
-    Holdout RMSE = 79652.94391102252
-    (Holdout-Train)/Train: 3%
-
-    # of predictor vars = 1 (OpenPorchSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 77758.02983921244
-    Holdout RMSE = 80447.97275506181
-    (Holdout-Train)/Train: 3%
-
-    # of predictor vars = 1 (EnclosedPorch)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 80431.83354350468
-    Holdout RMSE = 83927.50566035754
-    (Holdout-Train)/Train: 4%
-
-    # of predictor vars = 1 (YrSold)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 80915.74311359474
-    Holdout RMSE = 85361.89584710822
-    (Holdout-Train)/Train: 5%
-
-    # of predictor vars = 1 (MoSold)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 80954.47906260118
-    Holdout RMSE = 84837.77118209275
-    (Holdout-Train)/Train: 5%
-
-
 
 
 ```python
@@ -838,47 +645,47 @@ df_model_err.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>Predictor Variable</th>
       <th>Baseline Error</th>
       <th>Train Error</th>
       <th>Validation Error</th>
+      <th>Predictors</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>LotArea</td>
       <td>79415.291886</td>
       <td>82875.380855</td>
       <td>84323.189234</td>
+      <td>LotArea</td>
     </tr>
     <tr>
       <th>1</th>
-      <td>YearBuilt</td>
       <td>79415.291886</td>
       <td>67679.790920</td>
       <td>69727.341057</td>
+      <td>YearBuilt</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>YearRemodAdd</td>
       <td>79415.291886</td>
       <td>69055.741014</td>
       <td>70634.285653</td>
+      <td>YearRemodAdd</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>OverallQual</td>
       <td>79415.291886</td>
       <td>45516.185542</td>
       <td>46993.501006</td>
+      <td>OverallQual</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>OverallCond</td>
       <td>79415.291886</td>
       <td>81016.566207</td>
       <td>84915.452252</td>
+      <td>OverallCond</td>
     </tr>
   </tbody>
 </table>
@@ -889,7 +696,7 @@ df_model_err.head()
 
 ```python
 from regression_predict_sklearn import compare_models_plot
-sorted_predictors = compare_models_plot(df_model_err, 'RMSE');
+sorted_predictors, best_train_err, best_val_err = compare_models_plot(df_model_err, 'RMSE');
 ```
 
     Best model train error = 45516.18554163278
@@ -913,60 +720,10 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               X_val=X_val, y_val=y_val,
                               predictors_list=sorted_predictors[-3:],
                               metric='RMSE', log_scaled=True,
-                              model_type='unregularized', include_plots=True)
+                              model_type='unregularized',
+                              include_plots=True, verbose=False)
 ```
 
-    # of predictor vars = 1 (1stFlrSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 65085.562454919695
-    Holdout RMSE = 105753.38603752904
-    (Holdout-Train)/Train: 62%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # of predictor vars = 1 (GrLivArea)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 60495.94129708608
-    Holdout RMSE = 106314.04818601975
-    (Holdout-Train)/Train: 76%
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    # of predictor vars = 1 (TotalBsmtSF)
-    # of train observations = 876
-    # of test observations = 292
-    Baseline RMSE = 79415.29188606751
-    Train RMSE = 63479.544551733954
-    Holdout RMSE = 220453.4404000341
-    (Holdout-Train)/Train: 247%
 
 
 
@@ -984,7 +741,29 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
 
 
 
-It appears the worst performing predictors do not have much of a linear relationship with log(salePrice) and have some extreme outliers in the test set data. We also see some mild indication that some of these predictors may have other external variables that cause them to produce multiple distributions between predictor and log(salePrice). For example, it looks like there may be two data clouds in the TotalBsmtSF vs log(sale_price) plot. The type of basement finish may intersect with that relationship — producing multiple distributions. This is one reason why it is essential to include as many relevant variables in a model as possible.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+#### Outliers and interactions
+It appears the worst performing predictors do not have much of a linear relationship with log(salePrice) and have some extreme outliers in the test set data. If we were only to focus on univariate models, we would want to remove these outliers after carefully considering their meaning and cause. However, outliers in a univariate context may not remain outliers in a multivariate context.
+
+This point is further illustrated by the distributions / data clouds we see with the TotalBsmtSF predictor. The type of basement finish may change the relationship between TotalBsmtSF and SalePrice. If we fit a regression model that accounts for this interaction, the model will follow a linear pattern for each distribtuion separately. Similarly, certain outliers may stem from other predictors having interactions/relationships with one another. When searching for outliers, it is important to consider such multivariate interactions.
 
 ### Fitting all predictors
 Let's assume all predictors in the Ames housing dataset are related to at least some extent to sale price, and fit a multivariate regression model using all continuous predictors.
@@ -996,7 +775,8 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               X_val=X_val, y_val=y_val,
                               predictors_list=[X_train.columns],
                               metric='RMSE', log_scaled=True,
-                              model_type='unregularized', include_plots=True)
+                              model_type='unregularized',
+                              include_plots=True, verbose=True)
 ```
 
     # of predictor vars = 25
@@ -1021,222 +801,25 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
 
 
 ```python
-import itertools
-import random
+from regression_predict_sklearn import get_predictor_combos
+sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=100)
+print(sampled_combinations[0:2])
 
-def generate_combinations(items, K):
-    return list(itertools.combinations(items, K))
+df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
+                              X_train=X_train, y_train=y_train,
+                              X_val=X_val, y_val=y_val,
+                              predictors_list=sampled_combinations,
+                              metric='RMSE', log_scaled=True,
+                              model_type='unregularized',
+                              include_plots=False, verbose=False)
 
-# Example usage
-X_train_columns = list(X_train.columns)
-K = 16  # Number of columns in each combination
-num_samples = 20
-
-all_combinations = generate_combinations(X_train_columns, K)
-sampled_combinations = random.sample(all_combinations, min(num_samples, len(all_combinations)))
-sampled_combinations = [list(combo) for combo in sampled_combinations] # convert to list of lists
-
-for combo in sampled_combinations:
-    print(combo)
-
-df_model_err = compare_models(X_train=X_train, y_train=y_train,
-                   X_test=X_test, y_test=y_test,
-                   predictors_list=sampled_combinations,
-                   metric='RMSE', log_scaled=True,
-                   model_type='unregularized', include_plots=False)
-
-sorted_predictors = compare_models_plot(df_model_err, 'RMSE')
+sorted_predictors, best_train_err, best_val_err = compare_models_plot(df_model_err, 'RMSE')
 ```
 
-    ['LotArea', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'EnclosedPorch', 'MoSold']
-    ['LotArea', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', '1stFlrSF', '2ndFlrSF', 'BsmtFullBath', 'FullBath', 'HalfBath', 'Fireplaces', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
-    ['YearBuilt', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '2ndFlrSF', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageArea', 'OpenPorchSF', 'EnclosedPorch', 'MoSold']
-    ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF1', 'TotalBsmtSF', '2ndFlrSF', 'GrLivArea', 'FullBath', 'HalfBath', 'TotRmsAbvGrd', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'YrSold', 'MoSold']
-    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'OverallCond', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'Fireplaces', 'GarageCars', 'GarageArea', 'OpenPorchSF', 'EnclosedPorch', 'YrSold', 'MoSold']
-    ['LotArea', 'OverallQual', 'OverallCond', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
-    ['LotArea', 'YearBuilt', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'FullBath', 'Fireplaces', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 'YrSold', 'MoSold']
-    ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF2', 'BsmtUnfSF', '1stFlrSF', 'GrLivArea', 'BsmtFullBath', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'YrSold', 'MoSold']
-    ['YearBuilt', 'BsmtFinSF1', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'GarageArea', 'EnclosedPorch', 'YrSold', 'MoSold']
-    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'FullBath', 'HalfBath', 'Fireplaces', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch']
-    ['LotArea', 'YearBuilt', 'OverallQual', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'BedroomAbvGr', 'WoodDeckSF', 'YrSold', 'MoSold']
-    ['YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'MoSold']
-    ['YearBuilt', 'YearRemodAdd', 'OverallQual', 'BsmtFinSF1', 'TotalBsmtSF', '1stFlrSF', 'GrLivArea', 'FullBath', 'TotRmsAbvGrd', 'Fireplaces', 'GarageCars', 'GarageArea', 'WoodDeckSF', 'EnclosedPorch', 'YrSold', 'MoSold']
-    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF2', 'BsmtUnfSF', 'GrLivArea', 'BsmtFullBath', 'BedroomAbvGr', 'Fireplaces', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'EnclosedPorch', 'YrSold']
-    ['YearBuilt', 'YearRemodAdd', 'OverallCond', 'BsmtFinSF1', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '2ndFlrSF', 'GrLivArea', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'Fireplaces', 'GarageCars', 'WoodDeckSF', 'EnclosedPorch']
-    ['LotArea', 'YearBuilt', 'YearRemodAdd', 'BsmtFinSF1', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'Fireplaces', 'OpenPorchSF', 'EnclosedPorch', 'YrSold']
-    ['YearBuilt', 'OverallQual', 'BsmtFinSF2', 'BsmtUnfSF', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'HalfBath', 'TotRmsAbvGrd', 'Fireplaces', 'WoodDeckSF', 'EnclosedPorch', 'YrSold', 'MoSold']
-    ['LotArea', 'YearRemodAdd', 'OverallQual', 'OverallCond', 'BsmtFinSF1', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'FullBath', 'BedroomAbvGr', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
-    ['LotArea', 'YearBuilt', 'OverallQual', 'BsmtFinSF2', 'BsmtUnfSF', '2ndFlrSF', 'BsmtFullBath', 'FullBath', 'HalfBath', 'BedroomAbvGr', 'Fireplaces', 'GarageArea', 'WoodDeckSF', 'OpenPorchSF', 'YrSold', 'MoSold']
-    ['LotArea', 'YearRemodAdd', 'OverallQual', 'BsmtFinSF1', 'BsmtFinSF2', 'TotalBsmtSF', '1stFlrSF', '2ndFlrSF', 'GrLivArea', 'BsmtFullBath', 'HalfBath', 'TotRmsAbvGrd', 'GarageCars', 'WoodDeckSF', 'OpenPorchSF', 'MoSold']
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 44501.907407993735
-    Test RMSE = 165133.51857708755
-    (Test-Train)/Train: 271%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 40080.24411630359
-    Test RMSE = 90100.72801158622
-    (Test-Train)/Train: 125%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 36353.8202812514
-    Test RMSE = 154265.47547974318
-    (Test-Train)/Train: 324%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 36696.2163499506
-    Test RMSE = 118841.22847233835
-    (Test-Train)/Train: 224%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 38474.08752561942
-    Test RMSE = 89496.02093486271
-    (Test-Train)/Train: 133%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 36358.51062647036
-    Test RMSE = 98590.23875605517
-    (Test-Train)/Train: 171%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 41404.04288173085
-    Test RMSE = 177883.0959053497
-    (Test-Train)/Train: 330%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 35503.42533146411
-    Test RMSE = 66750.12003363922
-    (Test-Train)/Train: 88%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 44441.22224450497
-    Test RMSE = 157790.9042683851
-    (Test-Train)/Train: 255%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 39099.062002021776
-    Test RMSE = 174087.85418686905
-    (Test-Train)/Train: 345%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 40959.287529578636
-    Test RMSE = 136114.31830108684
-    (Test-Train)/Train: 232%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 37150.51755208934
-    Test RMSE = 117451.98416959836
-    (Test-Train)/Train: 216%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 34249.835099681906
-    Test RMSE = 114909.73628432401
-    (Test-Train)/Train: 236%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 33555.77772436982
-    Test RMSE = 55276.71640821062
-    (Test-Train)/Train: 65%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 39565.008323192786
-    Test RMSE = 139380.15750391112
-    (Test-Train)/Train: 252%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 43038.96121037037
-    Test RMSE = 191863.36663309642
-    (Test-Train)/Train: 346%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 37676.15611392981
-    Test RMSE = 118035.79633539334
-    (Test-Train)/Train: 213%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 36166.58397878597
-    Test RMSE = 80152.32788819952
-    (Test-Train)/Train: 122%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 34233.86878865497
-    Test RMSE = 45822.75695507571
-    (Test-Train)/Train: 34%
-
-    # of predictor vars = 16
-    # of train observations = 973
-    # of test observations = 487
-    Train RMSE = 36971.77722218436
-    Test RMSE = 106457.90933135293
-    (Test-Train)/Train: 188%
-
-    18       GarageCars
-    13         FullBath
-    7         BsmtUnfSF
-    17       Fireplaces
-    4       OverallCond
-    1         YearBuilt
-    5        BsmtFinSF1
-    19       GarageArea
-    12     BsmtFullBath
-    11        GrLivArea
-    16     TotRmsAbvGrd
-    3       OverallQual
-    10         2ndFlrSF
-    14         HalfBath
-    2      YearRemodAdd
-    8       TotalBsmtSF
-    0           LotArea
-    9          1stFlrSF
-    6        BsmtFinSF2
-    15     BedroomAbvGr
-    20       WoodDeckSF
-    21      OpenPorchSF
-    22    EnclosedPorch
-    23           YrSold
-    24           MoSold
-    Name: Predictor Variable, dtype: object
-    25
-    34233.86878865497
-    45822.75695507571
+    Best model train error = 41810.2470081927
+    Best model validation error = 43673.421540992196
+    Worst model train error = 63915.6512949506
+    Worst model validation error = 238255.72357163005
 
 
 
@@ -1245,234 +828,15 @@ sorted_predictors = compare_models_plot(df_model_err, 'RMSE')
 
 
 
-
-```python
-df_model_err
-```
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Predictor Variable</th>
-      <th>Train Error</th>
-      <th>Test Error</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>LotArea</td>
-      <td>44501.907408</td>
-      <td>165133.518577</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>YearBuilt</td>
-      <td>40080.244116</td>
-      <td>90100.728012</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>YearRemodAdd</td>
-      <td>36353.820281</td>
-      <td>154265.475480</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>OverallQual</td>
-      <td>36696.216350</td>
-      <td>118841.228472</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>OverallCond</td>
-      <td>38474.087526</td>
-      <td>89496.020935</td>
-    </tr>
-    <tr>
-      <th>5</th>
-      <td>BsmtFinSF1</td>
-      <td>36358.510626</td>
-      <td>98590.238756</td>
-    </tr>
-    <tr>
-      <th>6</th>
-      <td>BsmtFinSF2</td>
-      <td>41404.042882</td>
-      <td>177883.095905</td>
-    </tr>
-    <tr>
-      <th>7</th>
-      <td>BsmtUnfSF</td>
-      <td>35503.425331</td>
-      <td>66750.120034</td>
-    </tr>
-    <tr>
-      <th>8</th>
-      <td>TotalBsmtSF</td>
-      <td>44441.222245</td>
-      <td>157790.904268</td>
-    </tr>
-    <tr>
-      <th>9</th>
-      <td>1stFlrSF</td>
-      <td>39099.062002</td>
-      <td>174087.854187</td>
-    </tr>
-    <tr>
-      <th>10</th>
-      <td>2ndFlrSF</td>
-      <td>40959.287530</td>
-      <td>136114.318301</td>
-    </tr>
-    <tr>
-      <th>11</th>
-      <td>GrLivArea</td>
-      <td>37150.517552</td>
-      <td>117451.984170</td>
-    </tr>
-    <tr>
-      <th>12</th>
-      <td>BsmtFullBath</td>
-      <td>34249.835100</td>
-      <td>114909.736284</td>
-    </tr>
-    <tr>
-      <th>13</th>
-      <td>FullBath</td>
-      <td>33555.777724</td>
-      <td>55276.716408</td>
-    </tr>
-    <tr>
-      <th>14</th>
-      <td>HalfBath</td>
-      <td>39565.008323</td>
-      <td>139380.157504</td>
-    </tr>
-    <tr>
-      <th>15</th>
-      <td>BedroomAbvGr</td>
-      <td>43038.961210</td>
-      <td>191863.366633</td>
-    </tr>
-    <tr>
-      <th>16</th>
-      <td>TotRmsAbvGrd</td>
-      <td>37676.156114</td>
-      <td>118035.796335</td>
-    </tr>
-    <tr>
-      <th>17</th>
-      <td>Fireplaces</td>
-      <td>36166.583979</td>
-      <td>80152.327888</td>
-    </tr>
-    <tr>
-      <th>18</th>
-      <td>GarageCars</td>
-      <td>34233.868789</td>
-      <td>45822.756955</td>
-    </tr>
-    <tr>
-      <th>19</th>
-      <td>GarageArea</td>
-      <td>36971.777222</td>
-      <td>106457.909331</td>
-    </tr>
-    <tr>
-      <th>20</th>
-      <td>WoodDeckSF</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>21</th>
-      <td>OpenPorchSF</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>22</th>
-      <td>EnclosedPorch</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>23</th>
-      <td>YrSold</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-    <tr>
-      <th>24</th>
-      <td>MoSold</td>
-      <td>NaN</td>
-      <td>NaN</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
-
-```python
-sorted_predictors = compare_models_plot(df_model_err, 'RMSE')
-```
-
-    18       GarageCars
-    13         FullBath
-    7         BsmtUnfSF
-    17       Fireplaces
-    4       OverallCond
-    1         YearBuilt
-    5        BsmtFinSF1
-    19       GarageArea
-    12     BsmtFullBath
-    11        GrLivArea
-    16     TotRmsAbvGrd
-    3       OverallQual
-    10         2ndFlrSF
-    14         HalfBath
-    2      YearRemodAdd
-    8       TotalBsmtSF
-    0           LotArea
-    9          1stFlrSF
-    6        BsmtFinSF2
-    15     BedroomAbvGr
-    20       WoodDeckSF
-    21      OpenPorchSF
-    22    EnclosedPorch
-    23           YrSold
-    24           MoSold
-    Name: Predictor Variable, dtype: object
-    25
-    34233.86878865497
-    45822.75695507571
-
-
-
-
-
-
+> ## Compare efficacy of different numbers of predictors
+> To quickly assess how well we can predict sale price with varying numbers of predictors, use the code we just prepared to determine the best validation error possible when testing 30 permutations containing K=2, 4, 8, and 16 predictors. How does the best validation error compare across the different number of predictors used?
+> 
+> > ## Solution
+> >
+> > 
+> > 
+> {:.solution}
+{:.challenge}
 
 
 #### 7) Explaining models
