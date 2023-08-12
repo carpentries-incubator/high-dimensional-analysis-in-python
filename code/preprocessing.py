@@ -9,6 +9,10 @@ from typing import Optional, Tuple, List, Union
 
 from collections import Counter # remove_bad_cols()
 
+# load full-dim data
+from sklearn.model_selection import train_test_split
+from sklearn.datasets import fetch_openml
+
 def encode_predictors_housing_data(X):
     # get lists of continuous features, nominal features, etc.
     predictor_type_dict = get_feat_types()
@@ -248,3 +252,43 @@ def get_predictor_combos(X_train: pd.DataFrame, K: int, n: int) -> List[List[str
     sampled_combinations = [list(combo) for combo in sampled_combinations]  # Convert to list of lists
 
     return sampled_combinations
+
+
+def prep_fulldim_zdata(const_thresh: int = 98, test_size: float = 0.33, y_log_scaled: bool = True) -> Tuple[pd.DataFrame, pd.DataFrame, pd.Series, pd.Series]:
+    """
+    Prepares the housing dataset for high-dimensional regression analysis.
+
+    Args:
+        const_thresh (int, optional): Threshold for removing columns with low variance. Default is 98.
+        test_size (float, optional): Percentage of the data to use for testing. Default is 0.33.
+        y_log_scaled (bool, optional): Whether the target values are log-scaled or not. Default is True.
+
+    Returns:
+        X_train_z (pd.DataFrame): Z-scored training predictor variables.
+        X_test_z (pd.DataFrame): Z-scored testing predictor variables.
+        y_train (pd.Series): Training target values.
+        y_test (pd.Series): Testing target values.
+        y_raw (pd.Series): Raw target values before any scaling or transformation.
+    """
+    # Load housing dataset
+    housing = fetch_openml(name="house_prices", as_frame=True, parser='auto')
+    y_raw = housing['target']
+    X = housing['data']
+    if y_log_scaled:
+        y = np.log(y_raw)
+    else:
+        y = y_raw
+    # Encode categorical data
+    X_encoded = encode_predictors_housing_data(X)
+
+    # Remove columns with low variance
+    X_encoded_good = remove_bad_cols(X_encoded, const_thresh)
+
+    # Train/test split
+    X_train, X_test, y_train, y_test = train_test_split(X_encoded_good, y, test_size=test_size, random_state=0)
+
+    # Z-score predictors
+    X_train_z = zscore(df=X_train, train_means=X_train.mean(), train_stds=X_train.std())
+    X_test_z = zscore(df=X_test, train_means=X_train.mean(), train_stds=X_train.std())
+
+    return X_train_z, X_test_z, y_train, y_test, y_raw
