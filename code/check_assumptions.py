@@ -13,6 +13,8 @@ import numpy as np
 import pandas as pd
 from pandas import Series
 from scipy import stats
+from scipy.stats import norm
+
 # plotting
 import seaborn as sns
 import matplotlib.pyplot as plt
@@ -38,9 +40,23 @@ def normal_resid_test(resids: Series, threshold_p_value: float = 0.05) -> plt.Fi
     # Set up square figure with 1x2 subplots
     fig, (ax1, ax2) = plt.subplots(1, 2, figsize=(10, 5))
     
-    # plot histogram
-    ax1.hist(resids)
-    ax1.set_title('Histogram of Residuals')
+
+    # Create a histogram of residuals
+    ax1.hist(resids, bins=30, density=True, alpha=0.6, color='blue', label='Residuals')
+
+    # Create a range of x values for the normal distribution
+    x_range = np.linspace(min(resids), max(resids), 100)
+
+    # Calculate the PDF values for the normal distribution
+    pdf_values = norm.pdf(x_range, np.mean(resids), np.std(resids))
+
+    # Plot the normal distribution on top of the histogram
+    ax1.plot(x_range, pdf_values, color='red', label='Normal Distribution')
+
+    ax1.set_xlabel('Residuals')
+    ax1.set_ylabel('Frequency / Probability Density')
+    ax1.set_title('Histogram of Residuals with Expected Normal Distribution')
+    ax1.legend()
     
     # measure skew
     skewness = resids.skew() 
