@@ -99,12 +99,10 @@ x = housing['data'][predictor]
 ```python
 # remove columns with nans or containing > 97% constant values (typically 0's)
 from preprocessing import remove_bad_cols
-x_good = remove_bad_cols(x, .9)
+x_good = remove_bad_cols(x, 95)
 ```
 
-    OverallQual removed, most_common_val = 7, presence = 21.85
-    1 columns removed, 0 remaining.
-    Columns removed: ['OverallQual']
+    0 columns removed, 1 remaining.
 
 
 ### 3) Visualize the relationship between x and y
@@ -417,9 +415,9 @@ help(measure_model_err)
 
 ```python
 error_df = measure_model_err(y=y, baseline_pred=baseline_predict,
-                                                         y_train=expY_train, y_pred_train=pred_expY_train,
-                                                         y_test=expY_test, y_pred_test=pred_expY_test,
-                                                         metric='MAPE', y_log_scaled=False)
+                             y_train=expY_train, y_pred_train=pred_expY_train,
+                             y_test=expY_test, y_pred_test=pred_expY_test,
+                             metric='MAPE', y_log_scaled=False)
 
 error_df.head()
 ```
@@ -883,12 +881,12 @@ X_train.shape
 
 
 ```python
-from regression_predict_sklearn import get_predictor_combos
+from preprocessing import get_predictor_combos
 sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=30)
 print(sampled_combinations[0:2])
 ```
 
-    [['2ndFlrSF', 'BedroomAbvGr'], ['TotalBsmtSF', 'KitchenAbvGr']]
+    [['LowQualFinSF', 'TotRmsAbvGrd'], ['LotArea', 'GarageCars']]
 
 
 #### Compare efficacy of different numbers of predictors
@@ -930,10 +928,10 @@ for K in n_predictors:
 
 
     K = 2
-    Best model train error = 57695.51321243383
-    Best model validation error = 61057.82537781604
-    Worst model train error = 62347.45313937368
-    Worst model validation error = 392742.9159369634
+    Best model train error = 45493.21601925376
+    Best model validation error = 46915.92562247736
+    Worst model train error = 63391.36012661047
+    Worst model validation error = 218980.15582824568
 
 
 
@@ -943,10 +941,10 @@ for K in n_predictors:
 
 
     K = 5
-    Best model train error = 52671.3120361021
-    Best model validation error = 56244.828254762346
-    Worst model train error = 63177.245823575046
-    Worst model validation error = 477230.2029975715
+    Best model train error = 44847.71953691728
+    Best model validation error = 47066.535529657565
+    Worst model train error = 52937.94778006936
+    Worst model validation error = 348225.3044330829
 
 
 
@@ -956,10 +954,10 @@ for K in n_predictors:
 
 
     K = 10
-    Best model train error = 40905.03672286247
-    Best model validation error = 44340.62309692853
-    Worst model train error = 65526.068482925686
-    Worst model validation error = 475124.5284353966
+    Best model train error = 43230.48583898699
+    Best model validation error = 47086.417081120795
+    Worst model train error = 57814.662050494044
+    Worst model validation error = 330751.0402659216
 
 
 
@@ -969,10 +967,10 @@ for K in n_predictors:
 
 
     K = 20
-    Best model train error = 34178.885958376835
-    Best model validation error = 79957.0639217055
-    Worst model train error = 42589.06559853427
-    Worst model validation error = 223738.4480532306
+    Best model train error = 34857.285556349525
+    Best model validation error = 69406.56071219206
+    Worst model train error = 40538.27995366246
+    Worst model validation error = 195107.49017782984
 
 
 
@@ -982,10 +980,10 @@ for K in n_predictors:
 
 
     K = 25
-    Best model train error = 33831.60041611705
-    Best model validation error = 94034.63658720544
-    Worst model train error = 39395.73119276418
-    Worst model validation error = 182322.08653139145
+    Best model train error = 36105.033075497595
+    Best model validation error = 116695.64178626952
+    Worst model train error = 40084.87211427962
+    Worst model validation error = 201900.6572429609
 
 
 
