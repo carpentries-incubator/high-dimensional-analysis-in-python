@@ -214,7 +214,7 @@ trained_model.summary()
   <th>Date:</th>             <td>Sat, 12 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>13:04:51</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
+  <th>Time:</th>                 <td>14:54:46</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>   978</td>      <th>  AIC:               </th> <td>   81.65</td> 
@@ -412,7 +412,7 @@ trained_model.summary()
   <th>Date:</th>             <td>Sat, 12 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>13:04:51</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
+  <th>Time:</th>                 <td>14:54:46</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>   978</td>      <th>  AIC:               </th> <td>   81.65</td> 
@@ -575,4 +575,4 @@ fig = coef_plot(coefs=coefs, plot_const=False)
     
 
 
-<img src="../fig/regression/interpret/coef_plot.png"  align="center" width="70%" height="70%">
+<img src="../fig/regression/interpret/coef_plot.png"  align="center" width="900%" height="90%">
