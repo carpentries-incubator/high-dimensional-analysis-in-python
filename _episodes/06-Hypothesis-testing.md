@@ -3,7 +3,7 @@ title: Model interpretation and hypothesis testing
 teaching: 45
 exercises: 2
 keypoints:
-- "All models are wrong, but some are useful.""
+- "All models are wrong, but some are useful."
 objectives:
 - "Understand how to use statistics to evaluate the likelihood of existing relationships recovered by a multivariate model."
 - "Understand how to interpret a regression model and evaluate the strength/direction of different predictor and target relationships." 
