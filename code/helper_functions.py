@@ -5,6 +5,8 @@ from sklearn.decomposition import PCA
 import math
 import matplotlib as mpl
 import matplotlib.pyplot as plt
+import matplotlib.ticker
+
 import numpy as np
 import seaborn as sns
 from typing import Optional, Tuple
@@ -235,7 +237,8 @@ def create_feature_data(random_state: int) -> np.ndarray:
 
 def create_feature_scatter_plot(random_state: int) -> Tuple[np.ndarray, Tuple[float, float]]:
     # feature_data = create_feature_data()
-    feature_data = create_normalized_feature(
+    from preprocessing import create_zscore_feature
+    feature_data = create_zscore_feature(
             create_feature_data(random_state=random_state)
     )
     fig, ax = plt.subplots(1, 1, figsize=(8, 8))
