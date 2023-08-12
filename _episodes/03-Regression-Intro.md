@@ -36,7 +36,7 @@ By fitting linear models to the Ames housing dataset, we can...
 2. **Explain**: Use statistics to make scientific claims concerning which predictor variables have a significant impact on sale price — the target variable (a.k.a. response / dependent variable)
 
 **Terminology note:** "target" and "predictor" synonyms
-* Predictor = independent variable = feature
+* Predictor = independent variable = feature = regressor
 * Target = dependent variable = response = outcome
 
 In this workshop, we will explore how we can exploit well-established machine learning methods, including *feature selection*, and *regularization techniques* (more on these terms later), to achieve both of the above goals on high-dimensional datasets.
@@ -102,8 +102,8 @@ from preprocessing import remove_bad_cols
 x_good = remove_bad_cols(x, .9)
 ```
 
-    OverallQual: most_common_val = 7, presence = 21.85
-    # of columns removed: 1
+    OverallQual removed, most_common_val = 7, presence = 21.85
+    1 columns removed, 0 remaining.
     Columns removed: ['OverallQual']
 
 
@@ -116,7 +116,7 @@ import matplotlib.pyplot as plt
 plt.scatter(x,y, alpha=.1)
 plt.xlabel(predictor)
 plt.ylabel('Sale Price');
-# plt.savefig('..//fig//regression//scatterplot_x_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//intro//scatterplot_x_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -125,7 +125,7 @@ plt.ylabel('Sale Price');
 
 
 
-<img src="../fig/regression/scatterplot_x_vs_salePrice.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/intro/scatterplot_x_vs_salePrice.png"  align="center" width="30%" height="30%">
 
 ### 4) Transform target variable, if necessary
 Unfortunately, sale price appears to grow almost exponentially—not linearly—with the predictor variable. Any line we draw through this data cloud is going to fail in capturing the true trend we see here.
@@ -144,7 +144,7 @@ y_log = y.apply(np.log)
 plt.scatter(x,y_log, alpha=.1)
 plt.xlabel(predictor)
 plt.ylabel('Sale Price');
-# plt.savefig('..//fig//regression//scatterplot_x_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white')
+# plt.savefig('..//fig//regression//intro//scatterplot_x_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white')
 ```
 
 
@@ -153,7 +153,7 @@ plt.ylabel('Sale Price');
 
 
 
-<img src="../fig/regression/scatterplot_x_vs_logSalePrice.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/intro/scatterplot_x_vs_logSalePrice.png"  align="center" width="30%" height="30%">
 
 This plot looks much better than the previous one. That is, the trend between OverallQual and log(SalePrice) appears fairly linear. Whether or not it is sufficiently linear can be addressed when we evaluate the model's performance later.
 
@@ -227,46 +227,31 @@ y_pred_test=reg.predict(x_test)
 ```python
 from regression_predict_sklearn import plot_train_test_predictions
 
-?plot_train_test_predictions
+help(plot_train_test_predictions)
 ```
 
+    Help on function plot_train_test_predictions in module regression_predict_sklearn:
 
-    [1;31mSignature:[0m
-    [0mplot_train_test_predictions[0m[1;33m([0m[1;33m
-    [0m    [0mpredictors[0m[1;33m:[0m [0mList[0m[1;33m[[0m[0mstr[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mX_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mX_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_pred_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_pred_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_log_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m    [0mplot_raw[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m    [0merr_type[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mstr[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
-    [0m    [0mtrain_err[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mfloat[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
-    [0m    [0mtest_err[0m[1;33m:[0m [0mOptional[0m[1;33m[[0m[0mfloat[0m[1;33m][0m [1;33m=[0m [1;32mNone[0m[1;33m,[0m[1;33m
-    [0m[1;33m)[0m [1;33m->[0m [0mTuple[0m[1;33m[[0m[0mOptional[0m[1;33m[[0m[0mmatplotlib[0m[1;33m.[0m[0mfigure[0m[1;33m.[0m[0mFigure[0m[1;33m][0m[1;33m,[0m [0mOptional[0m[1;33m[[0m[0mmatplotlib[0m[1;33m.[0m[0mfigure[0m[1;33m.[0m[0mFigure[0m[1;33m][0m[1;33m][0m[1;33m[0m[1;33m[0m[0m
-    [1;31mDocstring:[0m
-    Plot true vs. predicted values for train and test sets and line of best fit.
+    plot_train_test_predictions(predictors: List[str], X_train: Union[numpy.ndarray, pandas.core.series.Series, pandas.core.frame.DataFrame], X_test: Union[numpy.ndarray, pandas.core.series.Series, pandas.core.frame.DataFrame], y_train: Union[numpy.ndarray, pandas.core.series.Series], y_test: Union[numpy.ndarray, pandas.core.series.Series], y_pred_train: Union[numpy.ndarray, pandas.core.series.Series], y_pred_test: Union[numpy.ndarray, pandas.core.series.Series], y_log_scaled: bool, plot_raw: bool, err_type: Optional[str] = None, train_err: Optional[float] = None, test_err: Optional[float] = None) -> Tuple[Optional[matplotlib.figure.Figure], Optional[matplotlib.figure.Figure]]
+        Plot true vs. predicted values for train and test sets and line of best fit.
 
-    Args:
-        predictors (List[str]): List of predictor names.
-        X_train (Union[np.ndarray, pd.Series, pd.DataFrame]): Training feature data.
-        X_test (Union[np.ndarray, pd.Series, pd.DataFrame]): Test feature data.
-        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
-        y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
-        y_pred_train (Union[np.ndarray, pd.Series]): Predicted target values for the training set.
-        y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
-        y_log_scaled (bool): Whether the target values are log-scaled or not.
-        plot_raw (bool): Whether to plot raw or log-scaled values.
-        err_type (Optional[str]): Type of error metric.
-        train_err (Optional[float]): Training set error value.
-        test_err (Optional[float]): Test set error value.
+        Args:
+            predictors (List[str]): List of predictor names.
+            X_train (Union[np.ndarray, pd.Series, pd.DataFrame]): Training feature data.
+            X_test (Union[np.ndarray, pd.Series, pd.DataFrame]): Test feature data.
+            y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+            y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
+            y_pred_train (Union[np.ndarray, pd.Series]): Predicted target values for the training set.
+            y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
+            y_log_scaled (bool): Whether the target values are log-scaled or not.
+            plot_raw (bool): Whether to plot raw or log-scaled values.
+            err_type (Optional[str]): Type of error metric.
+            train_err (Optional[float]): Training set error value.
+            test_err (Optional[float]): Test set error value.
 
-    Returns:
-        Tuple[Optional[plt.Figure], Optional[plt.Figure]]: Figures for true vs. predicted values and line of best fit.
-    [1;31mFile:[0m      c:\users\endemann\documents\github\high-dim-data-lesson\code\regression_predict_sklearn.py
-    [1;31mType:[0m      function
+        Returns:
+            Tuple[Optional[plt.Figure], Optional[plt.Figure]]: Figures for true vs. predicted values and line of best fit.
+
 
 
 
@@ -281,9 +266,9 @@ from regression_predict_sklearn import plot_train_test_predictions
 # import matplotlib.pyplot as plt
 # import pylab as pl
 # pl.figure(fig1.number)
-# plt.savefig('..//fig//regression//univariate_truePrice_vs_predPrice.png',bbox_inches='tight', dpi=300)
+# plt.savefig('..//fig//regression//intro//univariate_truePrice_vs_predPrice.png',bbox_inches='tight', dpi=300)
 # pl.figure(fig2.number)
-# fig2.savefig('..//fig//regression//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
+# fig2.savefig('..//fig//regression//intro//univariate_x_vs_predPrice.png',bbox_inches='tight', dpi=300)
 
 ```
 
@@ -299,8 +284,8 @@ from regression_predict_sklearn import plot_train_test_predictions
 
 
 
-<img src="../fig/regression/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
-<img src="../fig/regression/univariate_x_vs_predPrice.png"  align="center" width="40%" height="40%">
+<img src="../fig/regression/intro/univariate_truePrice_vs_predPrice.png"  align="left" width="40%" height="40%">
+<img src="../fig/regression/intro/univariate_x_vs_predPrice.png"  align="center" width="40%" height="40%">
 
 > ## Inspect the plots
 > 1. Does the model capture the variability in sale prices well? Would you use this model to predict the sale price of a house? Why or why not?
@@ -406,38 +391,27 @@ Rather than copying and pasting the code above, let's try using one of the helpe
 
 ```python
 from regression_predict_sklearn import measure_model_err
-?measure_model_err
+help(measure_model_err)
 ```
 
+    Help on function measure_model_err in module regression_predict_sklearn:
 
-    [1;31mSignature:[0m
-    [0mmeasure_model_err[0m[1;33m([0m[1;33m
-    [0m    [0my[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mbaseline_pred[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mfloat[0m[1;33m,[0m [0mnumpy[0m[1;33m.[0m[0mfloat64[0m[1;33m,[0m [0mnumpy[0m[1;33m.[0m[0mfloat32[0m[1;33m,[0m [0mint[0m[1;33m,[0m [0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_pred_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0my_pred_test[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mmetric[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
-    [0m    [0my_log_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m[1;33m)[0m [1;33m->[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m[0m[1;33m[0m[0m
-    [1;31mDocstring:[0m
-    Measures the error of a regression model's predictions on train and test sets.
+    measure_model_err(y: Union[numpy.ndarray, pandas.core.series.Series], baseline_pred: Union[float, numpy.float64, numpy.float32, int, numpy.ndarray, pandas.core.series.Series], y_train: Union[numpy.ndarray, pandas.core.series.Series], y_pred_train: Union[numpy.ndarray, pandas.core.series.Series], y_test: Union[numpy.ndarray, pandas.core.series.Series], y_pred_test: Union[numpy.ndarray, pandas.core.series.Series], metric: str, y_log_scaled: bool) -> pandas.core.frame.DataFrame
+        Measures the error of a regression model's predictions on train and test sets.
 
-    Args:
-        y (Union[np.ndarray, pd.Series]): Actual target values for full dataset (not transformed)
-        baseline_pred (Union[float, np.float64, np.float32, int, np.ndarray, pd.Series]): Single constant or array of predictions equal to the length of y. Baseline is also not transformed.
-        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
-        y_pred_train (Union[np.ndarray, pd.Series]): Predicted target values for the training set.
-        y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
-        y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
-        metric (str): The error metric to calculate ('RMSE', 'R-squared', or 'MAPE').
-        y_log_scaled (bool): Whether the target values are log-scaled or not.
+        Args:
+            y (Union[np.ndarray, pd.Series]): Actual target values for full dataset (not transformed)
+            baseline_pred (Union[float, np.float64, np.float32, int, np.ndarray, pd.Series]): Single constant or array of predictions equal to the length of y. Baseline is also not transformed.
+            y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+            y_pred_train (Union[np.ndarray, pd.Series]): Predicted target values for the training set.
+            y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
+            y_pred_test (Union[np.ndarray, pd.Series]): Predicted target values for the test set.
+            metric (str): The error metric to calculate ('RMSE', 'R-squared', or 'MAPE').
+            y_log_scaled (bool): Whether the target values are log-scaled or not.
 
-    Returns:
-        pd.DataFrame: A DataFrame containing the error values for the baseline, training set, and test set.
-    [1;31mFile:[0m      c:\users\endemann\documents\github\high-dim-data-lesson\code\regression_predict_sklearn.py
-    [1;31mType:[0m      function
+        Returns:
+            pd.DataFrame: A DataFrame containing the error values for the baseline, training set, and test set.
+
 
 
 
@@ -598,11 +572,11 @@ from preprocessing import remove_bad_cols
 X_good = remove_bad_cols(X, 99)
 ```
 
-    LotFrontage: removed due to 259 NaNs
-    MasVnrArea: removed due to 8 NaNs
-    GarageYrBlt: removed due to 81 NaNs
-    PoolArea: most_common_val = 0, presence = 99.52
-    # of columns removed: 4
+    LotFrontage removed, 259 NaNs
+    MasVnrArea removed, 8 NaNs
+    GarageYrBlt removed, 81 NaNs
+    PoolArea removed, most_common_val = 0, presence = 99.52
+    4 columns removed, 30 remaining.
     Columns removed: ['LotFrontage', 'MasVnrArea', 'GarageYrBlt', 'PoolArea']
 
 
@@ -622,46 +596,30 @@ X_val, X_test, y_val, y_test = train_test_split(X_holdout, y_holdout,
 
 ```python
 from regression_predict_sklearn import compare_models
-?compare_models
+help(compare_models)
 ```
 
+    Help on function compare_models in module regression_predict_sklearn:
 
-    [1;31mSignature:[0m
-    [0mcompare_models[0m[1;33m([0m[1;33m
-    [0m    [0my[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mbaseline_pred[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mX_train[0m[1;33m:[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m,[0m[1;33m
-    [0m    [0my_train[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mX_val[0m[1;33m:[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m,[0m[1;33m
-    [0m    [0my_val[0m[1;33m:[0m [0mUnion[0m[1;33m[[0m[0mnumpy[0m[1;33m.[0m[0mndarray[0m[1;33m,[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mseries[0m[1;33m.[0m[0mSeries[0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mpredictors_list[0m[1;33m:[0m [0mList[0m[1;33m[[0m[0mList[0m[1;33m[[0m[0mstr[0m[1;33m][0m[1;33m][0m[1;33m,[0m[1;33m
-    [0m    [0mmetric[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
-    [0m    [0my_log_scaled[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m    [0mmodel_type[0m[1;33m:[0m [0mstr[0m[1;33m,[0m[1;33m
-    [0m    [0minclude_plots[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m    [0mplot_raw[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m    [0mverbose[0m[1;33m:[0m [0mbool[0m[1;33m,[0m[1;33m
-    [0m[1;33m)[0m [1;33m->[0m [0mpandas[0m[1;33m.[0m[0mcore[0m[1;33m.[0m[0mframe[0m[1;33m.[0m[0mDataFrame[0m[1;33m[0m[1;33m[0m[0m
-    [1;31mDocstring:[0m
-    Compare different models based on predictor variables and evaluate their errors.
+    compare_models(y: Union[numpy.ndarray, pandas.core.series.Series], baseline_pred: Union[numpy.ndarray, pandas.core.series.Series], X_train: pandas.core.frame.DataFrame, y_train: Union[numpy.ndarray, pandas.core.series.Series], X_val: pandas.core.frame.DataFrame, y_val: Union[numpy.ndarray, pandas.core.series.Series], predictors_list: List[List[str]], metric: str, y_log_scaled: bool, model_type: str, include_plots: bool, plot_raw: bool, verbose: bool) -> pandas.core.frame.DataFrame
+        Compare different models based on predictor variables and evaluate their errors.
 
-    Args:
-        y (Union[np.ndarray, pd.Series]): Target variable in its original scale (raw/untransformed).
-        baseline_pred (Union[np.ndarray, pd.Series]): Baseline predictions (in same scale as original target, y).
-        X_train (pd.DataFrame): Training feature data.
-        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
-        X_val (pd.DataFrame): Validation feature data.
-        y_val (Union[np.ndarray, pd.Series]): Actual target values for the validation set.
-        predictors_list (List[List[str]]): List of predictor variables for different models.
-        metric (str): The error metric to calculate.
-        y_log_scaled (bool): Whether the model was trained on log-scaled target values or not.
-        model_type (str): Type of the model being used.
-        include_plots (bool): Whether to include plots.
+        Args:
+            y (Union[np.ndarray, pd.Series]): Target variable in its original scale (raw/untransformed).
+            baseline_pred (Union[np.ndarray, pd.Series]): Baseline predictions (in same scale as original target, y).
+            X_train (pd.DataFrame): Training feature data.
+            y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
+            X_val (pd.DataFrame): Validation feature data.
+            y_val (Union[np.ndarray, pd.Series]): Actual target values for the validation set.
+            predictors_list (List[List[str]]): List of predictor variables for different models.
+            metric (str): The error metric to calculate.
+            y_log_scaled (bool): Whether the model was trained on log-scaled target values or not.
+            model_type (str): Type of the model being used.
+            include_plots (bool): Whether to include plots.
 
-    Returns:
-        pd.DataFrame: A DataFrame containing model errors for different predictor variables.
-    [1;31mFile:[0m      c:\users\endemann\documents\github\high-dim-data-lesson\code\regression_predict_sklearn.py
-    [1;31mType:[0m      function
+        Returns:
+            pd.DataFrame: A DataFrame containing model errors for different predictor variables.
+
 
 
 
@@ -930,7 +888,7 @@ sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=30)
 print(sampled_combinations[0:2])
 ```
 
-    [['GrLivArea', 'KitchenAbvGr'], ['LotArea', 'YearBuilt']]
+    [['2ndFlrSF', 'BedroomAbvGr'], ['TotalBsmtSF', 'KitchenAbvGr']]
 
 
 #### Compare efficacy of different numbers of predictors
@@ -972,10 +930,10 @@ for K in n_predictors:
 
 
     K = 2
-    Best model train error = 45372.03630284794
-    Best model validation error = 47605.58931968338
-    Worst model train error = 63037.76023452979
-    Worst model validation error = 229440.80364597624
+    Best model train error = 57695.51321243383
+    Best model validation error = 61057.82537781604
+    Worst model train error = 62347.45313937368
+    Worst model validation error = 392742.9159369634
 
 
 
@@ -985,10 +943,10 @@ for K in n_predictors:
 
 
     K = 5
-    Best model train error = 43593.861447065894
-    Best model validation error = 44419.422820807755
-    Worst model train error = 56300.44653143042
-    Worst model validation error = 425862.1543596524
+    Best model train error = 52671.3120361021
+    Best model validation error = 56244.828254762346
+    Worst model train error = 63177.245823575046
+    Worst model validation error = 477230.2029975715
 
 
 
@@ -998,10 +956,10 @@ for K in n_predictors:
 
 
     K = 10
-    Best model train error = 37765.31005061791
-    Best model validation error = 39652.7001038106
-    Worst model train error = 53139.760955892925
-    Worst model validation error = 371695.3083476124
+    Best model train error = 40905.03672286247
+    Best model validation error = 44340.62309692853
+    Worst model train error = 65526.068482925686
+    Worst model validation error = 475124.5284353966
 
 
 
@@ -1011,10 +969,10 @@ for K in n_predictors:
 
 
     K = 20
-    Best model train error = 34525.435899415745
-    Best model validation error = 60026.778029041794
-    Worst model train error = 40712.55951193902
-    Worst model validation error = 208391.4413436783
+    Best model train error = 34178.885958376835
+    Best model validation error = 79957.0639217055
+    Worst model train error = 42589.06559853427
+    Worst model validation error = 223738.4480532306
 
 
 
@@ -1024,10 +982,10 @@ for K in n_predictors:
 
 
     K = 25
-    Best model train error = 33341.27877200449
-    Best model validation error = 88029.1738708029
-    Worst model train error = 38575.36786723158
-    Worst model validation error = 166730.73685601898
+    Best model train error = 33831.60041611705
+    Best model validation error = 94034.63658720544
+    Worst model train error = 39395.73119276418
+    Worst model validation error = 182322.08653139145
 
 
 
@@ -1038,22 +996,27 @@ for K in n_predictors:
 
 
 ```python
-plt.plot(n_predictors, best_train_errs, '-o')
-plt.plot(n_predictors, best_val_errs, '-o')
+# Assuming you have defined n_predictors, best_train_errs, and best_val_errs
+
+plt.plot(n_predictors, best_train_errs, '-o', label='Training Error')
+plt.plot(n_predictors, best_val_errs, '-o', label='Validation Error')
+plt.xlabel('Number of Predictors')
+plt.ylabel('Error')
+plt.title('Training and Validation Errors')
+plt.legend()  # This adds the legend based on the labels provided above
+plt.grid(True)
+
+# Save the plot to a file
+# plt.savefig('..//fig//regression//intro//Npredictor_v_error.png', bbox_inches='tight', dpi=300, facecolor='white')
 ```
 
 
 
 
-    [<matplotlib.lines.Line2D at 0x1e1982e9b50>]
 
 
 
-
-
-
-
-
+<img src="../fig/regression/intro/Npredictor_v_error.png"  align="center" width="30%" height="30%">
 
 #### How much data is needed per new predictor? 10X rule of thumb
 As the number of observations begins to approach the number of model parameters (i.e., coefficients being estimated), the model will simply memorize the training data rather than learn anything useful. As a general rule of thumb, obtaining reliable estimates from linear regression models requires that you have at least 10X as many observations than model coefficients/predictors. The exact ratio may change depending on the variability of your data and whether or not each observation is truly independent (time-series models, for instance, often require much more data since observations are rarely independent).

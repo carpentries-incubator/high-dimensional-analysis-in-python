@@ -10,7 +10,6 @@ objectives:
 - "Understand how to assess the validity of a multivariate regression model."
 - "Understand how to use statistics to evaluate the likelihood of existing relationships recovered by a multivariate model."
 questions:
-- "How can multivariate models be used to detect interesting relationships found in nature?"
 - "What are the assumptions of linear regression models?"
 - "How can we rigorously evaluate the validity and accuracy of a multivariate regression model?"
 - "How should we preprocess categorical predictors and sparse binary predictors?"
@@ -715,16 +714,96 @@ print(X_test.shape)
     (482, 4)
 
 
+#### Zscore the data
+As in the previous episode, we will zscore this data so that all predictors are on the same scale. This will allow us to compare coefficient sizes later.
+
+
+```python
+from preprocessing import zscore
+X_train_z = zscore(df=X_train, train_means=X_train.mean(), train_stds=X_train.std())
+X_test_z = zscore(df=X_test, train_means=X_train.mean(), train_stds=X_train.std())
+X_train_z.head()
+```
+
+
+
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>OverallQual</th>
+      <th>SaleCondition_Abnorml</th>
+      <th>SaleCondition_Family</th>
+      <th>SaleCondition_Partial</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>368</th>
+      <td>-0.819197</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
+    </tr>
+    <tr>
+      <th>315</th>
+      <td>0.630893</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
+    </tr>
+    <tr>
+      <th>135</th>
+      <td>0.630893</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
+    </tr>
+    <tr>
+      <th>473</th>
+      <td>1.355938</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>3.326071</td>
+    </tr>
+    <tr>
+      <th>1041</th>
+      <td>-0.094152</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
+
+
 
 ```python
 import statsmodels.api as sm
 
 # Add a constant column to the predictor variables dataframe - this acts as the y-intercept in the model
-X_train = sm.add_constant(X_train)
+X_train_z = sm.add_constant(X_train_z)
 
 # Add the constant to the test set as well so we can use the model to form predictions on the test set later
-X_test = sm.add_constant(X_test)
-X_test.head()
+X_test_z = sm.add_constant(X_test_z)
+X_test_z.head()
 ```
 
 
@@ -759,42 +838,42 @@ X_test.head()
     <tr>
       <th>280</th>
       <td>1.0</td>
-      <td>7</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.630893</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
     </tr>
     <tr>
       <th>1365</th>
       <td>1.0</td>
-      <td>7</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>0.630893</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
     </tr>
     <tr>
       <th>132</th>
       <td>1.0</td>
-      <td>5</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>-0.819197</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
     </tr>
     <tr>
       <th>357</th>
       <td>1.0</td>
-      <td>5</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>-0.819197</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
     </tr>
     <tr>
       <th>438</th>
       <td>1.0</td>
-      <td>5</td>
-      <td>0</td>
-      <td>0</td>
-      <td>0</td>
+      <td>-0.819197</td>
+      <td>-0.262263</td>
+      <td>-0.124741</td>
+      <td>-0.300348</td>
     </tr>
   </tbody>
 </table>
@@ -805,7 +884,7 @@ X_test.head()
 
 ```python
 # Fit the multivariate regression model
-model = sm.OLS(y_train, X_train)
+model = sm.OLS(y_train, X_train_z)
 trained_model = model.fit()
 ```
 
@@ -819,23 +898,55 @@ Before we go any further in assessing the model's assumptions and ultimately run
 
 
 ```python
+from regression_predict_sklearn import measure_model_err
 # to calculate residuals and R-squared for the test set, we'll need to get the model predictions first
-y_pred_train = trained_model.predict(X_train)
-y_pred_test = trained_model.predict(X_test)
+y_pred_train = trained_model.predict(X_train_z)
+y_pred_test = trained_model.predict(X_test_z)
+errors_df = measure_model_err(y, np.mean(y),
+                      y_train, y_pred_train,
+                      y_test, y_pred_test,
+                      'RMSE', y_log_scaled=True)
+
+errors_df
 ```
 
 
-```python
-# sklearn can help us quickly calculate R-squared
-from sklearn import metrics
-R2_train = metrics.r2_score(y_train, y_pred_train)
-R2_test = metrics.r2_score(y_test, y_pred_test)
-print('train R2:', R2_train)
-print('test R2:', R2_test)
-```
 
-    train R2: 0.6656610907646398
-    test R2: 0.7039490404354984
+
+<div>
+<style scoped>
+    .dataframe tbody tr th:only-of-type {
+        vertical-align: middle;
+    }
+
+    .dataframe tbody tr th {
+        vertical-align: top;
+    }
+
+    .dataframe thead th {
+        text-align: right;
+    }
+</style>
+<table border="1" class="dataframe">
+  <thead>
+    <tr style="text-align: right;">
+      <th></th>
+      <th>Baseline Error</th>
+      <th>Train Error</th>
+      <th>Test Error</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <th>0</th>
+      <td>79415.291886</td>
+      <td>48006.606717</td>
+      <td>38095.235457</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+
 
 
 You can also extract rsquared for the training data directly from the trained statsmodels object.
@@ -880,7 +991,7 @@ import matplotlib.pyplot as plt
 from statsmodels.graphics.regressionplots import plot_partregress_grid;
 
 fig = plt.figure(figsize=(12, 8));
-plot_partregress_grid(trained_model, fig=fig, exog_idx=list(range(1,X_train.shape[1])))
+plot_partregress_grid(trained_model, fig=fig, exog_idx=list(range(1,X_train_z.shape[1])))
 # fig.savefig('..//fig//regression//assumptions//partialRegression.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
@@ -1005,13 +1116,13 @@ resids.skew()
 
 ```
 
-    Median of residuals: 0.004774460786039825
+    Median of residuals: 0.0047744607860336075
 
 
 
 
 
-    -0.3768190722299785
+    -0.3768190722299776
 
 
 
@@ -1122,14 +1233,14 @@ Later in the workshop, we can use the following helper function to run the norma
 ```python
 from check_assumptions import normal_resid_test
 fig = normal_resid_test(resids)
-# fig.savefig('..//fig//regression//assumptions//normal_resids_fullTest.png',bbox_inches='tight', dpi=300)
+fig.savefig('..//fig//regression//assumptions//normal_resids_fullTest.png',bbox_inches='tight', dpi=300)
 ```
 
 
     ==========================
     VERIFYING NORMAL ERRORS...
-    Median of residuals: 0.004774460786039825
-    Skewness of resids (+/- 0.5 is bad): -0.3768190722299785
+    Median of residuals: 0.0047744607860336075
+    Skewness of resids (+/- 0.5 is bad): -0.3768190722299776
     Shapiro-Wilk test: statistic=0.9825, p-value=0.0000000019
     Shapiro-Wilk test passes: False
     Kolmogorov-Smirnov test: statistic=0.3115, p-value=0.0000000000
@@ -1141,6 +1252,8 @@ fig = normal_resid_test(resids)
 
 
 
+
+<img src="../fig/regression/assumptions/normal_resids_fullTest.png"  align="center" width="50%" height="50%">
 
 ### 6. Independent errors test
 **Independent errors assumption**: In the context of linear regression, the independent errors assumption states that the errors (also called residuals) in the model are not correlated with each other. In other words, the residual for one observation should not provide any information or pattern that can help predict the residual for another observation. This assumption is crucial because if errors are correlated, it can lead to biased and inefficient estimates of the regression coefficients, affecting the validity of the statistical inference and prediction.
@@ -1165,7 +1278,7 @@ durbin_watson_statistic = durbin_watson(resids)
 print(f"Durbin-Watson test statistic: {durbin_watson_statistic}")
 ```
 
-    Durbin-Watson test statistic: 1.9864287360736377
+    Durbin-Watson test statistic: 1.9864287360736372
 
 
 It can also be helpful to re-examine the model predictions vs residual plot to look for violations of this assumption. If the errors are independent, the residuals should be randomly scattered around zero with no specific patterns or trends. We'll call a pre-baked helper function to quickly create this plot and run the Durbin-Watson test.
@@ -1181,7 +1294,7 @@ fig = independent_resid_test(y_pred_train, resids, include_plot=True)
 
     ==========================
     VERIFYING INDEPENDENT ERRORS...
-    Durbin-Watson test statistic: 1.9864287360736377
+    Durbin-Watson test statistic: 1.9864287360736372
     Durbin-Watson test statistic is within the expected range (1.5 to 2.5) for no significant autocorrelation.
 
 
@@ -1191,12 +1304,14 @@ fig = independent_resid_test(y_pred_train, resids, include_plot=True)
 
 
 
+<img src="../fig/regression/assumptions/independentResids_fullTest.png"  align="center" width="30%" height="30%">
+
 #### Running all assumptions tests at once
 
 
 ```python
 from check_assumptions import eval_regression_assumptions
-eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
+eval_regression_assumptions(trained_model=trained_model, X=X_train_z, y=y_train,
                             y_pred=y_pred_train, y_log_scaled=True, plot_raw=False, threshold_p_value=.05);
 ```
 
@@ -1204,10 +1319,10 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
     ==========================
     VERIFYING MULTICOLLINEARITY...
                     Variable       VIF
-    0            OverallQual  1.226972
-    1  SaleCondition_Abnorml  1.067576
-    2   SaleCondition_Family  1.015308
-    3  SaleCondition_Partial  1.144088
+    0            OverallQual  1.098041
+    1  SaleCondition_Abnorml  1.009233
+    2   SaleCondition_Family  1.003844
+    3  SaleCondition_Partial  1.100450
 
 
 
@@ -1238,8 +1353,8 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
 
     ==========================
     VERIFYING NORMAL ERRORS...
-    Median of residuals: 0.004774460786039825
-    Skewness of resids (+/- 0.5 is bad): -0.3768190722299785
+    Median of residuals: 0.0047744607860336075
+    Skewness of resids (+/- 0.5 is bad): -0.3768190722299776
     Shapiro-Wilk test: statistic=0.9825, p-value=0.0000000019
     Shapiro-Wilk test passes: False
     Kolmogorov-Smirnov test: statistic=0.3115, p-value=0.0000000000
@@ -1255,7 +1370,7 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
 
     ==========================
     VERIFYING INDEPENDENT ERRORS...
-    Durbin-Watson test statistic: 1.9864287360736377
+    Durbin-Watson test statistic: 1.9864287360736372
     Durbin-Watson test statistic is within the expected range (1.5 to 2.5) for no significant autocorrelation.
 
 
@@ -1291,7 +1406,8 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
 > > 
 > > ~~~
 > > # Extract target, `y` and predictors, `X`.
-> > y_log = np.log(housing['target'])
+> > y = housing['target']
+> > y_log = np.log(y)
 > > predictors = ['LotArea', 'YearBuilt', 'YearRemodAdd', 'GarageArea', 'GarageCars', 'Neighborhood']
 > > X=housing['data'][predictors]
 > > X.head()
@@ -1343,10 +1459,8 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
 > > ~~~
 > > # Add a constant column to the predictor variables dataframe
 > > X_train_z = sm.add_constant(X_train_z)
-> > print(X_train_z.head())
 > > # Add the constant to the test set as well so we can use the model to form predictions on the test set later
 > > X_test_z = sm.add_constant(X_test_z)
-> > print(X_test_z.head())
 > > # Fit the multivariate regression model
 > > model = sm.OLS(y_train, X_train_z)
 > > trained_model = model.fit()
@@ -1380,69 +1494,3 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
 > > 
 > {:.solution}
 {:.challenge}
-
-
-
-
-#### Feature importance and significant features
-
-
-```python
-# Get coefficient values
-coefficients = trained_model.params
-coefficients = coefficients.drop('const')
-coefficients
-```
-
-
-
-
-    OverallQual              0.230798
-    SaleCondition_Abnorml   -0.118125
-    SaleCondition_Family    -0.099432
-    SaleCondition_Partial    0.092854
-    dtype: float64
-
-
-
-
-```python
-# Get feature importance based on coefficient magnitudes
-feature_importance = np.abs(coefficients)
-sorted_indices = feature_importance.sort_values(ascending=False).index
-
-# Plot coefficient values based on feature importance order
-plt.figure(figsize=(20, 6))
-plt.subplot(1, 2, 1)
-coefficients.loc[sorted_indices].plot(kind='bar')
-plt.title("Coefficient Values (Sorted Feature Importance)")
-plt.xlabel("Features")
-plt.ylabel("Coefficient Value")
-plt.xticks(rotation=45)
-
-# Plot feature importance based on coefficient magnitudes
-plt.subplot(1, 2, 2)
-feature_importance.loc[sorted_indices].plot(kind='bar')
-plt.title("Feature Importance based on Coefficient Magnitudes")
-plt.xlabel("Features")
-plt.ylabel("Magnitude")
-plt.xticks(rotation=45)
-
-plt.tight_layout()
-plt.show()
-
-# Print feature importance order
-print("Feature importance based on coefficient magnitudes:")
-print(sorted_indices)
-```
-
-
-
-
-
-
-
-    Feature importance based on coefficient magnitudes:
-    Index(['OverallQual', 'SaleCondition_Abnorml', 'SaleCondition_Family',
-           'SaleCondition_Partial'],
-          dtype='object')

@@ -12,20 +12,42 @@ import random
 
 from typing import Optional, Tuple, List, Union
 
-def train_linear_model(X_train, y_train, model_type):
+def train_linear_model(X_train: np.ndarray, y_train: np.ndarray, model_type: str) -> LinearRegression:
+    """
+    Train a linear regression model.
+
+    Args:
+        X_train (np.ndarray): Training predictor variables.
+        y_train (np.ndarray): Training target variable.
+        model_type (str): Type of linear regression model. Currently supports "unregularized".
+
+    Returns:
+        LinearRegression: Trained linear regression model.
+    """
     if model_type == "unregularized":
-        reg = LinearRegression().fit(X_train,y_train)
+        reg = LinearRegression().fit(X_train, y_train)
     else:
         raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
   
     return reg
 
-def get_train_test_pred(X_train, X_test, reg):
-    # 1) get model predicitons based on transformed (z-scored) predictor vars
-    y_pred_train=reg.predict(X_train)
-    y_pred_test=reg.predict(X_test)
+def get_train_test_pred(X_train: np.ndarray, X_test: np.ndarray, reg: LinearRegression) -> tuple:
+    """
+    Get model predictions for both training and test sets.
+
+    Args:
+        X_train (np.ndarray): Training predictor variables.
+        X_test (np.ndarray): Test predictor variables.
+        reg (LinearRegression): Trained linear regression model.
+
+    Returns:
+        tuple: A tuple containing predicted values for training and test sets.
+    """
+    y_pred_train = reg.predict(X_train)
+    y_pred_test = reg.predict(X_test)
     
     return y_pred_train, y_pred_test
+
 
 def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[float, np.float64, np.float32, int, np.ndarray, pd.Series],
                       y_train: Union[np.ndarray, pd.Series],

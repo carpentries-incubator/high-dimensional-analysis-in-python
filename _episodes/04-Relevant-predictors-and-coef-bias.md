@@ -77,7 +77,7 @@ It's always a good idea to start by plotting the predictor vs the target variabl
 ```python
 import matplotlib.pyplot as plt
 plt.scatter(X,y,alpha=.3);
-# plt.savefig('..//fig//regression//scatterplot_fullBath_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//relevant_predictors//scatterplot_fullBath_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -86,7 +86,7 @@ plt.scatter(X,y,alpha=.3);
 
 
 
-<img src="../fig/regression/scatterplot_fullBath_vs_salePrice.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/relevant_predictors/scatterplot_fullBath_vs_salePrice.png"  align="center" width="30%" height="30%">
 
 Since the relationship doesn't appear to be quite as linear as we were hoping, we will try a log transformation as we did in the previous episode.
 
@@ -95,7 +95,7 @@ Since the relationship doesn't appear to be quite as linear as we were hoping, w
 import numpy as np
 y_log = y.apply(np.log)
 plt.scatter(X,y_log, alpha=.3);
-# plt.savefig('..//fig//regression//scatterplot_fullBath_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//relevant_predictors//scatterplot_fullBath_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -104,7 +104,7 @@ plt.scatter(X,y_log, alpha=.3);
 
 
 
-<img src="../fig/regression/scatterplot_fullBath_vs_logSalePrice.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/relevant_predictors/scatterplot_fullBath_vs_logSalePrice.png"  align="center" width="30%" height="30%">
 
 The log transform improves the linear relationship substantially!
 
@@ -316,10 +316,10 @@ results.summary()
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   798.1</td>
 </tr>
 <tr>
-  <th>Date:</th>             <td>Fri, 11 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>2.12e-140</td>
+  <th>Date:</th>             <td>Sat, 12 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>2.12e-140</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>22:00:12</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
+  <th>Time:</th>                 <td>13:01:04</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>  1460</td>      <th>  AIC:               </th> <td>   829.3</td>
@@ -387,7 +387,7 @@ When transformed to the original data scale, this coefficient tells us that incr
 ```python
 X=housing['data']['GrLivArea']
 plt.scatter(X, y_log);
-# plt.savefig('..//fig//regression//scatterplot_GrLivArea_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
+# plt.savefig('..//fig//regression//relevant_predictors//scatterplot_GrLivArea_vs_logSalePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
@@ -396,7 +396,7 @@ plt.scatter(X, y_log);
 
 
 
-<img src="../fig/regression/scatterplot_GrLivArea_vs_logSalePrice.png"  align="center" width="30%" height="30%">
+<img src="../fig/regression/relevant_predictors/scatterplot_GrLivArea_vs_logSalePrice.png"  align="center" width="30%" height="30%">
 
 As before, we will z-score the predictor. This is a critical step when comparing coefficient estimates since the estimates are a function of the scale of the predictor.
 
@@ -748,100 +748,53 @@ print(X_encoded_good.shape)
 print(y.shape)
 ```
 
-    TotRmsAbvGrd removed, most_common_val = 8, presence = 12.81
+    WoodDeckSF removed, most_common_val = 0, presence = 52.12
+    MoSold removed, most_common_val = 2, presence = 3.56
+    LotFrontage removed, 259 NaNs
+    PoolArea removed, most_common_val = 0, presence = 99.52
     3SsnPorch removed, most_common_val = 0, presence = 98.36
+    OverallCond removed, most_common_val = 5, presence = 56.23
+    YearBuilt removed, most_common_val = 2003, presence = 3.08
+    MasVnrArea removed, 8 NaNs
+    LowQualFinSF removed, most_common_val = 0, presence = 98.22
     BedroomAbvGr removed, most_common_val = 3, presence = 55.07
     BsmtHalfBath removed, most_common_val = 0, presence = 94.38
-    WoodDeckSF removed, most_common_val = 0, presence = 52.12
-    PoolArea removed, most_common_val = 0, presence = 99.52
-    GarageYrBlt removed, 81 NaNs
-    LotFrontage removed, 259 NaNs
-    YearRemodAdd removed, most_common_val = 2003, presence = 3.49
-    YrSold removed, most_common_val = 2008, presence = 20.82
-    LowQualFinSF removed, most_common_val = 0, presence = 98.22
-    Fireplaces removed, most_common_val = 0, presence = 47.26
     BsmtFullBath removed, most_common_val = 1, presence = 40.27
-    ScreenPorch removed, most_common_val = 0, presence = 92.05
-    HalfBath removed, most_common_val = 1, presence = 36.64
-    OverallCond removed, most_common_val = 5, presence = 56.23
-    BsmtFinSF2 removed, most_common_val = 0, presence = 88.56
-    MasVnrArea removed, 8 NaNs
-    MoSold removed, most_common_val = 2, presence = 3.56
     GarageCars removed, most_common_val = 2, presence = 56.44
+    GarageYrBlt removed, 81 NaNs
+    ScreenPorch removed, most_common_val = 0, presence = 92.05
+    YearRemodAdd removed, most_common_val = 2003, presence = 3.49
+    Fireplaces removed, most_common_val = 0, presence = 47.26
     FullBath removed, most_common_val = 2, presence = 52.6
-    YearBuilt removed, most_common_val = 2003, presence = 3.08
-    OverallQual removed, most_common_val = 7, presence = 21.85
-    EnclosedPorch removed, most_common_val = 0, presence = 85.75
     KitchenAbvGr removed, most_common_val = 1, presence = 95.34
-    MiscFeature_Gar2 removed, most_common_val = 0, presence = 99.86
-    MiscFeature_Othr removed, most_common_val = 0, presence = 99.86
-    MiscFeature_Shed removed, most_common_val = 0, presence = 96.64
-    MiscFeature_TenC removed, most_common_val = 0, presence = 99.93
-    MSSubClass_20 removed, most_common_val = 0, presence = 63.29
-    MSSubClass_30 removed, most_common_val = 0, presence = 95.27
-    MSSubClass_40 removed, most_common_val = 0, presence = 99.73
-    MSSubClass_45 removed, most_common_val = 0, presence = 99.18
-    MSSubClass_50 removed, most_common_val = 0, presence = 90.14
-    MSSubClass_60 removed, most_common_val = 1, presence = 20.48
-    MSSubClass_70 removed, most_common_val = 0, presence = 95.89
-    MSSubClass_75 removed, most_common_val = 0, presence = 98.9
-    MSSubClass_80 removed, most_common_val = 0, presence = 96.03
-    MSSubClass_85 removed, most_common_val = 0, presence = 98.63
-    MSSubClass_90 removed, most_common_val = 0, presence = 96.44
-    MSSubClass_120 removed, most_common_val = 0, presence = 94.04
-    MSSubClass_160 removed, most_common_val = 0, presence = 95.68
-    MSSubClass_180 removed, most_common_val = 0, presence = 99.32
-    MSSubClass_190 removed, most_common_val = 0, presence = 97.95
-    LotConfig_Corner removed, most_common_val = 0, presence = 81.99
-    LotConfig_CulDSac removed, most_common_val = 0, presence = 93.56
-    LotConfig_FR2 removed, most_common_val = 0, presence = 96.78
-    LotConfig_FR3 removed, most_common_val = 0, presence = 99.73
-    LotConfig_Inside removed, most_common_val = 1, presence = 72.05
-    MSZoning_'C (all)' removed, most_common_val = 0, presence = 99.32
-    MSZoning_FV removed, most_common_val = 0, presence = 95.55
-    MSZoning_RH removed, most_common_val = 0, presence = 98.9
-    MSZoning_RL removed, most_common_val = 1, presence = 78.84
-    MSZoning_RM removed, most_common_val = 0, presence = 85.07
-    Condition1_Artery removed, most_common_val = 0, presence = 96.71
-    Condition1_Feedr removed, most_common_val = 0, presence = 94.45
-    Condition1_Norm removed, most_common_val = 1, presence = 86.3
-    Condition1_PosA removed, most_common_val = 0, presence = 99.45
-    Condition1_PosN removed, most_common_val = 0, presence = 98.7
-    Condition1_RRAe removed, most_common_val = 0, presence = 99.25
-    Condition1_RRAn removed, most_common_val = 0, presence = 98.22
-    Condition1_RRNe removed, most_common_val = 0, presence = 99.86
-    Condition1_RRNn removed, most_common_val = 0, presence = 99.66
+    TotRmsAbvGrd removed, most_common_val = 8, presence = 12.81
+    EnclosedPorch removed, most_common_val = 0, presence = 85.75
+    OverallQual removed, most_common_val = 7, presence = 21.85
+    YrSold removed, most_common_val = 2008, presence = 20.82
+    BsmtFinSF2 removed, most_common_val = 0, presence = 88.56
+    HalfBath removed, most_common_val = 1, presence = 36.64
     LandContour_Bnk removed, most_common_val = 0, presence = 95.68
     LandContour_HLS removed, most_common_val = 0, presence = 96.58
     LandContour_Low removed, most_common_val = 0, presence = 97.53
     LandContour_Lvl removed, most_common_val = 1, presence = 89.79
-    Utilities_AllPub removed, most_common_val = 1, presence = 99.93
-    Utilities_NoSeWa removed, most_common_val = 0, presence = 99.93
-    GarageType_2Types removed, most_common_val = 0, presence = 99.59
-    GarageType_Attchd removed, most_common_val = 1, presence = 59.59
-    GarageType_Basment removed, most_common_val = 0, presence = 98.7
-    GarageType_BuiltIn removed, most_common_val = 0, presence = 93.97
-    GarageType_CarPort removed, most_common_val = 0, presence = 99.38
-    GarageType_Detchd removed, most_common_val = 0, presence = 73.49
     SaleCondition_Abnorml removed, most_common_val = 0, presence = 93.08
     SaleCondition_AdjLand removed, most_common_val = 0, presence = 99.73
     SaleCondition_Alloca removed, most_common_val = 0, presence = 99.18
     SaleCondition_Family removed, most_common_val = 0, presence = 98.63
     SaleCondition_Normal removed, most_common_val = 1, presence = 82.05
     SaleCondition_Partial removed, most_common_val = 0, presence = 91.44
-    Foundation_BrkTil removed, most_common_val = 0, presence = 90.0
-    Foundation_CBlock removed, most_common_val = 0, presence = 56.58
-    Foundation_PConc removed, most_common_val = 1, presence = 44.32
-    Foundation_Slab removed, most_common_val = 0, presence = 98.36
-    Foundation_Stone removed, most_common_val = 0, presence = 99.59
-    Foundation_Wood removed, most_common_val = 0, presence = 99.79
-    Electrical_FuseA removed, most_common_val = 0, presence = 93.56
-    Electrical_FuseF removed, most_common_val = 0, presence = 98.15
-    Electrical_FuseP removed, most_common_val = 0, presence = 99.79
-    Electrical_Mix removed, most_common_val = 0, presence = 99.93
-    Electrical_SBrkr removed, most_common_val = 1, presence = 91.37
-    Alley_Grvl removed, most_common_val = 0, presence = 96.58
-    Alley_Pave removed, most_common_val = 0, presence = 97.19
+    HouseStyle_1.5Fin removed, most_common_val = 0, presence = 89.45
+    HouseStyle_1.5Unf removed, most_common_val = 0, presence = 99.04
+    HouseStyle_1Story removed, most_common_val = 0, presence = 50.27
+    HouseStyle_2.5Fin removed, most_common_val = 0, presence = 99.45
+    HouseStyle_2.5Unf removed, most_common_val = 0, presence = 99.25
+    HouseStyle_2Story removed, most_common_val = 1, presence = 30.48
+    HouseStyle_SFoyer removed, most_common_val = 0, presence = 97.47
+    HouseStyle_SLvl removed, most_common_val = 0, presence = 95.55
+    MasVnrType_BrkCmn removed, most_common_val = 0, presence = 98.97
+    MasVnrType_BrkFace removed, most_common_val = 1, presence = 30.48
+    MasVnrType_None removed, most_common_val = 0, presence = 40.82
+    MasVnrType_Stone removed, most_common_val = 0, presence = 91.23
     SaleType_COD removed, most_common_val = 0, presence = 97.05
     SaleType_CWD removed, most_common_val = 0, presence = 99.73
     SaleType_Con removed, most_common_val = 0, presence = 99.86
@@ -851,12 +804,6 @@ print(y.shape)
     SaleType_New removed, most_common_val = 0, presence = 91.64
     SaleType_Oth removed, most_common_val = 0, presence = 99.79
     SaleType_WD removed, most_common_val = 1, presence = 86.78
-    RoofStyle_Flat removed, most_common_val = 0, presence = 99.11
-    RoofStyle_Gable removed, most_common_val = 1, presence = 78.15
-    RoofStyle_Gambrel removed, most_common_val = 0, presence = 99.25
-    RoofStyle_Hip removed, most_common_val = 0, presence = 80.41
-    RoofStyle_Mansard removed, most_common_val = 0, presence = 99.52
-    RoofStyle_Shed removed, most_common_val = 0, presence = 99.86
     RoofMatl_ClyTile removed, most_common_val = 0, presence = 99.93
     RoofMatl_CompShg removed, most_common_val = 1, presence = 98.22
     RoofMatl_Membran removed, most_common_val = 0, presence = 99.93
@@ -865,68 +812,8 @@ print(y.shape)
     RoofMatl_Tar&Grv removed, most_common_val = 0, presence = 99.25
     RoofMatl_WdShake removed, most_common_val = 0, presence = 99.66
     RoofMatl_WdShngl removed, most_common_val = 0, presence = 99.59
-    Exterior1st_'Wd Sdng' removed, most_common_val = 0, presence = 85.89
-    Exterior1st_AsbShng removed, most_common_val = 0, presence = 98.63
-    Exterior1st_AsphShn removed, most_common_val = 0, presence = 99.93
-    Exterior1st_BrkComm removed, most_common_val = 0, presence = 99.86
-    Exterior1st_BrkFace removed, most_common_val = 0, presence = 96.58
-    Exterior1st_CBlock removed, most_common_val = 0, presence = 99.93
-    Exterior1st_CemntBd removed, most_common_val = 0, presence = 95.82
-    Exterior1st_HdBoard removed, most_common_val = 0, presence = 84.79
-    Exterior1st_ImStucc removed, most_common_val = 0, presence = 99.93
-    Exterior1st_MetalSd removed, most_common_val = 0, presence = 84.93
-    Exterior1st_Plywood removed, most_common_val = 0, presence = 92.6
-    Exterior1st_Stone removed, most_common_val = 0, presence = 99.86
-    Exterior1st_Stucco removed, most_common_val = 0, presence = 98.29
-    Exterior1st_VinylSd removed, most_common_val = 1, presence = 35.27
-    Exterior1st_WdShing removed, most_common_val = 0, presence = 98.22
-    BldgType_1Fam removed, most_common_val = 1, presence = 83.56
-    BldgType_2fmCon removed, most_common_val = 0, presence = 97.88
-    BldgType_Duplex removed, most_common_val = 0, presence = 96.44
-    BldgType_Twnhs removed, most_common_val = 0, presence = 97.05
-    BldgType_TwnhsE removed, most_common_val = 0, presence = 92.19
-    Condition2_Artery removed, most_common_val = 0, presence = 99.86
-    Condition2_Feedr removed, most_common_val = 0, presence = 99.59
-    Condition2_Norm removed, most_common_val = 1, presence = 98.97
-    Condition2_PosA removed, most_common_val = 0, presence = 99.93
-    Condition2_PosN removed, most_common_val = 0, presence = 99.86
-    Condition2_RRAe removed, most_common_val = 0, presence = 99.93
-    Condition2_RRAn removed, most_common_val = 0, presence = 99.93
-    Condition2_RRNn removed, most_common_val = 0, presence = 99.86
-    MasVnrType_BrkCmn removed, most_common_val = 0, presence = 98.97
-    MasVnrType_BrkFace removed, most_common_val = 1, presence = 30.48
-    MasVnrType_None removed, most_common_val = 0, presence = 40.82
-    MasVnrType_Stone removed, most_common_val = 0, presence = 91.23
-    HouseStyle_1.5Fin removed, most_common_val = 0, presence = 89.45
-    HouseStyle_1.5Unf removed, most_common_val = 0, presence = 99.04
-    HouseStyle_1Story removed, most_common_val = 0, presence = 50.27
-    HouseStyle_2.5Fin removed, most_common_val = 0, presence = 99.45
-    HouseStyle_2.5Unf removed, most_common_val = 0, presence = 99.25
-    HouseStyle_2Story removed, most_common_val = 1, presence = 30.48
-    HouseStyle_SFoyer removed, most_common_val = 0, presence = 97.47
-    HouseStyle_SLvl removed, most_common_val = 0, presence = 95.55
-    Exterior2nd_'Brk Cmn' removed, most_common_val = 0, presence = 99.52
-    Exterior2nd_'Wd Sdng' removed, most_common_val = 0, presence = 86.51
-    Exterior2nd_'Wd Shng' removed, most_common_val = 0, presence = 97.4
-    Exterior2nd_AsbShng removed, most_common_val = 0, presence = 98.63
-    Exterior2nd_AsphShn removed, most_common_val = 0, presence = 99.79
-    Exterior2nd_BrkFace removed, most_common_val = 0, presence = 98.29
-    Exterior2nd_CBlock removed, most_common_val = 0, presence = 99.93
-    Exterior2nd_CmentBd removed, most_common_val = 0, presence = 95.89
-    Exterior2nd_HdBoard removed, most_common_val = 0, presence = 85.82
-    Exterior2nd_ImStucc removed, most_common_val = 0, presence = 99.32
-    Exterior2nd_MetalSd removed, most_common_val = 0, presence = 85.34
-    Exterior2nd_Other removed, most_common_val = 0, presence = 99.93
-    Exterior2nd_Plywood removed, most_common_val = 0, presence = 90.27
-    Exterior2nd_Stone removed, most_common_val = 0, presence = 99.66
-    Exterior2nd_Stucco removed, most_common_val = 0, presence = 98.22
-    Exterior2nd_VinylSd removed, most_common_val = 1, presence = 34.52
-    Heating_Floor removed, most_common_val = 0, presence = 99.93
-    Heating_GasA removed, most_common_val = 1, presence = 97.81
-    Heating_GasW removed, most_common_val = 0, presence = 98.77
-    Heating_Grav removed, most_common_val = 0, presence = 99.52
-    Heating_OthW removed, most_common_val = 0, presence = 99.86
-    Heating_Wall removed, most_common_val = 0, presence = 99.73
+    Alley_Grvl removed, most_common_val = 0, presence = 96.58
+    Alley_Pave removed, most_common_val = 0, presence = 97.19
     Neighborhood_Blmngtn removed, most_common_val = 0, presence = 98.84
     Neighborhood_Blueste removed, most_common_val = 0, presence = 99.86
     Neighborhood_BrDale removed, most_common_val = 0, presence = 98.9
@@ -952,10 +839,123 @@ print(y.shape)
     Neighborhood_StoneBr removed, most_common_val = 0, presence = 98.29
     Neighborhood_Timber removed, most_common_val = 0, presence = 97.4
     Neighborhood_Veenker removed, most_common_val = 0, presence = 99.25
-    CentralAir removed, most_common_val = 1, presence = 93.49
+    GarageType_2Types removed, most_common_val = 0, presence = 99.59
+    GarageType_Attchd removed, most_common_val = 1, presence = 59.59
+    GarageType_Basment removed, most_common_val = 0, presence = 98.7
+    GarageType_BuiltIn removed, most_common_val = 0, presence = 93.97
+    GarageType_CarPort removed, most_common_val = 0, presence = 99.38
+    GarageType_Detchd removed, most_common_val = 0, presence = 73.49
+    Condition1_Artery removed, most_common_val = 0, presence = 96.71
+    Condition1_Feedr removed, most_common_val = 0, presence = 94.45
+    Condition1_Norm removed, most_common_val = 1, presence = 86.3
+    Condition1_PosA removed, most_common_val = 0, presence = 99.45
+    Condition1_PosN removed, most_common_val = 0, presence = 98.7
+    Condition1_RRAe removed, most_common_val = 0, presence = 99.25
+    Condition1_RRAn removed, most_common_val = 0, presence = 98.22
+    Condition1_RRNe removed, most_common_val = 0, presence = 99.86
+    Condition1_RRNn removed, most_common_val = 0, presence = 99.66
+    MSSubClass_20 removed, most_common_val = 0, presence = 63.29
+    MSSubClass_30 removed, most_common_val = 0, presence = 95.27
+    MSSubClass_40 removed, most_common_val = 0, presence = 99.73
+    MSSubClass_45 removed, most_common_val = 0, presence = 99.18
+    MSSubClass_50 removed, most_common_val = 0, presence = 90.14
+    MSSubClass_60 removed, most_common_val = 1, presence = 20.48
+    MSSubClass_70 removed, most_common_val = 0, presence = 95.89
+    MSSubClass_75 removed, most_common_val = 0, presence = 98.9
+    MSSubClass_80 removed, most_common_val = 0, presence = 96.03
+    MSSubClass_85 removed, most_common_val = 0, presence = 98.63
+    MSSubClass_90 removed, most_common_val = 0, presence = 96.44
+    MSSubClass_120 removed, most_common_val = 0, presence = 94.04
+    MSSubClass_160 removed, most_common_val = 0, presence = 95.68
+    MSSubClass_180 removed, most_common_val = 0, presence = 99.32
+    MSSubClass_190 removed, most_common_val = 0, presence = 97.95
+    MiscFeature_Gar2 removed, most_common_val = 0, presence = 99.86
+    MiscFeature_Othr removed, most_common_val = 0, presence = 99.86
+    MiscFeature_Shed removed, most_common_val = 0, presence = 96.64
+    MiscFeature_TenC removed, most_common_val = 0, presence = 99.93
+    Condition2_Artery removed, most_common_val = 0, presence = 99.86
+    Condition2_Feedr removed, most_common_val = 0, presence = 99.59
+    Condition2_Norm removed, most_common_val = 1, presence = 98.97
+    Condition2_PosA removed, most_common_val = 0, presence = 99.93
+    Condition2_PosN removed, most_common_val = 0, presence = 99.86
+    Condition2_RRAe removed, most_common_val = 0, presence = 99.93
+    Condition2_RRAn removed, most_common_val = 0, presence = 99.93
+    Condition2_RRNn removed, most_common_val = 0, presence = 99.86
+    Exterior1st_'Wd Sdng' removed, most_common_val = 0, presence = 85.89
+    Exterior1st_AsbShng removed, most_common_val = 0, presence = 98.63
+    Exterior1st_AsphShn removed, most_common_val = 0, presence = 99.93
+    Exterior1st_BrkComm removed, most_common_val = 0, presence = 99.86
+    Exterior1st_BrkFace removed, most_common_val = 0, presence = 96.58
+    Exterior1st_CBlock removed, most_common_val = 0, presence = 99.93
+    Exterior1st_CemntBd removed, most_common_val = 0, presence = 95.82
+    Exterior1st_HdBoard removed, most_common_val = 0, presence = 84.79
+    Exterior1st_ImStucc removed, most_common_val = 0, presence = 99.93
+    Exterior1st_MetalSd removed, most_common_val = 0, presence = 84.93
+    Exterior1st_Plywood removed, most_common_val = 0, presence = 92.6
+    Exterior1st_Stone removed, most_common_val = 0, presence = 99.86
+    Exterior1st_Stucco removed, most_common_val = 0, presence = 98.29
+    Exterior1st_VinylSd removed, most_common_val = 1, presence = 35.27
+    Exterior1st_WdShing removed, most_common_val = 0, presence = 98.22
+    RoofStyle_Flat removed, most_common_val = 0, presence = 99.11
+    RoofStyle_Gable removed, most_common_val = 1, presence = 78.15
+    RoofStyle_Gambrel removed, most_common_val = 0, presence = 99.25
+    RoofStyle_Hip removed, most_common_val = 0, presence = 80.41
+    RoofStyle_Mansard removed, most_common_val = 0, presence = 99.52
+    RoofStyle_Shed removed, most_common_val = 0, presence = 99.86
+    Electrical_FuseA removed, most_common_val = 0, presence = 93.56
+    Electrical_FuseF removed, most_common_val = 0, presence = 98.15
+    Electrical_FuseP removed, most_common_val = 0, presence = 99.79
+    Electrical_Mix removed, most_common_val = 0, presence = 99.93
+    Electrical_SBrkr removed, most_common_val = 1, presence = 91.37
+    Utilities_AllPub removed, most_common_val = 1, presence = 99.93
+    Utilities_NoSeWa removed, most_common_val = 0, presence = 99.93
+    Foundation_BrkTil removed, most_common_val = 0, presence = 90.0
+    Foundation_CBlock removed, most_common_val = 0, presence = 56.58
+    Foundation_PConc removed, most_common_val = 1, presence = 44.32
+    Foundation_Slab removed, most_common_val = 0, presence = 98.36
+    Foundation_Stone removed, most_common_val = 0, presence = 99.59
+    Foundation_Wood removed, most_common_val = 0, presence = 99.79
+    MSZoning_'C (all)' removed, most_common_val = 0, presence = 99.32
+    MSZoning_FV removed, most_common_val = 0, presence = 95.55
+    MSZoning_RH removed, most_common_val = 0, presence = 98.9
+    MSZoning_RL removed, most_common_val = 1, presence = 78.84
+    MSZoning_RM removed, most_common_val = 0, presence = 85.07
+    Heating_Floor removed, most_common_val = 0, presence = 99.93
+    Heating_GasA removed, most_common_val = 1, presence = 97.81
+    Heating_GasW removed, most_common_val = 0, presence = 98.77
+    Heating_Grav removed, most_common_val = 0, presence = 99.52
+    Heating_OthW removed, most_common_val = 0, presence = 99.86
+    Heating_Wall removed, most_common_val = 0, presence = 99.73
+    Exterior2nd_'Brk Cmn' removed, most_common_val = 0, presence = 99.52
+    Exterior2nd_'Wd Sdng' removed, most_common_val = 0, presence = 86.51
+    Exterior2nd_'Wd Shng' removed, most_common_val = 0, presence = 97.4
+    Exterior2nd_AsbShng removed, most_common_val = 0, presence = 98.63
+    Exterior2nd_AsphShn removed, most_common_val = 0, presence = 99.79
+    Exterior2nd_BrkFace removed, most_common_val = 0, presence = 98.29
+    Exterior2nd_CBlock removed, most_common_val = 0, presence = 99.93
+    Exterior2nd_CmentBd removed, most_common_val = 0, presence = 95.89
+    Exterior2nd_HdBoard removed, most_common_val = 0, presence = 85.82
+    Exterior2nd_ImStucc removed, most_common_val = 0, presence = 99.32
+    Exterior2nd_MetalSd removed, most_common_val = 0, presence = 85.34
+    Exterior2nd_Other removed, most_common_val = 0, presence = 99.93
+    Exterior2nd_Plywood removed, most_common_val = 0, presence = 90.27
+    Exterior2nd_Stone removed, most_common_val = 0, presence = 99.66
+    Exterior2nd_Stucco removed, most_common_val = 0, presence = 98.22
+    Exterior2nd_VinylSd removed, most_common_val = 1, presence = 34.52
+    BldgType_1Fam removed, most_common_val = 1, presence = 83.56
+    BldgType_2fmCon removed, most_common_val = 0, presence = 97.88
+    BldgType_Duplex removed, most_common_val = 0, presence = 96.44
+    BldgType_Twnhs removed, most_common_val = 0, presence = 97.05
+    BldgType_TwnhsE removed, most_common_val = 0, presence = 92.19
+    LotConfig_Corner removed, most_common_val = 0, presence = 81.99
+    LotConfig_CulDSac removed, most_common_val = 0, presence = 93.56
+    LotConfig_FR2 removed, most_common_val = 0, presence = 96.78
+    LotConfig_FR3 removed, most_common_val = 0, presence = 99.73
+    LotConfig_Inside removed, most_common_val = 1, presence = 72.05
     Street removed, most_common_val = 1, presence = 99.59
+    CentralAir removed, most_common_val = 1, presence = 93.49
     206 columns removed, 9 remaining.
-    Columns removed: ['TotRmsAbvGrd', '3SsnPorch', 'BedroomAbvGr', 'BsmtHalfBath', 'WoodDeckSF', 'PoolArea', 'GarageYrBlt', 'LotFrontage', 'YearRemodAdd', 'YrSold', 'LowQualFinSF', 'Fireplaces', 'BsmtFullBath', 'ScreenPorch', 'HalfBath', 'OverallCond', 'BsmtFinSF2', 'MasVnrArea', 'MoSold', 'GarageCars', 'FullBath', 'YearBuilt', 'OverallQual', 'EnclosedPorch', 'KitchenAbvGr', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'MSSubClass_20', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_50', 'MSSubClass_60', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_120', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'LotConfig_Corner', 'LotConfig_CulDSac', 'LotConfig_FR2', 'LotConfig_FR3', 'LotConfig_Inside', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', 'MSZoning_RL', 'MSZoning_RM', 'Condition1_Artery', 'Condition1_Feedr', 'Condition1_Norm', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LandContour_Lvl', 'Utilities_AllPub', 'Utilities_NoSeWa', 'GarageType_2Types', 'GarageType_Attchd', 'GarageType_Basment', 'GarageType_BuiltIn', 'GarageType_CarPort', 'GarageType_Detchd', 'SaleCondition_Abnorml', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'SaleCondition_Normal', 'SaleCondition_Partial', 'Foundation_BrkTil', 'Foundation_CBlock', 'Foundation_PConc', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Electrical_FuseA', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Electrical_SBrkr', 'Alley_Grvl', 'Alley_Pave', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_New', 'SaleType_Oth', 'SaleType_WD', 'RoofStyle_Flat', 'RoofStyle_Gable', 'RoofStyle_Gambrel', 'RoofStyle_Hip', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', "Exterior1st_'Wd Sdng'", 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_HdBoard', 'Exterior1st_ImStucc', 'Exterior1st_MetalSd', 'Exterior1st_Plywood', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_VinylSd', 'Exterior1st_WdShing', 'BldgType_1Fam', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'BldgType_TwnhsE', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'MasVnrType_BrkCmn', 'MasVnrType_BrkFace', 'MasVnrType_None', 'MasVnrType_Stone', 'HouseStyle_1.5Fin', 'HouseStyle_1.5Unf', 'HouseStyle_1Story', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_2Story', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Sdng'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_HdBoard', 'Exterior2nd_ImStucc', 'Exterior2nd_MetalSd', 'Exterior2nd_Other', 'Exterior2nd_Plywood', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'Exterior2nd_VinylSd', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_CollgCr', 'Neighborhood_Crawfor', 'Neighborhood_Edwards', 'Neighborhood_Gilbert', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NAmes', 'Neighborhood_NPkVill', 'Neighborhood_NWAmes', 'Neighborhood_NoRidge', 'Neighborhood_NridgHt', 'Neighborhood_OldTown', 'Neighborhood_SWISU', 'Neighborhood_Sawyer', 'Neighborhood_SawyerW', 'Neighborhood_Somerst', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'CentralAir', 'Street']
+    Columns removed: ['WoodDeckSF', 'MoSold', 'LotFrontage', 'PoolArea', '3SsnPorch', 'OverallCond', 'YearBuilt', 'MasVnrArea', 'LowQualFinSF', 'BedroomAbvGr', 'BsmtHalfBath', 'BsmtFullBath', 'GarageCars', 'GarageYrBlt', 'ScreenPorch', 'YearRemodAdd', 'Fireplaces', 'FullBath', 'KitchenAbvGr', 'TotRmsAbvGrd', 'EnclosedPorch', 'OverallQual', 'YrSold', 'BsmtFinSF2', 'HalfBath', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LandContour_Lvl', 'SaleCondition_Abnorml', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'SaleCondition_Normal', 'SaleCondition_Partial', 'HouseStyle_1.5Fin', 'HouseStyle_1.5Unf', 'HouseStyle_1Story', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_2Story', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'MasVnrType_BrkCmn', 'MasVnrType_BrkFace', 'MasVnrType_None', 'MasVnrType_Stone', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_New', 'SaleType_Oth', 'SaleType_WD', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Alley_Grvl', 'Alley_Pave', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_CollgCr', 'Neighborhood_Crawfor', 'Neighborhood_Edwards', 'Neighborhood_Gilbert', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NAmes', 'Neighborhood_NPkVill', 'Neighborhood_NWAmes', 'Neighborhood_NoRidge', 'Neighborhood_NridgHt', 'Neighborhood_OldTown', 'Neighborhood_SWISU', 'Neighborhood_Sawyer', 'Neighborhood_SawyerW', 'Neighborhood_Somerst', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'GarageType_2Types', 'GarageType_Attchd', 'GarageType_Basment', 'GarageType_BuiltIn', 'GarageType_CarPort', 'GarageType_Detchd', 'Condition1_Artery', 'Condition1_Feedr', 'Condition1_Norm', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'MSSubClass_20', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_50', 'MSSubClass_60', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_120', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', "Exterior1st_'Wd Sdng'", 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_HdBoard', 'Exterior1st_ImStucc', 'Exterior1st_MetalSd', 'Exterior1st_Plywood', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_VinylSd', 'Exterior1st_WdShing', 'RoofStyle_Flat', 'RoofStyle_Gable', 'RoofStyle_Gambrel', 'RoofStyle_Hip', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'Electrical_FuseA', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Electrical_SBrkr', 'Utilities_AllPub', 'Utilities_NoSeWa', 'Foundation_BrkTil', 'Foundation_CBlock', 'Foundation_PConc', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', 'MSZoning_RL', 'MSZoning_RM', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Sdng'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_HdBoard', 'Exterior2nd_ImStucc', 'Exterior2nd_MetalSd', 'Exterior2nd_Other', 'Exterior2nd_Plywood', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'Exterior2nd_VinylSd', 'BldgType_1Fam', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'BldgType_TwnhsE', 'LotConfig_Corner', 'LotConfig_CulDSac', 'LotConfig_FR2', 'LotConfig_FR3', 'LotConfig_Inside', 'Street', 'CentralAir']
     (1460, 9)
     (1460,)
 
@@ -986,77 +986,77 @@ X_encoded_good.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>GrLivArea</th>
-      <th>BsmtUnfSF</th>
-      <th>OpenPorchSF</th>
-      <th>LotArea</th>
-      <th>TotalBsmtSF</th>
-      <th>2ndFlrSF</th>
-      <th>1stFlrSF</th>
       <th>BsmtFinSF1</th>
+      <th>2ndFlrSF</th>
+      <th>OpenPorchSF</th>
+      <th>1stFlrSF</th>
+      <th>BsmtUnfSF</th>
+      <th>TotalBsmtSF</th>
       <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>GrLivArea</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>0</th>
-      <td>1710</td>
-      <td>150</td>
-      <td>61</td>
-      <td>8450</td>
-      <td>856</td>
-      <td>854</td>
-      <td>856</td>
       <td>706</td>
+      <td>854</td>
+      <td>61</td>
+      <td>856</td>
+      <td>150</td>
+      <td>856</td>
       <td>548</td>
+      <td>8450</td>
+      <td>1710</td>
     </tr>
     <tr>
       <th>1</th>
+      <td>978</td>
+      <td>0</td>
+      <td>0</td>
       <td>1262</td>
       <td>284</td>
-      <td>0</td>
+      <td>1262</td>
+      <td>460</td>
       <td>9600</td>
       <td>1262</td>
-      <td>0</td>
-      <td>1262</td>
-      <td>978</td>
-      <td>460</td>
     </tr>
     <tr>
       <th>2</th>
-      <td>1786</td>
-      <td>434</td>
-      <td>42</td>
-      <td>11250</td>
-      <td>920</td>
-      <td>866</td>
-      <td>920</td>
       <td>486</td>
+      <td>866</td>
+      <td>42</td>
+      <td>920</td>
+      <td>434</td>
+      <td>920</td>
       <td>608</td>
+      <td>11250</td>
+      <td>1786</td>
     </tr>
     <tr>
       <th>3</th>
-      <td>1717</td>
-      <td>540</td>
-      <td>35</td>
-      <td>9550</td>
-      <td>756</td>
-      <td>756</td>
-      <td>961</td>
       <td>216</td>
+      <td>756</td>
+      <td>35</td>
+      <td>961</td>
+      <td>540</td>
+      <td>756</td>
       <td>642</td>
+      <td>9550</td>
+      <td>1717</td>
     </tr>
     <tr>
       <th>4</th>
-      <td>2198</td>
-      <td>490</td>
-      <td>84</td>
-      <td>14260</td>
-      <td>1145</td>
-      <td>1053</td>
-      <td>1145</td>
       <td>655</td>
+      <td>1053</td>
+      <td>84</td>
+      <td>1145</td>
+      <td>490</td>
+      <td>1145</td>
       <td>836</td>
+      <td>14260</td>
+      <td>2198</td>
     </tr>
   </tbody>
 </table>
@@ -1131,77 +1131,77 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>GrLivArea</th>
-      <th>BsmtUnfSF</th>
-      <th>OpenPorchSF</th>
-      <th>LotArea</th>
-      <th>TotalBsmtSF</th>
-      <th>2ndFlrSF</th>
-      <th>1stFlrSF</th>
       <th>BsmtFinSF1</th>
+      <th>2ndFlrSF</th>
+      <th>OpenPorchSF</th>
+      <th>1stFlrSF</th>
+      <th>BsmtUnfSF</th>
+      <th>TotalBsmtSF</th>
       <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>GrLivArea</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>957</th>
-      <td>-0.980987</td>
-      <td>0.072200</td>
-      <td>-0.699470</td>
-      <td>-0.556526</td>
-      <td>-0.128092</td>
-      <td>-0.720904</td>
-      <td>-0.368098</td>
-      <td>0.003046</td>
-      <td>0.523667</td>
+      <th>165</th>
+      <td>-0.159155</td>
+      <td>0.325351</td>
+      <td>-0.721654</td>
+      <td>-0.838833</td>
+      <td>-1.114641</td>
+      <td>-0.784737</td>
+      <td>-2.281106</td>
+      <td>-0.071527</td>
+      <td>-0.348585</td>
     </tr>
     <tr>
-      <th>1350</th>
-      <td>2.336938</td>
-      <td>0.308932</td>
-      <td>-0.699470</td>
-      <td>0.351638</td>
-      <td>0.350083</td>
-      <td>2.202888</td>
-      <td>0.385361</td>
-      <td>0.198344</td>
-      <td>2.524100</td>
+      <th>710</th>
+      <td>-0.733001</td>
+      <td>-0.849881</td>
+      <td>-0.721654</td>
+      <td>-1.018791</td>
+      <td>-0.746061</td>
+      <td>-1.436218</td>
+      <td>-2.281106</td>
+      <td>-0.827277</td>
+      <td>-1.332717</td>
     </tr>
     <tr>
-      <th>1067</th>
-      <td>0.184600</td>
-      <td>-1.330658</td>
-      <td>1.059369</td>
-      <td>-0.053305</td>
-      <td>-0.821571</td>
-      <td>1.113234</td>
-      <td>-1.062567</td>
-      <td>0.607763</td>
-      <td>-0.160155</td>
+      <th>181</th>
+      <td>-0.157520</td>
+      <td>1.085922</td>
+      <td>-0.721654</td>
+      <td>-0.626983</td>
+      <td>-0.347154</td>
+      <td>-0.525191</td>
+      <td>-1.302465</td>
+      <td>-0.389964</td>
+      <td>0.354142</td>
     </tr>
     <tr>
-      <th>1083</th>
-      <td>-0.572821</td>
-      <td>0.199334</td>
-      <td>0.894478</td>
-      <td>-0.259755</td>
-      <td>0.357594</td>
-      <td>-0.720904</td>
-      <td>0.152084</td>
-      <td>0.323052</td>
-      <td>-0.063195</td>
+      <th>211</th>
+      <td>-0.674145</td>
+      <td>-0.849881</td>
+      <td>-0.362337</td>
+      <td>0.081460</td>
+      <td>1.367445</td>
+      <td>0.204676</td>
+      <td>-0.196963</td>
+      <td>-0.031817</td>
+      <td>-0.573395</td>
     </tr>
     <tr>
-      <th>221</th>
-      <td>1.564789</td>
-      <td>0.883227</td>
-      <td>-0.067387</td>
-      <td>-0.417173</td>
-      <td>-0.245758</td>
-      <td>2.114903</td>
-      <td>-0.494121</td>
-      <td>-0.978148</td>
-      <td>-0.425518</td>
+      <th>320</th>
+      <td>-0.733001</td>
+      <td>2.044156</td>
+      <td>1.793563</td>
+      <td>0.165745</td>
+      <td>1.537739</td>
+      <td>0.269128</td>
+      <td>1.524720</td>
+      <td>0.706608</td>
+      <td>1.602386</td>
     </tr>
   </tbody>
 </table>
@@ -1240,82 +1240,82 @@ X_train_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
-      <th>GrLivArea</th>
-      <th>BsmtUnfSF</th>
-      <th>OpenPorchSF</th>
-      <th>LotArea</th>
-      <th>TotalBsmtSF</th>
-      <th>2ndFlrSF</th>
-      <th>1stFlrSF</th>
       <th>BsmtFinSF1</th>
+      <th>2ndFlrSF</th>
+      <th>OpenPorchSF</th>
+      <th>1stFlrSF</th>
+      <th>BsmtUnfSF</th>
+      <th>TotalBsmtSF</th>
       <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>GrLivArea</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>957</th>
+      <th>165</th>
       <td>1.0</td>
-      <td>-0.980987</td>
-      <td>0.072200</td>
-      <td>-0.699470</td>
-      <td>-0.556526</td>
-      <td>-0.128092</td>
-      <td>-0.720904</td>
-      <td>-0.368098</td>
-      <td>0.003046</td>
-      <td>0.523667</td>
+      <td>-0.159155</td>
+      <td>0.325351</td>
+      <td>-0.721654</td>
+      <td>-0.838833</td>
+      <td>-1.114641</td>
+      <td>-0.784737</td>
+      <td>-2.281106</td>
+      <td>-0.071527</td>
+      <td>-0.348585</td>
     </tr>
     <tr>
-      <th>1350</th>
+      <th>710</th>
       <td>1.0</td>
-      <td>2.336938</td>
-      <td>0.308932</td>
-      <td>-0.699470</td>
-      <td>0.351638</td>
-      <td>0.350083</td>
-      <td>2.202888</td>
-      <td>0.385361</td>
-      <td>0.198344</td>
-      <td>2.524100</td>
+      <td>-0.733001</td>
+      <td>-0.849881</td>
+      <td>-0.721654</td>
+      <td>-1.018791</td>
+      <td>-0.746061</td>
+      <td>-1.436218</td>
+      <td>-2.281106</td>
+      <td>-0.827277</td>
+      <td>-1.332717</td>
     </tr>
     <tr>
-      <th>1067</th>
+      <th>181</th>
       <td>1.0</td>
-      <td>0.184600</td>
-      <td>-1.330658</td>
-      <td>1.059369</td>
-      <td>-0.053305</td>
-      <td>-0.821571</td>
-      <td>1.113234</td>
-      <td>-1.062567</td>
-      <td>0.607763</td>
-      <td>-0.160155</td>
+      <td>-0.157520</td>
+      <td>1.085922</td>
+      <td>-0.721654</td>
+      <td>-0.626983</td>
+      <td>-0.347154</td>
+      <td>-0.525191</td>
+      <td>-1.302465</td>
+      <td>-0.389964</td>
+      <td>0.354142</td>
     </tr>
     <tr>
-      <th>1083</th>
+      <th>211</th>
       <td>1.0</td>
-      <td>-0.572821</td>
-      <td>0.199334</td>
-      <td>0.894478</td>
-      <td>-0.259755</td>
-      <td>0.357594</td>
-      <td>-0.720904</td>
-      <td>0.152084</td>
-      <td>0.323052</td>
-      <td>-0.063195</td>
+      <td>-0.674145</td>
+      <td>-0.849881</td>
+      <td>-0.362337</td>
+      <td>0.081460</td>
+      <td>1.367445</td>
+      <td>0.204676</td>
+      <td>-0.196963</td>
+      <td>-0.031817</td>
+      <td>-0.573395</td>
     </tr>
     <tr>
-      <th>221</th>
+      <th>320</th>
       <td>1.0</td>
-      <td>1.564789</td>
-      <td>0.883227</td>
-      <td>-0.067387</td>
-      <td>-0.417173</td>
-      <td>-0.245758</td>
-      <td>2.114903</td>
-      <td>-0.494121</td>
-      <td>-0.978148</td>
-      <td>-0.425518</td>
+      <td>-0.733001</td>
+      <td>2.044156</td>
+      <td>1.793563</td>
+      <td>0.165745</td>
+      <td>1.537739</td>
+      <td>0.269128</td>
+      <td>1.524720</td>
+      <td>0.706608</td>
+      <td>1.602386</td>
     </tr>
   </tbody>
 </table>
@@ -1353,82 +1353,82 @@ X_test_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
-      <th>GrLivArea</th>
-      <th>BsmtUnfSF</th>
-      <th>OpenPorchSF</th>
-      <th>LotArea</th>
-      <th>TotalBsmtSF</th>
-      <th>2ndFlrSF</th>
-      <th>1stFlrSF</th>
       <th>BsmtFinSF1</th>
+      <th>2ndFlrSF</th>
+      <th>OpenPorchSF</th>
+      <th>1stFlrSF</th>
+      <th>BsmtUnfSF</th>
+      <th>TotalBsmtSF</th>
       <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>GrLivArea</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>900</th>
+      <th>1387</th>
       <td>1.0</td>
-      <td>-1.399673</td>
-      <td>-0.155765</td>
-      <td>-0.699470</td>
-      <td>-0.573731</td>
-      <td>-0.626295</td>
-      <td>-0.720904</td>
-      <td>-0.901686</td>
-      <td>-0.220487</td>
-      <td>1.074806</td>
+      <td>-0.458340</td>
+      <td>1.002131</td>
+      <td>-0.476665</td>
+      <td>1.111095</td>
+      <td>-1.375914</td>
+      <td>-0.662803</td>
+      <td>-1.302465</td>
+      <td>-0.272099</td>
+      <td>1.492339</td>
     </tr>
     <tr>
-      <th>484</th>
+      <th>862</th>
       <td>1.0</td>
-      <td>-1.103016</td>
-      <td>-0.429760</td>
-      <td>1.114333</td>
-      <td>-0.483839</td>
-      <td>-0.273297</td>
-      <td>-0.720904</td>
-      <td>-0.523616</td>
-      <td>0.405406</td>
-      <td>-1.068515</td>
+      <td>-0.180409</td>
+      <td>-0.849881</td>
+      <td>-0.721654</td>
+      <td>-0.180504</td>
+      <td>0.261704</td>
+      <td>-0.094935</td>
+      <td>-0.106348</td>
+      <td>-0.126412</td>
+      <td>-0.754186</td>
     </tr>
     <tr>
-      <th>334</th>
+      <th>264</th>
       <td>1.0</td>
-      <td>0.241406</td>
-      <td>-1.078582</td>
-      <td>-0.177315</td>
-      <td>-0.207712</td>
-      <td>-0.413495</td>
-      <td>0.847024</td>
-      <td>-0.673772</td>
-      <td>0.970122</td>
-      <td>-0.007061</td>
+      <td>-0.733001</td>
+      <td>-0.849881</td>
+      <td>-0.721654</td>
+      <td>-0.939063</td>
+      <td>0.210382</td>
+      <td>-0.722028</td>
+      <td>0.002390</td>
+      <td>-0.687914</td>
+      <td>-1.277694</td>
     </tr>
     <tr>
-      <th>1108</th>
+      <th>1373</th>
       <td>1.0</td>
-      <td>0.350812</td>
-      <td>0.694718</td>
-      <td>-0.039905</td>
-      <td>-0.418248</td>
-      <td>-0.461062</td>
-      <td>0.953057</td>
-      <td>-0.660365</td>
-      <td>-0.978148</td>
-      <td>-0.052989</td>
+      <td>1.362926</td>
+      <td>-0.849881</td>
+      <td>1.564907</td>
+      <td>3.318433</td>
+      <td>1.775683</td>
+      <td>2.679953</td>
+      <td>1.361613</td>
+      <td>0.092118</td>
+      <td>1.660553</td>
     </tr>
     <tr>
-      <th>397</th>
+      <th>1107</th>
       <td>1.0</td>
-      <td>0.607493</td>
-      <td>-0.620461</td>
-      <td>1.609007</td>
-      <td>-0.519968</td>
-      <td>-0.611274</td>
-      <td>1.390723</td>
-      <td>-0.853422</td>
-      <td>0.292463</td>
-      <td>-1.068515</td>
+      <td>-0.733001</td>
+      <td>1.586524</td>
+      <td>0.911604</td>
+      <td>-0.658875</td>
+      <td>0.648947</td>
+      <td>-0.394546</td>
+      <td>-0.369132</td>
+      <td>1.591605</td>
+      <td>0.698431</td>
     </tr>
   </tbody>
 </table>
@@ -1496,8 +1496,8 @@ errors_df.head()
     <tr>
       <th>0</th>
       <td>79415.291886</td>
-      <td>37497.647445</td>
-      <td>229134.466048</td>
+      <td>70886.822389</td>
+      <td>54164.328114</td>
     </tr>
   </tbody>
 </table>
