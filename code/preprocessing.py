@@ -1,6 +1,10 @@
 import numpy as np
 import pandas as pd
 import matplotlib.pyplot as plt
+
+import itertools
+import random
+
 from typing import Optional, Tuple, List, Union
 
 from collections import Counter # remove_bad_cols()
@@ -111,7 +115,7 @@ def remove_bad_cols(X: Union[pd.Series, pd.DataFrame], limited_var_thresh: float
     return X
 
 
-def create_normalized_feature(arr: np.ndarray) -> np.ndarray:
+def create_zscore_feature(arr: np.ndarray) -> np.ndarray:
     """center data at 0"""
     normalized_arr = np.zeros_like(arr)
     for dim in range(arr.shape[-1]):
@@ -209,5 +213,38 @@ def plot_dist_before_after(before: pd.DataFrame, after: pd.DataFrame, column: st
 
 
 def zscore(df: pd.DataFrame, train_means: pd.Series, train_stds: pd.Series) -> pd.DataFrame:
-    """return z-scored dataframe"""
+    """return z-scored dataframe using training data mean and standard deviation"""
     return (df - train_means) / train_stds
+
+def generate_combinations(items: List[str], K: int) -> List[tuple]:
+    """
+    Generate all combinations of K items from the given list of items.
+
+    Args:
+        items (List[str]): List of items to choose combinations from.
+        K (int): Number of items in each combination.
+
+    Returns:
+        List[tuple]: A list of tuples representing the combinations.
+    """
+    return list(itertools.combinations(items, K))
+
+def get_predictor_combos(X_train: pd.DataFrame, K: int, n: int) -> List[List[str]]:
+    """
+    Get sampled predictor variable combinations from the training data.
+
+    Args:
+        X_train (pd.DataFrame): Training feature data.
+        K (int): Number of columns in each combination.
+        n (int): Number of combinations to sample.
+
+    Returns:
+        List[List[str]]: A list of lists representing the sampled predictor variable combinations.
+    """
+    X_train_columns = list(X_train.columns)
+    
+    all_combinations = generate_combinations(X_train_columns, K)
+    sampled_combinations = random.sample(all_combinations, min(n, len(all_combinations)))
+    sampled_combinations = [list(combo) for combo in sampled_combinations]  # Convert to list of lists
+
+    return sampled_combinations
