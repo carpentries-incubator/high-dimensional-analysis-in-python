@@ -10,8 +10,8 @@ objectives:
 - "Understand how to assess the validity of a multivariate regression model."
 - "Understand how to use statistics to evaluate the likelihood of existing relationships recovered by a multivariate model."
 questions:
-- "What are the assumptions of linear regression models?"
 - "How can we rigorously evaluate the validity and accuracy of a multivariate regression model?"
+- "What are the assumptions of linear regression models and why are they important?"
 - "How should we preprocess categorical predictors and sparse binary predictors?"
 ---
 
