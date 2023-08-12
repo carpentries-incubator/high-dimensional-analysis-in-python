@@ -1285,7 +1285,6 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
 > 
 > 8. Check all model assumptions
 > 
-> 
 > > ## Solution
 > >
 > > 1) First, extract the data you'll be using to fit the model.
@@ -1383,67 +1382,6 @@ eval_regression_assumptions(trained_model=trained_model, X=X_train, y=y_train,
 {:.challenge}
 
 
-<!--
-# Extract target, `y` and predictors, `X`.
-y_log = np.log(housing['target'])
-predictors = ['LotArea', 'YearBuilt', 'YearRemodAdd', 'GarageArea', 'GarageCars', 'Neighborhood']
-X=housing['data'][predictors]
-X.head()
-
-
-# Preprocess the data
-from preprocessing import encode_predictors_housing_data
-X_enc = encode_predictors_housing_data(X)
-X_enc.head()
-
-from preprocessing import remove_bad_cols
-X_good = remove_bad_cols(X_enc, 95)
-
-
-multicollinearity_test(X_good);
-X_better = X_good.drop(['GarageCars','YearBuilt'],axis = 1)
-multicollinearity_test(X_better);
-
-
-from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X_better, y_log, test_size=0.33, random_state=0)
-
-
-from preprocessing import zscore
-X_train_z = zscore(df=X_train, train_means=X_train.mean(), train_stds=X_train.std())
-X_test_z = zscore(df=X_test, train_means=X_train.mean(), train_stds=X_train.std())
-X_train_z.head()
-
-
-# Add a constant column to the predictor variables dataframe
-X_train_z = sm.add_constant(X_train_z)
-print(X_train_z.head())
-# Add the constant to the test set as well so we can use the model to form predictions on the test set later
-X_test_z = sm.add_constant(X_test_z)
-print(X_test_z.head())
-# Fit the multivariate regression model
-model = sm.OLS(y_train, X_train_z)
-trained_model = model.fit()
-
-
-
-from regression_predict_sklearn import measure_model_err
-# to calculate residuals and R-squared for the test set, we'll need to get the model predictions first
-y_pred_train = trained_model.predict(X_train_z)
-y_pred_test = trained_model.predict(X_test_z)
-errors_df = measure_model_err(y, np.mean(y),
-                      y_train, y_pred_train,
-                      y_test, y_pred_test,
-                      'RMSE', y_log_scaled=True)
-
-errors_df.head()
-
-
-eval_regression_assumptions(trained_model=trained_model, X=X_train_z, y=y_train,
-                            y_pred=y_pred_train, y_log_scaled=True, plot_raw=False, threshold_p_value=.05);
-
-> {:.solution}
-{:.challenge}
 
 
 #### Feature importance and significant features
