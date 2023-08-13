@@ -1,4 +1,5 @@
 from sklearn.linear_model import LinearRegression
+from sklearn.linear_model import LassoCV
 from sklearn import metrics
 
 import numpy as np
@@ -9,7 +10,7 @@ import seaborn as sns
 
 from typing import Optional, Tuple, List, Union
 
-def train_linear_model(X_train: np.ndarray, y_train: np.ndarray, model_type: str) -> LinearRegression:
+def train_linear_model(X_train: np.ndarray, y_train: np.ndarray, model_type: str, alphas: Union[np.ndarray, List[float]] = None, cv: int=5, max_iter: int=10000) -> LinearRegression:
     """
     Train a linear regression model.
 
@@ -17,6 +18,10 @@ def train_linear_model(X_train: np.ndarray, y_train: np.ndarray, model_type: str
         X_train (np.ndarray): Training predictor variables.
         y_train (np.ndarray): Training target variable.
         model_type (str): Type of linear regression model. Currently supports "unregularized".
+        alphas (Union[np.ndarray, List[float]], optional): List of alphas to tune the LassoCV model. 
+                                                          Applicable when model_type is LassoCV.
+        cv (int): Number of folds to use during K-fold cross-validation over the alpha hyperparameter (only relevant to LASSO model)
+        max_iter (int): Maximum number of iterations to opti
 
     Returns:
         LinearRegression: Trained linear regression model.
@@ -24,7 +29,9 @@ def train_linear_model(X_train: np.ndarray, y_train: np.ndarray, model_type: str
     if model_type == "unregularized":
         reg = LinearRegression().fit(X_train, y_train)
     elif model_type == "LassoCV":
-        
+        # Create LassoCV model with cross-validation for lambda selection
+        reg = LassoCV(alphas=alphas, cv=cv, max_iter=max_iter)
+        reg.fit(X_train, y_train)
     else:
         raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
   
@@ -304,7 +311,6 @@ def plot_train_test_predictions(predictors: List[str],
         
     return (fig1, fig2)
 
-
 def fit_eval_model(y: Union[np.ndarray, pd.Series],
                    baseline_pred: Union[np.ndarray, pd.Series],
                    X_train: Union[np.ndarray, pd.DataFrame],
@@ -314,25 +320,23 @@ def fit_eval_model(y: Union[np.ndarray, pd.Series],
                    predictors: Union[str, List[str]],
                    metric: str,
                    y_log_scaled: bool,
-                   model_type: LinearRegression,
-                   include_plots: bool, plot_raw: bool,
-                   verbose: bool) -> Tuple[float, float, float]:
+                   model_type: str,  
+                   include_plots: bool,
+                   plot_raw: bool,
+                   verbose: bool,
+                   cv: int = None,  # Add cv as an optional argument
+                   alphas: Union[np.ndarray, List[float]] = None,  # Add alphas as an optional argument
+                   max_iter: int = None) -> Tuple[float, float, float]:
     """
     Fits a linear regression model using specified predictor variables and evaluates its performance.
 
     Args:
-        y (Union[np.ndarray, pd.Series]): Actual target values for full dataset (not transformed).
-        baseline_pred (Union[np.ndarray, pd.Series]): Array of baseline predictions for full dataset.
-        X_train (Union[np.ndarray, pd.DataFrame]): Training feature data.
-        y_train (Union[np.ndarray, pd.Series]): Actual target values for the training set.
-        X_test (Union[np.ndarray, pd.DataFrame]): Test feature data.
-        y_test (Union[np.ndarray, pd.Series]): Actual target values for the test set.
-        predictors (Union[str, List[str]]): List of predictor names.
-        metric (str): The error metric to calculate ('RMSE', 'R-squared', or 'MAPE').
-        y_log_scaled (bool): Whether the target values are log-scaled or not.
-        model_type (LinearRegression): Type of linear regression model to use.
-        include_plots (bool): Whether to include plots for visualization.
-        verbose (bool): Whether to print verbose output.
+        ... (existing arguments)
+
+        cv (int, optional): Number of cross-validation folds. Applicable when model_type is LassoCV.
+        alphas (Union[np.ndarray, List[float]], optional): List of alphas to tune the LassoCV model. 
+                                                          Applicable when model_type is LassoCV.
+        max_iter (int, optional): Maximum number of iterations for the LassoCV solver.
 
     Returns:
         Tuple[float, float, float]: Baseline error, training error, and test error.
@@ -364,10 +368,10 @@ def fit_eval_model(y: Union[np.ndarray, pd.Series],
         print('# of test observations = ' + str(X_test.shape[0]))
     
     # fit model to training data
-    reg = train_linear_model(X_train, y_train, model_type)
+    trained_model = train_linear_model(X_train=X_train, y_train=y_train, model_type=model_type, cv=cv, alphas=alphas, max_iter=max_iter)
 
     # get predictions for train/test sets
-    y_pred_train, y_pred_test = get_train_test_pred(X_train, X_test, reg)
+    y_pred_train, y_pred_test = get_train_test_pred(X_train, X_test, trained_model)
     
     # get train and test set error
     error_df = measure_model_err(y, baseline_pred,
@@ -400,7 +404,7 @@ def fit_eval_model(y: Union[np.ndarray, pd.Series],
     
 
     
-    return baseline_err, train_err, test_err
+    return trained_model, error_df
 
 
 def compare_models_plot(df_model_err: pd.DataFrame, metric: str) -> List[str]:
@@ -486,23 +490,20 @@ def compare_models(y: Union[np.ndarray, pd.Series],
         pd.DataFrame: A DataFrame containing model errors for different predictor variables.
     """
     df_model_err = pd.DataFrame(columns=['Baseline Error', 'Train Error', 'Validation Error', 'Predictors'])
-    model_err_rows = []
 
     for predictors in predictors_list:
-        baseline_err, train_err, val_err = fit_eval_model(y=y, baseline_pred=baseline_pred,
-                                                          X_train=X_train, y_train=y_train, 
-                                                          X_test=X_val, y_test=y_val,
-                                                          predictors=predictors, 
-                                                          metric=metric, y_log_scaled=y_log_scaled, 
-                                                          model_type=model_type, 
-                                                          include_plots=include_plots, plot_raw=plot_raw, verbose=verbose)
-
-        model_err_rows.append({'Baseline Error': baseline_err,
-                               'Train Error': train_err,
-                               'Validation Error': val_err,
-                               'Predictors': predictors})
-
-    df_model_err = pd.DataFrame(model_err_rows)
+        trained_model, model_errors = fit_eval_model(y=y, baseline_pred=baseline_pred,
+                                      X_train=X_train, y_train=y_train, 
+                                      X_test=X_val, y_test=y_val,
+                                      predictors=predictors, 
+                                      metric=metric, y_log_scaled=y_log_scaled, 
+                                      model_type=model_type, 
+                                      include_plots=include_plots, plot_raw=plot_raw, verbose=verbose)
+        
+        # Rename the 'Test Error' column to 'Validation Error'
+        model_errors.rename(columns={'Test Error': 'Validation Error'}, inplace=True)
+        model_errors['Trained Model'] = trained_model
+        model_errors['Predictors'] = [predictors]
+        df_model_err = pd.concat([df_model_err, model_errors], ignore_index=True)
 
     return df_model_err
-

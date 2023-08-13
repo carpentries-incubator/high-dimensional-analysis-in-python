@@ -555,6 +555,7 @@ We'll follow this general procedure to compare models:
 4. Use the remove_bad_cols helper function to remove predictors with nans or containing > 97% constant values (typically 0's)
 5. Perform a train/validation/test split using 60% of the data to train, 20% for validation (model selection), and 20% for final testing of the data
 6. Use the `compare_models` helper function to quickly calculate train/validation errors for all possible single predictors. Returns a `df_model_err` df that contains the following data stored for each predictor: 'Predictor Variable', 'Train Error', 'Validation Error'.
+7. Once selecting the best model, get the final assessment of the model's generalizeability using the test set data
 
 
 ```python
@@ -563,17 +564,14 @@ from preprocessing import get_feat_types
 predictor_type_dict = get_feat_types()
 continuous_fields = predictor_type_dict['continuous_fields']
 X = housing['data'][continuous_fields]
-y_log = np.log(housing['target'])
+y = housing['target']
+y_log = np.log(y)
 
 # remove columns with nans or containing > 97% constant values (typically 0's)
 from preprocessing import remove_bad_cols
 X_good = remove_bad_cols(X, 99)
 ```
 
-    LotFrontage removed, 259 NaNs
-    MasVnrArea removed, 8 NaNs
-    GarageYrBlt removed, 81 NaNs
-    PoolArea removed, most_common_val = 0, presence = 99.52
     4 columns removed, 30 remaining.
     Columns removed: ['LotFrontage', 'MasVnrArea', 'GarageYrBlt', 'PoolArea']
 
@@ -658,6 +656,7 @@ df_model_err.head()
       <th>Train Error</th>
       <th>Validation Error</th>
       <th>Predictors</th>
+      <th>Trained Model</th>
     </tr>
   </thead>
   <tbody>
@@ -667,6 +666,7 @@ df_model_err.head()
       <td>82875.380855</td>
       <td>84323.189234</td>
       <td>LotArea</td>
+      <td>LinearRegression()</td>
     </tr>
     <tr>
       <th>1</th>
@@ -674,6 +674,7 @@ df_model_err.head()
       <td>67679.790920</td>
       <td>69727.341057</td>
       <td>YearBuilt</td>
+      <td>LinearRegression()</td>
     </tr>
     <tr>
       <th>2</th>
@@ -681,6 +682,7 @@ df_model_err.head()
       <td>69055.741014</td>
       <td>70634.285653</td>
       <td>YearRemodAdd</td>
+      <td>LinearRegression()</td>
     </tr>
     <tr>
       <th>3</th>
@@ -688,6 +690,7 @@ df_model_err.head()
       <td>45516.185542</td>
       <td>46993.501006</td>
       <td>OverallQual</td>
+      <td>LinearRegression()</td>
     </tr>
     <tr>
       <th>4</th>
@@ -695,6 +698,7 @@ df_model_err.head()
       <td>81016.566207</td>
       <td>84915.452252</td>
       <td>OverallCond</td>
+      <td>LinearRegression()</td>
     </tr>
   </tbody>
 </table>
@@ -717,6 +721,24 @@ sorted_predictors, train_errs, val_errs = compare_models_plot(df_model_err, 'RMS
 
 
 
+
+
+
+### Assess best model's generalizeability
+Get the final assessment of the model's generalizeability using the test set data.
+
+
+```python
+best_model = df_model_err.loc[df_model_err['Predictors']=='OverallQual', 'Trained Model'].item()
+y_test_pred = best_model.predict(np.array(X_test['OverallQual']).reshape(-1,1))
+test_err = metrics.mean_squared_error(np.exp(y_test), np.exp(y_test_pred), squared=False)
+test_err
+```
+
+
+
+
+    42298.77889761536
 
 
 
@@ -796,6 +818,7 @@ df_model_err.head()
       <th>Train Error</th>
       <th>Validation Error</th>
       <th>Predictors</th>
+      <th>Trained Model</th>
     </tr>
   </thead>
   <tbody>
@@ -805,6 +828,7 @@ df_model_err.head()
       <td>65085.562455</td>
       <td>105753.386038</td>
       <td>1stFlrSF</td>
+      <td>LinearRegression()</td>
     </tr>
     <tr>
       <th>1</th>
@@ -812,6 +836,7 @@ df_model_err.head()
       <td>60495.941297</td>
       <td>106314.048186</td>
       <td>GrLivArea</td>
+      <td>LinearRegression()</td>
     </tr>
     <tr>
       <th>2</th>
@@ -819,6 +844,7 @@ df_model_err.head()
       <td>63479.544552</td>
       <td>220453.440400</td>
       <td>TotalBsmtSF</td>
+      <td>LinearRegression()</td>
     </tr>
   </tbody>
 </table>
@@ -842,7 +868,7 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
                               predictors_list=[X_train.columns],
                               metric='RMSE', y_log_scaled=True,
                               model_type='unregularized',
-                              include_plots=True, plot_raw=False, verbose=True)
+                              include_plots=True, plot_raw=True, verbose=True)
 
 ```
 
@@ -865,19 +891,7 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
 
 
 ### Compare permutations of models with different numbers of predictors
-
-
-```python
-X_train.head()
-X_train.shape
-```
-
-
-
-
-    (876, 30)
-
-
+Let's see how well we can predict house prices with different numbers of predictors.
 
 
 ```python
@@ -886,7 +900,7 @@ sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=30)
 print(sampled_combinations[0:2])
 ```
 
-    [['LowQualFinSF', 'TotRmsAbvGrd'], ['LotArea', 'GarageCars']]
+    [['BsmtFullBath', 'MoSold'], ['YearBuilt', 'BsmtUnfSF']]
 
 
 #### Compare efficacy of different numbers of predictors
@@ -928,10 +942,10 @@ for K in n_predictors:
 
 
     K = 2
-    Best model train error = 45493.21601925376
-    Best model validation error = 46915.92562247736
-    Worst model train error = 63391.36012661047
-    Worst model validation error = 218980.15582824568
+    Best model train error = 45007.18621534005
+    Best model validation error = 46902.304934126754
+    Worst model train error = 61467.976215670766
+    Worst model validation error = 172222.1087394079
 
 
 
@@ -941,10 +955,10 @@ for K in n_predictors:
 
 
     K = 5
-    Best model train error = 44847.71953691728
-    Best model validation error = 47066.535529657565
-    Worst model train error = 52937.94778006936
-    Worst model validation error = 348225.3044330829
+    Best model train error = 45359.35736302203
+    Best model validation error = 45514.209976660924
+    Worst model train error = 62656.14530251103
+    Worst model validation error = 297097.6132925179
 
 
 
@@ -954,10 +968,10 @@ for K in n_predictors:
 
 
     K = 10
-    Best model train error = 43230.48583898699
-    Best model validation error = 47086.417081120795
-    Worst model train error = 57814.662050494044
-    Worst model validation error = 330751.0402659216
+    Best model train error = 38017.69833169584
+    Best model validation error = 40504.963295927664
+    Worst model train error = 51722.90018797251
+    Worst model validation error = 342341.1973293411
 
 
 
@@ -967,10 +981,10 @@ for K in n_predictors:
 
 
     K = 20
-    Best model train error = 34857.285556349525
-    Best model validation error = 69406.56071219206
-    Worst model train error = 40538.27995366246
-    Worst model validation error = 195107.49017782984
+    Best model train error = 32661.19741349744
+    Best model validation error = 109959.07091506488
+    Worst model train error = 45505.850639539036
+    Worst model validation error = 255156.40604302924
 
 
 
@@ -980,10 +994,10 @@ for K in n_predictors:
 
 
     K = 25
-    Best model train error = 36105.033075497595
-    Best model validation error = 116695.64178626952
-    Worst model train error = 40084.87211427962
-    Worst model validation error = 201900.6572429609
+    Best model train error = 33574.43301842822
+    Best model validation error = 114187.70661516994
+    Worst model train error = 41433.795289824775
+    Worst model validation error = 181537.28190473243
 
 
 
@@ -994,8 +1008,6 @@ for K in n_predictors:
 
 
 ```python
-# Assuming you have defined n_predictors, best_train_errs, and best_val_errs
-
 plt.plot(n_predictors, best_train_errs, '-o', label='Training Error')
 plt.plot(n_predictors, best_val_errs, '-o', label='Validation Error')
 plt.xlabel('Number of Predictors')
@@ -1039,6 +1051,72 @@ The reasons for overfitting can vary including:
 
 * Data Structure: If your data has inherent structure or dependencies that violate the i.i.d. assumption (e.g., temporal or spatial dependencies), your model might capture these patterns as noise and overfit to them.
 * Outliers and Noise: If your data contains outliers or noisy observations, these can influence the model's behavior and contribute to overfitting. This can be especially problematic with small datasets.
+
+### Univariate results as a feature selection method
+Given the harsh reality of overfitting concerns, working in high-dimensional settings typical requires researchers to explore a number of "feature selection" methods. When working in strictly a predictive modeling context, you can use brute force methods to test different permutations of predictors. However, such permutation methods can become computationally expensive as the number of predictors begins to increase. One shortcut to brute force permutation testing is to select features based on their performance in a univariate modeling context.
+
+
+```python
+X_train.shape
+```
+
+
+
+
+    (876, 30)
+
+
+
+
+```python
+from feature_selection import get_best_uni_predictors
+
+top_features = get_best_uni_predictors(N_keep=5, y=y, baseline_pred=y.mean(),
+                                       X_train=X_train, y_train=y_train,
+                                       X_val=X_val, y_val=y_val,
+                                       metric='RMSE', y_log_scaled=True)
+
+top_features
+```
+
+
+
+
+    ['OverallQual', 'GarageCars', 'YearBuilt', 'YearRemodAdd', 'FullBath']
+
+
+
+
+```python
+from regression_predict_sklearn import fit_eval_model
+fit_eval_model(y=y,baseline_pred=y.mean(), X_train=X_train, y_train=y_train,
+                   X_test=X_test, y_test=y_test,
+                   predictors=top_features,
+                   metric='RMSE',
+                   y_log_scaled=True,
+                   model_type='unregularized',
+                   include_plots=True,
+                   plot_raw=True,
+                   verbose=True);
+```
+
+    # of predictor vars = 5
+    # of train observations = 876
+    # of test observations = 292
+    Baseline RMSE = 79415.29188606751
+    Train RMSE = 41084.668354744696
+    Holdout RMSE = 36522.31626858727
+    (Holdout-Train)/Train: -11%
+
+
+
+
+
+
+
+
+
+
 
 #### 7) Explaining models
 At this point, we have assessed the predictive accuracy of our model. However, what if we want to interpret our model to understand which predictor(s) have a consistent or above chance (i.e., statistically significant) impact sales price? For this kind of question and other questions related to model interpretability, we need to first carefully validate our model. The next two episodes will explore some of the necessary checks you must perform before reading too far into your model's estimations.
