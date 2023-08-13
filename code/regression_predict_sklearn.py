@@ -30,7 +30,7 @@ def train_linear_model(X_train: np.ndarray, y_train: np.ndarray, model_type: str
         reg = LinearRegression().fit(X_train, y_train)
     elif model_type == "LassoCV":
         # Create LassoCV model with cross-validation for lambda selection
-        reg = LassoCV(alphas=alphas, cv=cv, max_iter=max_iter)
+        reg = LassoCV(alphas=alphas, cv=cv, max_iter=max_iter, random_state=0)
         reg.fit(X_train, y_train)
     else:
         raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
@@ -118,7 +118,7 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
 
 
 def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
-                     y_log_scaled: bool, plot_raw: bool, keep_tick_labels: bool) -> plt.Axes:
+                     y_log_scaled: bool, plot_raw: bool, keep_tick_labels: bool, name: str = '') -> plt.Axes:
     """
     Plot true vs. predicted values.
 
@@ -129,7 +129,7 @@ def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
         y_log_scaled (bool): Whether the target values are log-transformed.
         plot_raw (bool): Whether to plot raw or log-scaled values.
         keep_tick_labels (bool): Whether to keep tick labels.
-
+        name (str): Name of dataset being plotted (train/test/val)
     Returns:
         plt.Axes: Matplotlib axis with the plot.
     """
@@ -161,9 +161,9 @@ def plot_predictions(ax: plt.Axes, y: np.ndarray, y_pred: np.ndarray,
     rmse_sanity_check = round(metrics.mean_squared_error(y, y_pred, squared=False),3)
 
     if y_log_scaled and not plot_raw:
-        title = f"RMSE (log units): {rmse_sanity_check}"
+        title = f"{name} RMSE (log units): {rmse_sanity_check}"
     else:
-        title = f"RMSE: {rmse_sanity_check}"
+        title = f"{name} RMSE: {rmse_sanity_check}"
         
     # Create a formatted title with line breaks and decreased font size
     ax.set_title(title, fontsize=12)  # Adjust the fontsize as needed
@@ -241,25 +241,24 @@ def plot_train_test_predictions(predictors: List[str],
         fig1.suptitle('True vs. Predicted log(Sale_Price)')
     else:
         fig1.suptitle('True vs. Predicted Sale Price')
-
-    # train set
-    if train_err is not None:
-        ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
-    else:
-        ax1.title.set_text('Train Data')
     
-    ax1 = plot_predictions(ax1, y_train, y_pred_train, y_log_scaled, plot_raw, keep_tick_labels=True)
+    ax1 = plot_predictions(ax1, y_train, y_pred_train, y_log_scaled, plot_raw, keep_tick_labels=True, name='Train')
     # ax1.set_ylim([min_y, max_y])
-    
-    #test set
-    if test_err is not None:
-        ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
-    else:
-        ax2.title.set_text('Test Data')
-    ax2 = plot_predictions(ax2, y_test, y_pred_test, y_log_scaled, plot_raw, keep_tick_labels=False)
+        # train set
+    # if train_err is not None:
+    #     ax1.title.set_text('Train ' + err_type + ' = ' + str(round(train_err,2)))
+    # else:
+    #     ax1.title.set_text('Train Data')
+
+    ax2 = plot_predictions(ax2, y_test, y_pred_test, y_log_scaled, plot_raw, keep_tick_labels=False, name='Test')
     # ax2.set_ylim([min_y, max_y])
-    
+    #test set
+    # if test_err is not None:
+    #     ax2.title.set_text('Test ' + err_type + ' = ' + str(round(test_err,2)))
+    # else:
+    #     ax2.title.set_text('Test Data')
     plt.show()
+    
     # Fig2. Line of best fit 
     fig2 = None
     if X_train.shape[1]==1:

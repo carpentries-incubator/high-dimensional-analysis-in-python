@@ -319,7 +319,7 @@ results.summary()
   <th>Date:</th>             <td>Sun, 13 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>2.12e-140</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>16:04:54</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
+  <th>Time:</th>                 <td>17:28:41</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>  1460</td>      <th>  AIC:               </th> <td>   829.3</td>
@@ -751,7 +751,7 @@ print(y.shape)
     X.shape[1] 80
     X_encoded.shape[1] 215
     99 columns removed, 116 remaining.
-    Columns removed: ['GarageYrBlt', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', '3SsnPorch', 'PoolArea', "MSZoning_'C (all)'", 'MSZoning_RH', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'MasVnrType_BrkCmn', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', 'Utilities_AllPub', 'Utilities_NoSeWa', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'LotConfig_FR3', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Street']
+    Columns removed: ['3SsnPorch', 'PoolArea', 'GarageYrBlt', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'Utilities_AllPub', 'Utilities_NoSeWa', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'LotConfig_FR3', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'MasVnrType_BrkCmn', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', "MSZoning_'C (all)'", 'MSZoning_RH', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Street']
     (1460, 116)
     (1460,)
 
@@ -833,148 +833,148 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>KitchenAbvGr</th>
-      <th>YearBuilt</th>
-      <th>GarageCars</th>
-      <th>BsmtFinSF2</th>
-      <th>YearRemodAdd</th>
-      <th>FullBath</th>
+      <th>YrSold</th>
       <th>TotRmsAbvGrd</th>
-      <th>OpenPorchSF</th>
+      <th>Fireplaces</th>
+      <th>OverallCond</th>
+      <th>FullBath</th>
+      <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>BedroomAbvGr</th>
+      <th>BsmtUnfSF</th>
       <th>GrLivArea</th>
-      <th>ScreenPorch</th>
       <th>...</th>
+      <th>RoofStyle_Hip</th>
+      <th>SaleCondition_Abnorml</th>
       <th>SaleCondition_Normal</th>
       <th>SaleCondition_Partial</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
-      <th>LotConfig_FR2</th>
-      <th>LotConfig_Inside</th>
-      <th>Foundation_BrkTil</th>
-      <th>Foundation_CBlock</th>
-      <th>Foundation_PConc</th>
+      <th>HouseStyle_1.5Fin</th>
+      <th>HouseStyle_1Story</th>
+      <th>HouseStyle_2Story</th>
+      <th>HouseStyle_SFoyer</th>
+      <th>HouseStyle_SLvl</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>1367</th>
-      <td>-0.157808</td>
-      <td>0.069868</td>
-      <td>-1.098142</td>
-      <td>0.754684</td>
-      <td>-0.375214</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>-0.225022</td>
-      <td>-0.256526</td>
+      <td>0.643645</td>
+      <td>0.521911</td>
+      <td>0.744171</td>
+      <td>-0.668965</td>
+      <td>-0.603394</td>
+      <td>1.542568</td>
+      <td>-1.172785</td>
       <td>0.034762</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>-0.880421</td>
-      <td>1.052758</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>637</th>
-      <td>4.450196</td>
-      <td>-0.832501</td>
-      <td>-1.098142</td>
-      <td>-0.345628</td>
-      <td>-1.567238</td>
-      <td>0.744171</td>
+      <td>0.89098</td>
       <td>0.445452</td>
-      <td>-0.716503</td>
+      <td>-0.949104</td>
+      <td>-1.510063</td>
+      <td>0.744171</td>
+      <td>-1.108940</td>
+      <td>-0.355677</td>
+      <td>0.202003</td>
+      <td>0.603234</td>
       <td>-0.159506</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>1304</th>
-      <td>-0.157808</td>
-      <td>1.129170</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>1.024118</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>0.445452</td>
-      <td>-0.008846</td>
+      <td>-0.949104</td>
+      <td>-0.494076</td>
+      <td>0.744171</td>
+      <td>-0.426979</td>
+      <td>-0.551548</td>
+      <td>0.202003</td>
+      <td>0.981354</td>
       <td>0.549132</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>-0.880421</td>
-      <td>1.052758</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>286</th>
-      <td>-0.157808</td>
-      <td>-0.518634</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.167906</td>
-      <td>-1.195990</td>
+      <td>-1.22994</td>
       <td>0.445452</td>
-      <td>-0.716503</td>
+      <td>0.643645</td>
+      <td>1.537898</td>
+      <td>-1.195990</td>
+      <td>-0.096998</td>
+      <td>-0.074462</td>
+      <td>0.202003</td>
+      <td>-0.540293</td>
       <td>0.606530</td>
-      <td>2.075590</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>488</th>
-      <td>4.450196</td>
-      <td>-2.951106</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.738004</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>2.456876</td>
-      <td>-0.716503</td>
+      <td>0.643645</td>
+      <td>-1.510063</td>
+      <td>0.744171</td>
+      <td>0.342977</td>
+      <td>0.000856</td>
+      <td>0.202003</td>
+      <td>-0.590709</td>
       <td>2.107696</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>1.844123</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>-1.493008</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>-4.813888</td>
     </tr>
   </tbody>
@@ -994,7 +994,7 @@ X_train_z.head()
 ```
 
     99 columns removed, 116 remaining.
-    Columns removed: ['GarageYrBlt', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', '3SsnPorch', 'PoolArea', "MSZoning_'C (all)'", 'MSZoning_RH', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'MasVnrType_BrkCmn', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', 'Utilities_AllPub', 'Utilities_NoSeWa', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'LotConfig_FR3', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Street']
+    Columns removed: ['3SsnPorch', 'PoolArea', 'GarageYrBlt', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'Utilities_AllPub', 'Utilities_NoSeWa', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'LotConfig_FR3', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'MasVnrType_BrkCmn', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', "MSZoning_'C (all)'", 'MSZoning_RH', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Street']
 
 
 
@@ -1018,148 +1018,148 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>KitchenAbvGr</th>
-      <th>YearBuilt</th>
-      <th>GarageCars</th>
-      <th>BsmtFinSF2</th>
-      <th>YearRemodAdd</th>
-      <th>FullBath</th>
+      <th>YrSold</th>
       <th>TotRmsAbvGrd</th>
-      <th>OpenPorchSF</th>
+      <th>Fireplaces</th>
+      <th>OverallCond</th>
+      <th>FullBath</th>
+      <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>BedroomAbvGr</th>
+      <th>BsmtUnfSF</th>
       <th>GrLivArea</th>
-      <th>ScreenPorch</th>
       <th>...</th>
+      <th>RoofStyle_Hip</th>
+      <th>SaleCondition_Abnorml</th>
       <th>SaleCondition_Normal</th>
       <th>SaleCondition_Partial</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
-      <th>LotConfig_FR2</th>
-      <th>LotConfig_Inside</th>
-      <th>Foundation_BrkTil</th>
-      <th>Foundation_CBlock</th>
-      <th>Foundation_PConc</th>
+      <th>HouseStyle_1.5Fin</th>
+      <th>HouseStyle_1Story</th>
+      <th>HouseStyle_2Story</th>
+      <th>HouseStyle_SFoyer</th>
+      <th>HouseStyle_SLvl</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>1367</th>
-      <td>-0.157808</td>
-      <td>0.069868</td>
-      <td>-1.098142</td>
-      <td>0.754684</td>
-      <td>-0.375214</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>-0.225022</td>
-      <td>-0.256526</td>
+      <td>0.643645</td>
+      <td>0.521911</td>
+      <td>0.744171</td>
+      <td>-0.668965</td>
+      <td>-0.603394</td>
+      <td>1.542568</td>
+      <td>-1.172785</td>
       <td>0.034762</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>-0.880421</td>
-      <td>1.052758</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>637</th>
-      <td>4.450196</td>
-      <td>-0.832501</td>
-      <td>-1.098142</td>
-      <td>-0.345628</td>
-      <td>-1.567238</td>
-      <td>0.744171</td>
+      <td>0.89098</td>
       <td>0.445452</td>
-      <td>-0.716503</td>
+      <td>-0.949104</td>
+      <td>-1.510063</td>
+      <td>0.744171</td>
+      <td>-1.108940</td>
+      <td>-0.355677</td>
+      <td>0.202003</td>
+      <td>0.603234</td>
       <td>-0.159506</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>1304</th>
-      <td>-0.157808</td>
-      <td>1.129170</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>1.024118</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>0.445452</td>
-      <td>-0.008846</td>
+      <td>-0.949104</td>
+      <td>-0.494076</td>
+      <td>0.744171</td>
+      <td>-0.426979</td>
+      <td>-0.551548</td>
+      <td>0.202003</td>
+      <td>0.981354</td>
       <td>0.549132</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>-0.880421</td>
-      <td>1.052758</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>286</th>
-      <td>-0.157808</td>
-      <td>-0.518634</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.167906</td>
-      <td>-1.195990</td>
+      <td>-1.22994</td>
       <td>0.445452</td>
-      <td>-0.716503</td>
+      <td>0.643645</td>
+      <td>1.537898</td>
+      <td>-1.195990</td>
+      <td>-0.096998</td>
+      <td>-0.074462</td>
+      <td>0.202003</td>
+      <td>-0.540293</td>
       <td>0.606530</td>
-      <td>2.075590</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>488</th>
-      <td>4.450196</td>
-      <td>-2.951106</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.738004</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>2.456876</td>
-      <td>-0.716503</td>
+      <td>0.643645</td>
+      <td>-1.510063</td>
+      <td>0.744171</td>
+      <td>0.342977</td>
+      <td>0.000856</td>
+      <td>0.202003</td>
+      <td>-0.590709</td>
       <td>2.107696</td>
-      <td>-0.295788</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>1.844123</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>-1.493008</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>-4.813888</td>
     </tr>
   </tbody>
@@ -1200,25 +1200,25 @@ X_train_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
-      <th>KitchenAbvGr</th>
-      <th>YearBuilt</th>
-      <th>GarageCars</th>
-      <th>BsmtFinSF2</th>
-      <th>YearRemodAdd</th>
-      <th>FullBath</th>
+      <th>YrSold</th>
       <th>TotRmsAbvGrd</th>
-      <th>OpenPorchSF</th>
-      <th>GrLivArea</th>
+      <th>Fireplaces</th>
+      <th>OverallCond</th>
+      <th>FullBath</th>
+      <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>BedroomAbvGr</th>
+      <th>BsmtUnfSF</th>
       <th>...</th>
+      <th>RoofStyle_Hip</th>
+      <th>SaleCondition_Abnorml</th>
       <th>SaleCondition_Normal</th>
       <th>SaleCondition_Partial</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
-      <th>LotConfig_FR2</th>
-      <th>LotConfig_Inside</th>
-      <th>Foundation_BrkTil</th>
-      <th>Foundation_CBlock</th>
-      <th>Foundation_PConc</th>
+      <th>HouseStyle_1.5Fin</th>
+      <th>HouseStyle_1Story</th>
+      <th>HouseStyle_2Story</th>
+      <th>HouseStyle_SFoyer</th>
+      <th>HouseStyle_SLvl</th>
       <th>CentralAir</th>
     </tr>
   </thead>
@@ -1226,121 +1226,121 @@ X_train_z.head()
     <tr>
       <th>1367</th>
       <td>1.0</td>
-      <td>-0.157808</td>
-      <td>0.069868</td>
-      <td>-1.098142</td>
-      <td>0.754684</td>
-      <td>-0.375214</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>-0.225022</td>
-      <td>-0.256526</td>
-      <td>0.034762</td>
+      <td>0.643645</td>
+      <td>0.521911</td>
+      <td>0.744171</td>
+      <td>-0.668965</td>
+      <td>-0.603394</td>
+      <td>1.542568</td>
+      <td>-1.172785</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>-0.880421</td>
-      <td>1.052758</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>637</th>
       <td>1.0</td>
-      <td>4.450196</td>
-      <td>-0.832501</td>
-      <td>-1.098142</td>
-      <td>-0.345628</td>
-      <td>-1.567238</td>
-      <td>0.744171</td>
+      <td>0.89098</td>
       <td>0.445452</td>
-      <td>-0.716503</td>
-      <td>-0.159506</td>
+      <td>-0.949104</td>
+      <td>-1.510063</td>
+      <td>0.744171</td>
+      <td>-1.108940</td>
+      <td>-0.355677</td>
+      <td>0.202003</td>
+      <td>0.603234</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>1304</th>
       <td>1.0</td>
-      <td>-0.157808</td>
-      <td>1.129170</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>1.024118</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>0.445452</td>
-      <td>-0.008846</td>
-      <td>0.549132</td>
+      <td>-0.949104</td>
+      <td>-0.494076</td>
+      <td>0.744171</td>
+      <td>-0.426979</td>
+      <td>-0.551548</td>
+      <td>0.202003</td>
+      <td>0.981354</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>-0.880421</td>
-      <td>1.052758</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>286</th>
       <td>1.0</td>
-      <td>-0.157808</td>
-      <td>-0.518634</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.167906</td>
-      <td>-1.195990</td>
+      <td>-1.22994</td>
       <td>0.445452</td>
-      <td>-0.716503</td>
-      <td>0.606530</td>
+      <td>0.643645</td>
+      <td>1.537898</td>
+      <td>-1.195990</td>
+      <td>-0.096998</td>
+      <td>-0.074462</td>
+      <td>0.202003</td>
+      <td>-0.540293</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>488</th>
       <td>1.0</td>
-      <td>4.450196</td>
-      <td>-2.951106</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.738004</td>
-      <td>0.744171</td>
+      <td>-1.22994</td>
       <td>2.456876</td>
-      <td>-0.716503</td>
-      <td>2.107696</td>
+      <td>0.643645</td>
+      <td>-1.510063</td>
+      <td>0.744171</td>
+      <td>0.342977</td>
+      <td>0.000856</td>
+      <td>0.202003</td>
+      <td>-0.590709</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>1.844123</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>-1.493008</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>-4.813888</td>
     </tr>
   </tbody>
@@ -1380,25 +1380,25 @@ X_test_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
-      <th>KitchenAbvGr</th>
-      <th>YearBuilt</th>
-      <th>GarageCars</th>
-      <th>BsmtFinSF2</th>
-      <th>YearRemodAdd</th>
-      <th>FullBath</th>
+      <th>YrSold</th>
       <th>TotRmsAbvGrd</th>
-      <th>OpenPorchSF</th>
-      <th>GrLivArea</th>
+      <th>Fireplaces</th>
+      <th>OverallCond</th>
+      <th>FullBath</th>
+      <th>GarageArea</th>
+      <th>LotArea</th>
+      <th>BedroomAbvGr</th>
+      <th>BsmtUnfSF</th>
       <th>...</th>
+      <th>RoofStyle_Hip</th>
+      <th>SaleCondition_Abnorml</th>
       <th>SaleCondition_Normal</th>
       <th>SaleCondition_Partial</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_CulDSac</th>
-      <th>LotConfig_FR2</th>
-      <th>LotConfig_Inside</th>
-      <th>Foundation_BrkTil</th>
-      <th>Foundation_CBlock</th>
-      <th>Foundation_PConc</th>
+      <th>HouseStyle_1.5Fin</th>
+      <th>HouseStyle_1Story</th>
+      <th>HouseStyle_2Story</th>
+      <th>HouseStyle_SFoyer</th>
+      <th>HouseStyle_SLvl</th>
       <th>CentralAir</th>
     </tr>
   </thead>
@@ -1406,121 +1406,121 @@ X_test_z.head()
     <tr>
       <th>529</th>
       <td>1.0</td>
-      <td>4.450196</td>
-      <td>-0.714801</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.478868</td>
-      <td>2.684332</td>
+      <td>-0.522966</td>
       <td>1.786401</td>
-      <td>-0.716503</td>
-      <td>2.330663</td>
+      <td>2.236394</td>
+      <td>-2.526050</td>
+      <td>2.684332</td>
+      <td>0.144988</td>
+      <td>1.625161</td>
+      <td>1.542568</td>
+      <td>0.614692</td>
       <td>...</td>
+      <td>2.192453</td>
+      <td>-0.270233</td>
       <td>-2.501369</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>3.888182</td>
-      <td>-0.144344</td>
-      <td>-1.493008</td>
       <td>-0.239946</td>
-      <td>-0.880421</td>
-      <td>1.052758</td>
+      <td>0.969630</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>491</th>
       <td>1.0</td>
-      <td>-0.157808</td>
-      <td>-1.342536</td>
-      <td>-1.098142</td>
-      <td>0.703803</td>
-      <td>-1.774546</td>
-      <td>-1.195990</td>
+      <td>-1.229940</td>
       <td>-0.895497</td>
-      <td>-0.716503</td>
-      <td>0.262145</td>
+      <td>2.236394</td>
+      <td>1.537898</td>
+      <td>-1.195990</td>
+      <td>-1.196935</td>
+      <td>-0.096448</td>
+      <td>0.202003</td>
+      <td>-0.709874</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>459</th>
       <td>1.0</td>
-      <td>-0.157808</td>
-      <td>-0.989435</td>
-      <td>-1.098142</td>
-      <td>-0.345628</td>
-      <td>-1.774546</td>
-      <td>-1.195990</td>
+      <td>0.890980</td>
       <td>-0.895497</td>
-      <td>-0.716503</td>
-      <td>-0.565704</td>
+      <td>0.643645</td>
+      <td>-1.510063</td>
+      <td>-1.195990</td>
+      <td>-0.580970</td>
+      <td>-0.280285</td>
+      <td>0.202003</td>
+      <td>-0.054466</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>1.844123</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>-1.493008</td>
-      <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>4.139064</td>
+      <td>-1.024257</td>
+      <td>-0.708304</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>279</th>
       <td>1.0</td>
-      <td>-0.157808</td>
-      <td>0.069868</td>
-      <td>0.400257</td>
-      <td>-0.345628</td>
-      <td>-0.375214</td>
-      <td>0.744171</td>
+      <td>0.184007</td>
       <td>1.115927</td>
-      <td>1.353394</td>
-      <td>1.242318</td>
+      <td>0.643645</td>
+      <td>-0.494076</td>
+      <td>0.744171</td>
+      <td>0.260482</td>
+      <td>-0.058195</td>
+      <td>1.542568</td>
+      <td>0.504694</td>
       <td>...</td>
+      <td>2.192453</td>
+      <td>-0.270233</td>
       <td>0.397043</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
     <tr>
       <th>655</th>
       <td>1.0</td>
-      <td>-0.157808</td>
-      <td>-0.165533</td>
-      <td>-1.098142</td>
-      <td>-0.345628</td>
-      <td>-0.686177</td>
-      <td>-1.195990</td>
+      <td>1.597953</td>
       <td>-0.225022</td>
-      <td>-0.716503</td>
-      <td>-0.810748</td>
+      <td>-0.949104</td>
+      <td>-0.494076</td>
+      <td>-1.195990</td>
+      <td>-1.064943</td>
+      <td>-0.676557</td>
+      <td>0.202003</td>
+      <td>-0.052174</td>
       <td>...</td>
+      <td>-0.452986</td>
+      <td>-0.270233</td>
       <td>-2.501369</td>
       <td>-0.239946</td>
-      <td>-0.538549</td>
-      <td>-0.255428</td>
-      <td>-0.144344</td>
-      <td>0.665201</td>
       <td>-0.239946</td>
-      <td>1.128040</td>
-      <td>-0.943380</td>
+      <td>-1.024257</td>
+      <td>1.402153</td>
+      <td>-0.187665</td>
+      <td>-0.22364</td>
       <td>0.206309</td>
     </tr>
   </tbody>
@@ -1626,6 +1626,15 @@ However, despite their imperfections, some models can still be valuable and "use
 
 #### Feature selection methods
 Throughout this workshop, we will explore a couple of feature (predictor) selection methods that can help you simplify your high-dimensional data — making it possible to avoid overfitting concerns. These methods can involve either (A) mathematically combining features to reduce dimensionality or (B) selecting only the most "interesting" predictors, where the definition of interesting varies based on the exact method of choice.
+
+
+```python
+from feature_selection import hypothesis_driven_predictors
+hypothesis_driven_predictors()
+```
+
+    Consult the literature in your field to narrow down your high-dimensional dataset to a list of predictors that have been shown to have some influence over the target variable. This approach, by itself, can be somewhat limiting as a good scientist should take care to investigate unexplored predictors in addition to well documented predictors. It is often worthwhile to combine a priori knowledge with data-driven methods.
+
 
 ### Summary
 In summary, leaving out relevant predictors can lead to biased coefficient estimates and model misspecification. Without including the most essential predictors, the model will place too much focus on the predictors included and over/underestimate their contributions to the target variable.

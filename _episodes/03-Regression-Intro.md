@@ -900,7 +900,7 @@ sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=30)
 print(sampled_combinations[0:2])
 ```
 
-    [['BsmtFullBath', 'MoSold'], ['YearBuilt', 'BsmtUnfSF']]
+    [['LotArea', 'EnclosedPorch'], ['YearBuilt', '2ndFlrSF']]
 
 
 #### Compare efficacy of different numbers of predictors
@@ -942,10 +942,10 @@ for K in n_predictors:
 
 
     K = 2
-    Best model train error = 45007.18621534005
-    Best model validation error = 46902.304934126754
-    Worst model train error = 61467.976215670766
-    Worst model validation error = 172222.1087394079
+    Best model train error = 57042.94521278749
+    Best model validation error = 58982.48757428803
+    Worst model train error = 63490.69158002296
+    Worst model validation error = 220519.2793905504
 
 
 
@@ -955,10 +955,10 @@ for K in n_predictors:
 
 
     K = 5
-    Best model train error = 45359.35736302203
-    Best model validation error = 45514.209976660924
-    Worst model train error = 62656.14530251103
-    Worst model validation error = 297097.6132925179
+    Best model train error = 40246.37369083988
+    Best model validation error = 45159.34522468372
+    Worst model train error = 62351.3432354761
+    Worst model validation error = 293219.7974797769
 
 
 
@@ -968,10 +968,10 @@ for K in n_predictors:
 
 
     K = 10
-    Best model train error = 38017.69833169584
-    Best model validation error = 40504.963295927664
-    Worst model train error = 51722.90018797251
-    Worst model validation error = 342341.1973293411
+    Best model train error = 40284.43531085465
+    Best model validation error = 46262.79823149068
+    Worst model train error = 47946.98458244144
+    Worst model validation error = 376910.70491284726
 
 
 
@@ -981,10 +981,10 @@ for K in n_predictors:
 
 
     K = 20
-    Best model train error = 32661.19741349744
-    Best model validation error = 109959.07091506488
-    Worst model train error = 45505.850639539036
-    Worst model validation error = 255156.40604302924
+    Best model train error = 35208.827129028374
+    Best model validation error = 69948.55111019973
+    Worst model train error = 40107.751924460885
+    Worst model validation error = 191687.07544958766
 
 
 
@@ -994,10 +994,10 @@ for K in n_predictors:
 
 
     K = 25
-    Best model train error = 33574.43301842822
-    Best model validation error = 114187.70661516994
-    Worst model train error = 41433.795289824775
-    Worst model validation error = 181537.28190473243
+    Best model train error = 31789.24697454612
+    Best model validation error = 92791.4581601175
+    Worst model train error = 38793.2906120023
+    Worst model validation error = 179263.60973200446
 
 
 
@@ -1089,6 +1089,29 @@ top_features
 
 ```python
 from regression_predict_sklearn import fit_eval_model
+help(fit_eval_model)
+```
+
+    Help on function fit_eval_model in module regression_predict_sklearn:
+
+    fit_eval_model(y: Union[numpy.ndarray, pandas.core.series.Series], baseline_pred: Union[numpy.ndarray, pandas.core.series.Series], X_train: Union[numpy.ndarray, pandas.core.frame.DataFrame], y_train: Union[numpy.ndarray, pandas.core.series.Series], X_test: Union[numpy.ndarray, pandas.core.frame.DataFrame], y_test: Union[numpy.ndarray, pandas.core.series.Series], predictors: Union[str, List[str]], metric: str, y_log_scaled: bool, model_type: str, include_plots: bool, plot_raw: bool, verbose: bool, cv: int = None, alphas: Union[numpy.ndarray, List[float]] = None, max_iter: int = None) -> Tuple[float, float, float]
+        Fits a linear regression model using specified predictor variables and evaluates its performance.
+
+        Args:
+            ... (existing arguments)
+
+            cv (int, optional): Number of cross-validation folds. Applicable when model_type is LassoCV.
+            alphas (Union[np.ndarray, List[float]], optional): List of alphas to tune the LassoCV model.
+                                                              Applicable when model_type is LassoCV.
+            max_iter (int, optional): Maximum number of iterations for the LassoCV solver.
+
+        Returns:
+            Tuple[float, float, float]: Baseline error, training error, and test error.
+
+
+
+
+```python
 fit_eval_model(y=y,baseline_pred=y.mean(), X_train=X_train, y_train=y_train,
                    X_test=X_test, y_test=y_test,
                    predictors=top_features,
