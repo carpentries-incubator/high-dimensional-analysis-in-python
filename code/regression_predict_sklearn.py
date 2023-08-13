@@ -23,6 +23,8 @@ def train_linear_model(X_train: np.ndarray, y_train: np.ndarray, model_type: str
     """
     if model_type == "unregularized":
         reg = LinearRegression().fit(X_train, y_train)
+    elif model_type == "LassoCV":
+        
     else:
         raise ValueError('Unexpected model_type encountered; model_type = ' + model_type)
   
