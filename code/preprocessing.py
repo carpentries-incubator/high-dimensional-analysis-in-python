@@ -106,10 +106,10 @@ def remove_bad_cols(X: Union[pd.Series, pd.DataFrame], limited_var_thresh: float
         most_common_val = value_counts_df.loc[0,'Value'] 
         
         if sum_nans > 0: 
-            print(feat_name +  ' removed, ' + str(sum_nans) + ' NaNs')
+            # print(feat_name +  ' removed, ' + str(sum_nans) + ' NaNs')
             rem_cols.append(feat_name)
         elif most_common_val_perc > limited_var_thresh:
-            print(feat_name + ' removed, most_common_val = ' + str(most_common_val) + ', presence = ' + str(round(most_common_val_perc,2)))
+            # print(feat_name + ' removed, most_common_val = ' + str(most_common_val) + ', presence = ' + str(round(most_common_val_perc,2)))
             rem_cols.append(feat_name)
             
     X = X.drop(rem_cols, axis=1)

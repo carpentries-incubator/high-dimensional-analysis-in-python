@@ -475,8 +475,6 @@ X_good = remove_bad_cols(X_enc, 99)
 X_good.head()
 ```
 
-    SaleCondition_AdjLand removed, most_common_val = 0, presence = 99.73
-    SaleCondition_Alloca removed, most_common_val = 0, presence = 99.18
     2 columns removed, 5 remaining.
     Columns removed: ['SaleCondition_AdjLand', 'SaleCondition_Alloca']
 

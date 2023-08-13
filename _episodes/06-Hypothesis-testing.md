@@ -54,22 +54,6 @@ from exercise_solutions import regression_assumptions_e1_explore_altPredictors
 trained_model = regression_assumptions_e1_explore_altPredictors()
 ```
 
-    Neighborhood_Blmngtn removed, most_common_val = 0, presence = 98.84
-    Neighborhood_Blueste removed, most_common_val = 0, presence = 99.86
-    Neighborhood_BrDale removed, most_common_val = 0, presence = 98.9
-    Neighborhood_BrkSide removed, most_common_val = 0, presence = 96.03
-    Neighborhood_ClearCr removed, most_common_val = 0, presence = 98.08
-    Neighborhood_Crawfor removed, most_common_val = 0, presence = 96.51
-    Neighborhood_IDOTRR removed, most_common_val = 0, presence = 97.47
-    Neighborhood_MeadowV removed, most_common_val = 0, presence = 98.84
-    Neighborhood_Mitchel removed, most_common_val = 0, presence = 96.64
-    Neighborhood_NPkVill removed, most_common_val = 0, presence = 99.38
-    Neighborhood_NoRidge removed, most_common_val = 0, presence = 97.19
-    Neighborhood_SWISU removed, most_common_val = 0, presence = 98.29
-    Neighborhood_SawyerW removed, most_common_val = 0, presence = 95.96
-    Neighborhood_StoneBr removed, most_common_val = 0, presence = 98.29
-    Neighborhood_Timber removed, most_common_val = 0, presence = 97.4
-    Neighborhood_Veenker removed, most_common_val = 0, presence = 99.25
     16 columns removed, 14 remaining.
     Columns removed: ['Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NoRidge', 'Neighborhood_SWISU', 'Neighborhood_SawyerW', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker']
     
@@ -169,7 +153,7 @@ trained_model = regression_assumptions_e1_explore_altPredictors()
     ==========================
     VERIFYING NORMAL ERRORS...
     Median of residuals: 0.004087877077902924
-    Skewness of resids (+/- 0.5 is bad): -0.42300070977189735
+    Skewness of resids (+/- 0.5 is bad): -0.423000709771896
     Shapiro-Wilk test: statistic=0.9730, p-value=0.0000000000
     Shapiro-Wilk test passes: False
     Kolmogorov-Smirnov test: statistic=0.3038, p-value=0.0000000000
@@ -211,10 +195,10 @@ trained_model.summary()
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   131.7</td> 
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sat, 12 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
+  <th>Date:</th>             <td>Sun, 13 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>14:54:46</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
+  <th>Time:</th>                 <td>16:11:16</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>   978</td>      <th>  AIC:               </th> <td>   81.65</td> 
@@ -237,10 +221,10 @@ trained_model.summary()
   <th>const</th>                <td>   12.0260</td> <td>    0.008</td> <td> 1500.602</td> <td> 0.000</td> <td>   12.010</td> <td>   12.042</td>
 </tr>
 <tr>
-  <th>YearRemodAdd</th>         <td>    0.1343</td> <td>    0.010</td> <td>   13.660</td> <td> 0.000</td> <td>    0.115</td> <td>    0.154</td>
+  <th>LotArea</th>              <td>    0.0669</td> <td>    0.008</td> <td>    8.111</td> <td> 0.000</td> <td>    0.051</td> <td>    0.083</td>
 </tr>
 <tr>
-  <th>LotArea</th>              <td>    0.0669</td> <td>    0.008</td> <td>    8.111</td> <td> 0.000</td> <td>    0.051</td> <td>    0.083</td>
+  <th>YearRemodAdd</th>         <td>    0.1343</td> <td>    0.010</td> <td>   13.660</td> <td> 0.000</td> <td>    0.115</td> <td>    0.154</td>
 </tr>
 <tr>
   <th>GarageArea</th>           <td>    0.1779</td> <td>    0.009</td> <td>   18.725</td> <td> 0.000</td> <td>    0.159</td> <td>    0.196</td>
@@ -340,7 +324,7 @@ p_values
 
 
 
-    array([0.00000000e+00, 5.77683408e-39, 1.51433066e-15, 5.63916857e-67,
+    array([0.00000000e+00, 1.51433066e-15, 5.77683408e-39, 5.63916857e-67,
            1.11482797e-01, 1.04392453e-05, 6.54771638e-01, 1.98182267e-02,
            1.73282954e-01, 1.99578527e-05, 6.51408046e-09, 1.59324911e-05,
            6.94929557e-01])
@@ -357,8 +341,8 @@ p_values[p_values < .05]
 ```
 
     const                   0.000000e+00
-    YearRemodAdd            5.776834e-39
     LotArea                 1.514331e-15
+    YearRemodAdd            5.776834e-39
     GarageArea              5.639169e-67
     Neighborhood_CollgCr    1.114828e-01
     Neighborhood_Edwards    1.043925e-05
@@ -376,8 +360,8 @@ p_values[p_values < .05]
 
 
     const                   0.000000e+00
-    YearRemodAdd            5.776834e-39
     LotArea                 1.514331e-15
+    YearRemodAdd            5.776834e-39
     GarageArea              5.639169e-67
     Neighborhood_Edwards    1.043925e-05
     Neighborhood_NAmes      1.981823e-02
@@ -409,10 +393,10 @@ trained_model.summary()
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   131.7</td> 
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sat, 12 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
+  <th>Date:</th>             <td>Sun, 13 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>14:54:46</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
+  <th>Time:</th>                 <td>16:11:16</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>   978</td>      <th>  AIC:               </th> <td>   81.65</td> 
@@ -435,10 +419,10 @@ trained_model.summary()
   <th>const</th>                <td>   12.0260</td> <td>    0.008</td> <td> 1500.602</td> <td> 0.000</td> <td>   12.010</td> <td>   12.042</td>
 </tr>
 <tr>
-  <th>YearRemodAdd</th>         <td>    0.1343</td> <td>    0.010</td> <td>   13.660</td> <td> 0.000</td> <td>    0.115</td> <td>    0.154</td>
+  <th>LotArea</th>              <td>    0.0669</td> <td>    0.008</td> <td>    8.111</td> <td> 0.000</td> <td>    0.051</td> <td>    0.083</td>
 </tr>
 <tr>
-  <th>LotArea</th>              <td>    0.0669</td> <td>    0.008</td> <td>    8.111</td> <td> 0.000</td> <td>    0.051</td> <td>    0.083</td>
+  <th>YearRemodAdd</th>         <td>    0.1343</td> <td>    0.010</td> <td>   13.660</td> <td> 0.000</td> <td>    0.115</td> <td>    0.154</td>
 </tr>
 <tr>
   <th>GarageArea</th>           <td>    0.1779</td> <td>    0.009</td> <td>   18.725</td> <td> 0.000</td> <td>    0.159</td> <td>    0.196</td>
@@ -527,8 +511,8 @@ coefs
 
 
     const                   12.025984
-    YearRemodAdd             0.134300
     LotArea                  0.066891
+    YearRemodAdd             0.134300
     GarageArea               0.177854
     Neighborhood_CollgCr    -0.014424
     Neighborhood_Edwards    -0.038375
@@ -551,12 +535,13 @@ help(coef_plot)
 
     Help on function coef_plot in module interpret_model:
     
-    coef_plot(coefs: pandas.core.series.Series, plot_const: bool) -> matplotlib.figure.Figure
+    coef_plot(coefs: pandas.core.series.Series, plot_const: bool = False, index: bool = None) -> matplotlib.figure.Figure
         Plot coefficient values and feature importance based on sorted feature importance.
         
         Args:
-            coeffs (pd.Series): Coefficient values.
-            plot_const (bool): Whether or not to plot the y-intercept coef value
+            coefs (pd.Series or np.ndarray): Coefficient values.
+            plot_const (bool, optional): Whether or not to plot the y-intercept coef value. Default is False.
+            index (list or pd.Index, optional): Index labels for the coefficients. Default is None.
         
         Returns:
             plt.Figure: The figure containing the coefficient plots.
@@ -566,7 +551,7 @@ help(coef_plot)
 
 ```python
 fig = coef_plot(coefs=coefs, plot_const=False)
-# fig.savefig('..//fig//regression//interpret//coef_plot.png', bbox_inches='tight', dpi=300, facecolor='white');
+fig.savefig('..//fig//regression//interpret//coef_plot.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
 
