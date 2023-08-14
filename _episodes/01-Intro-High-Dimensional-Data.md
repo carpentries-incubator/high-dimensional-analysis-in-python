@@ -262,6 +262,12 @@ human gene expression e.g.
 > {:.solution}
 {:.challenge}
 
+## High-Dimensional Data
+What is high-dimensional data? Unfortunately, there isn't a precise definition. Oftentimes, when people use the term, they are referring to data that has so many features that it is difficult to determine which features are relevant to the research question (dozens or more). In a modeling context, however, high-dimensional data is usually defined as a dataset where the number of features approaches or exceeds the number of observations.
+
+The "curse of dimensionality" generally refers to the issues that arise when dealing with data in high-dimensional spaces, where distances between data points become less meaningful and the data becomes more sparse. This can lead to challenges in terms of computational complexity, overfitting in machine learning models, difficulties in visualization, and the need for specialized techniques to handle such data effectively.
+
+So, whether the term "high-dimensional data" is used to describe datasets with a large number of features or datasets with a very high number of features, the underlying challenges related to dimensionality are usually concerned with the same issues of increased complexity and difficulties in analysis and modeling.
 
 # End of part 1
 in part two we'll start exploring a new dataset
