@@ -88,41 +88,22 @@ def remove_bad_cols(X: Union[pd.Series, pd.DataFrame], limited_var_thresh: float
     if isinstance(X, pd.Series):
         X = pd.DataFrame(X, columns=[X.name])
         
-    all_feats = X.columns
-    rem_cols = []
-    for feat_index in range(0, len(all_feats)):
-        feat_name = X.columns[feat_index]
-        this_X = np.array(X.loc[:, feat_name]).reshape(-1, 1)
-        sum_nans = np.sum(np.isnan(this_X))
-        unique_vals = np.unique(this_X)
+    # Remove NA
+    without_na = X.dropna(axis='columns')
+    # Find Sparse
+    sparse_cols = without_na.apply(lambda col: col.value_counts(normalize=True).max() * 100 > limited_var_thresh)
+    # Remove Sparse
+    without_sparse = without_na.drop(without_na.columns[sparse_cols], axis='columns')
 
-        # Use Counter to get counts and corresponding values
-        value_counts = Counter(X[feat_name])
+    # Print dropped cols
+    orig_cols = X.columns
+    final_cols = without_sparse.columns
+    dropped_cols = orig_cols[~orig_cols.isin(final_cols)]
+    print(f'{len(dropped_cols)} removed, {len(final_cols)} remaining.')
+    print(f'Columns removed: {list(dropped_cols)}')
 
-        # Create a DataFrame to store values and counts
-        value_counts_df = pd.DataFrame(value_counts.items(), columns=['Value', 'Count'])
-
-        # Calculate the percentage of rows for each value
-        value_counts_df['Percentage'] = (value_counts_df['Count'] / len(X)) * 100
-
-        # sort the result
-        value_counts_df = value_counts_df.sort_values(by='Count', ascending=False)
-
-        most_common_val_perc = value_counts_df.loc[0,'Percentage'] 
-        most_common_val = value_counts_df.loc[0,'Value'] 
-        
-        if sum_nans > 0: 
-            # print(feat_name +  ' removed, ' + str(sum_nans) + ' NaNs')
-            rem_cols.append(feat_name)
-        elif most_common_val_perc > limited_var_thresh:
-            # print(feat_name + ' removed, most_common_val = ' + str(most_common_val) + ', presence = ' + str(round(most_common_val_perc,2)))
-            rem_cols.append(feat_name)
-            
-    X = X.drop(rem_cols, axis=1)
-    print(len(rem_cols), 'columns removed,', X.shape[1], 'remaining.')
-    if len(rem_cols) > 0:
-        print('Columns removed:', rem_cols)
-    return X
+    # Return
+    return without_sparse
 
 
 def create_zscore_feature(arr: np.ndarray) -> np.ndarray:
