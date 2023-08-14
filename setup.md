@@ -15,7 +15,9 @@ Create a folder named, "highdim_workshop" on your Desktop which will store all o
 {% include links.md %}
 
 ## Download Helpers
-Download several helper function files which we will use to expedite our analyses Click the files below to download:
+Download several helper function files which we will use to expedite our analyses. Place all files in the highdim_workshop folder on your Desktop. 
+
+Click the files below to download:
 * [preprocessing.py](/code/preprocessing.py)
 * [regression_predict_sklearn.py](/code/regression_predict_sklearn.py)
 * [check_assumptions.py](/code/check_assumptions.py)
