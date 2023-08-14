@@ -100,7 +100,8 @@ def remove_bad_cols(X: Union[pd.Series, pd.DataFrame], limited_var_thresh: float
     final_cols = without_sparse.columns
     dropped_cols = orig_cols[~orig_cols.isin(final_cols)]
     print(f'{len(dropped_cols)} removed, {len(final_cols)} remaining.')
-    print(f'Columns removed: {list(dropped_cols)}')
+    if len(dropped_cols) > 0:
+        print(f'Columns removed: {list(dropped_cols)}')
 
     # Return
     return without_sparse
