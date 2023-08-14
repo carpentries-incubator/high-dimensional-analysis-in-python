@@ -9,7 +9,6 @@ from typing import Optional, Tuple, List, Union
 
 from collections import Counter # remove_bad_cols()
 
-# load full-dim data
 from sklearn.model_selection import train_test_split
 from sklearn.datasets import fetch_openml
 
