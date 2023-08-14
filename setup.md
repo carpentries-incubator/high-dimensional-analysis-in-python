@@ -14,6 +14,17 @@ Create a folder named, "highdim_workshop" on your Desktop which will store all o
 
 {% include links.md %}
 
+## Download Helpers
+Download several helper function files which we will use to expedite our analyses. Place all files in the highdim_workshop folder on your Desktop. 
+
+Click the files below to download:
+* [preprocessing.py](/code/preprocessing.py)
+* [regression_predict_sklearn.py](/code/regression_predict_sklearn.py)
+* [check_assumptions.py](/code/check_assumptions.py)
+* [interpret_model.py](/code/interpret_model.py)
+* [feature_selection.py](/code/feature_selection.py)
+* [helper_functions.py](/code/helper_functions.py)
+* [exercise_solutions.py](/code/exercise_solutions.py)
 
 
 ## Installing Python using Anaconda
