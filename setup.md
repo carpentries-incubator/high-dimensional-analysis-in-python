@@ -23,6 +23,7 @@ Click the files below to download:
 * [check_assumptions.py](/code/check_assumptions.py)
 * [interpret_model.py](/code/interpret_model.py)
 * [feature_selection.py](/code/feature_selection.py)
+* [helper_functions.py](/code/helper_functions.py)
 * [exercise_solutions.py](/code/exercise_solutions.py)
 
 
