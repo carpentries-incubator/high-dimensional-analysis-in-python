@@ -14,6 +14,15 @@ from sklearn.model_selection import train_test_split
 from sklearn.datasets import fetch_openml
 
 def encode_predictors_housing_data(X):
+    """
+    Encode predictor variables in the housing data using one-hot encoding for nominal fields.
+    
+    Args:
+        X (pd.DataFrame): Input DataFrame containing predictor variables.
+
+    Returns:
+        pd.DataFrame: DataFrame with encoded predictor variables.
+    """
     # get lists of continuous features, nominal features, etc.
     predictor_type_dict = get_feat_types()
     exclude_fields = predictor_type_dict['exclude_fields']
@@ -41,8 +50,6 @@ def encode_predictors_housing_data(X):
     one_hot = pd.get_dummies(X_enc[nominal_fields])
     keep_cols.extend(one_hot.columns)
     X_enc=X_enc.join(one_hot)
-
-
     
     # ordinal fields are skipped since they require some additional code to map different strings to different numerical values. we'll leave them out for this workshop
     
@@ -133,38 +140,7 @@ def create_zscore_feature(arr: np.ndarray) -> np.ndarray:
 def get_feat_types():
     # Also see here for more thorough documentation regarding the feature set: 
     # https://www.openml.org/d/42165
-
-    # OverallQual: Rates the overall material and finish of the house
-    # GrLivArea: Above grade (ground) living area square feet
-    # GarageCars: Size of garage in car capacity
-    # GarageArea: Size of garage in square feet
-    # TotalBsmtSF: Total square feet of basement area
-    # 1stFlrSF: First Floor square feet
-    # FullBath: Full bathrooms above grade (i.e., not in the basement)
-    # TotRmsAbvGrd: Total rooms above grade (does not include bathrooms)
-    # YearBuilt: Original construction date
-    # YearRemodAdd: Remodel date (same as construction date if no remodeling or additions)
-    # data['MSZoning'] # nominal variable with 5 different general zoning options: https://www.openml.org/d/42165
-    # data['MSSubClass'] # nominal variable with 15 different types of dwellings
-    # data['Street'].unique() Grvl or Pave
-    # 'LotShape' # ordinal variable; map as
-    #     Reg Regular=1
-    #     IR1 Slightly irregular=2
-    #     IR2 Moderately Irregular=3
-    #     IR3 Irregular=4
-    # data['LandContour'] # nominal variable with 4 different categories
-    # data['Utilities'] # could code as ordinal variable with 4 different levels:
-    #     AllPub All public Utilities (E,G,W,& S) - 4
-    #     NoSewr Electricity, Gas, and Water (Septic Tank) - 3
-    #     NoSeWa Electricity and Gas Only - 2
-    #     ELO Electricity only - 1
-    # data['LotConfig'] # nominal variable with 5 different categories
-    # data['LandSlope'] # ordinal variable with 3 different levels
-    #     1=Gtl Gentle slope
-    #     2=Mod Moderate Slope
-    #     3=Sev Severe Slope
     
-    # data['Neighborhood'] # nominal variable with 25 different categories
     exclude_fields=['Id','MiscFeature','MiscVal'] # ID is an index variable. Removing MiscFeature and MiscVal for simplicity. These two features are always paired; would take a small amount of code to convert the combination of these vars into a set of one-hot-encoded vars.
     nominal_fields=['MSSubClass','MSZoning','Alley','LandContour',
                    'LotConfig','Neighborhood','Condition1','Condition2',

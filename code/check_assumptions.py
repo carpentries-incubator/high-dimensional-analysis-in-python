@@ -1,6 +1,7 @@
 # statsmodels
 import statsmodels.api as sm
 import statsmodels.stats.api as sms
+import statsmodels.stats.stattools as smt
 # normal errors
 import statsmodels.graphics.gofplots as smg # qqplot
 # independent errors
@@ -15,11 +16,12 @@ from pandas import Series
 from scipy import stats
 from scipy.stats import norm
 
+# helpers
+from regression_predict_sklearn import plot_predictions
+
 # plotting
 import seaborn as sns
 import matplotlib.pyplot as plt
-
-
 
 def normal_resid_test(resids: Series, threshold_p_value: float = 0.05) -> plt.Figure:
     """
@@ -88,6 +90,15 @@ def normal_resid_test(resids: Series, threshold_p_value: float = 0.05) -> plt.Fi
 
 
 def plot_corr_matrix(corr_matrix: pd.DataFrame) -> plt.figure:
+    """
+    Plot a heatmap of the correlation matrix.
+
+    Args:
+        corr_matrix (pd.DataFrame): Correlation matrix of predictor variables.
+
+    Returns:
+        plt.figure: The figure containing the correlation heatmap.
+    """
     # Create a heatmap with variable labels
     fig = plt.figure(figsize=(10, 8))
     sns.heatmap(corr_matrix, annot=True, fmt=".2f", cmap="coolwarm",
@@ -107,6 +118,15 @@ def plot_corr_matrix(corr_matrix: pd.DataFrame) -> plt.figure:
 
 
 def calc_print_VIF(X):
+    """
+    Calculate and print Variance Inflation Factors (VIF) for predictor variables.
+
+    Args:
+        X (pd.DataFrame): Predictor variable data.
+
+    Returns:
+        None
+    """
     # Calculate VIF for each predictor in X
     vif = pd.DataFrame()
     vif["Variable"] = X.columns
@@ -116,6 +136,15 @@ def calc_print_VIF(X):
     print(vif)
     
 def multicollinearity_test(X: pd.DataFrame):
+    """
+    Perform multicollinearity test and plot the correlation matrix.
+
+    Args:
+        X (pd.DataFrame): Predictor variable data.
+
+    Returns:
+        plt.figure: The figure containing the correlation heatmap.
+    """
     print('\n==========================')
     print('VERIFYING MULTICOLLINEARITY...')
     
@@ -136,7 +165,20 @@ def multicollinearity_test(X: pd.DataFrame):
     
     
 def plot_pred_v_resid(y_pred, resids, ax):
-    
+    """
+    Plot the predicted values against residuals.
+
+    Args:
+        y_pred: Predicted values.
+        resids: Residuals.
+        ax: Axes to plot on.
+
+    Returns:
+        plt.axes: The axes containing the plot.
+    """
+    # the lowess parameter stands for "Locally Weighted Scatterplot Smoothing." 
+    # When lowess is set to True, it indicates that the function will use a Lowess regression to create a smoothed line through the scatter plot of the provided data points. 
+    # It works by fitting a separate regression line to a local neighborhood of points around each data point. 
     sns.regplot(x=y_pred, y=resids, lowess=True, ax=ax, line_kws={'color': 'red'})
     ax.axhline(0, color='blue', linestyle='dashed')  # Add a horizontal line at y=0
 
@@ -144,13 +186,6 @@ def plot_pred_v_resid(y_pred, resids, ax):
     ax.set(xlabel='Predicted', ylabel='Residuals')
     ax.set_aspect('equal')
     return ax
-
-
-import statsmodels.api as sm
-import pandas as pd
-import seaborn as sns
-import matplotlib.pyplot as plt
-from regression_predict_sklearn import plot_predictions
 
 def homoscedasticity_linearity_test(trained_model: sm.regression.linear_model.RegressionResultsWrapper, 
                                     y: pd.Series, y_pred: pd.Series, y_log_scaled: bool, plot_raw: bool,
@@ -197,11 +232,6 @@ def homoscedasticity_linearity_test(trained_model: sm.regression.linear_model.Re
     plt.show()
     return fig
 
-
-import matplotlib.pyplot as plt
-import statsmodels.stats.stattools as smt
-from pandas import Series
-
 def independent_resid_test(y_pred: Series, resids: Series, include_plot: bool = True) -> plt.Figure:
     """
     Perform tests and visualizations to assess the independence of residuals.
@@ -238,7 +268,19 @@ def independent_resid_test(y_pred: Series, resids: Series, include_plot: bool = 
     return fig
 
 
-def eval_regression_assumptions(trained_model, X, y, y_pred, y_log_scaled, plot_raw, threshold_p_value):
+def eval_regression_assumptions(trained_model, X: pd.DataFrame, y: np.ndarray, y_pred: np.ndarray, y_log_scaled: bool, plot_raw: bool, threshold_p_value: float):
+    """
+    Evaluate the assumptions of linear regression using various diagnostic tests and visualizations.
+
+    Args:
+        trained_model: A trained regression model.
+        X (pd.DataFrame): Predictor variables.
+        y (np.ndarray): Actual target values.
+        y_pred (np.ndarray): Predicted target values.
+        y_log_scaled (bool): Whether the target values are log-scaled.
+        plot_raw (bool): Whether to plot raw target values.
+        threshold_p_value (float): Threshold p-value for significance tests.
+    """
     multicollinearity_test(X)
     
     homoscedasticity_linearity_test(trained_model=trained_model, y=y, y_pred=y_pred, 
