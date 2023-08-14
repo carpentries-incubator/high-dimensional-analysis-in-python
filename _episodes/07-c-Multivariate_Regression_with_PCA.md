@@ -2609,8 +2609,8 @@ print(f'test rmse ± sd: \t {rmse_mean} ± {rmse_sd}')
 print(f'train rmse ± sd:\t {train_rmse_mean} ± {train_rmse_sd}')
 ```
 
-    test rmse ± sd: 	 0.14821175422002095 ± 0.012248565769105898
-    train rmse ± sd:	 0.12216870451781224 ± 0.005813049599139218
+    test rmse ± sd: 	 0.1474688591046521 ± 0.012094312352499338
+    train rmse ± sd:	 0.12207366216037324 ± 0.0057547368737219115
 
 
 # Model Comparison

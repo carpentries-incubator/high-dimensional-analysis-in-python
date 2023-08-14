@@ -53,7 +53,7 @@ X_train_z.head()
 ```
 
     164 columns removed, 51 remaining.
-    Columns removed: ['ScreenPorch', 'LowQualFinSF', 'MasVnrArea', 'GarageYrBlt', '3SsnPorch', 'BsmtHalfBath', 'LotFrontage', 'PoolArea', 'KitchenAbvGr', 'BsmtFinSF2', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Condition1_Artery', 'Condition1_Feedr', 'Condition1_Norm', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LandContour_Lvl', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_New', 'SaleType_Oth', 'SaleType_WD', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'Foundation_BrkTil', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Alley_Grvl', 'Alley_Pave', 'SaleCondition_Abnorml', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'SaleCondition_Partial', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'BldgType_TwnhsE', 'Utilities_AllPub', 'Utilities_NoSeWa', 'MasVnrType_BrkCmn', 'MasVnrType_Stone', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Sdng'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Plywood', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_50', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_120', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'LotConfig_CulDSac', 'LotConfig_FR2', 'LotConfig_FR3', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_Edwards', 'Neighborhood_Gilbert', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NWAmes', 'Neighborhood_NoRidge', 'Neighborhood_NridgHt', 'Neighborhood_OldTown', 'Neighborhood_SWISU', 'Neighborhood_Sawyer', 'Neighborhood_SawyerW', 'Neighborhood_Somerst', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'HouseStyle_1.5Fin', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'Electrical_FuseA', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Electrical_SBrkr', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_BuiltIn', 'GarageType_CarPort', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Plywood', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'Street', 'CentralAir']
+    Columns removed: ['PoolArea', 'LotFrontage', 'BsmtFinSF2', 'ScreenPorch', 'GarageYrBlt', 'MasVnrArea', 'KitchenAbvGr', '3SsnPorch', 'BsmtHalfBath', 'LowQualFinSF', 'Foundation_BrkTil', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_Edwards', 'Neighborhood_Gilbert', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NWAmes', 'Neighborhood_NoRidge', 'Neighborhood_NridgHt', 'Neighborhood_OldTown', 'Neighborhood_SWISU', 'Neighborhood_Sawyer', 'Neighborhood_SawyerW', 'Neighborhood_Somerst', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_BuiltIn', 'GarageType_CarPort', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Sdng'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Plywood', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_New', 'SaleType_Oth', 'SaleType_WD', 'Condition1_Artery', 'Condition1_Feedr', 'Condition1_Norm', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Plywood', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'LotConfig_CulDSac', 'LotConfig_FR2', 'LotConfig_FR3', 'HouseStyle_1.5Fin', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_50', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_120', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'Alley_Grvl', 'Alley_Pave', 'SaleCondition_Abnorml', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'SaleCondition_Partial', 'MasVnrType_BrkCmn', 'MasVnrType_Stone', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'BldgType_TwnhsE', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LandContour_Lvl', 'Electrical_FuseA', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Electrical_SBrkr', 'Utilities_AllPub', 'Utilities_NoSeWa', 'Street', 'CentralAir']
     
 
 
@@ -77,149 +77,149 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>OverallQual</th>
-      <th>MoSold</th>
-      <th>1stFlrSF</th>
       <th>GrLivArea</th>
-      <th>Fireplaces</th>
-      <th>WoodDeckSF</th>
-      <th>BedroomAbvGr</th>
+      <th>OpenPorchSF</th>
+      <th>1stFlrSF</th>
+      <th>YearBuilt</th>
+      <th>TotalBsmtSF</th>
       <th>TotRmsAbvGrd</th>
-      <th>OverallCond</th>
+      <th>BsmtFinSF1</th>
+      <th>GarageArea</th>
+      <th>YrSold</th>
       <th>YearRemodAdd</th>
       <th>...</th>
+      <th>LotConfig_Corner</th>
+      <th>LotConfig_Inside</th>
       <th>HouseStyle_1Story</th>
       <th>HouseStyle_2Story</th>
-      <th>MSZoning_RL</th>
-      <th>MSZoning_RM</th>
-      <th>GarageType_Attchd</th>
-      <th>GarageType_Detchd</th>
-      <th>Exterior1st_'Wd Sdng'</th>
-      <th>Exterior1st_HdBoard</th>
-      <th>Exterior1st_MetalSd</th>
-      <th>Exterior1st_VinylSd</th>
+      <th>MSSubClass_20</th>
+      <th>MSSubClass_60</th>
+      <th>SaleCondition_Normal</th>
+      <th>MasVnrType_BrkFace</th>
+      <th>MasVnrType_None</th>
+      <th>BldgType_1Fam</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>368</th>
-      <td>-0.913011</td>
-      <td>-1.088988</td>
-      <td>0.362455</td>
       <td>-0.445068</td>
-      <td>0.611180</td>
-      <td>-0.709012</td>
-      <td>-1.044188</td>
+      <td>0.942450</td>
+      <td>0.362455</td>
+      <td>-0.929703</td>
+      <td>0.634862</td>
       <td>0.453853</td>
-      <td>0.523613</td>
+      <td>0.268800</td>
+      <td>-1.122146</td>
+      <td>1.549150</td>
       <td>-1.626427</td>
       <td>...</td>
+      <td>-0.567003</td>
+      <td>0.719212</td>
       <td>0.956799</td>
       <td>-0.73492</td>
-      <td>0.445016</td>
-      <td>-0.345968</td>
-      <td>0.627189</td>
-      <td>-0.413187</td>
-      <td>-0.38031</td>
-      <td>2.396484</td>
-      <td>-0.429212</td>
-      <td>-0.799272</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
+      <td>0.429212</td>
+      <td>1.407264</td>
+      <td>-1.097933</td>
+      <td>0.506673</td>
     </tr>
     <tr>
       <th>973</th>
-      <td>0.877896</td>
-      <td>1.931227</td>
-      <td>0.807446</td>
       <td>-0.083375</td>
-      <td>-1.073694</td>
-      <td>-0.709012</td>
-      <td>0.223755</td>
+      <td>1.315704</td>
+      <td>0.807446</td>
+      <td>1.259310</td>
+      <td>1.045635</td>
       <td>-0.198161</td>
-      <td>-0.484095</td>
+      <td>-1.058334</td>
+      <td>0.111518</td>
+      <td>0.181069</td>
       <td>1.184480</td>
       <td>...</td>
+      <td>1.746369</td>
+      <td>-1.376778</td>
       <td>0.956799</td>
       <td>-0.73492</td>
-      <td>-2.225080</td>
-      <td>-0.345968</td>
-      <td>0.627189</td>
-      <td>-0.413187</td>
-      <td>-0.38031</td>
-      <td>-0.413187</td>
-      <td>-0.429212</td>
-      <td>-0.799272</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
+      <td>-2.307012</td>
+      <td>-0.703632</td>
+      <td>-1.097933</td>
+      <td>0.506673</td>
     </tr>
     <tr>
       <th>387</th>
-      <td>-0.017558</td>
-      <td>1.260068</td>
-      <td>-0.035256</td>
       <td>-0.768331</td>
-      <td>0.611180</td>
-      <td>1.398549</td>
-      <td>0.223755</td>
+      <td>-0.720227</td>
+      <td>-0.035256</td>
+      <td>-0.021056</td>
+      <td>0.052077</td>
       <td>-0.198161</td>
-      <td>0.523613</td>
+      <td>0.492447</td>
+      <td>-0.557588</td>
+      <td>0.865110</td>
       <td>-0.481243</td>
       <td>...</td>
+      <td>-0.567003</td>
+      <td>0.719212</td>
       <td>-1.034905</td>
       <td>-0.73492</td>
-      <td>0.445016</td>
-      <td>-0.345968</td>
-      <td>-1.578785</td>
-      <td>2.396484</td>
-      <td>-0.38031</td>
-      <td>-0.413187</td>
-      <td>2.307012</td>
-      <td>-0.799272</td>
+      <td>-0.832549</td>
+      <td>-0.582023</td>
+      <td>-2.307012</td>
+      <td>1.407264</td>
+      <td>-1.097933</td>
+      <td>0.506673</td>
     </tr>
     <tr>
       <th>816</th>
-      <td>-0.913011</td>
-      <td>0.253330</td>
-      <td>-0.360655</td>
       <td>-1.032819</td>
-      <td>0.611180</td>
-      <td>-0.709012</td>
-      <td>-1.044188</td>
+      <td>-0.720227</td>
+      <td>-0.360655</td>
+      <td>-0.929703</td>
+      <td>-0.032645</td>
       <td>-1.502190</td>
-      <td>0.523613</td>
+      <td>0.136087</td>
+      <td>-0.960097</td>
+      <td>-1.187011</td>
       <td>-1.626427</td>
       <td>...</td>
+      <td>1.746369</td>
+      <td>-1.376778</td>
       <td>0.956799</td>
       <td>-0.73492</td>
-      <td>0.445016</td>
-      <td>-0.345968</td>
-      <td>0.627189</td>
-      <td>-0.413187</td>
-      <td>-0.38031</td>
-      <td>-0.413187</td>
-      <td>-0.429212</td>
-      <td>-0.799272</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
+      <td>0.429212</td>
+      <td>-0.703632</td>
+      <td>0.901873</td>
+      <td>0.506673</td>
     </tr>
     <tr>
       <th>1316</th>
-      <td>1.773349</td>
-      <td>-1.760147</td>
-      <td>1.369247</td>
       <td>0.373261</td>
-      <td>0.611180</td>
-      <td>0.515652</td>
-      <td>0.223755</td>
+      <td>-0.007651</td>
+      <td>1.369247</td>
+      <td>1.300612</td>
+      <td>1.543698</td>
       <td>1.105868</td>
-      <td>-0.484095</td>
+      <td>-1.058334</td>
+      <td>2.097925</td>
+      <td>0.865110</td>
       <td>1.184480</td>
       <td>...</td>
+      <td>-0.567003</td>
+      <td>0.719212</td>
       <td>0.956799</td>
       <td>-0.73492</td>
-      <td>0.445016</td>
-      <td>-0.345968</td>
-      <td>0.627189</td>
-      <td>-0.413187</td>
-      <td>-0.38031</td>
-      <td>-0.413187</td>
-      <td>-0.429212</td>
-      <td>1.238872</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
+      <td>0.429212</td>
+      <td>-0.703632</td>
+      <td>-1.097933</td>
+      <td>0.506673</td>
     </tr>
   </tbody>
 </table>
@@ -248,599 +248,8 @@ The LassoCV model doesn't store a reference to all individual models tested duri
 
 ```python
 from sklearn.linear_model import LassoCV
-help(LassoCV)
+# help(LassoCV)
 ```
-
-    Help on class LassoCV in module sklearn.linear_model._coordinate_descent:
-    
-    class LassoCV(sklearn.base.RegressorMixin, LinearModelCV)
-     |  LassoCV(*, eps=0.001, n_alphas=100, alphas=None, fit_intercept=True, precompute='auto', max_iter=1000, tol=0.0001, copy_X=True, cv=None, verbose=False, n_jobs=None, positive=False, random_state=None, selection='cyclic')
-     |  
-     |  Lasso linear model with iterative fitting along a regularization path.
-     |  
-     |  See glossary entry for :term:`cross-validation estimator`.
-     |  
-     |  The best model is selected by cross-validation.
-     |  
-     |  The optimization objective for Lasso is::
-     |  
-     |      (1 / (2 * n_samples)) * ||y - Xw||^2_2 + alpha * ||w||_1
-     |  
-     |  Read more in the :ref:`User Guide <lasso>`.
-     |  
-     |  Parameters
-     |  ----------
-     |  eps : float, default=1e-3
-     |      Length of the path. ``eps=1e-3`` means that
-     |      ``alpha_min / alpha_max = 1e-3``.
-     |  
-     |  n_alphas : int, default=100
-     |      Number of alphas along the regularization path.
-     |  
-     |  alphas : array-like, default=None
-     |      List of alphas where to compute the models.
-     |      If ``None`` alphas are set automatically.
-     |  
-     |  fit_intercept : bool, default=True
-     |      Whether to calculate the intercept for this model. If set
-     |      to false, no intercept will be used in calculations
-     |      (i.e. data is expected to be centered).
-     |  
-     |  precompute : 'auto', bool or array-like of shape             (n_features, n_features), default='auto'
-     |      Whether to use a precomputed Gram matrix to speed up
-     |      calculations. If set to ``'auto'`` let us decide. The Gram
-     |      matrix can also be passed as argument.
-     |  
-     |  max_iter : int, default=1000
-     |      The maximum number of iterations.
-     |  
-     |  tol : float, default=1e-4
-     |      The tolerance for the optimization: if the updates are
-     |      smaller than ``tol``, the optimization code checks the
-     |      dual gap for optimality and continues until it is smaller
-     |      than ``tol``.
-     |  
-     |  copy_X : bool, default=True
-     |      If ``True``, X will be copied; else, it may be overwritten.
-     |  
-     |  cv : int, cross-validation generator or iterable, default=None
-     |      Determines the cross-validation splitting strategy.
-     |      Possible inputs for cv are:
-     |  
-     |      - None, to use the default 5-fold cross-validation,
-     |      - int, to specify the number of folds.
-     |      - :term:`CV splitter`,
-     |      - An iterable yielding (train, test) splits as arrays of indices.
-     |  
-     |      For int/None inputs, :class:`KFold` is used.
-     |  
-     |      Refer :ref:`User Guide <cross_validation>` for the various
-     |      cross-validation strategies that can be used here.
-     |  
-     |      .. versionchanged:: 0.22
-     |          ``cv`` default value if None changed from 3-fold to 5-fold.
-     |  
-     |  verbose : bool or int, default=False
-     |      Amount of verbosity.
-     |  
-     |  n_jobs : int, default=None
-     |      Number of CPUs to use during the cross validation.
-     |      ``None`` means 1 unless in a :obj:`joblib.parallel_backend` context.
-     |      ``-1`` means using all processors. See :term:`Glossary <n_jobs>`
-     |      for more details.
-     |  
-     |  positive : bool, default=False
-     |      If positive, restrict regression coefficients to be positive.
-     |  
-     |  random_state : int, RandomState instance, default=None
-     |      The seed of the pseudo random number generator that selects a random
-     |      feature to update. Used when ``selection`` == 'random'.
-     |      Pass an int for reproducible output across multiple function calls.
-     |      See :term:`Glossary <random_state>`.
-     |  
-     |  selection : {'cyclic', 'random'}, default='cyclic'
-     |      If set to 'random', a random coefficient is updated every iteration
-     |      rather than looping over features sequentially by default. This
-     |      (setting to 'random') often leads to significantly faster convergence
-     |      especially when tol is higher than 1e-4.
-     |  
-     |  Attributes
-     |  ----------
-     |  alpha_ : float
-     |      The amount of penalization chosen by cross validation.
-     |  
-     |  coef_ : ndarray of shape (n_features,) or (n_targets, n_features)
-     |      Parameter vector (w in the cost function formula).
-     |  
-     |  intercept_ : float or ndarray of shape (n_targets,)
-     |      Independent term in decision function.
-     |  
-     |  mse_path_ : ndarray of shape (n_alphas, n_folds)
-     |      Mean square error for the test set on each fold, varying alpha.
-     |  
-     |  alphas_ : ndarray of shape (n_alphas,)
-     |      The grid of alphas used for fitting.
-     |  
-     |  dual_gap_ : float or ndarray of shape (n_targets,)
-     |      The dual gap at the end of the optimization for the optimal alpha
-     |      (``alpha_``).
-     |  
-     |  n_iter_ : int
-     |      Number of iterations run by the coordinate descent solver to reach
-     |      the specified tolerance for the optimal alpha.
-     |  
-     |  n_features_in_ : int
-     |      Number of features seen during :term:`fit`.
-     |  
-     |      .. versionadded:: 0.24
-     |  
-     |  feature_names_in_ : ndarray of shape (`n_features_in_`,)
-     |      Names of features seen during :term:`fit`. Defined only when `X`
-     |      has feature names that are all strings.
-     |  
-     |      .. versionadded:: 1.0
-     |  
-     |  See Also
-     |  --------
-     |  lars_path : Compute Least Angle Regression or Lasso path using LARS
-     |      algorithm.
-     |  lasso_path : Compute Lasso path with coordinate descent.
-     |  Lasso : The Lasso is a linear model that estimates sparse coefficients.
-     |  LassoLars : Lasso model fit with Least Angle Regression a.k.a. Lars.
-     |  LassoCV : Lasso linear model with iterative fitting along a regularization
-     |      path.
-     |  LassoLarsCV : Cross-validated Lasso using the LARS algorithm.
-     |  
-     |  Notes
-     |  -----
-     |  In `fit`, once the best parameter `alpha` is found through
-     |  cross-validation, the model is fit again using the entire training set.
-     |  
-     |  To avoid unnecessary memory duplication the `X` argument of the `fit`
-     |  method should be directly passed as a Fortran-contiguous numpy array.
-     |  
-     |   For an example, see
-     |   :ref:`examples/linear_model/plot_lasso_model_selection.py
-     |   <sphx_glr_auto_examples_linear_model_plot_lasso_model_selection.py>`.
-     |  
-     |  :class:`LassoCV` leads to different results than a hyperparameter
-     |  search using :class:`~sklearn.model_selection.GridSearchCV` with a
-     |  :class:`Lasso` model. In :class:`LassoCV`, a model for a given
-     |  penalty `alpha` is warm started using the coefficients of the
-     |  closest model (trained at the previous iteration) on the
-     |  regularization path. It tends to speed up the hyperparameter
-     |  search.
-     |  
-     |  Examples
-     |  --------
-     |  >>> from sklearn.linear_model import LassoCV
-     |  >>> from sklearn.datasets import make_regression
-     |  >>> X, y = make_regression(noise=4, random_state=0)
-     |  >>> reg = LassoCV(cv=5, random_state=0).fit(X, y)
-     |  >>> reg.score(X, y)
-     |  0.9993...
-     |  >>> reg.predict(X[:1,])
-     |  array([-78.4951...])
-     |  
-     |  Method resolution order:
-     |      LassoCV
-     |      sklearn.base.RegressorMixin
-     |      LinearModelCV
-     |      sklearn.base.MultiOutputMixin
-     |      sklearn.linear_model._base.LinearModel
-     |      sklearn.base.BaseEstimator
-     |      sklearn.utils._metadata_requests._MetadataRequester
-     |      abc.ABC
-     |      builtins.object
-     |  
-     |  Methods defined here:
-     |  
-     |  __init__(self, *, eps=0.001, n_alphas=100, alphas=None, fit_intercept=True, precompute='auto', max_iter=1000, tol=0.0001, copy_X=True, cv=None, verbose=False, n_jobs=None, positive=False, random_state=None, selection='cyclic')
-     |      Initialize self.  See help(type(self)) for accurate signature.
-     |  
-     |  set_fit_request(self: sklearn.linear_model._coordinate_descent.LassoCV, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> sklearn.linear_model._coordinate_descent.LassoCV
-     |      Request metadata passed to the ``fit`` method.
-     |      
-     |      Note that this method is only relevant if
-     |      ``enable_metadata_routing=True`` (see :func:`sklearn.set_config`).
-     |      Please see :ref:`User Guide <metadata_routing>` on how the routing
-     |      mechanism works.
-     |      
-     |      The options for each parameter are:
-     |      
-     |      - ``True``: metadata is requested, and passed to ``fit`` if provided. The request is ignored if metadata is not provided.
-     |      
-     |      - ``False``: metadata is not requested and the meta-estimator will not pass it to ``fit``.
-     |      
-     |      - ``None``: metadata is not requested, and the meta-estimator will raise an error if the user provides it.
-     |      
-     |      - ``str``: metadata should be passed to the meta-estimator with this given alias instead of the original name.
-     |      
-     |      The default (``sklearn.utils.metadata_routing.UNCHANGED``) retains the
-     |      existing request. This allows you to change the request for some
-     |      parameters and not others.
-     |      
-     |      .. versionadded:: 1.3
-     |      
-     |      .. note::
-     |          This method is only relevant if this estimator is used as a
-     |          sub-estimator of a meta-estimator, e.g. used inside a
-     |          :class:`pipeline.Pipeline`. Otherwise it has no effect.
-     |      
-     |      Parameters
-     |      ----------
-     |      sample_weight : str, True, False, or None,                     default=sklearn.utils.metadata_routing.UNCHANGED
-     |          Metadata routing for ``sample_weight`` parameter in ``fit``.
-     |      
-     |      Returns
-     |      -------
-     |      self : object
-     |          The updated object.
-     |  
-     |  set_score_request(self: sklearn.linear_model._coordinate_descent.LassoCV, *, sample_weight: Union[bool, NoneType, str] = '$UNCHANGED$') -> sklearn.linear_model._coordinate_descent.LassoCV
-     |      Request metadata passed to the ``score`` method.
-     |      
-     |      Note that this method is only relevant if
-     |      ``enable_metadata_routing=True`` (see :func:`sklearn.set_config`).
-     |      Please see :ref:`User Guide <metadata_routing>` on how the routing
-     |      mechanism works.
-     |      
-     |      The options for each parameter are:
-     |      
-     |      - ``True``: metadata is requested, and passed to ``score`` if provided. The request is ignored if metadata is not provided.
-     |      
-     |      - ``False``: metadata is not requested and the meta-estimator will not pass it to ``score``.
-     |      
-     |      - ``None``: metadata is not requested, and the meta-estimator will raise an error if the user provides it.
-     |      
-     |      - ``str``: metadata should be passed to the meta-estimator with this given alias instead of the original name.
-     |      
-     |      The default (``sklearn.utils.metadata_routing.UNCHANGED``) retains the
-     |      existing request. This allows you to change the request for some
-     |      parameters and not others.
-     |      
-     |      .. versionadded:: 1.3
-     |      
-     |      .. note::
-     |          This method is only relevant if this estimator is used as a
-     |          sub-estimator of a meta-estimator, e.g. used inside a
-     |          :class:`pipeline.Pipeline`. Otherwise it has no effect.
-     |      
-     |      Parameters
-     |      ----------
-     |      sample_weight : str, True, False, or None,                     default=sklearn.utils.metadata_routing.UNCHANGED
-     |          Metadata routing for ``sample_weight`` parameter in ``score``.
-     |      
-     |      Returns
-     |      -------
-     |      self : object
-     |          The updated object.
-     |  
-     |  ----------------------------------------------------------------------
-     |  Static methods defined here:
-     |  
-     |  path = lasso_path(X, y, *, eps=0.001, n_alphas=100, alphas=None, precompute='auto', Xy=None, copy_X=True, coef_init=None, verbose=False, return_n_iter=False, positive=False, **params)
-     |      Compute Lasso path with coordinate descent.
-     |      
-     |      The Lasso optimization function varies for mono and multi-outputs.
-     |      
-     |      For mono-output tasks it is::
-     |      
-     |          (1 / (2 * n_samples)) * ||y - Xw||^2_2 + alpha * ||w||_1
-     |      
-     |      For multi-output tasks it is::
-     |      
-     |          (1 / (2 * n_samples)) * ||Y - XW||^2_Fro + alpha * ||W||_21
-     |      
-     |      Where::
-     |      
-     |          ||W||_21 = \sum_i \sqrt{\sum_j w_{ij}^2}
-     |      
-     |      i.e. the sum of norm of each row.
-     |      
-     |      Read more in the :ref:`User Guide <lasso>`.
-     |      
-     |      Parameters
-     |      ----------
-     |      X : {array-like, sparse matrix} of shape (n_samples, n_features)
-     |          Training data. Pass directly as Fortran-contiguous data to avoid
-     |          unnecessary memory duplication. If ``y`` is mono-output then ``X``
-     |          can be sparse.
-     |      
-     |      y : {array-like, sparse matrix} of shape (n_samples,) or         (n_samples, n_targets)
-     |          Target values.
-     |      
-     |      eps : float, default=1e-3
-     |          Length of the path. ``eps=1e-3`` means that
-     |          ``alpha_min / alpha_max = 1e-3``.
-     |      
-     |      n_alphas : int, default=100
-     |          Number of alphas along the regularization path.
-     |      
-     |      alphas : ndarray, default=None
-     |          List of alphas where to compute the models.
-     |          If ``None`` alphas are set automatically.
-     |      
-     |      precompute : 'auto', bool or array-like of shape             (n_features, n_features), default='auto'
-     |          Whether to use a precomputed Gram matrix to speed up
-     |          calculations. If set to ``'auto'`` let us decide. The Gram
-     |          matrix can also be passed as argument.
-     |      
-     |      Xy : array-like of shape (n_features,) or (n_features, n_targets),         default=None
-     |          Xy = np.dot(X.T, y) that can be precomputed. It is useful
-     |          only when the Gram matrix is precomputed.
-     |      
-     |      copy_X : bool, default=True
-     |          If ``True``, X will be copied; else, it may be overwritten.
-     |      
-     |      coef_init : ndarray of shape (n_features, ), default=None
-     |          The initial values of the coefficients.
-     |      
-     |      verbose : bool or int, default=False
-     |          Amount of verbosity.
-     |      
-     |      return_n_iter : bool, default=False
-     |          Whether to return the number of iterations or not.
-     |      
-     |      positive : bool, default=False
-     |          If set to True, forces coefficients to be positive.
-     |          (Only allowed when ``y.ndim == 1``).
-     |      
-     |      **params : kwargs
-     |          Keyword arguments passed to the coordinate descent solver.
-     |      
-     |      Returns
-     |      -------
-     |      alphas : ndarray of shape (n_alphas,)
-     |          The alphas along the path where models are computed.
-     |      
-     |      coefs : ndarray of shape (n_features, n_alphas) or             (n_targets, n_features, n_alphas)
-     |          Coefficients along the path.
-     |      
-     |      dual_gaps : ndarray of shape (n_alphas,)
-     |          The dual gaps at the end of the optimization for each alpha.
-     |      
-     |      n_iters : list of int
-     |          The number of iterations taken by the coordinate descent optimizer to
-     |          reach the specified tolerance for each alpha.
-     |      
-     |      See Also
-     |      --------
-     |      lars_path : Compute Least Angle Regression or Lasso path using LARS
-     |          algorithm.
-     |      Lasso : The Lasso is a linear model that estimates sparse coefficients.
-     |      LassoLars : Lasso model fit with Least Angle Regression a.k.a. Lars.
-     |      LassoCV : Lasso linear model with iterative fitting along a regularization
-     |          path.
-     |      LassoLarsCV : Cross-validated Lasso using the LARS algorithm.
-     |      sklearn.decomposition.sparse_encode : Estimator that can be used to
-     |          transform signals into sparse linear combination of atoms from a fixed.
-     |      
-     |      Notes
-     |      -----
-     |      For an example, see
-     |      :ref:`examples/linear_model/plot_lasso_coordinate_descent_path.py
-     |      <sphx_glr_auto_examples_linear_model_plot_lasso_coordinate_descent_path.py>`.
-     |      
-     |      To avoid unnecessary memory duplication the X argument of the fit method
-     |      should be directly passed as a Fortran-contiguous numpy array.
-     |      
-     |      Note that in certain cases, the Lars solver may be significantly
-     |      faster to implement this functionality. In particular, linear
-     |      interpolation can be used to retrieve model coefficients between the
-     |      values output by lars_path
-     |      
-     |      Examples
-     |      --------
-     |      
-     |      Comparing lasso_path and lars_path with interpolation:
-     |      
-     |      >>> import numpy as np
-     |      >>> from sklearn.linear_model import lasso_path
-     |      >>> X = np.array([[1, 2, 3.1], [2.3, 5.4, 4.3]]).T
-     |      >>> y = np.array([1, 2, 3.1])
-     |      >>> # Use lasso_path to compute a coefficient path
-     |      >>> _, coef_path, _ = lasso_path(X, y, alphas=[5., 1., .5])
-     |      >>> print(coef_path)
-     |      [[0.         0.         0.46874778]
-     |       [0.2159048  0.4425765  0.23689075]]
-     |      
-     |      >>> # Now use lars_path and 1D linear interpolation to compute the
-     |      >>> # same path
-     |      >>> from sklearn.linear_model import lars_path
-     |      >>> alphas, active, coef_path_lars = lars_path(X, y, method='lasso')
-     |      >>> from scipy import interpolate
-     |      >>> coef_path_continuous = interpolate.interp1d(alphas[::-1],
-     |      ...                                             coef_path_lars[:, ::-1])
-     |      >>> print(coef_path_continuous([5., 1., .5]))
-     |      [[0.         0.         0.46915237]
-     |       [0.2159048  0.4425765  0.23668876]]
-     |  
-     |  ----------------------------------------------------------------------
-     |  Data and other attributes defined here:
-     |  
-     |  __abstractmethods__ = frozenset()
-     |  
-     |  __annotations__ = {}
-     |  
-     |  ----------------------------------------------------------------------
-     |  Methods inherited from sklearn.base.RegressorMixin:
-     |  
-     |  score(self, X, y, sample_weight=None)
-     |      Return the coefficient of determination of the prediction.
-     |      
-     |      The coefficient of determination :math:`R^2` is defined as
-     |      :math:`(1 - \frac{u}{v})`, where :math:`u` is the residual
-     |      sum of squares ``((y_true - y_pred)** 2).sum()`` and :math:`v`
-     |      is the total sum of squares ``((y_true - y_true.mean()) ** 2).sum()``.
-     |      The best possible score is 1.0 and it can be negative (because the
-     |      model can be arbitrarily worse). A constant model that always predicts
-     |      the expected value of `y`, disregarding the input features, would get
-     |      a :math:`R^2` score of 0.0.
-     |      
-     |      Parameters
-     |      ----------
-     |      X : array-like of shape (n_samples, n_features)
-     |          Test samples. For some estimators this may be a precomputed
-     |          kernel matrix or a list of generic objects instead with shape
-     |          ``(n_samples, n_samples_fitted)``, where ``n_samples_fitted``
-     |          is the number of samples used in the fitting for the estimator.
-     |      
-     |      y : array-like of shape (n_samples,) or (n_samples, n_outputs)
-     |          True values for `X`.
-     |      
-     |      sample_weight : array-like of shape (n_samples,), default=None
-     |          Sample weights.
-     |      
-     |      Returns
-     |      -------
-     |      score : float
-     |          :math:`R^2` of ``self.predict(X)`` w.r.t. `y`.
-     |      
-     |      Notes
-     |      -----
-     |      The :math:`R^2` score used when calling ``score`` on a regressor uses
-     |      ``multioutput='uniform_average'`` from version 0.23 to keep consistent
-     |      with default value of :func:`~sklearn.metrics.r2_score`.
-     |      This influences the ``score`` method of all the multioutput
-     |      regressors (except for
-     |      :class:`~sklearn.multioutput.MultiOutputRegressor`).
-     |  
-     |  ----------------------------------------------------------------------
-     |  Data descriptors inherited from sklearn.base.RegressorMixin:
-     |  
-     |  __dict__
-     |      dictionary for instance variables (if defined)
-     |  
-     |  __weakref__
-     |      list of weak references to the object (if defined)
-     |  
-     |  ----------------------------------------------------------------------
-     |  Methods inherited from LinearModelCV:
-     |  
-     |  fit(self, X, y, sample_weight=None)
-     |      Fit linear model with coordinate descent.
-     |      
-     |      Fit is on grid of alphas and best alpha estimated by cross-validation.
-     |      
-     |      Parameters
-     |      ----------
-     |      X : {array-like, sparse matrix} of shape (n_samples, n_features)
-     |          Training data. Pass directly as Fortran-contiguous data
-     |          to avoid unnecessary memory duplication. If y is mono-output,
-     |          X can be sparse.
-     |      
-     |      y : array-like of shape (n_samples,) or (n_samples, n_targets)
-     |          Target values.
-     |      
-     |      sample_weight : float or array-like of shape (n_samples,),                 default=None
-     |          Sample weights used for fitting and evaluation of the weighted
-     |          mean squared error of each cv-fold. Note that the cross validated
-     |          MSE that is finally used to find the best model is the unweighted
-     |          mean over the (weighted) MSEs of each test fold.
-     |      
-     |      Returns
-     |      -------
-     |      self : object
-     |          Returns an instance of fitted model.
-     |  
-     |  ----------------------------------------------------------------------
-     |  Methods inherited from sklearn.linear_model._base.LinearModel:
-     |  
-     |  predict(self, X)
-     |      Predict using the linear model.
-     |      
-     |      Parameters
-     |      ----------
-     |      X : array-like or sparse matrix, shape (n_samples, n_features)
-     |          Samples.
-     |      
-     |      Returns
-     |      -------
-     |      C : array, shape (n_samples,)
-     |          Returns predicted values.
-     |  
-     |  ----------------------------------------------------------------------
-     |  Methods inherited from sklearn.base.BaseEstimator:
-     |  
-     |  __getstate__(self)
-     |      Helper for pickle.
-     |  
-     |  __repr__(self, N_CHAR_MAX=700)
-     |      Return repr(self).
-     |  
-     |  __setstate__(self, state)
-     |  
-     |  __sklearn_clone__(self)
-     |  
-     |  get_params(self, deep=True)
-     |      Get parameters for this estimator.
-     |      
-     |      Parameters
-     |      ----------
-     |      deep : bool, default=True
-     |          If True, will return the parameters for this estimator and
-     |          contained subobjects that are estimators.
-     |      
-     |      Returns
-     |      -------
-     |      params : dict
-     |          Parameter names mapped to their values.
-     |  
-     |  set_params(self, **params)
-     |      Set the parameters of this estimator.
-     |      
-     |      The method works on simple estimators as well as on nested objects
-     |      (such as :class:`~sklearn.pipeline.Pipeline`). The latter have
-     |      parameters of the form ``<component>__<parameter>`` so that it's
-     |      possible to update each component of a nested object.
-     |      
-     |      Parameters
-     |      ----------
-     |      **params : dict
-     |          Estimator parameters.
-     |      
-     |      Returns
-     |      -------
-     |      self : estimator instance
-     |          Estimator instance.
-     |  
-     |  ----------------------------------------------------------------------
-     |  Methods inherited from sklearn.utils._metadata_requests._MetadataRequester:
-     |  
-     |  get_metadata_routing(self)
-     |      Get metadata routing of this object.
-     |      
-     |      Please check :ref:`User Guide <metadata_routing>` on how the routing
-     |      mechanism works.
-     |      
-     |      Returns
-     |      -------
-     |      routing : MetadataRequest
-     |          A :class:`~utils.metadata_routing.MetadataRequest` encapsulating
-     |          routing information.
-     |  
-     |  ----------------------------------------------------------------------
-     |  Class methods inherited from sklearn.utils._metadata_requests._MetadataRequester:
-     |  
-     |  __init_subclass__(**kwargs) from abc.ABCMeta
-     |      Set the ``set_{method}_request`` methods.
-     |      
-     |      This uses PEP-487 [1]_ to set the ``set_{method}_request`` methods. It
-     |      looks for the information available in the set default values which are
-     |      set using ``__metadata_request__*`` class attributes, or inferred
-     |      from method signatures.
-     |      
-     |      The ``__metadata_request__*`` class attributes are used when a method
-     |      does not explicitly accept a metadata through its arguments or if the
-     |      developer would like to specify a request value for those metadata
-     |      which are different from the default ``None``.
-     |      
-     |      References
-     |      ----------
-     |      .. [1] https://www.python.org/dev/peps/pep-0487
-    
-    
 
 ### Specify range of alphas
 Specify a range of alpha values. Typically, small alphas work well. However, you don't want to be so close to zero that you get no benefits from regularization (i.e., none of the coefs shrink to zero).
@@ -908,8 +317,8 @@ trained_model, error_df = fit_eval_model(y=y, baseline_pred=y.mean(),
     # of train observations = 102
     # of test observations = 1358
     Baseline RMSE = 79415.29188606751
-    Train RMSE = 14835.039689206124
-    Holdout RMSE = 112820.25536497678
+    Train RMSE = 14835.039689206178
+    Holdout RMSE = 112820.25536497237
     (Holdout-Train)/Train: 660%
     
 
@@ -924,8 +333,8 @@ trained_model, error_df = fit_eval_model(y=y, baseline_pred=y.mean(),
     # of train observations = 102
     # of test observations = 1358
     Baseline RMSE = 79415.29188606751
-    Train RMSE = 18937.05271249303
-    Holdout RMSE = 56987.78539659686
+    Train RMSE = 18935.63680029539
+    Holdout RMSE = 56992.74351917894
     (Holdout-Train)/Train: 201%
     
 
@@ -950,16 +359,16 @@ coef_matrix
 
 
 
-    array([ 0.05099734, -0.        ,  0.        ,  0.09581748,  0.02434971,
-            0.03003432,  0.        ,  0.        ,  0.04569418,  0.        ,
-           -0.        ,  0.        , -0.        ,  0.        ,  0.        ,
-            0.01884117,  0.06444948,  0.03995289,  0.04840338,  0.00376607,
-            0.0165892 , -0.01137917,  0.00223687,  0.03142482,  0.        ,
-           -0.        ,  0.        ,  0.02047176,  0.        ,  0.        ,
-            0.        , -0.        , -0.        ,  0.        ,  0.03235407,
-            0.        ,  0.        ,  0.        , -0.        , -0.        ,
-            0.        , -0.        ,  0.        ,  0.        , -0.03051134,
-           -0.        , -0.        , -0.01382   , -0.0025191 ,  0.        ,
+    array([ 0.09580626,  0.01657068,  0.        ,  0.04837551,  0.06444754,
+            0.        ,  0.00223178,  0.04002545, -0.01137468,  0.        ,
+            0.03003016,  0.        , -0.        , -0.        ,  0.03136104,
+            0.01883186,  0.02435751, -0.        ,  0.        ,  0.0456953 ,
+            0.        ,  0.05102214,  0.        ,  0.00376516,  0.        ,
+            0.02047447, -0.        ,  0.        , -0.        , -0.        ,
+            0.        , -0.03051899, -0.        ,  0.        ,  0.03235801,
+            0.        , -0.        , -0.01383338, -0.00252309,  0.        ,
+            0.        ,  0.        , -0.        , -0.        ,  0.        ,
+            0.        ,  0.        ,  0.        ,  0.        , -0.        ,
             0.        ])
 
 
