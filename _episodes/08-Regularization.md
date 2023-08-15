@@ -53,7 +53,7 @@ X_train_z.head()
 ```
 
     164 columns removed, 51 remaining.
-    Columns removed: ['PoolArea', 'LotFrontage', 'BsmtFinSF2', 'ScreenPorch', 'GarageYrBlt', 'MasVnrArea', 'KitchenAbvGr', '3SsnPorch', 'BsmtHalfBath', 'LowQualFinSF', 'Foundation_BrkTil', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_Edwards', 'Neighborhood_Gilbert', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NWAmes', 'Neighborhood_NoRidge', 'Neighborhood_NridgHt', 'Neighborhood_OldTown', 'Neighborhood_SWISU', 'Neighborhood_Sawyer', 'Neighborhood_SawyerW', 'Neighborhood_Somerst', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_BuiltIn', 'GarageType_CarPort', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Sdng'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Plywood', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_New', 'SaleType_Oth', 'SaleType_WD', 'Condition1_Artery', 'Condition1_Feedr', 'Condition1_Norm', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Plywood', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'LotConfig_CulDSac', 'LotConfig_FR2', 'LotConfig_FR3', 'HouseStyle_1.5Fin', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_50', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_120', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'Alley_Grvl', 'Alley_Pave', 'SaleCondition_Abnorml', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'SaleCondition_Partial', 'MasVnrType_BrkCmn', 'MasVnrType_Stone', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'BldgType_TwnhsE', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LandContour_Lvl', 'Electrical_FuseA', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Electrical_SBrkr', 'Utilities_AllPub', 'Utilities_NoSeWa', 'Street', 'CentralAir']
+    Columns removed: ['LotFrontage', 'LowQualFinSF', 'ScreenPorch', 'MasVnrArea', 'BsmtHalfBath', 'PoolArea', 'KitchenAbvGr', '3SsnPorch', 'GarageYrBlt', 'BsmtFinSF2', 'SaleCondition_Abnorml', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'SaleCondition_Partial', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_BuiltIn', 'GarageType_CarPort', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Plywood', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'LandContour_Lvl', 'Alley_Grvl', 'Alley_Pave', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'BldgType_TwnhsE', 'Foundation_BrkTil', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_Edwards', 'Neighborhood_Gilbert', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NWAmes', 'Neighborhood_NoRidge', 'Neighborhood_NridgHt', 'Neighborhood_OldTown', 'Neighborhood_SWISU', 'Neighborhood_Sawyer', 'Neighborhood_SawyerW', 'Neighborhood_Somerst', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'Condition1_Artery', 'Condition1_Feedr', 'Condition1_Norm', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_New', 'SaleType_Oth', 'SaleType_WD', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'HouseStyle_1.5Fin', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'Utilities_AllPub', 'Utilities_NoSeWa', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Sdng'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Plywood', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'MasVnrType_BrkCmn', 'MasVnrType_Stone', 'Electrical_FuseA', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'Electrical_SBrkr', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', 'LotConfig_CulDSac', 'LotConfig_FR2', 'LotConfig_FR3', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_50', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_120', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'CentralAir', 'Street']
     
 
 
@@ -77,149 +77,149 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>GrLivArea</th>
-      <th>OpenPorchSF</th>
       <th>1stFlrSF</th>
+      <th>HalfBath</th>
+      <th>EnclosedPorch</th>
+      <th>YrSold</th>
+      <th>Fireplaces</th>
+      <th>MoSold</th>
       <th>YearBuilt</th>
       <th>TotalBsmtSF</th>
-      <th>TotRmsAbvGrd</th>
-      <th>BsmtFinSF1</th>
-      <th>GarageArea</th>
-      <th>YrSold</th>
-      <th>YearRemodAdd</th>
+      <th>OverallCond</th>
+      <th>BsmtFullBath</th>
       <th>...</th>
-      <th>LotConfig_Corner</th>
-      <th>LotConfig_Inside</th>
-      <th>HouseStyle_1Story</th>
-      <th>HouseStyle_2Story</th>
-      <th>MSSubClass_20</th>
-      <th>MSSubClass_60</th>
-      <th>SaleCondition_Normal</th>
+      <th>Exterior2nd_MetalSd</th>
+      <th>Exterior2nd_VinylSd</th>
       <th>MasVnrType_BrkFace</th>
       <th>MasVnrType_None</th>
-      <th>BldgType_1Fam</th>
+      <th>MSZoning_RL</th>
+      <th>MSZoning_RM</th>
+      <th>LotConfig_Corner</th>
+      <th>LotConfig_Inside</th>
+      <th>MSSubClass_20</th>
+      <th>MSSubClass_60</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>368</th>
-      <td>-0.445068</td>
-      <td>0.942450</td>
       <td>0.362455</td>
+      <td>-0.832549</td>
+      <td>-0.252468</td>
+      <td>1.549150</td>
+      <td>0.611180</td>
+      <td>-1.088988</td>
       <td>-0.929703</td>
       <td>0.634862</td>
-      <td>0.453853</td>
-      <td>0.268800</td>
-      <td>-1.122146</td>
-      <td>1.549150</td>
-      <td>-1.626427</td>
+      <td>0.523613</td>
+      <td>-0.834015</td>
       <td>...</td>
-      <td>-0.567003</td>
-      <td>0.719212</td>
-      <td>0.956799</td>
-      <td>-0.73492</td>
-      <td>1.189355</td>
-      <td>-0.582023</td>
-      <td>0.429212</td>
+      <td>-0.429212</td>
+      <td>-0.719212</td>
       <td>1.407264</td>
       <td>-1.097933</td>
-      <td>0.506673</td>
+      <td>0.445016</td>
+      <td>-0.345968</td>
+      <td>-0.567003</td>
+      <td>0.719212</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
     </tr>
     <tr>
       <th>973</th>
-      <td>-0.083375</td>
-      <td>1.315704</td>
       <td>0.807446</td>
+      <td>-0.832549</td>
+      <td>-0.252468</td>
+      <td>0.181069</td>
+      <td>-1.073694</td>
+      <td>1.931227</td>
       <td>1.259310</td>
       <td>1.045635</td>
-      <td>-0.198161</td>
-      <td>-1.058334</td>
-      <td>0.111518</td>
-      <td>0.181069</td>
-      <td>1.184480</td>
+      <td>-0.484095</td>
+      <td>-0.834015</td>
       <td>...</td>
-      <td>1.746369</td>
-      <td>-1.376778</td>
-      <td>0.956799</td>
-      <td>-0.73492</td>
-      <td>1.189355</td>
-      <td>-0.582023</td>
-      <td>-2.307012</td>
+      <td>-0.429212</td>
+      <td>-0.719212</td>
       <td>-0.703632</td>
       <td>-1.097933</td>
-      <td>0.506673</td>
+      <td>-2.225080</td>
+      <td>-0.345968</td>
+      <td>1.746369</td>
+      <td>-1.376778</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
     </tr>
     <tr>
       <th>387</th>
-      <td>-0.768331</td>
-      <td>-0.720227</td>
       <td>-0.035256</td>
+      <td>-0.832549</td>
+      <td>-0.252468</td>
+      <td>0.865110</td>
+      <td>0.611180</td>
+      <td>1.260068</td>
       <td>-0.021056</td>
       <td>0.052077</td>
-      <td>-0.198161</td>
-      <td>0.492447</td>
-      <td>-0.557588</td>
-      <td>0.865110</td>
-      <td>-0.481243</td>
+      <td>0.523613</td>
+      <td>1.099383</td>
       <td>...</td>
-      <td>-0.567003</td>
-      <td>0.719212</td>
-      <td>-1.034905</td>
-      <td>-0.73492</td>
-      <td>-0.832549</td>
-      <td>-0.582023</td>
-      <td>-2.307012</td>
+      <td>2.307012</td>
+      <td>-0.719212</td>
       <td>1.407264</td>
       <td>-1.097933</td>
-      <td>0.506673</td>
+      <td>0.445016</td>
+      <td>-0.345968</td>
+      <td>-0.567003</td>
+      <td>0.719212</td>
+      <td>-0.832549</td>
+      <td>-0.582023</td>
     </tr>
     <tr>
       <th>816</th>
-      <td>-1.032819</td>
-      <td>-0.720227</td>
       <td>-0.360655</td>
+      <td>-0.832549</td>
+      <td>2.361918</td>
+      <td>-1.187011</td>
+      <td>0.611180</td>
+      <td>0.253330</td>
       <td>-0.929703</td>
       <td>-0.032645</td>
-      <td>-1.502190</td>
-      <td>0.136087</td>
-      <td>-0.960097</td>
-      <td>-1.187011</td>
-      <td>-1.626427</td>
+      <td>0.523613</td>
+      <td>-0.834015</td>
       <td>...</td>
-      <td>1.746369</td>
-      <td>-1.376778</td>
-      <td>0.956799</td>
-      <td>-0.73492</td>
-      <td>1.189355</td>
-      <td>-0.582023</td>
-      <td>0.429212</td>
+      <td>-0.429212</td>
+      <td>-0.719212</td>
       <td>-0.703632</td>
       <td>0.901873</td>
-      <td>0.506673</td>
+      <td>0.445016</td>
+      <td>-0.345968</td>
+      <td>1.746369</td>
+      <td>-1.376778</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
     </tr>
     <tr>
       <th>1316</th>
-      <td>0.373261</td>
-      <td>-0.007651</td>
       <td>1.369247</td>
+      <td>-0.832549</td>
+      <td>-0.252468</td>
+      <td>0.865110</td>
+      <td>0.611180</td>
+      <td>-1.760147</td>
       <td>1.300612</td>
       <td>1.543698</td>
-      <td>1.105868</td>
-      <td>-1.058334</td>
-      <td>2.097925</td>
-      <td>0.865110</td>
-      <td>1.184480</td>
+      <td>-0.484095</td>
+      <td>1.099383</td>
       <td>...</td>
-      <td>-0.567003</td>
-      <td>0.719212</td>
-      <td>0.956799</td>
-      <td>-0.73492</td>
-      <td>1.189355</td>
-      <td>-0.582023</td>
-      <td>0.429212</td>
+      <td>-0.429212</td>
+      <td>1.376778</td>
       <td>-0.703632</td>
       <td>-1.097933</td>
-      <td>0.506673</td>
+      <td>0.445016</td>
+      <td>-0.345968</td>
+      <td>-0.567003</td>
+      <td>0.719212</td>
+      <td>1.189355</td>
+      <td>-0.582023</td>
     </tr>
   </tbody>
 </table>
@@ -317,8 +317,8 @@ trained_model, error_df = fit_eval_model(y=y, baseline_pred=y.mean(),
     # of train observations = 102
     # of test observations = 1358
     Baseline RMSE = 79415.29188606751
-    Train RMSE = 14835.039689206178
-    Holdout RMSE = 112820.25536497237
+    Train RMSE = 14835.039689206125
+    Holdout RMSE = 112820.25536497564
     (Holdout-Train)/Train: 660%
     
 
@@ -333,8 +333,8 @@ trained_model, error_df = fit_eval_model(y=y, baseline_pred=y.mean(),
     # of train observations = 102
     # of test observations = 1358
     Baseline RMSE = 79415.29188606751
-    Train RMSE = 18935.63680029539
-    Holdout RMSE = 56992.74351917894
+    Train RMSE = 18937.000079349345
+    Holdout RMSE = 56985.86676300235
     (Holdout-Train)/Train: 201%
     
 
@@ -359,16 +359,16 @@ coef_matrix
 
 
 
-    array([ 0.09580626,  0.01657068,  0.        ,  0.04837551,  0.06444754,
-            0.        ,  0.00223178,  0.04002545, -0.01137468,  0.        ,
-            0.03003016,  0.        , -0.        , -0.        ,  0.03136104,
-            0.01883186,  0.02435751, -0.        ,  0.        ,  0.0456953 ,
-            0.        ,  0.05102214,  0.        ,  0.00376516,  0.        ,
-            0.02047447, -0.        ,  0.        , -0.        , -0.        ,
-            0.        , -0.03051899, -0.        ,  0.        ,  0.03235801,
-            0.        , -0.        , -0.01383338, -0.00252309,  0.        ,
-            0.        ,  0.        , -0.        , -0.        ,  0.        ,
-            0.        ,  0.        ,  0.        ,  0.        , -0.        ,
+    array([ 0.        ,  0.        ,  0.01883461, -0.0113799 ,  0.02434467,
+           -0.        ,  0.04836801,  0.06445211,  0.04569132,  0.00376452,
+            0.03991102, -0.        ,  0.01658349,  0.        ,  0.        ,
+            0.03003712,  0.        ,  0.00224332,  0.        ,  0.03145369,
+            0.09581944,  0.05103676,  0.        , -0.        ,  0.        ,
+           -0.        , -0.        , -0.01382748, -0.00251348,  0.        ,
+            0.        ,  0.        , -0.        ,  0.        ,  0.        ,
+            0.02047155, -0.        ,  0.        , -0.        ,  0.        ,
+           -0.        ,  0.        ,  0.03235523,  0.        , -0.        ,
+            0.        , -0.03051745,  0.        , -0.        ,  0.        ,
             0.        ])
 
 

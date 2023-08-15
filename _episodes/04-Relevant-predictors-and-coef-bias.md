@@ -316,10 +316,10 @@ results.summary()
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   798.1</td>
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sun, 13 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>2.12e-140</td>
+  <th>Date:</th>             <td>Mon, 14 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>2.12e-140</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>17:28:41</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
+  <th>Time:</th>                 <td>21:14:09</td>     <th>  Log-Likelihood:    </th> <td> -412.67</td>
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>  1460</td>      <th>  AIC:               </th> <td>   829.3</td>
@@ -366,8 +366,47 @@ Based on the R-squared, this model explains 35.4% of the variance in the SalePri
 
 The model coefficient estimated for the "FullBath" predictor is 0.24. Recall that we fit this model to a log scaled version of the SalePrice. In other words, increasing the FullBath predictor by 1 standard deviation increases the log(SalePrice) by 0.24. While this explanation is completely valid, it is often useful to interpret the coefficient in terms of the original scale of the target variable.
 
-##### Transforming the coefficient to the original scale of the data.
+#### Transforming the coefficient to the original scale of the data.
 Exponentiate the coefficient to reverse the log transformation. This gives the multiplicative factor for every one-unit increase in the independent variable. In our model (run code below), for every standard devation increase in the predictor, our target variable increases by a factor of about 1.27, or 27%. Recall that multiplying a number by 1.27 is the same as increasing the number by 27%. Likewise, multiplying a number by, say 0.3, is the same as decreasing the number by 1 – 0.3 = 0.7, or 70%.
+
+#### Bonus: Unpacking the coefficient transformation
+When we have a linear model fit to the logarithm of the target variable, the general form of the model can be written as:
+
+```
+log(y) = b0 + b1 * x1 + b2 * x2 + ... + bn * xn
+```
+Where:
+* `log(y)` is the natural logarithm of the target variable `y`.
+* `b0, b1, b2, ..., bn` are the estimated coefficients.
+* `x1, x2, ..., xn` are the predictor variables.
+
+Now, if you want to express the effect of a one-unit change in one of the predictor variables on the original target variable y, you can take the exponential of both sides of the equation:
+```
+exp(log(y)) = exp(b0 + b1 * x1 + b2 * x2 + ... + bn * xn)
+y = exp(b0) * exp(b1 * x1) * exp(b2 * x2) * ... * exp(bn * xn)
+```
+
+When you're specifically interested in the multiplicative change associated with a one-unit change in a particular predictor variable (let's call it x1), you don't actually need to include the x1 term in the equation. This is because when x1 changes by 1 unit, the multiplicative effect is solely captured by exp(b1).
+
+```
+y = exp(b0) * exp(b1) * exp(b2) * ... * exp(bn)
+```
+
+Notice in the above equation, that equation coefficient is not multiplied. This is where we get the "multiplicative change" from.
+
+#### Log review
+Remember that `exp()` is the inverse of the natural logarithm, `log()`.
+
+```
+e = 2.71828#... (irrational number) Euler's number, base of the natural log
+x = 2
+e_squared = e**x # raise e to the power of x
+e_squared_exact = np.exp(x)
+
+# take the natural log (ln)
+print(np.log(e_squared))
+print(np.log(e_squared_exact)) # take the natural log (ln)
+```
 
 
 ```python
@@ -715,7 +754,7 @@ print('R-squared:', results.rsquared)
 
 
 ### Including ALL predictors - overfitting concerns
-While researchers should always strive to include as many many relevant predictors as possible, this must also be balanced with overfitting concerns. That is, it is often the case that SOME of the relevant predictors must be left out in order to ensure that overfitting does not occur. If we include too many predictors in the model and train on a limited number of observations, the model may simply memorize the nuances/noise in the data rather than capturing the underlying trend in the data.
+While researchers should always strive to include as many many relevant predictors as possible, this must also be balanced with overfitting concerns. That is, it is often the case that some of the relevant predictors must be left out in order to ensure that overfitting does not occur. If we include too many predictors in the model and train on a limited number of observations, the model may simply memorize the nuances/noise in the data rather than capturing the underlying trend in the data.
 
 Let's see how this plays out with the Ames housing dataset.
 
@@ -737,37 +776,38 @@ import numpy as np
 y_log = np.log(y)
 
 from preprocessing import encode_predictors_housing_data
-X_encoded = encode_predictors_housing_data(X)
+X_encoded = encode_predictors_housing_data(X) # use one-hot encoding to encode categorical predictors
 print('X_encoded.shape[1]', X_encoded.shape[1])
 
 from preprocessing import remove_bad_cols
-X_encoded_good = remove_bad_cols(X_encoded, 98)
+X_encoded_good = remove_bad_cols(X_encoded, 98) # remove cols with nans and cols that are 98% constant
 X_encoded_good.head()
 
 print(X_encoded_good.shape)
 print(y.shape)
+
 ```
 
     X.shape[1] 80
     X_encoded.shape[1] 215
     99 columns removed, 116 remaining.
-    Columns removed: ['3SsnPorch', 'PoolArea', 'GarageYrBlt', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'Utilities_AllPub', 'Utilities_NoSeWa', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'LotConfig_FR3', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'MasVnrType_BrkCmn', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', "MSZoning_'C (all)'", 'MSZoning_RH', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Street']
+    Columns removed: ['LotFrontage', 'PoolArea', '3SsnPorch', 'LowQualFinSF', 'GarageYrBlt', 'MasVnrArea', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'Utilities_AllPub', 'Utilities_NoSeWa', 'LotConfig_FR3', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', "MSZoning_'C (all)'", 'MSZoning_RH', 'MasVnrType_BrkCmn', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Street']
     (1460, 116)
     (1460,)
 
 
-Next, we will perform a train/test split so that we can test for overfitting effects. We will limit the size of the training set here to illustrate a point. Typically, you'd want to use around 30% of the data for testing.
+#### Train/test split
 
 
 ```python
 from sklearn.model_selection import train_test_split
-X_train, X_test, y_train, y_test = train_test_split(X_encoded_good, y_log, test_size=0.90, random_state=0)
+X_train, X_test, y_train, y_test = train_test_split(X_encoded_good, y_log, test_size=0.33, random_state=0)
 print(X_train.shape)
 print(X_test.shape)
 ```
 
-    (146, 116)
-    (1314, 116)
+    (978, 116)
+    (482, 116)
 
 
 #### Zscoring all predictors
@@ -833,149 +873,149 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>YrSold</th>
-      <th>TotRmsAbvGrd</th>
-      <th>Fireplaces</th>
-      <th>OverallCond</th>
-      <th>FullBath</th>
+      <th>YearRemodAdd</th>
+      <th>MoSold</th>
       <th>GarageArea</th>
-      <th>LotArea</th>
-      <th>BedroomAbvGr</th>
-      <th>BsmtUnfSF</th>
+      <th>OverallCond</th>
+      <th>2ndFlrSF</th>
+      <th>TotRmsAbvGrd</th>
+      <th>BsmtFinSF1</th>
+      <th>1stFlrSF</th>
+      <th>TotalBsmtSF</th>
       <th>GrLivArea</th>
       <th>...</th>
-      <th>RoofStyle_Hip</th>
-      <th>SaleCondition_Abnorml</th>
-      <th>SaleCondition_Normal</th>
-      <th>SaleCondition_Partial</th>
+      <th>BldgType_Twnhs</th>
+      <th>BldgType_TwnhsE</th>
       <th>HouseStyle_1.5Fin</th>
       <th>HouseStyle_1Story</th>
       <th>HouseStyle_2Story</th>
       <th>HouseStyle_SFoyer</th>
       <th>HouseStyle_SLvl</th>
+      <th>Alley_Grvl</th>
+      <th>Alley_Pave</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>1367</th>
-      <td>-1.22994</td>
-      <td>-0.225022</td>
-      <td>0.643645</td>
-      <td>0.521911</td>
-      <td>0.744171</td>
-      <td>-0.668965</td>
-      <td>-0.603394</td>
-      <td>1.542568</td>
-      <td>-1.172785</td>
-      <td>0.034762</td>
+      <th>1127</th>
+      <td>0.940448</td>
+      <td>1.757876</td>
+      <td>0.758930</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>0.276161</td>
+      <td>1.972614</td>
+      <td>0.976157</td>
+      <td>1.140398</td>
+      <td>0.011263</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>637</th>
-      <td>0.89098</td>
-      <td>0.445452</td>
-      <td>-0.949104</td>
-      <td>-1.510063</td>
-      <td>0.744171</td>
-      <td>-1.108940</td>
-      <td>-0.355677</td>
-      <td>0.202003</td>
-      <td>0.603234</td>
-      <td>-0.159506</td>
+      <th>1424</th>
+      <td>-0.081668</td>
+      <td>-0.104345</td>
+      <td>0.060128</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>-0.341883</td>
+      <td>0.027414</td>
+      <td>0.480164</td>
+      <td>-0.087155</td>
+      <td>-0.347499</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>1304</th>
-      <td>-1.22994</td>
-      <td>0.445452</td>
-      <td>-0.949104</td>
-      <td>-0.494076</td>
-      <td>0.744171</td>
-      <td>-0.426979</td>
-      <td>-0.551548</td>
-      <td>0.202003</td>
-      <td>0.981354</td>
-      <td>0.549132</td>
+      <th>587</th>
+      <td>-0.130340</td>
+      <td>0.268099</td>
+      <td>0.270726</td>
+      <td>0.400065</td>
+      <td>-0.801562</td>
+      <td>-1.577972</td>
+      <td>0.523521</td>
+      <td>-0.810483</td>
+      <td>-0.533538</td>
+      <td>-1.281052</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>-0.674456</td>
+      <td>6.747209</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>286</th>
-      <td>-1.22994</td>
-      <td>0.445452</td>
-      <td>0.643645</td>
-      <td>1.537898</td>
-      <td>-1.195990</td>
-      <td>-0.096998</td>
-      <td>-0.074462</td>
-      <td>0.202003</td>
-      <td>-0.540293</td>
-      <td>0.606530</td>
+      <th>1157</th>
+      <td>1.135137</td>
+      <td>0.268099</td>
+      <td>0.739785</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>-0.341883</td>
+      <td>1.058855</td>
+      <td>0.400166</td>
+      <td>0.616384</td>
+      <td>-0.405364</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>5.931796</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>488</th>
-      <td>-1.22994</td>
-      <td>2.456876</td>
-      <td>0.643645</td>
-      <td>-1.510063</td>
-      <td>0.744171</td>
-      <td>0.342977</td>
-      <td>0.000856</td>
-      <td>0.202003</td>
-      <td>-0.590709</td>
-      <td>2.107696</td>
+      <th>938</th>
+      <td>1.037792</td>
+      <td>0.640543</td>
+      <td>1.898074</td>
+      <td>-0.491196</td>
+      <td>0.490338</td>
+      <td>0.276161</td>
+      <td>0.043566</td>
+      <td>0.605496</td>
+      <td>0.803185</td>
+      <td>0.844517</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>-4.813888</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>1.481159</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
   </tbody>
 </table>
@@ -989,12 +1029,14 @@ Note: we have a helper function that will do the above steps for us later in thi
 
 ```python
 from preprocessing import prep_fulldim_zdata
-X_train_z, X_test_z, y_train, y_test, y = prep_fulldim_zdata(const_thresh= 98, test_size=.9, y_log_scaled=True)
+X_train_z, X_test_z, y_train, y_test, y = prep_fulldim_zdata(const_thresh= 98, test_size=.33, y_log_scaled=True)
+print(X_train_z.shape)
 X_train_z.head()
 ```
 
     99 columns removed, 116 remaining.
-    Columns removed: ['3SsnPorch', 'PoolArea', 'GarageYrBlt', 'LotFrontage', 'MasVnrArea', 'LowQualFinSF', 'Utilities_AllPub', 'Utilities_NoSeWa', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'LotConfig_FR3', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'MasVnrType_BrkCmn', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', "MSZoning_'C (all)'", 'MSZoning_RH', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Street']
+    Columns removed: ['LotFrontage', 'PoolArea', '3SsnPorch', 'LowQualFinSF', 'GarageYrBlt', 'MasVnrArea', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', "Exterior2nd_'Brk Cmn'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'Utilities_AllPub', 'Utilities_NoSeWa', 'LotConfig_FR3', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'Heating_Floor', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_75', 'MSSubClass_85', 'MSSubClass_180', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_ClearCr', 'Neighborhood_MeadowV', 'Neighborhood_NPkVill', 'Neighborhood_SWISU', 'Neighborhood_StoneBr', 'Neighborhood_Veenker', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_CBlock', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', "MSZoning_'C (all)'", 'MSZoning_RH', 'MasVnrType_BrkCmn', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_TenC', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'Street']
+    (978, 116)
 
 
 
@@ -1018,149 +1060,149 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>YrSold</th>
-      <th>TotRmsAbvGrd</th>
-      <th>Fireplaces</th>
-      <th>OverallCond</th>
-      <th>FullBath</th>
+      <th>YearRemodAdd</th>
+      <th>MoSold</th>
       <th>GarageArea</th>
-      <th>LotArea</th>
-      <th>BedroomAbvGr</th>
-      <th>BsmtUnfSF</th>
+      <th>OverallCond</th>
+      <th>2ndFlrSF</th>
+      <th>TotRmsAbvGrd</th>
+      <th>BsmtFinSF1</th>
+      <th>1stFlrSF</th>
+      <th>TotalBsmtSF</th>
       <th>GrLivArea</th>
       <th>...</th>
-      <th>RoofStyle_Hip</th>
-      <th>SaleCondition_Abnorml</th>
-      <th>SaleCondition_Normal</th>
-      <th>SaleCondition_Partial</th>
+      <th>BldgType_Twnhs</th>
+      <th>BldgType_TwnhsE</th>
       <th>HouseStyle_1.5Fin</th>
       <th>HouseStyle_1Story</th>
       <th>HouseStyle_2Story</th>
       <th>HouseStyle_SFoyer</th>
       <th>HouseStyle_SLvl</th>
+      <th>Alley_Grvl</th>
+      <th>Alley_Pave</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>1367</th>
-      <td>-1.22994</td>
-      <td>-0.225022</td>
-      <td>0.643645</td>
-      <td>0.521911</td>
-      <td>0.744171</td>
-      <td>-0.668965</td>
-      <td>-0.603394</td>
-      <td>1.542568</td>
-      <td>-1.172785</td>
-      <td>0.034762</td>
+      <th>1127</th>
+      <td>0.940448</td>
+      <td>1.757876</td>
+      <td>0.758930</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>0.276161</td>
+      <td>1.972614</td>
+      <td>0.976157</td>
+      <td>1.140398</td>
+      <td>0.011263</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>637</th>
-      <td>0.89098</td>
-      <td>0.445452</td>
-      <td>-0.949104</td>
-      <td>-1.510063</td>
-      <td>0.744171</td>
-      <td>-1.108940</td>
-      <td>-0.355677</td>
-      <td>0.202003</td>
-      <td>0.603234</td>
-      <td>-0.159506</td>
+      <th>1424</th>
+      <td>-0.081668</td>
+      <td>-0.104345</td>
+      <td>0.060128</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>-0.341883</td>
+      <td>0.027414</td>
+      <td>0.480164</td>
+      <td>-0.087155</td>
+      <td>-0.347499</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>1304</th>
-      <td>-1.22994</td>
-      <td>0.445452</td>
-      <td>-0.949104</td>
-      <td>-0.494076</td>
-      <td>0.744171</td>
-      <td>-0.426979</td>
-      <td>-0.551548</td>
-      <td>0.202003</td>
-      <td>0.981354</td>
-      <td>0.549132</td>
+      <th>587</th>
+      <td>-0.130340</td>
+      <td>0.268099</td>
+      <td>0.270726</td>
+      <td>0.400065</td>
+      <td>-0.801562</td>
+      <td>-1.577972</td>
+      <td>0.523521</td>
+      <td>-0.810483</td>
+      <td>-0.533538</td>
+      <td>-1.281052</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>-0.674456</td>
+      <td>6.747209</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>286</th>
-      <td>-1.22994</td>
-      <td>0.445452</td>
-      <td>0.643645</td>
-      <td>1.537898</td>
-      <td>-1.195990</td>
-      <td>-0.096998</td>
-      <td>-0.074462</td>
-      <td>0.202003</td>
-      <td>-0.540293</td>
-      <td>0.606530</td>
+      <th>1157</th>
+      <td>1.135137</td>
+      <td>0.268099</td>
+      <td>0.739785</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>-0.341883</td>
+      <td>1.058855</td>
+      <td>0.400166</td>
+      <td>0.616384</td>
+      <td>-0.405364</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>5.931796</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>488</th>
-      <td>-1.22994</td>
-      <td>2.456876</td>
-      <td>0.643645</td>
-      <td>-1.510063</td>
-      <td>0.744171</td>
-      <td>0.342977</td>
-      <td>0.000856</td>
-      <td>0.202003</td>
-      <td>-0.590709</td>
-      <td>2.107696</td>
+      <th>938</th>
+      <td>1.037792</td>
+      <td>0.640543</td>
+      <td>1.898074</td>
+      <td>-0.491196</td>
+      <td>0.490338</td>
+      <td>0.276161</td>
+      <td>0.043566</td>
+      <td>0.605496</td>
+      <td>0.803185</td>
+      <td>0.844517</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>-4.813888</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>1.481159</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
   </tbody>
 </table>
@@ -1200,148 +1242,148 @@ X_train_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
-      <th>YrSold</th>
-      <th>TotRmsAbvGrd</th>
-      <th>Fireplaces</th>
-      <th>OverallCond</th>
-      <th>FullBath</th>
+      <th>YearRemodAdd</th>
+      <th>MoSold</th>
       <th>GarageArea</th>
-      <th>LotArea</th>
-      <th>BedroomAbvGr</th>
-      <th>BsmtUnfSF</th>
+      <th>OverallCond</th>
+      <th>2ndFlrSF</th>
+      <th>TotRmsAbvGrd</th>
+      <th>BsmtFinSF1</th>
+      <th>1stFlrSF</th>
+      <th>TotalBsmtSF</th>
       <th>...</th>
-      <th>RoofStyle_Hip</th>
-      <th>SaleCondition_Abnorml</th>
-      <th>SaleCondition_Normal</th>
-      <th>SaleCondition_Partial</th>
+      <th>BldgType_Twnhs</th>
+      <th>BldgType_TwnhsE</th>
       <th>HouseStyle_1.5Fin</th>
       <th>HouseStyle_1Story</th>
       <th>HouseStyle_2Story</th>
       <th>HouseStyle_SFoyer</th>
       <th>HouseStyle_SLvl</th>
+      <th>Alley_Grvl</th>
+      <th>Alley_Pave</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
-      <th>1367</th>
+      <th>1127</th>
       <td>1.0</td>
-      <td>-1.22994</td>
-      <td>-0.225022</td>
-      <td>0.643645</td>
-      <td>0.521911</td>
-      <td>0.744171</td>
-      <td>-0.668965</td>
-      <td>-0.603394</td>
-      <td>1.542568</td>
-      <td>-1.172785</td>
+      <td>0.940448</td>
+      <td>1.757876</td>
+      <td>0.758930</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>0.276161</td>
+      <td>1.972614</td>
+      <td>0.976157</td>
+      <td>1.140398</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>637</th>
+      <th>1424</th>
       <td>1.0</td>
-      <td>0.89098</td>
-      <td>0.445452</td>
-      <td>-0.949104</td>
-      <td>-1.510063</td>
-      <td>0.744171</td>
-      <td>-1.108940</td>
-      <td>-0.355677</td>
-      <td>0.202003</td>
-      <td>0.603234</td>
+      <td>-0.081668</td>
+      <td>-0.104345</td>
+      <td>0.060128</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>-0.341883</td>
+      <td>0.027414</td>
+      <td>0.480164</td>
+      <td>-0.087155</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>1304</th>
+      <th>587</th>
       <td>1.0</td>
-      <td>-1.22994</td>
-      <td>0.445452</td>
-      <td>-0.949104</td>
-      <td>-0.494076</td>
-      <td>0.744171</td>
-      <td>-0.426979</td>
-      <td>-0.551548</td>
-      <td>0.202003</td>
-      <td>0.981354</td>
+      <td>-0.130340</td>
+      <td>0.268099</td>
+      <td>0.270726</td>
+      <td>0.400065</td>
+      <td>-0.801562</td>
+      <td>-1.577972</td>
+      <td>0.523521</td>
+      <td>-0.810483</td>
+      <td>-0.533538</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>-0.674456</td>
+      <td>6.747209</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>286</th>
+      <th>1157</th>
       <td>1.0</td>
-      <td>-1.22994</td>
-      <td>0.445452</td>
-      <td>0.643645</td>
-      <td>1.537898</td>
-      <td>-1.195990</td>
-      <td>-0.096998</td>
-      <td>-0.074462</td>
-      <td>0.202003</td>
-      <td>-0.540293</td>
+      <td>1.135137</td>
+      <td>0.268099</td>
+      <td>0.739785</td>
+      <td>-0.491196</td>
+      <td>-0.801562</td>
+      <td>-0.341883</td>
+      <td>1.058855</td>
+      <td>0.400166</td>
+      <td>0.616384</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>5.931796</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
-      <th>488</th>
+      <th>938</th>
       <td>1.0</td>
-      <td>-1.22994</td>
-      <td>2.456876</td>
-      <td>0.643645</td>
-      <td>-1.510063</td>
-      <td>0.744171</td>
-      <td>0.342977</td>
-      <td>0.000856</td>
-      <td>0.202003</td>
-      <td>-0.590709</td>
+      <td>1.037792</td>
+      <td>0.640543</td>
+      <td>1.898074</td>
+      <td>-0.491196</td>
+      <td>0.490338</td>
+      <td>0.276161</td>
+      <td>0.043566</td>
+      <td>0.605496</td>
+      <td>0.803185</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>-4.813888</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>1.481159</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
   </tbody>
 </table>
@@ -1380,25 +1422,25 @@ X_test_z.head()
     <tr style="text-align: right;">
       <th></th>
       <th>const</th>
-      <th>YrSold</th>
-      <th>TotRmsAbvGrd</th>
-      <th>Fireplaces</th>
-      <th>OverallCond</th>
-      <th>FullBath</th>
+      <th>YearRemodAdd</th>
+      <th>MoSold</th>
       <th>GarageArea</th>
-      <th>LotArea</th>
-      <th>BedroomAbvGr</th>
-      <th>BsmtUnfSF</th>
+      <th>OverallCond</th>
+      <th>2ndFlrSF</th>
+      <th>TotRmsAbvGrd</th>
+      <th>BsmtFinSF1</th>
+      <th>1stFlrSF</th>
+      <th>TotalBsmtSF</th>
       <th>...</th>
-      <th>RoofStyle_Hip</th>
-      <th>SaleCondition_Abnorml</th>
-      <th>SaleCondition_Normal</th>
-      <th>SaleCondition_Partial</th>
+      <th>BldgType_Twnhs</th>
+      <th>BldgType_TwnhsE</th>
       <th>HouseStyle_1.5Fin</th>
       <th>HouseStyle_1Story</th>
       <th>HouseStyle_2Story</th>
       <th>HouseStyle_SFoyer</th>
       <th>HouseStyle_SLvl</th>
+      <th>Alley_Grvl</th>
+      <th>Alley_Pave</th>
       <th>CentralAir</th>
     </tr>
   </thead>
@@ -1406,122 +1448,122 @@ X_test_z.head()
     <tr>
       <th>529</th>
       <td>1.0</td>
-      <td>-0.522966</td>
-      <td>1.786401</td>
-      <td>2.236394</td>
-      <td>-2.526050</td>
-      <td>2.684332</td>
-      <td>0.144988</td>
-      <td>1.625161</td>
-      <td>1.542568</td>
-      <td>0.614692</td>
+      <td>-0.471045</td>
+      <td>-1.221678</td>
+      <td>0.060128</td>
+      <td>-2.273717</td>
+      <td>-0.801562</td>
+      <td>1.512249</td>
+      <td>1.785709</td>
+      <td>3.602784</td>
+      <td>2.365525</td>
       <td>...</td>
-      <td>2.192453</td>
-      <td>-0.270233</td>
-      <td>-2.501369</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>0.969630</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>0.997447</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
       <th>491</th>
       <td>1.0</td>
-      <td>-1.229940</td>
-      <td>-0.895497</td>
-      <td>2.236394</td>
-      <td>1.537898</td>
-      <td>-1.195990</td>
-      <td>-1.196935</td>
-      <td>-0.096448</td>
-      <td>0.202003</td>
-      <td>-0.709874</td>
+      <td>-1.687850</td>
+      <td>0.640543</td>
+      <td>-1.107734</td>
+      <td>1.291325</td>
+      <td>0.601202</td>
+      <td>-0.959927</td>
+      <td>-0.097190</td>
+      <td>-0.549153</td>
+      <td>-0.616021</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>2.929070</td>
+      <td>-1.001535</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
       <th>459</th>
       <td>1.0</td>
-      <td>0.890980</td>
-      <td>-0.895497</td>
-      <td>0.643645</td>
-      <td>-1.510063</td>
-      <td>-1.195990</td>
-      <td>-0.580970</td>
-      <td>-0.280285</td>
-      <td>0.202003</td>
-      <td>-0.054466</td>
+      <td>-1.687850</td>
+      <td>0.268099</td>
+      <td>-0.571667</td>
+      <td>-1.382456</td>
+      <td>-0.294757</td>
+      <td>-0.959927</td>
+      <td>-0.600219</td>
+      <td>-0.493154</td>
+      <td>-0.851343</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>4.139064</td>
-      <td>-1.024257</td>
-      <td>-0.708304</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>2.929070</td>
+      <td>-1.001535</td>
+      <td>-0.674456</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
       <th>279</th>
       <td>1.0</td>
-      <td>0.184007</td>
-      <td>1.115927</td>
-      <td>0.643645</td>
-      <td>-0.494076</td>
-      <td>0.744171</td>
-      <td>0.260482</td>
-      <td>-0.058195</td>
-      <td>1.542568</td>
-      <td>0.504694</td>
+      <td>-0.373701</td>
+      <td>-1.221678</td>
+      <td>0.160640</td>
+      <td>-0.491196</td>
+      <td>1.157782</td>
+      <td>0.894205</td>
+      <td>-0.122572</td>
+      <td>-0.021161</td>
+      <td>0.242780</td>
       <td>...</td>
-      <td>2.192453</td>
-      <td>-0.270233</td>
-      <td>0.397043</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>-0.168411</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>1.481159</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
     <tr>
       <th>655</th>
       <td>1.0</td>
-      <td>1.597953</td>
-      <td>-0.225022</td>
-      <td>-0.949104</td>
-      <td>-0.494076</td>
-      <td>-1.195990</td>
-      <td>-1.064943</td>
-      <td>-0.676557</td>
-      <td>0.202003</td>
-      <td>-0.052174</td>
+      <td>-0.665734</td>
+      <td>-1.221678</td>
+      <td>-0.992863</td>
+      <td>-0.491196</td>
+      <td>0.481288</td>
+      <td>-0.341883</td>
+      <td>-1.027102</td>
+      <td>-1.703802</td>
+      <td>-1.297726</td>
       <td>...</td>
-      <td>-0.452986</td>
-      <td>-0.270233</td>
-      <td>-2.501369</td>
-      <td>-0.239946</td>
-      <td>-0.239946</td>
-      <td>-1.024257</td>
-      <td>1.402153</td>
-      <td>-0.187665</td>
-      <td>-0.22364</td>
-      <td>0.206309</td>
+      <td>5.931796</td>
+      <td>-0.294241</td>
+      <td>-0.341056</td>
+      <td>-1.001535</td>
+      <td>1.481159</td>
+      <td>-0.148058</td>
+      <td>-0.198191</td>
+      <td>-0.171591</td>
+      <td>-0.180836</td>
+      <td>0.266685</td>
     </tr>
   </tbody>
 </table>
@@ -1590,8 +1632,8 @@ errors_df.head()
     <tr>
       <th>0</th>
       <td>79415.291886</td>
-      <td>8105.0583</td>
-      <td>172669.596119</td>
+      <td>24796.925348</td>
+      <td>69935.683796</td>
     </tr>
   </tbody>
 </table>
@@ -1611,7 +1653,7 @@ X_train_z.shape[0]/X_train_z.shape[1]
 
 
 
-    1.2478632478632479
+    8.35897435897436
 
 
 
@@ -1625,16 +1667,16 @@ In essence, the phrase means that no model can perfectly capture the complexitie
 However, despite their imperfections, some models can still be valuable and "useful" for specific purposes. A useful model is one that provides valuable insights, makes accurate predictions, or aids in decision-making, even if it does not perfectly match the underlying reality. The key is to understand the limitations of the model and interpret its results accordingly. Users of the model should be aware of its assumptions, potential biases, and areas where it might not perform well. Skilled data analysts and scientists know how to leverage models effectively, acknowledging their limitations and using them to gain insights or solve problems within the scope of their applicability.
 
 #### Feature selection methods
-Throughout this workshop, we will explore a couple of feature (predictor) selection methods that can help you simplify your high-dimensional data — making it possible to avoid overfitting concerns. These methods can involve either (A) mathematically combining features to reduce dimensionality or (B) selecting only the most "interesting" predictors, where the definition of interesting varies based on the exact method of choice.
+Throughout this workshop, we will explore a couple of feature (predictor) selection methods that can help you simplify your high-dimensional data — making it possible to avoid overfitting concerns. These methods can involve:
+1. Mathematically combining features to reduce dimensionality (e.g., PCA)
+2. Data-driven/empirical methods such as comparing univariate model performance
+3. Hypothesis-driven feature selection
 
 
 ```python
 from feature_selection import hypothesis_driven_predictors
 hypothesis_driven_predictors()
 ```
-
-    Consult the literature in your field to narrow down your high-dimensional dataset to a list of predictors that have been shown to have some influence over the target variable. This approach, by itself, can be somewhat limiting as a good scientist should take care to investigate unexplored predictors in addition to well documented predictors. It is often worthwhile to combine a priori knowledge with data-driven methods.
-
 
 ### Summary
 In summary, leaving out relevant predictors can lead to biased coefficient estimates and model misspecification. Without including the most essential predictors, the model will place too much focus on the predictors included and over/underestimate their contributions to the target variable.

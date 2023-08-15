@@ -45,18 +45,9 @@ We will explore assess all five assumptions using a multivariate model built fro
 ```python
 from sklearn.datasets import fetch_openml
 housing = fetch_openml(name="house_prices", as_frame=True, parser='auto') #
-```
-
-
-```python
 y=housing['target']
-```
 
-#### Log scale SalePrices
-In our previous univariate models, we observed that several predictors tend to linearly relate more with the log version of SalePrices. Target variables that exhibit an exponential trend, as we observe with house prices, typically need to be log scaled in order to observe a linear relationship with predictors that scale linearly. For this reason, we'll log scale our target variable here as well.
-
-
-```python
+# Log scale sale prices: In our previous univariate models, we observed that several predictors tend to linearly relate more with the log version of SalePrices. Target variables that exhibit an exponential trend, as we observe with house prices, typically need to be log scaled in order to observe a linear relationship with predictors that scale linearly. For this reason, we'll log scale our target variable here as well.
 import numpy as np
 y_log = y.apply(np.log)
 ```
@@ -96,11 +87,10 @@ SaleCondition: Condition of sale
 
 ```python
 import pandas as pd
-
 nominal_fields =['SaleCondition']
 X_enc = X.copy()
 X_enc[nominal_fields]=X[nominal_fields].astype("category")
-one_hot =pd.get_dummies(X_enc[nominal_fields])
+one_hot = pd.get_dummies(X_enc[nominal_fields])
 one_hot.head()
 ```
 
@@ -385,18 +375,16 @@ To assess not only sparsity (presence of nearly all 0's) but for the presence of
 
 
 ```python
-from collections import Counter
+import pandas as pd
 
-# Use Counter to get counts and corresponding values
-value_counts = Counter(X_enc['OverallQual'])
+# Calculate value counts
+value_counts_df = X_enc['OverallQual'].value_counts().reset_index()
+value_counts_df.columns = ['Value', 'Count']
 
-# Create a DataFrame to store values and counts
-value_counts_df = pd.DataFrame(value_counts.items(), columns=['Value', 'Count'])
+# Calculate percentages separately
+value_counts_df['Percentage'] = value_counts_df['Count']/len(X_enc) * 100
 
-# Calculate the percentage of rows for each value
-value_counts_df['Percentage'] = (value_counts_df['Count'] / len(X_enc)) * 100
-
-# sort the result
+# Sort the DataFrame
 value_counts_df = value_counts_df.sort_values(by='Count', ascending=False)
 
 # Display the DataFrame
@@ -431,7 +419,7 @@ value_counts_df.head()
   </thead>
   <tbody>
     <tr>
-      <th>3</th>
+      <th>0</th>
       <td>5</td>
       <td>397</td>
       <td>27.191781</td>
@@ -443,19 +431,19 @@ value_counts_df.head()
       <td>25.616438</td>
     </tr>
     <tr>
-      <th>0</th>
+      <th>2</th>
       <td>7</td>
       <td>319</td>
       <td>21.849315</td>
     </tr>
     <tr>
-      <th>2</th>
+      <th>3</th>
       <td>8</td>
       <td>168</td>
       <td>11.506849</td>
     </tr>
     <tr>
-      <th>5</th>
+      <th>4</th>
       <td>4</td>
       <td>116</td>
       <td>7.945205</td>
@@ -466,6 +454,9 @@ value_counts_df.head()
 
 
 
+A few of the predictors (AdjLand, Alloca, Family) contain very little information since they are filled almost entirely with 0's. With few observations to rely on, this makes it difficult to assess how house price changes when these predictors become active (1 instead of 0). If you encounter extremely sparse predictors, it's best to remove them from the start to avoid wasting computational resources. While it's important to pick a threshold that encourages different values of each predictor to land in both the training and test sets, the exact threshold chosen is somewhat arbitrary. It's more important that you follow-up this choice with a thorough investigation of the resulting model and adjust the model downstream, if necessary.
+
+#### Preprocessing helper function does the above calcuation at looks at the top percentage
 We have a pre-made helper function that will run the above code for all predictors and remove any that contain that are nearly constant. Here, we'll remove predictors that don't have at are 99% constant.
 
 
@@ -554,7 +545,48 @@ X_good.head()
 
 
 
-A few of the predictors (AdjLand, Alloca, Family) contain very little information since they are filled almost entirely with 0's. With few observations to rely on, this makes it difficult to assess how house price changes when these predictors become active (1 instead of 0). If you encounter extremely sparse predictors, it's best to remove them from the start to avoid wasting computational resources. While it's important to pick a threshold that encourages different values of each predictor to land in both the training and test sets, the exact threshold chosen is somewhat arbitrary. It's more important that you follow-up this choice with a thorough investigation of the resulting model and adjust the model downstream, if necessary.
+**Why not just use variance instead of counts?**
+Variance = (Sum of the squared differences between each value and the mean) / (Number of values)
+
+Using the variance measure to detect extremely sparse or near-constant features might not be the most suitable approach. Variance can be influenced by outliers and can be misleading results.
+
+
+```python
+import numpy as np
+
+# Array of continuous values (1 to 100)
+continuous_data = np.arange(1, 101)
+print(continuous_data)
+
+# Array with mostly zeros and an outlier
+sparse_data_with_outlier = np.array([0] * 100 + [1000])
+print(sparse_data_with_outlier)
+
+# Calculate variances
+variance_continuous = np.var(continuous_data)
+variance_sparse = np.var(sparse_data_with_outlier)
+
+print("Continuous Data Variance:", variance_continuous)
+print("Sparse Data Variance:", variance_sparse)
+```
+
+    [  1   2   3   4   5   6   7   8   9  10  11  12  13  14  15  16  17  18
+      19  20  21  22  23  24  25  26  27  28  29  30  31  32  33  34  35  36
+      37  38  39  40  41  42  43  44  45  46  47  48  49  50  51  52  53  54
+      55  56  57  58  59  60  61  62  63  64  65  66  67  68  69  70  71  72
+      73  74  75  76  77  78  79  80  81  82  83  84  85  86  87  88  89  90
+      91  92  93  94  95  96  97  98  99 100]
+    [   0    0    0    0    0    0    0    0    0    0    0    0    0    0
+        0    0    0    0    0    0    0    0    0    0    0    0    0    0
+        0    0    0    0    0    0    0    0    0    0    0    0    0    0
+        0    0    0    0    0    0    0    0    0    0    0    0    0    0
+        0    0    0    0    0    0    0    0    0    0    0    0    0    0
+        0    0    0    0    0    0    0    0    0    0    0    0    0    0
+        0    0    0    0    0    0    0    0    0    0    0    0    0    0
+        0    0 1000]
+    Continuous Data Variance: 833.25
+    Sparse Data Variance: 9802.96049406921
+
 
 ### 2. Check for multicollinearity
 
@@ -889,8 +921,8 @@ trained_model = model.fit()
 ### 4. Evaluate evidence of overfitting or *severe* underfitting
 
 Before we go any further in assessing the model's assumptions and ultimately running hypothesis tests, we should first check to see if there is evidence of overfitting or *severe* underfitting.
-- **Overfitting**: If R-squared is notably higher (accounting for sample size) in the test set than the train set, this indicates overfitting. Recall that overfitting means that the model will poorly generalize. When running hypothesis tests, the goal is typically to reveal general relationships that hold true across datasets. Therefore, overfitting must first be ruled out before we bother with hypothesis testing.
-- **Severe underfitting**: If the R-squared is extremely low in the train set, this indicates the model describes the data poorly and is underfitting. In the context of hypothesis testing, it is okay for predictors to have small but consistent effects (low R-squared). However, depending on the field and line of inquiry, a small effect may or may not be interesting. Some researchers might consider R-squared values above 0.50 or 0.60 to be satisfactory in certain contexts. Others might find R-squared values as low as 0.20 or 0.30 to be meaningful, depending on many factors (dataset size, model relevance in ongoing studies, common benchmarks, etc.)
+- **Overfitting**: If error is notably higher (accounting for sample size) in the test set than the train set, this indicates overfitting. Recall that overfitting means that the model will poorly generalize. When running hypothesis tests, the goal is typically to reveal general relationships that hold true across datasets. Therefore, overfitting must first be ruled out before we bother with hypothesis testing.
+- **Severe underfitting**: If the error is extremely high in the train set, this indicates the model describes the data poorly and is underfitting. In the context of hypothesis testing, it is okay for predictors to have small but consistent effects (low R-squared, high error). However, depending on the field and line of inquiry, a small effect may or may not be interesting. Some researchers might consider R-squared values above 0.50 or 0.60 to be satisfactory in certain contexts. Others might find R-squared values as low as 0.20 or 0.30 to be meaningful, depending on many factors (dataset size, model relevance in ongoing studies, common benchmarks, etc.)
 
 
 
@@ -903,7 +935,7 @@ y_pred_test = trained_model.predict(X_test_z)
 errors_df = measure_model_err(y, np.mean(y),
                       y_train, y_pred_train,
                       y_test, y_pred_test,
-                      'RMSE', y_log_scaled=True)
+                      'R-squared', y_log_scaled=True)
 
 errors_df
 ```
@@ -937,9 +969,9 @@ errors_df
   <tbody>
     <tr>
       <th>0</th>
-      <td>79415.291886</td>
-      <td>48006.606717</td>
-      <td>38095.235457</td>
+      <td>0.0</td>
+      <td>0.662168</td>
+      <td>0.723296</td>
     </tr>
   </tbody>
 </table>
@@ -992,6 +1024,12 @@ fig = plt.figure(figsize=(12, 8));
 plot_partregress_grid(trained_model, fig=fig, exog_idx=list(range(1,X_train_z.shape[1])))
 # fig.savefig('..//fig//regression//assumptions//partialRegression.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
+
+    eval_env: 1
+    eval_env: 1
+    eval_env: 1
+    eval_env: 1
+
 
 
 
@@ -1180,10 +1218,8 @@ This x-axis represents nothing but Z-values/Z-scores of standard normal distribu
 **Y-axis: Sample Quantiles**
 The y-axis represents the quantiles of your observed data (i.e., the sorted possible values of the residuals).
 
-true z-scores of each observed sample in our dataset. The observed z-score can be compared to the expected z-score based on a datapoint's position in an ordered dataset.
-
 **Red diagonal line**
-Data drawn from a normal distribution fall along the line y = x in the Q-Q plot.
+Data drawn from a normal distribution fall along the line y = x in the Q-Q plot. If the residuals are perfectly normal, they will follow this diagonal perfectly.
 
 **Common Diagnostics**
 1. **Right-skewed**: If the data falls above the red line (where y=x) where x > 0, that means that you have a right skewed distrution (long tail on the right side of the distrubtion). A right-skewed distribution will have have higher than expected z-scores for data that is greater than the mean (zscore = 0).
@@ -1231,7 +1267,7 @@ Later in the workshop, we can use the following helper function to run the norma
 ```python
 from check_assumptions import normal_resid_test
 fig = normal_resid_test(resids)
-fig.savefig('..//fig//regression//assumptions//normal_resids_fullTest.png',bbox_inches='tight', dpi=300)
+# fig.savefig('..//fig//regression//assumptions//normal_resids_fullTest.png',bbox_inches='tight', dpi=300)
 ```
 
 
@@ -1254,7 +1290,9 @@ fig.savefig('..//fig//regression//assumptions//normal_resids_fullTest.png',bbox_
 <img src="../fig/regression/assumptions/normal_resids_fullTest.png"  align="center" width="50%" height="50%">
 
 ### 6. Independent errors test
-**Independent errors assumption**: In the context of linear regression, the independent errors assumption states that the errors (also called residuals) in the model are not correlated with each other. In other words, the residual for one observation should not provide any information or pattern that can help predict the residual for another observation. This assumption is crucial because if errors are correlated, it can lead to biased and inefficient estimates of the regression coefficients, affecting the validity of the statistical inference and prediction.
+**Independent errors assumption**: In the context of linear regression, the independent errors assumption states that the errors (also called residuals) in the model are not correlated with each other. The assumption of independent errors implies that, on average, the errors are balanced around zero, meaning that the model is equally likely to overestimate as it is to underestimate the true values of the dependent variable.
+
+The importance of this assumption lies in its role in ensuring that the estimated coefficients obtained from the regression analysis are unbiased. When the errors have a mean of zero and are independent, the regression coefficients are estimated in such a way that they minimize the sum of squared errors between the observed data and the model's predictions. This property ensures that the estimates of the coefficients are not systematically biased in one direction, and they tend to converge to the true population parameters as the sample size increases.
 
 Mathematically, for a linear regression model, the independent errors assumption can be written as:
 

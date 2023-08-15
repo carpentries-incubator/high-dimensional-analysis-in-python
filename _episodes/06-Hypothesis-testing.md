@@ -195,10 +195,10 @@ trained_model.summary()
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   131.7</td> 
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sun, 13 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
+  <th>Date:</th>             <td>Tue, 15 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>17:30:35</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
+  <th>Time:</th>                 <td>06:52:26</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>   978</td>      <th>  AIC:               </th> <td>   81.65</td> 
@@ -393,10 +393,10 @@ trained_model.summary()
   <th>Method:</th>             <td>Least Squares</td>  <th>  F-statistic:       </th> <td>   131.7</td> 
 </tr>
 <tr>
-  <th>Date:</th>             <td>Sun, 13 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
+  <th>Date:</th>             <td>Tue, 15 Aug 2023</td> <th>  Prob (F-statistic):</th> <td>1.19e-193</td>
 </tr>
 <tr>
-  <th>Time:</th>                 <td>17:30:35</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
+  <th>Time:</th>                 <td>06:52:26</td>     <th>  Log-Likelihood:    </th> <td> -27.825</td> 
 </tr>
 <tr>
   <th>No. Observations:</th>      <td>   978</td>      <th>  AIC:               </th> <td>   81.65</td> 
@@ -493,7 +493,7 @@ The following predictors were found to have p-values < .05:
 * Neighborhood_Sawyer     1.593249e-05
 
 Contextual Note:
-The significance of predictors like YearRemodAdd, GarageArea, and LotArea suggests that they have a meaningful impact on SalePrice. However, the Jarque-Bera test for normality and the associated p-value (2.85e-57) indicate that the residuals deviate from a normal distribution, supporting our earlier tests of normal residuals. Specifically, the model has a tendency to overestimate low-value homes and underestimate high-value homes. It's important to keep in mind that while normality of residuals is an assumption of linear regression, minor deviations may not invalidate the entire model, especially if the deviation is not severe and the other assumptions (such as linearity, homoscedasticity, and independence of residuals) are met. Our model still provides valuable insights into the relationships between predictor variables and the target SalePrice. The R-squared value of 0.621 suggests that approximately 62.1% of the variance in SalePrice can be explained by the predictor variables in the model. However, given the observed pattern in residuals, it is important to pay closer attention to how these predictors affect homes in different SalePrice ranges. The model's accuracy could vary depending on whether you're predicting prices for low-value or high-value homes.
+The significance of predictors like YearRemodAdd, GarageArea, and LotArea suggests that they have a meaningful impact on SalePrice. However, the Shapiro-Wilk and Kolmogorov-Smirnov tests for normality and the associated p-values indicate that the residuals deviate from a normal distribution. Specifically, the model has a tendency to overestimate low-value homes and underestimate high-value homes. It's important to keep in mind that while normality of residuals is an assumption of linear regression, minor deviations may not invalidate the entire model, especially if the deviation is not severe and the other assumptions (such as linearity, homoscedasticity, and independence of residuals) are met. Our model still provides valuable insights into the relationships between predictor variables and the target SalePrice. The R-squared value of 0.621 suggests that approximately 62.1% of the variance in SalePrice can be explained by the predictor variables in the model. However, given the observed pattern in residuals, it is important to pay closer attention to how these predictors affect homes in different SalePrice ranges. The model's accuracy could vary depending on whether you're predicting prices for low-value or high-value homes.
 
 In summary, while the model's residuals show some deviation from normality, the provided regression results still offer insights into the relationships between predictor variables and SalePrice. Careful consideration of the model's assumptions, limitations, and context will help you interpret the results accurately. As the statistician George Box famously said, "All models are wrong, but some are useful." This reminds us that models are simplifications of reality, and while they may not perfectly capture all aspects, they can still provide valuable insights and guidance.
 
@@ -502,27 +502,27 @@ In addition to running hypothesis tests, we should look more closely at the spec
 
 
 ```python
-# Get coefficient values
-coefs = trained_model.params
+# Get coefficient values in terms of percent change in sale price
+coefs = (np.exp(trained_model.params) - 1)*100
 coefs
 ```
 
 
 
 
-    const                   12.025984
-    GarageArea               0.177854
-    LotArea                  0.066891
-    YearRemodAdd             0.134300
-    Neighborhood_CollgCr    -0.014424
-    Neighborhood_Edwards    -0.038375
-    Neighborhood_Gilbert     0.003833
-    Neighborhood_NAmes      -0.021045
-    Neighborhood_NWAmes      0.011453
-    Neighborhood_NridgHt     0.038521
-    Neighborhood_OldTown    -0.050399
-    Neighborhood_Sawyer     -0.036748
-    Neighborhood_Somerst    -0.003477
+    const                   1.670383e+07
+    GarageArea              1.946508e+01
+    LotArea                 6.917864e+00
+    YearRemodAdd            1.437357e+01
+    Neighborhood_CollgCr   -1.432055e+00
+    Neighborhood_Edwards   -3.764838e+00
+    Neighborhood_Gilbert    3.840818e-01
+    Neighborhood_NAmes     -2.082547e+00
+    Neighborhood_NWAmes     1.151902e+00
+    Neighborhood_NridgHt    3.927266e+00
+    Neighborhood_OldTown   -4.915032e+00
+    Neighborhood_Sawyer    -3.608071e+00
+    Neighborhood_Somerst   -3.470761e-01
     dtype: float64
 
 
@@ -551,8 +551,20 @@ help(coef_plot)
 
 ```python
 fig = coef_plot(coefs=coefs, plot_const=False)
+# Retrieve the axes from the figure
+ax1 = fig.get_axes()[0]  # Assuming the first axis is what you want to modify
+
+# Adjust the x-axis label of the first axis
+ax1.set_xlabel("Percent Change In Sale Price")
 # fig.savefig('..//fig//regression//interpret//coef_plot.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
+
+
+
+
+    Text(0.5, 27.722222222222214, 'Percent Change In Sale Price')
+
+
 
 
     
