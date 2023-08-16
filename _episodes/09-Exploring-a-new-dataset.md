@@ -1,4 +1,3 @@
-```python
 ---
 title: Exploring additional datasets
 teaching: 45
@@ -10,7 +9,6 @@ objectives:
 questions:
 - "How can we use everything we have learned to analyze a new dataset?"
 ---
-```
 
 ## Preprocessing
 

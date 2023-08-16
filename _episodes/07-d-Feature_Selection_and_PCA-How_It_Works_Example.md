@@ -50,6 +50,31 @@ feature_ax, features, axlims = create_feature_scatter_plot(random_state=13)
     
 
 
+### Reminder: correlated features lead to multicollinearity issues
+A VIF score above 10 means that you can't meaningfully interpret the model's estimated coefficients/p-values due to confounding effects.
+
+
+```python
+from statsmodels.stats.outliers_influence import variance_inflation_factor
+import pandas as pd
+
+def calc_print_VIF(X):
+    # Calculate VIF for each predictor in X
+    vif = pd.DataFrame()
+    vif["Variable"] = X.columns
+    vif["VIF"] = [variance_inflation_factor(X.values, i) for i in range(X.shape[1])]
+
+    # Display the VIF values
+    print(vif)
+    
+calc_print_VIF(pd.DataFrame(features))
+```
+
+       Variable        VIF
+    0         0  45.174497
+    1         1  45.174497
+    
+
 ### PCA of those two variables 
 
 
@@ -58,6 +83,16 @@ from sklearn.decomposition import PCA
 p = PCA(n_components=2)  # instantiate PCA transform
 features_pca = p.fit_transform(features)  # perform PCA and re-project data 
 ```
+
+
+```python
+calc_print_VIF(pd.DataFrame(features_pca))
+```
+
+       Variable  VIF
+    0         0  1.0
+    1         1  1.0
+    
 
 ### plot PCA result
 
