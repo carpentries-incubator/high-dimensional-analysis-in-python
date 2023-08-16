@@ -30,7 +30,6 @@ In the context of linear regression, the L1 penalty can be incorporated into the
 
 ![LASSO Model](https://www.analyticsvidhya.com/wp-content/uploads/2015/08/Lasso.png)
 
-
 Where:
 
 * λ (lambda) is the regularization parameter that controls the strength of the penalty. Higher values of λ lead to stronger regularization and more coefficients being pushed towards zero.
@@ -54,7 +53,7 @@ X_train_z.head()
 ```
 
     133 columns removed, 82 remaining.
-    Columns removed: ['LotFrontage', 'GarageYrBlt', 'MasVnrArea', 'PoolArea', '3SsnPorch', 'KitchenAbvGr', 'LowQualFinSF', 'MasVnrType_BrkCmn', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NoRidge', 'Neighborhood_SWISU', 'Neighborhood_SawyerW', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', 'Alley_Grvl', 'Alley_Pave', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'LotConfig_FR2', 'LotConfig_FR3', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'Utilities_AllPub', 'Utilities_NoSeWa', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'Condition1_Artery', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Street']
+    Columns removed: ['MasVnrArea', 'LowQualFinSF', 'GarageYrBlt', '3SsnPorch', 'LotFrontage', 'KitchenAbvGr', 'PoolArea', 'Condition1_Artery', 'Condition1_PosA', 'Condition1_PosN', 'Condition1_RRAe', 'Condition1_RRAn', 'Condition1_RRNe', 'Condition1_RRNn', "Exterior2nd_'Brk Cmn'", "Exterior2nd_'Wd Shng'", 'Exterior2nd_AsbShng', 'Exterior2nd_AsphShn', 'Exterior2nd_BrkFace', 'Exterior2nd_CBlock', 'Exterior2nd_CmentBd', 'Exterior2nd_ImStucc', 'Exterior2nd_Other', 'Exterior2nd_Stone', 'Exterior2nd_Stucco', 'LotConfig_FR2', 'LotConfig_FR3', 'Alley_Grvl', 'Alley_Pave', 'RoofMatl_ClyTile', 'RoofMatl_CompShg', 'RoofMatl_Membran', 'RoofMatl_Metal', 'RoofMatl_Roll', 'RoofMatl_Tar&Grv', 'RoofMatl_WdShake', 'RoofMatl_WdShngl', 'Heating_Floor', 'Heating_GasA', 'Heating_GasW', 'Heating_Grav', 'Heating_OthW', 'Heating_Wall', 'MasVnrType_BrkCmn', 'Condition2_Artery', 'Condition2_Feedr', 'Condition2_Norm', 'Condition2_PosA', 'Condition2_PosN', 'Condition2_RRAe', 'Condition2_RRAn', 'Condition2_RRNn', 'HouseStyle_1.5Unf', 'HouseStyle_2.5Fin', 'HouseStyle_2.5Unf', 'HouseStyle_SFoyer', 'HouseStyle_SLvl', 'GarageType_2Types', 'GarageType_Basment', 'GarageType_CarPort', "MSZoning_'C (all)'", 'MSZoning_FV', 'MSZoning_RH', 'RoofStyle_Flat', 'RoofStyle_Gambrel', 'RoofStyle_Mansard', 'RoofStyle_Shed', 'Utilities_AllPub', 'Utilities_NoSeWa', 'SaleCondition_AdjLand', 'SaleCondition_Alloca', 'SaleCondition_Family', 'Neighborhood_Blmngtn', 'Neighborhood_Blueste', 'Neighborhood_BrDale', 'Neighborhood_BrkSide', 'Neighborhood_ClearCr', 'Neighborhood_Crawfor', 'Neighborhood_IDOTRR', 'Neighborhood_MeadowV', 'Neighborhood_Mitchel', 'Neighborhood_NPkVill', 'Neighborhood_NoRidge', 'Neighborhood_SWISU', 'Neighborhood_SawyerW', 'Neighborhood_StoneBr', 'Neighborhood_Timber', 'Neighborhood_Veenker', 'MiscFeature_Gar2', 'MiscFeature_Othr', 'MiscFeature_Shed', 'MiscFeature_TenC', 'BldgType_2fmCon', 'BldgType_Duplex', 'BldgType_Twnhs', 'SaleType_COD', 'SaleType_CWD', 'SaleType_Con', 'SaleType_ConLD', 'SaleType_ConLI', 'SaleType_ConLw', 'SaleType_Oth', 'Foundation_Slab', 'Foundation_Stone', 'Foundation_Wood', 'Electrical_FuseF', 'Electrical_FuseP', 'Electrical_Mix', 'LandContour_Bnk', 'LandContour_HLS', 'LandContour_Low', 'MSSubClass_30', 'MSSubClass_40', 'MSSubClass_45', 'MSSubClass_70', 'MSSubClass_75', 'MSSubClass_80', 'MSSubClass_85', 'MSSubClass_90', 'MSSubClass_160', 'MSSubClass_180', 'MSSubClass_190', 'Exterior1st_AsbShng', 'Exterior1st_AsphShn', 'Exterior1st_BrkComm', 'Exterior1st_BrkFace', 'Exterior1st_CBlock', 'Exterior1st_CemntBd', 'Exterior1st_ImStucc', 'Exterior1st_Stone', 'Exterior1st_Stucco', 'Exterior1st_WdShing', 'Street']
     
 
 
@@ -78,148 +77,148 @@ X_train_z.head()
   <thead>
     <tr style="text-align: right;">
       <th></th>
-      <th>GrLivArea</th>
-      <th>MoSold</th>
-      <th>OverallCond</th>
-      <th>WoodDeckSF</th>
-      <th>EnclosedPorch</th>
+      <th>BsmtFinSF1</th>
+      <th>GarageCars</th>
+      <th>1stFlrSF</th>
       <th>YrSold</th>
-      <th>Fireplaces</th>
-      <th>YearBuilt</th>
-      <th>GarageArea</th>
-      <th>BedroomAbvGr</th>
+      <th>EnclosedPorch</th>
+      <th>WoodDeckSF</th>
+      <th>2ndFlrSF</th>
+      <th>OpenPorchSF</th>
+      <th>BsmtHalfBath</th>
+      <th>GrLivArea</th>
       <th>...</th>
-      <th>Exterior2nd_Plywood</th>
-      <th>Exterior2nd_VinylSd</th>
-      <th>BldgType_1Fam</th>
-      <th>BldgType_TwnhsE</th>
-      <th>Condition1_Feedr</th>
-      <th>Condition1_Norm</th>
-      <th>Foundation_BrkTil</th>
-      <th>Foundation_CBlock</th>
-      <th>Foundation_PConc</th>
+      <th>MSSubClass_20</th>
+      <th>MSSubClass_50</th>
+      <th>MSSubClass_60</th>
+      <th>MSSubClass_120</th>
+      <th>Exterior1st_'Wd Sdng'</th>
+      <th>Exterior1st_HdBoard</th>
+      <th>Exterior1st_MetalSd</th>
+      <th>Exterior1st_Plywood</th>
+      <th>Exterior1st_VinylSd</th>
       <th>CentralAir</th>
     </tr>
   </thead>
   <tbody>
     <tr>
       <th>633</th>
-      <td>-0.961978</td>
-      <td>0.169179</td>
-      <td>1.419048</td>
-      <td>2.007070</td>
-      <td>-0.251998</td>
+      <td>0.075477</td>
+      <td>-1.072050</td>
+      <td>-0.173045</td>
       <td>-0.495091</td>
-      <td>-0.925321</td>
-      <td>-0.807251</td>
-      <td>-1.031070</td>
-      <td>0.241741</td>
+      <td>-0.251998</td>
+      <td>2.007070</td>
+      <td>-0.849556</td>
+      <td>-0.694796</td>
+      <td>4.124766</td>
+      <td>-0.961978</td>
       <td>...</td>
-      <td>-0.395671</td>
-      <td>-0.760865</td>
-      <td>0.526172</td>
+      <td>1.223298</td>
+      <td>-0.117041</td>
+      <td>-0.589094</td>
+      <td>-0.239117</td>
+      <td>2.357786</td>
+      <td>-0.372423</td>
+      <td>-0.462275</td>
       <td>-0.323431</td>
-      <td>-0.239117</td>
-      <td>0.348412</td>
-      <td>-0.239117</td>
-      <td>1.093397</td>
-      <td>-0.927282</td>
+      <td>-0.85322</td>
       <td>0.166683</td>
     </tr>
     <tr>
       <th>908</th>
-      <td>-1.313923</td>
-      <td>-0.164606</td>
-      <td>-0.430783</td>
-      <td>0.434247</td>
-      <td>-0.251998</td>
+      <td>-0.352031</td>
+      <td>0.350853</td>
+      <td>-0.589792</td>
       <td>-1.203750</td>
-      <td>-0.925321</td>
-      <td>0.317799</td>
-      <td>0.113304</td>
-      <td>-1.018765</td>
+      <td>-0.251998</td>
+      <td>0.434247</td>
+      <td>-0.849556</td>
+      <td>-0.694796</td>
+      <td>-0.239117</td>
+      <td>-1.313923</td>
       <td>...</td>
-      <td>-0.395671</td>
-      <td>-0.760865</td>
-      <td>0.526172</td>
+      <td>1.223298</td>
+      <td>-0.117041</td>
+      <td>-0.589094</td>
+      <td>-0.239117</td>
+      <td>-0.418317</td>
+      <td>2.648339</td>
+      <td>-0.462275</td>
       <td>-0.323431</td>
-      <td>-0.239117</td>
-      <td>0.348412</td>
-      <td>-0.239117</td>
-      <td>1.093397</td>
-      <td>-0.927282</td>
+      <td>-0.85322</td>
       <td>0.166683</td>
     </tr>
     <tr>
       <th>611</th>
-      <td>-1.016827</td>
-      <td>0.169179</td>
-      <td>0.494133</td>
-      <td>-0.707093</td>
-      <td>-0.251998</td>
+      <td>0.374016</td>
+      <td>0.350853</td>
+      <td>-0.237993</td>
       <td>-0.495091</td>
-      <td>0.682975</td>
-      <td>0.123825</td>
-      <td>0.522008</td>
-      <td>0.241741</td>
+      <td>-0.251998</td>
+      <td>-0.707093</td>
+      <td>-0.849556</td>
+      <td>-0.694796</td>
+      <td>4.124766</td>
+      <td>-1.016827</td>
       <td>...</td>
-      <td>-0.395671</td>
-      <td>-0.760865</td>
-      <td>0.526172</td>
+      <td>-0.806264</td>
+      <td>-0.117041</td>
+      <td>-0.589094</td>
+      <td>-0.239117</td>
+      <td>-0.418317</td>
+      <td>2.648339</td>
+      <td>-0.462275</td>
       <td>-0.323431</td>
-      <td>-0.239117</td>
-      <td>0.348412</td>
-      <td>-0.239117</td>
-      <td>1.093397</td>
-      <td>-0.927282</td>
+      <td>-0.85322</td>
       <td>0.166683</td>
     </tr>
     <tr>
       <th>398</th>
-      <td>-0.913986</td>
-      <td>1.504320</td>
-      <td>-3.205529</td>
-      <td>-0.707093</td>
-      <td>-0.251998</td>
+      <td>-1.070913</td>
+      <td>-1.072050</td>
+      <td>-0.116216</td>
       <td>-0.495091</td>
-      <td>-0.925321</td>
-      <td>-2.126275</td>
-      <td>-0.632583</td>
-      <td>-1.018765</td>
-      <td>...</td>
-      <td>-0.395671</td>
-      <td>-0.760865</td>
-      <td>0.526172</td>
-      <td>-0.323431</td>
+      <td>-0.251998</td>
+      <td>-0.707093</td>
+      <td>-0.849556</td>
+      <td>-0.694796</td>
       <td>-0.239117</td>
-      <td>0.348412</td>
-      <td>4.124766</td>
-      <td>-0.902052</td>
-      <td>-0.927282</td>
+      <td>-0.913986</td>
+      <td>...</td>
+      <td>-0.806264</td>
+      <td>-0.117041</td>
+      <td>-0.589094</td>
+      <td>-0.239117</td>
+      <td>-0.418317</td>
+      <td>-0.372423</td>
+      <td>2.133579</td>
+      <td>-0.323431</td>
+      <td>-0.85322</td>
       <td>0.166683</td>
     </tr>
     <tr>
       <th>91</th>
-      <td>-0.552900</td>
-      <td>1.838105</td>
-      <td>-2.280614</td>
-      <td>-0.707093</td>
-      <td>-0.251998</td>
+      <td>0.362075</td>
+      <td>0.350853</td>
+      <td>0.311355</td>
       <td>-1.203750</td>
-      <td>-0.925321</td>
-      <td>-0.535687</td>
-      <td>0.092868</td>
-      <td>-1.018765</td>
+      <td>-0.251998</td>
+      <td>-0.707093</td>
+      <td>-0.849556</td>
+      <td>-0.694796</td>
+      <td>-0.239117</td>
+      <td>-0.552900</td>
       <td>...</td>
-      <td>-0.395671</td>
-      <td>-0.760865</td>
-      <td>0.526172</td>
+      <td>1.223298</td>
+      <td>-0.117041</td>
+      <td>-0.589094</td>
+      <td>-0.239117</td>
+      <td>-0.418317</td>
+      <td>2.648339</td>
+      <td>-0.462275</td>
       <td>-0.323431</td>
-      <td>-0.239117</td>
-      <td>0.348412</td>
-      <td>-0.239117</td>
-      <td>1.093397</td>
-      <td>-0.927282</td>
+      <td>-0.85322</td>
       <td>0.166683</td>
     </tr>
   </tbody>
@@ -319,23 +318,23 @@ coefs
 
 
 
-    array([ 0.08295882, -0.01380859,  0.03153   ,  0.02955373,  0.00996286,
-           -0.        ,  0.04028652,  0.03152201,  0.00409952,  0.        ,
-            0.        ,  0.        ,  0.        ,  0.02593301,  0.        ,
-            0.00141221, -0.        ,  0.06602105,  0.00060508,  0.        ,
-            0.        ,  0.06136738, -0.        ,  0.        ,  0.        ,
-            0.01326941,  0.06097473,  0.00380414, -0.        , -0.        ,
-            0.00016823, -0.        ,  0.        , -0.        , -0.        ,
-           -0.        ,  0.        ,  0.02452494,  0.0223447 , -0.02467728,
-            0.        , -0.02635082,  0.        ,  0.        ,  0.        ,
-           -0.        , -0.        , -0.        , -0.00602431, -0.        ,
-            0.        ,  0.        ,  0.        ,  0.        , -0.0488774 ,
-            0.        ,  0.        , -0.        ,  0.        ,  0.        ,
-           -0.        ,  0.        ,  0.        ,  0.        , -0.        ,
-            0.        ,  0.        ,  0.        ,  0.        , -0.        ,
-           -0.        ,  0.        ,  0.00045322,  0.02715398,  0.        ,
-            0.00378253, -0.        ,  0.01709323, -0.00143871,  0.        ,
-            0.00916012,  0.01255674])
+    array([ 0.        ,  0.06596183,  0.        , -0.        ,  0.00999046,
+            0.02956164,  0.        ,  0.02594706,  0.        ,  0.08300968,
+           -0.        ,  0.03157657,  0.06126806,  0.01329162,  0.03171758,
+           -0.01378301,  0.        ,  0.        ,  0.        ,  0.04026495,
+           -0.        ,  0.0609676 ,  0.        ,  0.00054206,  0.00410852,
+            0.00141018,  0.        , -0.        ,  0.01709261, -0.        ,
+           -0.        ,  0.        ,  0.00041337,  0.02716718,  0.        ,
+            0.        , -0.        ,  0.00381712, -0.        , -0.        ,
+            0.        , -0.        , -0.        ,  0.        , -0.        ,
+            0.        ,  0.        , -0.04891258,  0.00014635, -0.        ,
+           -0.02633333,  0.        ,  0.        ,  0.        , -0.        ,
+           -0.        , -0.        ,  0.        ,  0.02453974,  0.02236798,
+           -0.02465517,  0.        ,  0.        ,  0.00378062,  0.        ,
+            0.        , -0.00136852,  0.        ,  0.00914042, -0.        ,
+            0.        , -0.        ,  0.        ,  0.        ,  0.        ,
+            0.        , -0.00601784, -0.        ,  0.        ,  0.        ,
+            0.        ,  0.01252988])
 
 
 
@@ -399,8 +398,8 @@ errors_df.head()
     <tr>
       <th>0</th>
       <td>79415.291886</td>
-      <td>13762.95373</td>
-      <td>55999.689566</td>
+      <td>13763.876079</td>
+      <td>56009.758064</td>
     </tr>
   </tbody>
 </table>
@@ -440,9 +439,9 @@ best_lasso_model, error_df = fit_eval_model(y=y, baseline_pred=y.mean(),
     # of train observations = 73
     # of test observations = 694
     Baseline RMSE = 79415.29188606751
-    Train RMSE = 2.9883282815358944e-10
-    Holdout RMSE = 2357924.397902944
-    (Holdout-Train)/Train: 789044634912418048%
+    Train RMSE = 2.905594915676157e-10
+    Holdout RMSE = 2357924.397903089
+    (Holdout-Train)/Train: 811511744180753792%
     
 
 
@@ -456,8 +455,8 @@ best_lasso_model, error_df = fit_eval_model(y=y, baseline_pred=y.mean(),
     # of train observations = 73
     # of test observations = 694
     Baseline RMSE = 79415.29188606751
-    Train RMSE = 13762.95373005899
-    Holdout RMSE = 55999.68956595316
+    Train RMSE = 13763.876078966621
+    Holdout RMSE = 56009.758063855006
     (Holdout-Train)/Train: 307%
     
 
@@ -573,7 +572,14 @@ Ridge regression introduces an L2 penalty term to the linear regression equation
 
 * **Bias-Variance Trade-off (avoids overfitting)**: Ridge regression strikes a balance between bias and variance. It can reduce the risk of overfitting without excluding any predictors from the model, making it a useful tool when working with high-dimensional datasets.
 
-In summary, Ridge regression and Lasso are regularization techniques that address high-dimensional data analysis challenges in distinct ways. Ridge regression is effective for stabilizing coefficient estimates and managing multicollinearity. Lasso excels in situations where feature selection and interpretability are essential, but it might sacrifice some predictive accuracy for simplicity. The choice between Ridge regression and Lasso depends on the specific goals of your analysis and the nature of your dataset.
+In summary, Ridge regression and Lasso are regularization techniques that address high-dimensional data analysis challenges in distinct ways. Ridge regression is effective for shrinking coefficients to small values, but keeping all predictors in the model. Lasso excels in situations where feature selection and interpretability are essential. The choice between Ridge regression and Lasso depends on the specific goals of your analysis and the nature of your dataset.
+
+### The L2 penalty
+The fundamental principle underlying ridge regression is its utilization of the L2 penalty, which involves the summation of the squared values of the coefficients (parameters) of the model, multiplied by a regularization parameter (often represented as λ or alpha).
+
+In the realm of linear regression, the L2 penalty can be integrated into the ordinary least squares (OLS) loss function in the following manner:
+
+![Ridge Model](https://www.analyticsvidhya.com/wp-content/uploads/2015/08/Ridge2.png)
 
 
 ```python
@@ -590,7 +596,7 @@ print("R-squared Score:", ridge_cv.score(X_test_z, y_test))
 ```
 
     Chosen Alpha: 10.0
-    R-squared Score: 0.810842060991108
+    R-squared Score: 0.8108420609911078
     
 
 
@@ -602,7 +608,7 @@ full_dim_r2 = full_dim_model.score(X_test_z, y_test)
 print("R-squared Score:", full_dim_r2)
 ```
 
-    R-squared Score: -7.321193011831625
+    R-squared Score: -7.321193011831792
     
 
 
@@ -613,7 +619,7 @@ from interpret_model import coef_plot
 coef_matrix = ridge_cv.coef_
 
 fig = coef_plot(coefs=coef_matrix, plot_const=False, index=X_train_z.columns) 
-fig.set_size_inches(6, 8)
+fig.set_size_inches(6, 15)
 ```
 
 
@@ -621,3 +627,18 @@ fig.set_size_inches(6, 8)
 
     
 
+
+## Elastic Net
+Elastic Net is a regularization technique used in linear regression models that combines both L1 (LASSO) and L2 (ridge) penalties. It aims to address some limitations of individual LASSO and ridge regression by providing a balance between feature selection (LASSO's sparsity) and coefficient shrinkage (ridge's stability).
+
+The Elastic Net regularization term can be represented as a combination of the L1 and L2 penalties, and it depends on two hyperparameters: α (alpha) and λ (lambda). The α parameter controls the balance between the L1 and L2 penalties. When α is 0, Elastic Net behaves like ridge regression, and when α is 1, it behaves like LASSO.
+
+To implement Elastic Net in Python, you can use libraries like scikit-learn. Here's how you can do it:
+
+
+```python
+# Initialize the ElasticNetCV model
+alphas = [0.1, 1.0, 10.0]  # List of alpha values to search over
+l1_ratios = [0.1, 0.5, 0.9]  # List of l1_ratio values to search over
+elastic_net_cv = ElasticNetCV(alphas=alphas, l1_ratio=l1_ratios, cv=5)
+```
