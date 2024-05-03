@@ -29,7 +29,8 @@ jobs:
 
       - name: Install GitHub Pages, Bundler, and kramdown gems
         run: |
-          gem install github-pages bundler:2.4.22 nokogiri -v 1.15.6 kramdown kramdown-parser-gfm
+          gem install github-pages bundler:2.4.22 kramdown kramdown-parser-gfm
+          gem install nokogiri -v 1.15.6
 
       - name: Install Python modules
         run: |
