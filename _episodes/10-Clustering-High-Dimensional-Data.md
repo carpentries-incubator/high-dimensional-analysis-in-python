@@ -1,25 +1,22 @@
 ---
-**Title:** Introduction to High-Dimensional Clustering  
-**Teaching:** 20 minutes  
-**Exercises:** 10 minutes  
-**Key Points:** 
-- Understanding the basics of clustering and its importance.
-- Challenges in high-dimensional spaces.
-- Implementing basic clustering algorithms.
----
-**Objectives:**
-- Explain what clustering is.
-- Discuss common clustering algorithms.
-- Highlight the challenges of clustering in high-dimensional spaces.
-- Implement and evaluate basic clustering algorithms.
-
-**Questions:**
-- What is clustering?
-- Why is clustering important?
-- What are the challenges of clustering in high-dimensional spaces?
-- How do we implement K-means clustering in Python?
-- How do we evaluate the results of clustering?
-
+title: "Introduction to High-Dimensional Clustering"
+teaching: 20 minutes  
+exercises: 10 minutes 
+questions:
+- "What is clustering?"
+- "Why is clustering important?"
+- "What are the challenges of clustering in high-dimensional spaces?"
+- "How do we implement K-means clustering in Python?"
+- "How do we evaluate the results of clustering?"
+objectives:
+- "Explain what clustering is."
+- "Discuss common clustering algorithms."
+- "Highlight the challenges of clustering in high-dimensional spaces."
+- "Implement and evaluate basic clustering algorithms."
+keypoints: 
+- "Understanding the basics of clustering and its importance."
+- "Challenges in high-dimensional spaces."
+- "Implementing basic clustering algorithms."
 ---
 
 # Introduction to High-Dimensional Clustering
