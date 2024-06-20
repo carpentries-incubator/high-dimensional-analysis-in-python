@@ -6,7 +6,7 @@
 - Understanding the basics of clustering and its importance.
 - Challenges in high-dimensional spaces.
 - Implementing basic clustering algorithms.
-
+---
 **Objectives:**
 - Explain what clustering is.
 - Discuss common clustering algorithms.
