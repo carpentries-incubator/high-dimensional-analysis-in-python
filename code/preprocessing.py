@@ -46,7 +46,7 @@ def encode_predictors_housing_data(X):
     # add nominal fields as dummy vars
     X_enc = X.copy()
     X_enc.loc[:, nominal_fields]=X[nominal_fields].astype("category")
-    one_hot = pd.get_dummies(X_enc[nominal_fields])
+    one_hot = pd.get_dummies(X_enc[nominal_fields], dtype=int)
     keep_cols.extend(one_hot.columns)
     X_enc=X_enc.join(one_hot)
     
