@@ -108,9 +108,9 @@ def measure_model_err(y: Union[np.ndarray, pd.Series], baseline_pred: Union[floa
     
     # Create a DataFrame to store the error values
     errors_df = pd.DataFrame({
-        'Baseline Error': [baseline_err],
-        'Train Error': [train_err],
-        'Test Error': [test_err]
+        f'Baseline {metric}': [baseline_err],
+        f'Train {metric}': [train_err],
+        f'Test {metric}': [test_err]
     })
 
     return errors_df
