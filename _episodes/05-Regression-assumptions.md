@@ -633,9 +633,12 @@ def calc_print_VIF(X):
     print(vif)
 ```
 
-
+The variance_inflation_factor() function expects a constant column to code for each model's y-intercept. We will add this constant before calculating VIF scores.
 ```python
-calc_print_VIF(X_good)
+# Add constant to the dataframe for VIF calculation
+X_with_const = add_constant(X_good)
+# Calc VIF scores
+calc_print_VIF(X_with_const)
 ```
 
                     Variable        VIF
