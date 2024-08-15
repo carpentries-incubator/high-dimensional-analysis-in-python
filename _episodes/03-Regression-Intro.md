@@ -19,7 +19,7 @@ questions:
 ---
 
 # Linear Regression
-Linear regression is powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset **linearly relate** to some *target variable* (e.g., house sale prices). Starting with linear models when working with high-dimensional data can offer several advantages including:
+Linear regression is a powerful technique that is often used to understand whether and how certain *predictor variables* (e.g., garage size, year built, etc.) in a dataset **linearly relate** to some *target variable* (e.g., house sale prices). Starting with linear models when working with high-dimensional data can offer several advantages including:
 
 * **Simplicity and Interpretability**: Linear models, such as linear regression, are relatively simple and interpretable. They provide a clear understanding of how each predictor variable contributes to the outcome, which can be especially valuable in exploratory analysis.
 
@@ -128,8 +128,8 @@ plt.ylabel('Sale Price');
 ### 4) Transform target variable, if necessary
 Unfortunately, sale price appears to grow almost exponentially—not linearly—with the predictor variable. Any line we draw through this data cloud is going to fail in capturing the true trend we see here.
 
-##### Log scaling
-How can we remedy this situation? One common approach is to log transform the target variable. We’ll convert the "SalePrice" variable to its logarithmic form by using the math.log() function. Pandas has a special function called apply which can apply an operation to every item in a series by using the statement y.apply(math.log), where y is a pandas series.
+#### Log scaling
+How can we remedy this situation? One common approach is to log transform the target variable. We’ll convert the "SalePrice" variable to its logarithmic form by using the `math.log()` function. Pandas has a special function called `apply` which can apply an operation to every item in a series by using the statement `y.apply(math.log)`, where `y` is a pandas series.
 
 
 ```python
@@ -153,7 +153,7 @@ plt.ylabel('Sale Price');
 
 <img src="../fig/regression/intro/scatterplot_x_vs_logSalePrice.png"  align="center" width="30%" height="30%">
 
-This plot looks much better than the previous one. That is, the trend between OverallQual and log(SalePrice) appears fairly linear. Whether or not it is sufficiently linear can be addressed when we evaluate the model's performance later.
+This plot now shows a more linear appearing relationship between the target and predictor variables. Whether or not it is sufficiently linear can be addressed when we evaluate the model's performance later.
 
 ### 5) Train/test split
 Next, we will prepare two subsets of our data to be used for *model-fitting* and *model evaluation*. This process is standard for any predictive modeling task that involves a model "learning" from observed data (e.g., fitting a line to the observed data).
@@ -167,7 +167,7 @@ If we were to evaluate the model solely on the training data, it could lead to *
 ![The above image is from Badillo et al., 2020. An Introduction to Machine Learning. Clinical Pharmacology & Therapeutics. 107. 10.1002/cpt.1796.](../fig/regression/under_v_over_fit.png)
 
 
-The below code will split our dataset into a training dataset containing 2/3 of the samples, and a test set containing the remaining 1/3 of the data. We'll discuss these different subsets in more detail in just a bit.
+The below code will split our dataset into a training dataset containing 2/3 of the samples and a test set containing the remaining 1/3 of the data. We'll discuss these different subsets in more detail in just a bit.
 
 
 ```python
@@ -203,7 +203,7 @@ print(x_test.shape)
 
 During the model fitting step, we use a subset of the data referred to as **training data** to estimate the model's coefficients. The univariate model will find a line of best fit through this data.
 
-##### The sklearn library
+#### The sklearn library
 When fitting linear models solely for predictive purposes, the scikit-learn or "sklearn" library is typically used. Sklearn offers a broad spectrum of machine learning algorithms beyond linear regression. Having multiple algorithms available in the same library allows you to switch between different models easily and experiment with various techniques without switching libraries. Sklearn is also optimized for performance and efficiency, which is beneficial when working with large datasets. It can efficiently handle large-scale linear regression tasks, and if needed, you can leverage tools like NumPy and SciPy, which are well-integrated with scikit-learn for faster numerical computations.
 
 
@@ -304,11 +304,11 @@ help(plot_train_test_predictions)
 {:.challenge}
 
 
-#### b. Measure train/test set errors and check for signs of underfitting or overfitting
+#### b) Measure train/test set errors and check for signs of underfitting or overfitting
 While qualitative examinations of model performance are extremely helpful, it is always a good idea to pair such evaluations with a quantitative analysis of the model's performance.
 
 **Convert back to original data scale**
-There are several error measurements that can't be used to measure a regression model's performance. Before we implement any of them, we'll first convert the log(salePrice) back to original sale price for ease of interpretation.
+There are several error measurements that can be used to measure a regression model's performance. Before we implement any of them, we'll first convert the log(salePrice) back to original sale price for ease of interpretation.
 
 
 ```python
@@ -335,11 +335,6 @@ baseline_predict
 ```
 
     mean sale price = 180921.19589041095
-
-
-
-
-
     0    180921.19589
     0    180921.19589
     0    180921.19589
@@ -463,7 +458,7 @@ error_df.head()
 
 With the MAPE measurement (max value of 1 which corresponds to 100%), we can state that our model over/under estimates sale prices by an average of 23.41% (25.28%) across all houses included in the test set (train set). Certainly seems there is room for improvement based on this measure.
 
-**R-Squared**: Another useful error measurement to use with regression models is the coefficient of determination — $R^2$. Oftentimes pronounced simply "R-squared",  this measure assesses the proportion of the variation in the target variable that is predictable from the predictor variable(s). Using sklearn's metrics, we can calculate this as follows:
+**R-Squared**: Another useful error measurement to use with regression models is the coefficient of determination $`R^2`$. Oftentimes pronounced simply "R-squared",  this measure assesses the proportion of the variation in the target variable that is predictable from the predictor variable(s). Using sklearn's metrics, we can calculate this as follows:
 
 
 ```python
@@ -519,10 +514,10 @@ Our model predicts 70.1% (65.2%) of the variance across sale prices in the test 
 ### R-squared equation: R-squared = 1 - (Sum of squared residuals) / (Total sum of squares)
 
 **Sum of Squared Residuals (SSR)**:
-SSR = Sum of (Actual Value - Predicted Value)^2 for all data points. The Sum of Squared Residuals (SSR) is equivalent to the variance of the residuals in a regression model. Residuals are the differences between the actual observed values and the predicted values produced by the model. Squaring these differences and summing them up yields the SSR.
+$`SSR = \sum\left(Actual Value - Predicted Value\right)^2`$ for all data points. The SSR is equivalent to the variance of the residuals in a regression model. Residuals are the differences between the actual observed values and the predicted values produced by the model. Squaring these differences and summing them up yields the SSR.
 
 **Total Sum of Squares (TSS)**:
-TSS = Sum of (Actual Value - Mean of Actual Values)^2 for all data points. The TSS represents the total variability or dispersion in the observed values of the target variable. It measures the total squared differences between each data point's value and the mean of the observed values.
+$`TSS = \sum\left(Actual Value - Mean of Actual Values\right)^2`$ for all data points. The TSS represents the total variability or dispersion in the observed values of the target variable. It measures the total squared differences between each data point's value and the mean of the observed values.
 
 To read more about additional error/loss measurements, visit [sklearn's metrics documentation](https://scikit-learn.org/stable/modules/model_evaluation.html).
 
@@ -549,10 +544,10 @@ Let's see how well the other predictors in our dataset can predict sale prices. 
 ### General procedure for comparing predictive models
 We'll follow this general procedure to compare models:
 
-1. Use get_feat_types() to get a list of continuous predictors
+1. Use `get_feat_types()` to get a list of continuous predictors
 2. Create an X variable containing only continuous predictors from `housing['data']`
 3. Extract sale prices from `housing['target']` and log scale it
-4. Use the remove_bad_cols helper function to remove predictors with nans or containing > 97% constant values (typically 0's)
+4. Use the `remove_bad_cols` helper function to remove predictors with nans or containing > 97% constant values (typically 0's)
 5. Perform a train/validation/test split using 60% of the data to train, 20% for validation (model selection), and 20% for final testing of the data
 6. Use the `compare_models` helper function to quickly calculate train/validation errors for all possible single predictors. Returns a `df_model_err` df that contains the following data stored for each predictor: 'Predictor Variable', 'Train Error', 'Validation Error'.
 7. Once selecting the best model, get the final assessment of the model's generalizeability using the test set data
@@ -858,7 +853,7 @@ It appears the worst performing predictors do not have much of a linear relation
 This point is further illustrated by the distributions / data clouds we see with the TotalBsmtSF predictor. The type of basement finish may change the relationship between TotalBsmtSF and SalePrice. If we fit a regression model that accounts for this interaction, the model will follow a linear pattern for each distribtuion separately. Similarly, certain outliers may stem from other predictors having interactions/relationships with one another. When searching for outliers, it is important to consider such multivariate interactions.
 
 ### Fitting all predictors
-Let's assume all predictors in the Ames housing dataset are related to at least some extent to sale price, and fit a multivariate regression model using all continuous predictors.
+Let's assume all predictors in the Ames housing dataset are related to sale price to some extent and fit a multivariate regression model using all continuous predictors.
 
 
 ```python
