@@ -263,11 +263,18 @@ human gene expression e.g.
 {:.challenge}
 
 ## High-Dimensional Data
-What is high-dimensional data? Unfortunately, there isn't a precise definition. Oftentimes, when people use the term, they are referring to data that has so many features that it is difficult to determine which features are relevant to the research question (dozens or more). In a modeling context, however, high-dimensional data is usually defined as a dataset where the number of features approaches or exceeds the number of observations.
 
-The "curse of dimensionality" generally refers to the issues that arise when dealing with data in high-dimensional spaces, where distances between data points become less meaningful and the data becomes more sparse. This can lead to challenges in terms of computational complexity, overfitting in machine learning models, difficulties in visualization, and the need for specialized techniques to handle such data effectively.
+What is high-dimensional data? Unfortunately, there isn’t a precise definition. Often, when people use the term, they are referring to specific problems and headaches that arise when working with data that has many (typically dozens or more) features (a.k.a. dimensions). These problems are generally referred to as the "curse of dimensionality".
 
-So, whether the term "high-dimensional data" is used to describe datasets with a large number of features or datasets with a very high number of features, the underlying challenges related to dimensionality are usually concerned with the same issues of increased complexity and difficulties in analysis and modeling.
+### Curse of Dimensionality
 
-# End of part 1
-in part two we'll start exploring a new dataset
+The “curse of dimensionality” refers to the challenges that arise when dealing with data in high-dimensional spaces. These challenges include:
+
+- **Overfitting in Models:** Machine learning models are prone to overfitting when the number of features approaches or exceeds the number of observations in the data. In this context, what is considered "high-dimensional is relative to the number of observations in your data.
+- **Increased Computational Complexity:** As dimensions increase, so do compute needs both in terms of memory and processing power. This can make the analysis more difficult.
+- **Visualization Challenges:** Visualizing data with many features becomes challenging, as humans can easily comprehend only up to three dimensions.
+- **Increased Sparsity:** As dimensions increase, the volume of the space grows exponentially, making data points more spread out and less dense.
+- **Reduced Meaningfulness of Distance:** As dimensions increase, the concept of distance between data points becomes less intuitive and less useful for distinguishing between different points.
+  
+Throughout this workshop, we'll see how these challenges, or "curses," apply to our research goals and explore strategies to address them.
+
