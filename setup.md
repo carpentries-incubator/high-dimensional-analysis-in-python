@@ -107,10 +107,18 @@ conda create --name highdim_workshop python jupyter seaborn scikit-learn pandas 
 ~~~
 {: .source}
 
-Activate the newly created environment:
+### Activating the environment
+At the start of each day throughout this workshop, remember to activate the environment prior to launching your Jupyter lab notebook. This will ensure you have access to all the libraries we installed within this environment (i.e., python jupyter seaborn scikit-learn pandas statsmodels ). 
 ~~~
 conda activate highdim_workshop
 ~~~
+
+### Deactivating environment 
+When you're done working in a specific environment (you don't have to do this now), it's good practice to deactivate it to avoid conflicts with other environments. This ensures that the packages and settings from the active environment don't interfere with your system's global settings or other environments. At the end of each day (not now), you can deactivate the conda environment by typing:
+~~~
+conda deactivate
+~~~
+
 {: .source}
 
 ## Starting Jupyter Lab
