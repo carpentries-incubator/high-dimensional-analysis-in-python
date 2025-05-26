@@ -99,7 +99,6 @@ If you run into any difficulties, please request help before the workshop begins
 Conda should already be available in your system once you installed Anaconda successfully. Conda thus works regardless of the operating system.
 Make sure you have an up-to-date version of Conda running.
 See [these instructions](https://docs.anaconda.com/anaconda/install/update-version/) for updating Conda if required.
-{: .callout}
 
 To create a conda environment called `highdim_workshop` with the required packages, open a terminal (Mac) or Anaconda prompt (Windows) and type the command:
 ~~~
@@ -112,6 +111,7 @@ At the start of each day throughout this workshop, remember to activate the envi
 ~~~
 conda activate highdim_workshop
 ~~~
+{: .source}
 
 ### Deactivating environment 
 When you're done working in a specific environment (you don't have to do this now), it's good practice to deactivate it to avoid conflicts with other environments. This ensures that the packages and settings from the active environment don't interfere with your system's global settings or other environments. At the end of each day (not now), you can deactivate the conda environment by typing:

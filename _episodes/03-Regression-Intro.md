@@ -43,12 +43,12 @@ In this workshop, we will explore how we can exploit well-established machine le
 
 > ## To predict or explain. That is the question.
 > When trying to model data you use in your work, which goal is typically more prevalent? Do you typically care more about (1) accurately predicting some target variable or (2) making scientific claims concerning the existence of certain relationships between variables?
+> 
 > > ## Solution
 > >
 > > In a research setting, explaining relationships typically takes higher priority over predicting since explainations hold high value in science, but both goals are sometimes relevant. In industry, the reverse is typically true as many industry applications place predictive accuracy above explainability. We will explore how these goals align and sometimes diverge from one another throughout the remaining lessons.
 > {:.solution}
 {:.challenge}
-
 
 ## Predicting housing prices with a single predictor
 We'll start with the first goal: prediction. How can we use regression models to predict housing sale prices? For clarity, we will begin this question through the lens of simple univariate regression models.
@@ -63,10 +63,8 @@ We'll follow this general procedure to fit and evaluate predictive models:
 5. **Train/test split the data**
 6. **Fit the model to the training data**
 7. **Evaluate model**
-
-    a. Plot the data vs predictions - qualitative assessment
-
-    b. Measure train/test set errors and check for signs of underfitting or overfitting
+    1. Plot the data vs predictions - qualitative assessment
+    2. Measure train/test set errors and check for signs of underfitting or overfitting
 
 
 We'll start by loading in the Ames housing data as we have done previously in this workshop.
@@ -82,8 +80,8 @@ Next, we'll extract the two variables we'll use for our model — the target var
 
 **OverallQual**: Rates the overall material and finish of the house
 
-       10	Very Excellent
-       1	Very Poor
+* 10: Very Excellent
+* 1:  Very Poor
 
 
 ```python
@@ -102,7 +100,10 @@ from preprocessing import remove_bad_cols
 x_good = remove_bad_cols(x, 95)
 ```
 
-    0 columns removed, 1 remaining.
+~~~
+0 columns removed, 1 remaining.
+~~~
+{: .output}
 
 
 ### 3) Visualize the relationship between x and y
@@ -117,13 +118,8 @@ plt.ylabel('Sale Price');
 # plt.savefig('..//fig//regression//intro//scatterplot_x_vs_salePrice.png', bbox_inches='tight', dpi=300, facecolor='white');
 ```
 
-
-
-
-
-
-
 <img src="../fig/regression/intro/scatterplot_x_vs_salePrice.png"  align="center" width="30%" height="30%">
+
 
 ### 4) Transform target variable, if necessary
 Unfortunately, sale price appears to grow almost exponentially—not linearly—with the predictor variable. Any line we draw through this data cloud is going to fail in capturing the true trend we see here.
@@ -164,7 +160,9 @@ Next, we can assess the model's ability to generalize to new datasets by measuri
 
 If we were to evaluate the model solely on the training data, it could lead to **overfitting**. Overfitting occurs when the model learns the noise and specific patterns of the training data too well, resulting in poor performance on new data. By using a separate test set, we can identify if the model has overfit the training data and assess its ability to generalize to unseen samples. While overfitting is typically not likely to occur when using only a single predictor variable, it is still a good idea to use a train/test split when fitting univariate models. This can help in detecting unanticipated issues with the data, such as missing values, outliers, or other anomalies that affect the model's behavior.
 
-![The above image is from Badillo et al., 2020. An Introduction to Machine Learning. Clinical Pharmacology & Therapeutics. 107. 10.1002/cpt.1796.](../fig/regression/under_v_over_fit.png)
+<img src="../fig/regression/under_v_over_fit.png"  align="center" width="70%" height="30%">
+
+_The above image is from Badillo et al., 2020. An Introduction to Machine Learning. Clinical Pharmacology & Therapeutics. 107. 10.1002/cpt.1796._
 
 
 The below code will split our dataset into a training dataset containing 2/3 of the samples and a test set containing the remaining 1/3 of the data. We'll discuss these different subsets in more detail in just a bit.
@@ -181,9 +179,11 @@ print(x_train.shape)
 print(x_test.shape)
 ```
 
-    (978,)
-    (482,)
-
+~~~
+ (978,)
+ (482,)
+~~~
+{: .output}
 
 Reshape single-var predictor matrix in preparation for model-fitting step (requires a 2-D representation)
 
@@ -195,9 +195,11 @@ print(x_train.shape)
 print(x_test.shape)
 ```
 
-    (978, 1)
-    (482, 1)
-
+~~~
+ (978, 1)
+ (482, 1)
+~~~
+{: .output}
 
 ### 6) Fit the model to the training dataset
 
@@ -228,6 +230,7 @@ from regression_predict_sklearn import plot_train_test_predictions
 help(plot_train_test_predictions)
 ```
 
+~~~
     Help on function plot_train_test_predictions in module regression_predict_sklearn:
 
     plot_train_test_predictions(predictors: List[str], X_train: Union[numpy.ndarray, pandas.core.series.Series, pandas.core.frame.DataFrame], X_test: Union[numpy.ndarray, pandas.core.series.Series, pandas.core.frame.DataFrame], y_train: Union[numpy.ndarray, pandas.core.series.Series], y_test: Union[numpy.ndarray, pandas.core.series.Series], y_pred_train: Union[numpy.ndarray, pandas.core.series.Series], y_pred_test: Union[numpy.ndarray, pandas.core.series.Series], y_log_scaled: bool, plot_raw: bool, err_type: Optional[str] = None, train_err: Optional[float] = None, test_err: Optional[float] = None) -> Tuple[Optional[matplotlib.figure.Figure], Optional[matplotlib.figure.Figure]]
@@ -250,7 +253,8 @@ help(plot_train_test_predictions)
         Returns:
             Tuple[Optional[plt.Figure], Optional[plt.Figure]]: Figures for true vs. predicted values and line of best fit.
 
-
+~~~
+{: .output}
 
 
 ```python
@@ -303,7 +307,6 @@ help(plot_train_test_predictions)
 > {:.solution}
 {:.challenge}
 
-
 #### b) Measure train/test set errors and check for signs of underfitting or overfitting
 While qualitative examinations of model performance are extremely helpful, it is always a good idea to pair such evaluations with a quantitative analysis of the model's performance.
 
@@ -334,6 +337,7 @@ baseline_predict = baseline_predict.repeat(len(y))
 baseline_predict
 ```
 
+~~~
     mean sale price = 180921.19589041095
     0    180921.19589
     0    180921.19589
@@ -347,7 +351,8 @@ baseline_predict
     0    180921.19589
     0    180921.19589
     Length: 1460, dtype: float64
-
+~~~
+{: .output}
 
 
 **Root Mean Squared Error (RMSE)**:
@@ -366,10 +371,12 @@ print(f"Train RMSE = {RMSE_train}")
 print(f"Test RMSE = {RMSE_test}")
 ```
 
+~~~
     Baseline RMSE = 79415.29188606751
     Train RMSE = 45534.34940950763
     Test RMSE = 44762.77229823455
-
+~~~
+{: .output}
 
 Here, both train and test RMSE are very similar to one another. As expected with most univariate models, we do not see any evidence of overfitting. This model performs substantially better than the baseline. However, an average error of +/- $44,726 is likely too high for this model to be useful in practice. That is, the model is underfitting the data given its poor ability to predict the true housing prices.
 
@@ -387,6 +394,7 @@ from regression_predict_sklearn import measure_model_err
 help(measure_model_err)
 ```
 
+~~~
     Help on function measure_model_err in module regression_predict_sklearn:
 
     measure_model_err(y: Union[numpy.ndarray, pandas.core.series.Series], baseline_pred: Union[float, numpy.float64, numpy.float32, int, numpy.ndarray, pandas.core.series.Series], y_train: Union[numpy.ndarray, pandas.core.series.Series], y_pred_train: Union[numpy.ndarray, pandas.core.series.Series], y_test: Union[numpy.ndarray, pandas.core.series.Series], y_pred_test: Union[numpy.ndarray, pandas.core.series.Series], metric: str, y_log_scaled: bool) -> pandas.core.frame.DataFrame
@@ -405,7 +413,8 @@ help(measure_model_err)
         Returns:
             pd.DataFrame: A DataFrame containing the error values for the baseline, training set, and test set.
 
-
+~~~
+{: .output}
 
 
 ```python
@@ -417,44 +426,9 @@ error_df = measure_model_err(y=y, baseline_pred=baseline_predict,
 error_df.head()
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Baseline Error</th>
-      <th>Train Error</th>
-      <th>Test Error</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0.363222</td>
-      <td>0.187585</td>
-      <td>0.16754</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
+|   | Baseline Error | Train Error | Test Error |
+|---|----------------|-------------|------------|
+| 0 |    0.363222    |  0.187585   |  0.16754   |
 
 With the MAPE measurement (max value of 1 which corresponds to 100%), we can state that our model over/under estimates sale prices by an average of 23.41% (25.28%) across all houses included in the test set (train set). Certainly seems there is room for improvement based on this measure.
 
@@ -470,42 +444,9 @@ error_df = measure_model_err(y=y, baseline_pred=baseline_predict,
 error_df.head()
 ```
 
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Baseline Error</th>
-      <th>Train Error</th>
-      <th>Test Error</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>0.0</td>
-      <td>0.666875</td>
-      <td>0.690463</td>
-    </tr>
-  </tbody>
-</table>
-</div>
+|   | Baseline Error | Train Error | Test Error |
+|---|----------------|-------------|------------|
+| 0 |     0.0        |  0.666875   |  0.690463  |
 
 
 
@@ -566,10 +507,11 @@ y_log = np.log(y)
 from preprocessing import remove_bad_cols
 X_good = remove_bad_cols(X, 99)
 ```
-
+~~~
     4 columns removed, 30 remaining.
     Columns removed: ['LotFrontage', 'MasVnrArea', 'GarageYrBlt', 'PoolArea']
-
+~~~
+{: .output}
 
 
 ```python
@@ -590,6 +532,7 @@ from regression_predict_sklearn import compare_models
 help(compare_models)
 ```
 
+~~~
     Help on function compare_models in module regression_predict_sklearn:
 
     compare_models(y: Union[numpy.ndarray, pandas.core.series.Series], baseline_pred: Union[numpy.ndarray, pandas.core.series.Series], X_train: pandas.core.frame.DataFrame, y_train: Union[numpy.ndarray, pandas.core.series.Series], X_val: pandas.core.frame.DataFrame, y_val: Union[numpy.ndarray, pandas.core.series.Series], predictors_list: List[List[str]], metric: str, y_log_scaled: bool, model_type: str, include_plots: bool, plot_raw: bool, verbose: bool) -> pandas.core.frame.DataFrame
@@ -611,7 +554,8 @@ help(compare_models)
         Returns:
             pd.DataFrame: A DataFrame containing model errors for different predictor variables.
 
-
+~~~
+{: .output}
 
 
 ```python
@@ -629,89 +573,27 @@ df_model_err.head()
 
 
 
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
 
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Baseline Error</th>
-      <th>Train Error</th>
-      <th>Validation Error</th>
-      <th>Predictors</th>
-      <th>Trained Model</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>79415.291886</td>
-      <td>82875.380855</td>
-      <td>84323.189234</td>
-      <td>LotArea</td>
-      <td>LinearRegression()</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>79415.291886</td>
-      <td>67679.790920</td>
-      <td>69727.341057</td>
-      <td>YearBuilt</td>
-      <td>LinearRegression()</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>79415.291886</td>
-      <td>69055.741014</td>
-      <td>70634.285653</td>
-      <td>YearRemodAdd</td>
-      <td>LinearRegression()</td>
-    </tr>
-    <tr>
-      <th>3</th>
-      <td>79415.291886</td>
-      <td>45516.185542</td>
-      <td>46993.501006</td>
-      <td>OverallQual</td>
-      <td>LinearRegression()</td>
-    </tr>
-    <tr>
-      <th>4</th>
-      <td>79415.291886</td>
-      <td>81016.566207</td>
-      <td>84915.452252</td>
-      <td>OverallCond</td>
-      <td>LinearRegression()</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
-
-
+|   | Baseline Error | Train Error | Validation Error | Predictors | Trained Model |
+|---|----------------|-------------|------------------|------------|---------------|
+| 0 | 79415.291886   | 82875.380855 | 84323.189234    | LotArea    | LinearRegression() |
+| 1 | 79415.291886   | 67679.790920 | 69727.341057    | YearBuilt  | LinearRegression() |
+| 2 | 79415.291886   | 69055.741014 | 70634.285653    | YearRemodAdd | LinearRegression() |
+| 3 | 79415.291886   | 45516.185542 | 46993.501006    | OverallQual  | LinearRegression() |
+| 4 | 79415.291886   | 81016.566207 | 84915.452252    | OverallCond  | LinearRegression() |
 
 ```python
 from regression_predict_sklearn import compare_models_plot
 sorted_predictors, train_errs, val_errs = compare_models_plot(df_model_err, 'RMSE');
 ```
 
+~~~
     Best model train error = 45516.18554163278
     Best model validation error = 46993.501005708364
     Worst model train error = 63479.544551733954
     Worst model validation error = 220453.4404000341
-
+~~~
+{: .output}
 
 
 
@@ -732,9 +614,10 @@ test_err
 
 
 
-
+~~~
     42298.77889761536
-
+~~~
+{: .output}
 
 
 ### Examing the worst performers
@@ -753,98 +636,11 @@ df_model_err.head()
 ```
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-<div>
-<style scoped>
-    .dataframe tbody tr th:only-of-type {
-        vertical-align: middle;
-    }
-
-    .dataframe tbody tr th {
-        vertical-align: top;
-    }
-
-    .dataframe thead th {
-        text-align: right;
-    }
-</style>
-<table border="1" class="dataframe">
-  <thead>
-    <tr style="text-align: right;">
-      <th></th>
-      <th>Baseline Error</th>
-      <th>Train Error</th>
-      <th>Validation Error</th>
-      <th>Predictors</th>
-      <th>Trained Model</th>
-    </tr>
-  </thead>
-  <tbody>
-    <tr>
-      <th>0</th>
-      <td>79415.291886</td>
-      <td>65085.562455</td>
-      <td>105753.386038</td>
-      <td>1stFlrSF</td>
-      <td>LinearRegression()</td>
-    </tr>
-    <tr>
-      <th>1</th>
-      <td>79415.291886</td>
-      <td>60495.941297</td>
-      <td>106314.048186</td>
-      <td>GrLivArea</td>
-      <td>LinearRegression()</td>
-    </tr>
-    <tr>
-      <th>2</th>
-      <td>79415.291886</td>
-      <td>63479.544552</td>
-      <td>220453.440400</td>
-      <td>TotalBsmtSF</td>
-      <td>LinearRegression()</td>
-    </tr>
-  </tbody>
-</table>
-</div>
-
+|   | Baseline Error | Train Error | Validation Error | Predictors | Trained Model |
+|---|----------------|-------------|------------------|------------|---------------|
+| 0 | 79415.291886 | 65085.562455 | 105753.386038 | 1stFlrSF | LinearRegression() |
+| 1 | 79415.291886 | 60495.941297 | 106314.048186 | GrLivArea | LinearRegression() |
+| 2 | 79415.291886 | 63479.544552 | 220453.440400 | TotalBsmtSF | LinearRegression() |
 
 
 #### Outliers and interactions
@@ -867,6 +663,7 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
 
 ```
 
+~~~
     # of predictor vars = 30
     # of train observations = 876
     # of test observations = 292
@@ -874,16 +671,8 @@ df_model_err = compare_models(y=y, baseline_pred=baseline_predict,
     Train RMSE = 34139.3449119712
     Holdout RMSE = 134604.1997549234
     (Holdout-Train)/Train: 294%
-
-
-
-
-
-
-
-
-
-
+~~~
+{: .output}
 
 ### Compare permutations of models with different numbers of predictors
 Let's see how well we can predict house prices with different numbers of predictors.
@@ -895,8 +684,10 @@ sampled_combinations = get_predictor_combos(X_train=X_train, K=2, n=30)
 print(sampled_combinations[0:2])
 ```
 
+~~~
     [['TotalBsmtSF', '3SsnPorch'], ['YearBuilt', 'OverallQual']]
-
+~~~
+{: .output}
 
 #### Compare efficacy of different numbers of predictors
 To quickly assess how well we can predict sale price with varying numbers of predictors, use the code we just prepared in conjunction with a for loop to determine the best train/validation errors possible when testing 30 permutations containing K=1, 2, 5, 10, and 25 predictors. Plot the results (K vs train/test errors). Is there any trend?
@@ -923,17 +714,12 @@ for K in n_predictors:
     best_val_errs.append(np.median(val_errs))
 ```
 
+~~~
     K = 1
     Best model train error = 45516.18554163278
     Best model validation error = 46993.501005708364
     Worst model train error = 63479.544551733954
     Worst model validation error = 220453.4404000341
-
-
-
-
-
-
 
 
     K = 2
@@ -943,23 +729,11 @@ for K in n_predictors:
     Worst model validation error = 215272.44855611687
 
 
-
-
-
-
-
-
     K = 5
     Best model train error = 43122.17607559138
     Best model validation error = 45562.43051930849
     Worst model train error = 62279.367627167645
     Worst model validation error = 333222.31164330646
-
-
-
-
-
-
 
 
     K = 10
@@ -969,23 +743,11 @@ for K in n_predictors:
     Worst model validation error = 357384.2570907179
 
 
-
-
-
-
-
-
     K = 20
     Best model train error = 33729.291727505
     Best model validation error = 84522.32196428241
     Worst model train error = 39417.4765728046
     Worst model validation error = 189314.02234304545
-
-
-
-
-
-
 
 
     K = 25
@@ -994,12 +756,8 @@ for K in n_predictors:
     Worst model train error = 38689.73868462601
     Worst model validation error = 192248.540723152
 
-
-
-
-
-
-
+~~~
+{: .output}
 
 
 ```python
@@ -1016,11 +774,6 @@ plt.grid(True)
 ```
 
 
-
-
-
-
-
 <img src="../fig/regression/intro/Npredictor_v_error.png"  align="center" width="30%" height="30%">
 
 #### How much data is needed per new predictor? 10X rule of thumb
@@ -1035,9 +788,10 @@ Let's see what the ratio is when we start to hit overfitting effects with our da
 
 
 
-
+~~~
     [876.0, 438.0, 175.2, 87.6, 43.8, 35.04]
-
+~~~
+{: .output}
 
 
 With our data, we start to see overfitting effects even when we have as much as 87.6 times as many observations as estimated model coefficients. if you find that your regression model is more prone to overfitting that the "10X rule", it could suggest that the training data might not be strictly independently and identically distributed (i.i.d.). Overfitting occurs when a model learns the noise and random fluctuations in the training data instead of the true underlying patterns, leading to poor generalization to new data.
@@ -1057,10 +811,10 @@ X_train.shape
 
 
 
-
+~~~
     (876, 30)
-
-
+~~~
+{: .output}
 
 
 ```python
@@ -1076,10 +830,10 @@ top_features
 
 
 
-
+~~~
     ['OverallQual', 'GarageCars', 'YearBuilt', 'YearRemodAdd', 'FullBath']
-
-
+~~~
+{: .output}
 
 
 ```python
@@ -1087,6 +841,7 @@ from regression_predict_sklearn import fit_eval_model
 help(fit_eval_model)
 ```
 
+~~~
     Help on function fit_eval_model in module regression_predict_sklearn:
 
     fit_eval_model(y: Union[numpy.ndarray, pandas.core.series.Series], baseline_pred: Union[numpy.ndarray, pandas.core.series.Series], X_train: Union[numpy.ndarray, pandas.core.frame.DataFrame], y_train: Union[numpy.ndarray, pandas.core.series.Series], X_test: Union[numpy.ndarray, pandas.core.frame.DataFrame], y_test: Union[numpy.ndarray, pandas.core.series.Series], predictors: Union[str, List[str]], metric: str, y_log_scaled: bool, model_type: str, include_plots: bool, plot_raw: bool, verbose: bool, cv: int = None, alphas: Union[numpy.ndarray, List[float]] = None, max_iter: int = None) -> Tuple[float, float, float]
@@ -1103,7 +858,8 @@ help(fit_eval_model)
         Returns:
             Tuple[float, float, float]: Baseline error, training error, and test error.
 
-
+~~~
+{: .output}
 
 
 ```python
@@ -1118,6 +874,7 @@ fit_eval_model(y=y,baseline_pred=y.mean(), X_train=X_train, y_train=y_train,
                    verbose=True);
 ```
 
+~~~
     # of predictor vars = 5
     # of train observations = 876
     # of test observations = 292
@@ -1125,12 +882,8 @@ fit_eval_model(y=y,baseline_pred=y.mean(), X_train=X_train, y_train=y_train,
     Train RMSE = 41084.668354744696
     Holdout RMSE = 36522.31626858727
     (Holdout-Train)/Train: -11%
-
-
-
-
-
-
+~~~
+{: .output}
 
 
 
@@ -1138,3 +891,5 @@ fit_eval_model(y=y,baseline_pred=y.mean(), X_train=X_train, y_train=y_train,
 
 #### 7) Explaining models
 At this point, we have assessed the predictive accuracy of our model. However, what if we want to interpret our model to understand which predictor(s) have a consistent or above chance (i.e., statistically significant) impact sales price? For this kind of question and other questions related to model interpretability, we need to first carefully validate our model. The next two episodes will explore some of the necessary checks you must perform before reading too far into your model's estimations.
+
+
